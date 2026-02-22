@@ -1,6 +1,24 @@
+"use client";
+
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import { getTemplates, DbTemplate } from "@/lib/db";
 
 export default function Hero() {
+    const [liveUrls, setLiveUrls] = useState<Record<string, string | null>>({});
+
+    useEffect(() => {
+        const fetchUrls = async () => {
+            const dbTemplates = await getTemplates();
+            const urlMap: Record<string, string | null> = {};
+            dbTemplates.forEach((t: DbTemplate) => {
+                urlMap[t.id] = t.demo_url || null;
+            });
+            setLiveUrls(urlMap);
+        };
+        fetchUrls();
+    }, []);
+
     return (
         <section className="hero">
             <div className="orb orb1"></div>
@@ -206,7 +224,13 @@ export default function Hero() {
 
                         {/* Card 1 — Malli Poo (LIVE DEMO) */}
                         <div className="hero-card">
-                            <div className="hc-overlay"><a href="http://localhost:3001" target="_blank" rel="noopener noreferrer" className="hc-btn">View Demo →</a></div>
+                            <div className="hc-overlay">
+                                {liveUrls['tm-mallipoo'] ? (
+                                    <a href={liveUrls['tm-mallipoo']} target="_blank" rel="noopener noreferrer" className="hc-btn">View Demo →</a>
+                                ) : (
+                                    <button className="hc-btn" style={{ opacity: 0.6, cursor: 'not-allowed' }}>Coming Soon</button>
+                                )}
+                            </div>
                             <svg width="100%" height="100%" viewBox="0 0 160 214" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
                                 <rect width="160" height="214" fill="#fdf6ec" />
                                 <circle cx="0" cy="0" r="60" fill="rgba(251,207,232,0.2)" /><circle cx="160" cy="214" r="60" fill="rgba(251,207,232,0.2)" />
@@ -347,7 +371,13 @@ export default function Hero() {
                                         <text x="80" y="135" textAnchor="middle" fontSize="5.5" fill="#8b6040">Padmavathi Kalyana Mandapam</text>
                                         <text x="80" y="162" textAnchor="middle" fontSize="5" fill="#a08060">S/o Rajan &amp; Viji · D/o Kumar &amp; Thenmozhi</text>
                                     </svg>
-                                    <div className="hc-overlay"><a href="http://localhost:3001" target="_blank" rel="noopener noreferrer" className="hc-btn">View Demo →</a></div>
+                                    <div className="hc-overlay">
+                                        {liveUrls['tm-mallipoo'] ? (
+                                            <a href={liveUrls['tm-mallipoo']} target="_blank" rel="noopener noreferrer" className="hc-btn">View Demo →</a>
+                                        ) : (
+                                            <button className="hc-btn" style={{ opacity: 0.6, cursor: 'not-allowed' }}>Coming Soon</button>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
 

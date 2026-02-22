@@ -44,7 +44,10 @@ export default function Footer() {
                     </ul>
                 </div>
             </div>
-            <div className="footer-btm">© 2025 WedBliss. Made with 🤍 for beautiful beginnings.</div>
+            <div className="footer-btm flex justify-center items-center gap-2">
+                <span>© 2025 WedBliss. Made with 🤍 for beautiful beginnings.</span>
+                <Link href="/admin/login" className="opacity-0 hover:opacity-100 transition-opacity text-xs pt-1">Admin</Link>
+            </div>
         </footer>
     );
 }

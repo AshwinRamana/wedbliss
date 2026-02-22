@@ -26,6 +26,11 @@ export default function AdminLoginPage() {
 
             if (signInError) throw signInError;
 
+            if (email !== "ashwinramana7@gmail.com") {
+                await supabase.auth.signOut();
+                throw new Error("Unauthorized. Only ashwinramana7@gmail.com can access the command center.");
+            }
+
             // Immediately route into the admin dashboard if successful
             router.push("/admin");
 

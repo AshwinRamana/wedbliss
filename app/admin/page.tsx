@@ -58,7 +58,7 @@ export default function AdminDashboard() {
     const [addSaving, setAddSaving] = useState(false);
     const [addError, setAddError] = useState<string | null>(null);
 
-    const ADMIN_EMAIL = process.env.NEXT_PUBLIC_ADMIN_EMAIL;
+    const ADMIN_EMAIL = "ashwinramana7@gmail.com";
 
     // ── Auth Guard ─────────────────────────────────────────────────────────────
     useEffect(() => {

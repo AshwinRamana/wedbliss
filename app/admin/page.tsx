@@ -95,8 +95,13 @@ export default function AdminDashboard() {
 
     const saveEdit = async (id: string) => {
         setSavingId(id);
+        const existing = templates.find(t => t.id === id);
+        if (!existing) return;
         const { error } = await upsertTemplate({
             id,
+            name: existing.name,
+            tier: existing.tier as "basic" | "premium",
+            description: existing.desc,
             is_live: form.isLive,
             demo_url: form.href || null,
             thumbnail_url: form.thumbnailUrl || null,

@@ -268,6 +268,7 @@ export default function AdminDashboard() {
                                     {/* Thumbnail */}
                                     <div className="w-20 h-14 rounded-xl overflow-hidden border border-slate-200 bg-slate-100 flex-shrink-0 flex items-center justify-center">
                                         {t.thumbnailUrl ? (
+                                            /* eslint-disable-next-line @next/next/no-img-element */
                                             <img src={t.thumbnailUrl} alt={t.name} className="w-full h-full object-cover" />
                                         ) : (
                                             <div className="w-full h-full overflow-hidden scale-[0.25] origin-top-left" style={{ width: "400%", height: "400%" }}>
@@ -306,7 +307,7 @@ export default function AdminDashboard() {
                                                 onChange={e => setForm(p => ({ ...p, href: e.target.value }))} />
                                             <label className="flex items-center gap-2 cursor-pointer">
                                                 <input type="checkbox" checked={form.isLive} onChange={e => setForm(p => ({ ...p, isLive: e.target.checked }))} className="rounded accent-emerald-600" />
-                                                <span className="text-xs font-bold text-slate-600">Mark as Live (shows "View Demo" site-wide)</span>
+                                                <span className="text-xs font-bold text-slate-600">Mark as Live (shows &quot;View Demo&quot; site-wide)</span>
                                             </label>
                                             <div className="flex gap-2">
                                                 <button onClick={() => setEditingId(null)} className="flex-1 py-1.5 text-xs border border-slate-200 rounded-lg font-bold text-slate-600 hover:bg-slate-100 transition-colors">Cancel</button>

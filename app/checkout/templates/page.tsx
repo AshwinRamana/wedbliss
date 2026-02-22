@@ -9,7 +9,6 @@ import { supabase } from "@/lib/supabase";
 import { User } from "@supabase/supabase-js";
 import { TEMPLATES, TemplateSVG } from "@/components/marketing/Templates";
 import { getTemplates } from "@/lib/db";
-import type { DbTemplate } from "@/lib/db";
 
 type MergedTemplate = typeof TEMPLATES[0] & { thumbnailUrl?: string | null };
 
@@ -84,12 +83,13 @@ function TemplateSelectionContent() {
                         const isComingSoon = !tmpl.isLive;
                         return (
                             <div key={tmpl.id} className={`group relative bg-white/60 backdrop-blur-md border rounded-3xl overflow-hidden shadow-xl flex flex-col transition-all ${isComingSoon
-                                    ? "border-slate-200/40 opacity-60 cursor-not-allowed"
-                                    : "border-slate-200/60 shadow-slate-200/50 hover:-translate-y-2 hover:shadow-2xl hover:border-emerald-500/30"
+                                ? "border-slate-200/40 opacity-60 cursor-not-allowed"
+                                : "border-slate-200/60 shadow-slate-200/50 hover:-translate-y-2 hover:shadow-2xl hover:border-emerald-500/30"
                                 }`}>
                                 {/* Template Thumbnail */}
                                 <div className="w-full h-64 bg-slate-900 relative overflow-hidden flex items-center justify-center">
                                     {(tmpl as MergedTemplate).thumbnailUrl ? (
+                                        /* eslint-disable-next-line @next/next/no-img-element */
                                         <img src={(tmpl as MergedTemplate).thumbnailUrl!} alt={tmpl.name} className="w-full h-full object-cover" />
                                     ) : (
                                         <TemplateSVG id={tmpl.id} />

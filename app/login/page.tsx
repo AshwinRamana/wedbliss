@@ -30,8 +30,9 @@ export default function LoginPage() {
             if (!res.ok) throw new Error(data.error || "Failed to send OTP");
 
             setStep("otp");
-        } catch (err: any) {
-            setError(err.message);
+        } catch (err: unknown) {
+            const error = err as Error;
+            setError(error.message);
         } finally {
             setLoading(false);
         }
@@ -80,8 +81,9 @@ export default function LoginPage() {
 
             // Success! Redirect to landing page; they can navigate to Profile from nav.
             router.push("/");
-        } catch (err: any) {
-            setError(err.message);
+        } catch (err: unknown) {
+            const error = err as Error;
+            setError(error.message);
         } finally {
             setLoading(false);
         }

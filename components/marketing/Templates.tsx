@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { getTemplates } from "@/lib/db";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -214,6 +213,7 @@ export default async function Templates() {
 
                             {/* If admin set a thumbnail_url, show the real image; else fall back to SVG */}
                             {t.thumbnailUrl ? (
+                                /* eslint-disable-next-line @next/next/no-img-element */
                                 <img src={t.thumbnailUrl} alt={t.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                             ) : (
                                 <TemplateSVG id={t.id} />

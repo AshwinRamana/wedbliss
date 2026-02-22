@@ -46,7 +46,8 @@ export default function LiveDomainsSection() {
             } else {
                 alert("Failed to remove domain: " + (data.error || "Unknown error"));
             }
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error(err);
             alert("Network error removing domain");
         }
         setRemovingId(null);

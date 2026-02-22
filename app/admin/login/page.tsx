@@ -19,7 +19,7 @@ export default function AdminLoginPage() {
         try {
             // Note: In Supabase, if you haven't set up SMTP yet, the default `signInWithPassword` 
             // works immediately if the user was created in the Supabase Auth dashboard with a password.
-            const { data, error: signInError } = await supabase.auth.signInWithPassword({
+            const { error: signInError } = await supabase.auth.signInWithPassword({
                 email: email,
                 password: password,
             });
@@ -29,8 +29,9 @@ export default function AdminLoginPage() {
             // Immediately route into the admin dashboard if successful
             router.push("/admin");
 
-        } catch (err: any) {
-            setError(err.message || "Invalid Admin Credentials");
+        } catch (err: unknown) {
+            const error = err as Error;
+            setError(error.message || "Invalid Admin Credentials");
         } finally {
             setLoading(false);
         }

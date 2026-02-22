@@ -35,8 +35,9 @@ function CheckoutAuthContent() {
                 if (!res.ok) throw new Error(data.error || "Failed to send OTP");
 
                 setStep("otp");
-            } catch (err: any) {
-                setError(err.message);
+            } catch (err: unknown) {
+                const error = err as Error;
+                setError(error.message);
             } finally {
                 setLoading(false);
             }
@@ -86,8 +87,9 @@ function CheckoutAuthContent() {
 
             // Redirect to the mega form, passing along the context
             router.push(`/checkout/form?plan=${plan}&template=${template}`);
-        } catch (err: any) {
-            setError(err.message);
+        } catch (err: unknown) {
+            const error = err as Error;
+            setError(error.message);
         } finally {
             setLoading(false);
         }

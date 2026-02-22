@@ -10,6 +10,9 @@ const italiana = Italiana({ weight: "400", subsets: ["latin"], variable: "--font
 export const metadata: Metadata = {
   title: "WedBliss — Elegant Digital Invitations for Your Big Day",
   description: "Create stunning, interactive, and beautifully crafted wedding invitations in minutes. Effortlessly share your love story with friends and family.",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

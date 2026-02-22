@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { getTemplates } from "@/lib/db";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -171,21 +174,30 @@ export const TEMPLATES = [
 // ─────────────────────────────────────────────────────────────────────────────
 // Server Component — fetches template flags from Supabase at request time
 // ─────────────────────────────────────────────────────────────────────────────
-export default async function Templates() {
-    // Fetch live template registry from Supabase
-    const dbTemplates = await getTemplates();
+export default function Templates() {
+    // Merge DB data onto the static SVG list by ID (initially static)
+    const [merged, setMerged] = useState(() => TEMPLATES.map(t => ({
+        ...t,
+        thumbnailUrl: null as string | null
+    })));
 
-    // Merge DB data (is_live, demo_url, thumbnail_url) onto the static SVG list by ID
-    const merged = TEMPLATES.map(t => {
-        const db = dbTemplates.find(d => d.id === t.id);
-        return {
-            ...t,
-            isLive: db?.is_live ?? t.isLive,
-            href: db?.demo_url ?? undefined,
-            thumbnailUrl: db?.thumbnail_url ?? null,
-            desc: db?.description ?? t.desc,
+    // Fetch live template registry from Supabase on mount
+    useEffect(() => {
+        const fetchTemplates = async () => {
+            const dbTemplates = await getTemplates();
+            setMerged(TEMPLATES.map(t => {
+                const db = dbTemplates.find(d => d.id === t.id);
+                return {
+                    ...t,
+                    isLive: db?.is_live ?? t.isLive,
+                    href: db?.demo_url ?? t.href,
+                    thumbnailUrl: db?.thumbnail_url ?? null,
+                    desc: db?.description ?? t.desc,
+                };
+            }));
         };
-    });
+        fetchTemplates();
+    }, []);
 
     return (
         <section className="templates" id="templates">

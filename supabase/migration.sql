@@ -91,6 +91,11 @@ create policy "Users can read own invitations"
   on public.invitations for select
   using (true);
 
+-- Users can update their own invitations
+create policy "Users can update their own invitations"
+  on public.invitations for update
+  using (auth.role() = 'authenticated' and current_setting('request.jwt.claim.email', true) = user_email);
+
 -- Service role / authenticated can insert
 create policy "Authenticated can insert invitations"
   on public.invitations for insert
@@ -100,3 +105,24 @@ create policy "Authenticated can insert invitations"
 create policy "Authenticated can update invitations"
   on public.invitations for update
   using (true);
+
+-- =============================================================================
+-- Migration Query for Existing Database
+-- =============================================================================
+/*
+ALTER TABLE public.invitations ADD COLUMN IF NOT EXISTS data jsonb not null default '{}'::jsonb;
+ALTER TABLE public.invitations DROP COLUMN IF EXISTS bride_first;
+ALTER TABLE public.invitations DROP COLUMN IF EXISTS bride_last;
+ALTER TABLE public.invitations DROP COLUMN IF EXISTS bride_qual;
+ALTER TABLE public.invitations DROP COLUMN IF EXISTS groom_first;
+ALTER TABLE public.invitations DROP COLUMN IF EXISTS groom_last;
+ALTER TABLE public.invitations DROP COLUMN IF EXISTS groom_qual;
+ALTER TABLE public.invitations DROP COLUMN IF EXISTS events;
+ALTER TABLE public.invitations DROP COLUMN IF EXISTS bride_parents;
+ALTER TABLE public.invitations DROP COLUMN IF EXISTS bride_grands;
+ALTER TABLE public.invitations DROP COLUMN IF EXISTS groom_parents;
+ALTER TABLE public.invitations DROP COLUMN IF EXISTS groom_grands;
+ALTER TABLE public.invitations DROP COLUMN IF EXISTS best_wishes;
+ALTER TABLE public.invitations DROP COLUMN IF EXISTS video_url;
+ALTER TABLE public.invitations DROP COLUMN IF EXISTS music_track;
+*/

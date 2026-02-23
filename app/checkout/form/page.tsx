@@ -30,13 +30,27 @@ function CheckoutFormContent() {
     const [groomQual, setGroomQual] = useState("");
 
     // Events
-    const [weddingDate, setWeddingDate] = useState("");
-    const [weddingTime, setWeddingTime] = useState("");
-    const [weddingVenue, setWeddingVenue] = useState("");
-    const [weddingMap, setWeddingMap] = useState("");
-    const [receptionDate, setReceptionDate] = useState("");
-    const [receptionTime, setReceptionTime] = useState("");
-    const [receptionVenue, setReceptionVenue] = useState("");
+    const [eventsList, setEventsList] = useState([
+        { id: "ev-1", title: "Wedding / Muhurtham", type: "muhurtham", date: "", time: "", venueName: "", venueAddress: "", googleMapsUrl: "" },
+        { id: "ev-2", title: "Reception", type: "reception", date: "", time: "", venueName: "", venueAddress: "", googleMapsUrl: "" }
+    ]);
+
+    const handleEventChange = (index: number, field: string, value: string) => {
+        const newEvents = [...eventsList];
+        newEvents[index] = { ...newEvents[index], [field]: value };
+        setEventsList(newEvents);
+    };
+
+    const addEvent = () => {
+        if (!isPremium && eventsList.length >= 2) return;
+        setEventsList([...eventsList, { id: `ev-${Date.now()}`, type: "other", title: "Custom Event", date: "", time: "", venueName: "", venueAddress: "", googleMapsUrl: "" }]);
+    };
+
+    const removeEvent = (index: number) => {
+        const newEvents = [...eventsList];
+        newEvents.splice(index, 1);
+        setEventsList(newEvents);
+    };
 
     // Family
     const [brideParents, setBrideParents] = useState("");
@@ -46,7 +60,44 @@ function CheckoutFormContent() {
     const [bestWishes, setBestWishes] = useState("");
 
     // Media (Premium)
-    const [musicTrack, setMusicTrack] = useState("Traditional Nadaswaram & Thavil");
+    const [videoUrl, setVideoUrl] = useState("");
+    const [photos, setPhotos] = useState<string[]>([]);
+    const [uploading, setUploading] = useState(false);
+
+    const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (!e.target.files?.length) return;
+        if (photos.length >= 4) {
+            alert("Maximum 4 photos allowed.");
+            return;
+        }
+
+        const file = e.target.files[0];
+        if (file.size > 5 * 1024 * 1024) {
+            alert("File must be less than 5MB");
+            return;
+        }
+
+        setUploading(true);
+        try {
+            const res = await fetch(`${BACKEND_URL}/api/upload/presigned-url?fileName=${encodeURIComponent(file.name)}&fileType=${encodeURIComponent(file.type)}`);
+            const data = await res.json();
+
+            if (!res.ok || data.error) throw new Error(data.error || "Failed to generate upload URL");
+
+            const uploadRes = await fetch(data.signedUrl, {
+                method: "PUT",
+                headers: { "Content-Type": file.type },
+                body: file
+            });
+
+            if (!uploadRes.ok) throw new Error("Failed to upload to S3");
+            setPhotos(prev => [...prev, data.publicUrl]);
+        } catch (err: unknown) {
+            alert("Upload error: " + (err instanceof Error ? err.message : String(err)));
+        }
+        setUploading(false);
+        e.target.value = '';
+    };
 
     // Domain
     const [subdomain, setSubdomain] = useState("");
@@ -113,11 +164,6 @@ function CheckoutFormContent() {
             // Final submit — save to DB
             setSaving(true);
             try {
-                const events = [
-                    { type: "wedding", date: weddingDate, time: weddingTime, venue: weddingVenue, mapLink: weddingMap },
-                    ...(receptionDate || receptionVenue ? [{ type: "reception", date: receptionDate, time: receptionTime, venue: receptionVenue }] : [])
-                ];
-
                 const payload = {
                     user_email: userEmail,
                     plan,
@@ -134,8 +180,9 @@ function CheckoutFormContent() {
                             groom: { firstName: groomFirst, lastName: groomLast, parents: groomParents, grandparents: groomGrands },
                             storyMessage: bestWishes
                         },
-                        events,
-                        media: isPremium ? { backgroundMusicUrl: musicTrack } : undefined
+                        events: eventsList,
+                        gallery: isPremium && photos.length > 0 ? { images: photos } : undefined,
+                        media: isPremium && videoUrl ? { videoUrl: videoUrl } : undefined
                     }
                 };
 
@@ -255,45 +302,52 @@ function CheckoutFormContent() {
                                 <p className="text-sm text-slate-700 mb-6">Enter the venue and timing details for your events.</p>
 
                                 <div className="flex flex-col gap-8">
-                                    <div className="p-6 border border-emerald-100 bg-emerald-50/30 rounded-2xl flex flex-col gap-4">
-                                        <h3 className="font-bold text-lg text-emerald-800">Wedding / Muhurtham</h3>
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                            <div className="flex flex-col gap-2">
-                                                <label className="text-xs font-bold text-slate-700 uppercase">Date *</label>
-                                                <input type="date" required className={inputClass} value={weddingDate} onChange={e => setWeddingDate(e.target.value)} />
+                                    {eventsList.map((event, index) => (
+                                        <div key={event.id} className={`p-6 border rounded-2xl flex flex-col gap-4 relative ${index % 2 === 0 ? 'border-emerald-100 bg-emerald-50/30' : 'border-amber-100 bg-amber-50/30'}`}>
+                                            <div className="flex justify-between items-center">
+                                                <input
+                                                    type="text"
+                                                    className={`font-bold text-lg bg-transparent border-b border-slate-300 focus:outline-none focus:border-emerald-500 ${index % 2 === 0 ? 'text-emerald-800' : 'text-amber-800'}`}
+                                                    value={event.title}
+                                                    onChange={e => handleEventChange(index, "title", e.target.value)}
+                                                    placeholder="Event Title"
+                                                />
+                                                {index > 0 && (
+                                                    <button type="button" onClick={() => removeEvent(index)} className="text-red-500 hover:text-red-700 text-sm font-bold border border-red-200 bg-red-50 hover:bg-red-100 px-3 py-1 rounded-lg transition-colors">
+                                                        Remove
+                                                    </button>
+                                                )}
                                             </div>
-                                            <div className="flex flex-col gap-2">
-                                                <label className="text-xs font-bold text-slate-700 uppercase">Time *</label>
-                                                <input type="time" required className={inputClass} value={weddingTime} onChange={e => setWeddingTime(e.target.value)} />
-                                            </div>
-                                            <div className="flex flex-col gap-2 md:col-span-2">
-                                                <label className="text-xs font-bold text-slate-700 uppercase">Venue Name & Address *</label>
-                                                <textarea required rows={2} className={inputClass + " resize-none"} placeholder="Sri Krishna Mahal, 123 Temple Road, Chennai" value={weddingVenue} onChange={e => setWeddingVenue(e.target.value)}></textarea>
-                                            </div>
-                                            <div className="flex flex-col gap-2 md:col-span-2">
-                                                <label className="text-xs font-bold text-slate-700 uppercase">Google Maps Link</label>
-                                                <input type="url" className={inputClass} placeholder="https://maps.google.com/..." value={weddingMap} onChange={e => setWeddingMap(e.target.value)} />
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                                                <div className="flex flex-col gap-2">
+                                                    <label className="text-xs font-bold text-slate-700 uppercase">Date *</label>
+                                                    <input type="date" required className={inputClass} value={event.date} onChange={e => handleEventChange(index, "date", e.target.value)} />
+                                                </div>
+                                                <div className="flex flex-col gap-2">
+                                                    <label className="text-xs font-bold text-slate-700 uppercase">Time *</label>
+                                                    <input type="time" required className={inputClass} value={event.time} onChange={e => handleEventChange(index, "time", e.target.value)} />
+                                                </div>
+                                                <div className="flex flex-col gap-2 md:col-span-2">
+                                                    <label className="text-xs font-bold text-slate-700 uppercase">Venue Name & Address *</label>
+                                                    <textarea required rows={2} className={inputClass + " resize-none"} placeholder="Sri Krishna Mahal, 123 Temple Road, Chennai" value={event.venueName} onChange={e => handleEventChange(index, "venueName", e.target.value)}></textarea>
+                                                </div>
+                                                <div className="flex flex-col gap-2 md:col-span-2">
+                                                    <label className="text-xs font-bold text-slate-700 uppercase">Google Maps Link</label>
+                                                    <input type="url" className={inputClass} placeholder="https://maps.google.com/..." value={event.googleMapsUrl} onChange={e => handleEventChange(index, "googleMapsUrl", e.target.value)} />
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    ))}
 
-                                    <div className="p-6 border border-amber-100 bg-amber-50/30 rounded-2xl flex flex-col gap-4">
-                                        <h3 className="font-bold text-lg text-amber-800">Reception</h3>
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                            <div className="flex flex-col gap-2">
-                                                <label className="text-xs font-bold text-slate-700 uppercase">Date</label>
-                                                <input type="date" className={inputClass} value={receptionDate} onChange={e => setReceptionDate(e.target.value)} />
-                                            </div>
-                                            <div className="flex flex-col gap-2">
-                                                <label className="text-xs font-bold text-slate-700 uppercase">Time</label>
-                                                <input type="time" className={inputClass} value={receptionTime} onChange={e => setReceptionTime(e.target.value)} />
-                                            </div>
-                                            <div className="flex flex-col gap-2 md:col-span-2">
-                                                <label className="text-xs font-bold text-slate-700 uppercase">Venue (if different)</label>
-                                                <textarea rows={2} className={inputClass + " resize-none"} placeholder="Leave blank if same as wedding..." value={receptionVenue} onChange={e => setReceptionVenue(e.target.value)}></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    {(isPremium || eventsList.length < 2) && (
+                                        <button
+                                            type="button"
+                                            onClick={addEvent}
+                                            className="w-full py-4 border-2 border-dashed border-emerald-300 text-emerald-700 font-bold rounded-xl hover:bg-emerald-50 transition-colors flex items-center justify-center gap-2"
+                                        >
+                                            <span className="text-xl leading-none">+</span> Add Another Event
+                                        </button>
+                                    )}
                                 </div>
                             </div>
                         )}
@@ -408,28 +462,50 @@ function CheckoutFormContent() {
                                         <div className="w-full md:w-1/3 p-6 bg-slate-50 rounded-2xl border border-slate-200 text-center">
                                             <span className="text-3xl mb-2 block">📹</span>
                                             <h4 className="font-bold text-slate-800">Couple&apos;s Video Invite</h4>
-                                            <p className="text-xs text-slate-700 mt-2">Upload a short, heartfelt video greeting your guests.</p>
+                                            <p className="text-xs text-slate-700 mt-2">Paste a YouTube link to a video greeting for your guests.</p>
                                         </div>
                                         <div className="flex-1 w-full flex flex-col gap-4 pt-2">
-                                            <label className="text-xs font-bold text-slate-700 uppercase">Upload Video (MP4)</label>
-                                            <input type="file" accept="video/mp4" className="w-full text-sm text-slate-700 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 transition-colors cursor-pointer" />
-                                            <p className="text-xs text-slate-400">Max file size: 20MB. Note: You can skip this and upload it later from your dashboard.</p>
+                                            <label className="text-xs font-bold text-slate-700 uppercase">YouTube Link</label>
+                                            <input type="url" placeholder="https://youtube.com/watch?v=..." className={inputClass} value={videoUrl} onChange={e => setVideoUrl(e.target.value)} />
+                                            <p className="text-xs text-slate-400">Example: https://youtube.com/watch?v=dQw4w9WgXcQ</p>
                                         </div>
                                     </div>
 
                                     <div className="flex flex-col md:flex-row gap-6 items-start border-t border-slate-100 pt-8">
                                         <div className="w-full md:w-1/3 p-6 bg-slate-50 rounded-2xl border border-slate-200 text-center">
-                                            <span className="text-3xl mb-2 block">🎵</span>
-                                            <h4 className="font-bold text-slate-800">Background Music</h4>
-                                            <p className="text-xs text-slate-700 mt-2">Choose the ambient music for your invitation.</p>
+                                            <span className="text-3xl mb-2 block">📸</span>
+                                            <h4 className="font-bold text-slate-800">Photo Gallery</h4>
+                                            <p className="text-xs text-slate-700 mt-2">Upload up to 4 photos to feature in your invitation.</p>
                                         </div>
                                         <div className="flex-1 w-full flex flex-col gap-4 pt-2">
-                                            <label className="text-xs font-bold text-slate-700 uppercase">Select Track</label>
-                                            <select className={inputClass} value={musicTrack} onChange={e => setMusicTrack(e.target.value)}>
-                                                <option>Traditional Nadaswaram & Thavil</option>
-                                                <option>Classical Carnatic Flute</option>
-                                                <option>Soft Piano Instrumental</option>
-                                            </select>
+                                            <label className="text-xs font-bold text-slate-700 uppercase">Upload Photos (Max 4)</label>
+
+                                            <div className="flex flex-wrap gap-4 mb-2">
+                                                {photos.map((url, i) => (
+                                                    <div key={i} className="relative w-24 h-24 rounded-lg overflow-hidden border-2 border-slate-200 group">
+                                                        <img src={url} alt={`Gallery ${i + 1}`} className="w-full h-full object-cover" />
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => setPhotos(photos.filter((_, index) => index !== i))}
+                                                            className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity shadow-sm"
+                                                        >✕</button>
+                                                    </div>
+                                                ))}
+                                                {uploading && (
+                                                    <div className="w-24 h-24 rounded-lg border-2 border-emerald-300 border-dashed flex items-center justify-center bg-emerald-50">
+                                                        <div className="w-6 h-6 border-2 border-emerald-200 border-t-emerald-600 rounded-full animate-spin"></div>
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                onChange={handlePhotoUpload}
+                                                disabled={photos.length >= 4 || uploading}
+                                                className="w-full text-sm text-slate-700 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 transition-colors cursor-pointer disabled:opacity-50"
+                                            />
+                                            <p className="text-xs text-slate-400">Upload high-quality images. Safe to skip and upload later.</p>
                                         </div>
                                     </div>
                                 </div>

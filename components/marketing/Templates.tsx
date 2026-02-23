@@ -233,7 +233,16 @@ export default function Templates() {
                         </div>
                         <div className="t-info">
                             <div className="t-name" style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                                {t.name}
+                                <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                                    {t.name}
+                                    <span style={{
+                                        fontSize: "10px",
+                                        background: t.tier === "premium" ? "#fef3c7" : "#f1f5f9",
+                                        color: t.tier === "premium" ? "#92400e" : "#475569",
+                                        padding: "2px 6px", borderRadius: "4px", fontWeight: 700,
+                                        textTransform: "uppercase"
+                                    }}>{t.tier}</span>
+                                </div>
                                 {t.isLive && (
                                     <span style={{
                                         fontSize: "10px", background: "#d1fae5", color: "#065f46",

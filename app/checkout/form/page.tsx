@@ -483,6 +483,7 @@ function CheckoutFormContent() {
                                             <div className="flex flex-wrap gap-4 mb-2">
                                                 {photos.map((url, i) => (
                                                     <div key={i} className="relative w-24 h-24 rounded-lg overflow-hidden border-2 border-slate-200 group">
+                                                        {/* eslint-disable-next-line @next/next/no-img-element */}
                                                         <img src={url} alt={`Gallery ${i + 1}`} className="w-full h-full object-cover" />
                                                         <button
                                                             type="button"

@@ -46,6 +46,7 @@ export default function AdminDashboard() {
     // Data
     const [templates, setTemplates] = useState<MergedTemplate[]>([]);
     const [orders, setOrders] = useState<DbOrder[]>([]);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [invitations, setInvitations] = useState<any[]>([]);
     const [dataLoading, setDataLoading] = useState(true);
 

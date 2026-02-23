@@ -9,12 +9,14 @@ import { User } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabase";
 import Loader from "@/components/ui/Loader";
 
+const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+
 export default function Dashboard() {
     const router = useRouter();
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [invitations, setInvitations] = useState<any[]>([]);
-    const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
     // Profile state
     const [profileName, setProfileName] = useState("");
@@ -253,6 +255,7 @@ export default function Dashboard() {
                             </div>
                         ) : (
                             <div className="divide-y divide-slate-100">
+                                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                                 {invitations.map((inv: any) => (
                                     <div key={inv.id} className="p-6 hover:bg-slate-50 transition-colors flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                                         <div>

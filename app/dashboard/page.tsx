@@ -13,6 +13,8 @@ export default function Dashboard() {
     const router = useRouter();
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
+    const [invitations, setInvitations] = useState<any[]>([]);
+    const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
     // Profile state
     const [profileName, setProfileName] = useState("");
@@ -29,6 +31,16 @@ export default function Dashboard() {
             if (u) {
                 setProfileName(u.user_metadata?.name || "");
                 setProfileDob(u.user_metadata?.dob || "");
+
+                try {
+                    const res = await fetch(`${BACKEND_URL}/api/invitations?email=${u.email}`);
+                    if (res.ok) {
+                        const json = await res.json();
+                        setInvitations(json.invitations || []);
+                    }
+                } catch (err) {
+                    console.error("Failed to fetch invitations:", err);
+                }
             }
             setLoading(false);
         };
@@ -225,19 +237,53 @@ export default function Dashboard() {
                         <div className="p-6 md:p-8 border-b border-slate-100">
                             <h2 className="font-serif text-2xl font-bold text-slate-800">Your Invitations</h2>
                         </div>
-                        <div className="flex flex-col items-center justify-center py-20 px-4 text-center">
-                            <div className="w-20 h-20 mb-6 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600 shadow-inner shadow-emerald-200/50">
-                                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                                    <polyline points="22,6 12,13 2,6" />
-                                </svg>
+                        {invitations.length === 0 ? (
+                            <div className="flex flex-col items-center justify-center py-20 px-4 text-center">
+                                <div className="w-20 h-20 mb-6 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600 shadow-inner shadow-emerald-200/50">
+                                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                                        <polyline points="22,6 12,13 2,6" />
+                                    </svg>
+                                </div>
+                                <h3 className="text-xl font-bold text-slate-800 mb-2">No Invitations Yet</h3>
+                                <p className="text-slate-500 max-w-sm mb-8">Choose a beautiful template and your digital wedding invitation will appear here.</p>
+                                <Link href="/checkout/templates" className="px-8 py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl shadow-lg hover:-translate-y-0.5 transition-all">
+                                    Browse Templates
+                                </Link>
                             </div>
-                            <h3 className="text-xl font-bold text-slate-800 mb-2">No Invitations Yet</h3>
-                            <p className="text-slate-500 max-w-sm mb-8">Choose a beautiful template and your digital wedding invitation will appear here.</p>
-                            <Link href="/checkout/templates" className="px-8 py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl shadow-lg hover:-translate-y-0.5 transition-all">
-                                Browse Templates
-                            </Link>
-                        </div>
+                        ) : (
+                            <div className="divide-y divide-slate-100">
+                                {invitations.map((inv: any) => (
+                                    <div key={inv.id} className="p-6 hover:bg-slate-50 transition-colors flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                                        <div>
+                                            <div className="flex items-center gap-3 mb-1">
+                                                <h3 className="font-bold text-lg text-slate-800">
+                                                    {inv.data?.couple?.bride?.firstName} &amp; {inv.data?.couple?.groom?.firstName}
+                                                </h3>
+                                                <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full ${inv.plan === "premium" ? "bg-amber-100 text-amber-700" : "bg-slate-200 text-slate-600"}`}>
+                                                    {inv.plan}
+                                                </span>
+                                            </div>
+                                            <p className="text-sm text-slate-500 mb-1">
+                                                Domain: <span className="font-medium text-slate-700">{inv.subdomain ? `${inv.subdomain}.wedbliss.co` : "Not set"}</span>
+                                            </p>
+                                            <p className="text-xs text-slate-400">Template ID: {inv.template_id}</p>
+                                        </div>
+                                        <div className="flex items-center gap-3 w-full md:w-auto mt-4 md:mt-0">
+                                            {inv.subdomain ? (
+                                                <a href={`http://${inv.subdomain}.wedbliss.co`} target="_blank" rel="noopener noreferrer" className="flex-1 md:flex-none text-center px-4 py-2 bg-emerald-50 text-emerald-700 font-bold text-sm rounded-lg hover:bg-emerald-100 transition-colors border border-emerald-200">
+                                                    View Live
+                                                </a>
+                                            ) : (
+                                                <span className="flex-1 md:flex-none text-center px-4 py-2 bg-slate-100 text-slate-400 font-bold text-sm rounded-lg border border-slate-200 cursor-not-allowed">
+                                                    Pending Domain
+                                                </span>
+                                            )}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
 
                 </div>

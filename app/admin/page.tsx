@@ -46,6 +46,7 @@ export default function AdminDashboard() {
     // Data
     const [templates, setTemplates] = useState<MergedTemplate[]>([]);
     const [orders, setOrders] = useState<DbOrder[]>([]);
+    const [invitations, setInvitations] = useState<any[]>([]);
     const [dataLoading, setDataLoading] = useState(true);
 
     // UI state
@@ -79,9 +80,14 @@ export default function AdminDashboard() {
         if (loading || accessDenied) return;
         const fetchData = async () => {
             setDataLoading(true);
-            const [dbTemplates, dbOrders] = await Promise.all([getTemplates(), getOrders()]);
+            const [dbTemplates, dbOrders, { data: dbInvs }] = await Promise.all([
+                getTemplates(),
+                getOrders(),
+                supabase.from('invitations').select('*').order('created_at', { ascending: false })
+            ]);
             setTemplates(mergeWithStatic(dbTemplates));
             setOrders(dbOrders);
+            setInvitations(dbInvs || []);
             setDataLoading(false);
         };
         fetchData();
@@ -331,6 +337,63 @@ export default function AdminDashboard() {
                             ))}
                         </div>
                     )}
+                </section>
+
+                {/* ── Customer Invitations & Domains ── */}
+                <section className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+                    <div className="p-6 border-b border-slate-100 flex justify-between items-center">
+                        <h2 className="font-bold text-lg text-slate-800">Customer Invitations & Domains</h2>
+                    </div>
+                    <div className="overflow-x-auto">
+                        <table className="w-full text-left border-collapse">
+                            <thead>
+                                <tr className="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider">
+                                    <th className="p-4 font-bold border-b border-slate-200">Couple / User</th>
+                                    <th className="p-4 font-bold border-b border-slate-200">Domain</th>
+                                    <th className="p-4 font-bold border-b border-slate-200">Template / Plan</th>
+                                    <th className="p-4 font-bold border-b border-slate-200">Created At</th>
+                                </tr>
+                            </thead>
+                            <tbody className="text-sm">
+                                {dataLoading ? (
+                                    <tr><td colSpan={4} className="p-8 text-center text-slate-400">Loading…</td></tr>
+                                ) : invitations.length === 0 ? (
+                                    <tr>
+                                        <td colSpan={4} className="p-12 text-center text-slate-400">
+                                            No invitations found.
+                                        </td>
+                                    </tr>
+                                ) : invitations.map(inv => (
+                                    <tr key={inv.id} className="hover:bg-slate-50 transition-colors border-b border-slate-100 last:border-0">
+                                        <td className="p-4">
+                                            <div className="font-bold text-slate-800">
+                                                {inv.data?.couple?.bride?.firstName || "Unknown"} &amp; {inv.data?.couple?.groom?.firstName || "Unknown"}
+                                            </div>
+                                            <div className="text-xs text-slate-500 mt-1">{inv.user_email}</div>
+                                        </td>
+                                        <td className="p-4">
+                                            {inv.subdomain ? (
+                                                <a href={`http://${inv.subdomain}.wedbliss.co`} target="_blank" rel="noopener noreferrer" className="font-medium text-emerald-600 hover:underline">
+                                                    {inv.subdomain}.wedbliss.co
+                                                </a>
+                                            ) : (
+                                                <span className="text-slate-400 italic">No domain</span>
+                                            )}
+                                        </td>
+                                        <td className="p-4">
+                                            <div className="font-mono text-xs text-slate-600">{inv.template_id}</div>
+                                            <div className={`mt-1 inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${inv.plan === "premium" ? "bg-amber-100 text-amber-700" : "bg-slate-100 text-slate-600"}`}>
+                                                {inv.plan}
+                                            </div>
+                                        </td>
+                                        <td className="p-4 text-xs text-slate-500">
+                                            {new Date(inv.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 </section>
 
                 {/* ── Recent Orders (from Supabase, no dummy rows) ── */}

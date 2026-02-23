@@ -1,49 +1,66 @@
-import Image from "next/image";
+"use client";
 
-import { headers } from "next/headers";
+import Image from "next/image";
+import { useEffect, useState } from "react";
 import { getInvitationData } from "@/lib/db";
 
-export default async function Home() {
-  const headersList = await headers();
-  const host = headersList.get("host") || "";
+export default function Home() {
+  const [inviteData, setInviteData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
-  // Extract subdomain (e.g., hema-siva.wedbliss.co -> hema-siva)
-  // For local testing, handle localhost:3001
-  let subdomain = "default";
-  if (host.includes("localhost") || host.includes("127.0.0.1")) {
-    // Allow testing via ?s=subdomain
-    const url = new URL(`http://${host}${headersList.get("x-invoke-path") || "/"}`);
-    subdomain = url.searchParams.get("s") || "default";
-  } else {
-    subdomain = host.split(".")[0];
-  }
+  useEffect(() => {
+    const fetchIt = async () => {
+      let host = window.location.hostname;
+      let subdomain = "default";
 
-  // Fetch from Supabase
-  let inviteData = await getInvitationData(subdomain);
+      if (host.includes("localhost") || host.includes("127.0.0.1")) {
+        // Allow testing via ?s=subdomain
+        const urlParams = new URLSearchParams(window.location.search);
+        subdomain = urlParams.get("s") || "default";
+      } else {
+        subdomain = host.split(".")[0];
+      }
 
-  // Fallback to static dummy data if not found
-  if (!inviteData) {
-    inviteData = {
-      metadata: { plan: "basic", template_id: "tm-mallipoo", createdAt: new Date().toISOString() },
-      couple: {
-        bride: { firstName: "Hema", lastName: "", parents: "D/o Kumar & Thenmozhi" },
-        groom: { firstName: "Siva", lastName: "", parents: "S/o Rajan & Viji" },
-        storyMessage: "We joyfully invite you to share in our happiness as we unite in marriage."
-      },
-      events: [
-        {
-          id: "ev-1",
-          type: "muhurtham",
-          title: "Muhurtham",
-          date: "12 May 2026",
-          time: "6:48 AM - 8:30 AM",
-          venueName: "Padmavathi Kalyana Mandapam",
-          venueAddress: "123 Tirupati Road, Chennai 600 028"
-        }
-      ],
-      gallery: { images: [] },
-      media: { videoUrl: "" }
+      // Fetch from Supabase
+      let data = await getInvitationData(subdomain);
+
+      // Fallback to static dummy data if not found
+      if (!data) {
+        data = {
+          metadata: { plan: "basic", template_id: "tm-mallipoo", createdAt: new Date().toISOString() },
+          couple: {
+            bride: { firstName: "Hema", lastName: "", parents: "D/o", grandparents: "" },
+            groom: { firstName: "Siva", lastName: "", parents: "S/o", grandparents: "" },
+            storyMessage: "We joyfully invite you to share in our happiness as we unite in marriage."
+          },
+          events: [
+            {
+              id: "ev-1",
+              type: "muhurtham",
+              title: "Muhurtham",
+              date: "12 May 2026",
+              time: "6:48 AM - 8:30 AM",
+              venueName: "Padmavathi Kalyana Mandapam",
+              venueAddress: "123 Tirupati Road, Chennai 600 028"
+            }
+          ],
+          gallery: { images: [] },
+          media: { videoUrl: "" }
+        };
+      }
+      setInviteData(data);
+      setLoading(false);
     };
+
+    fetchIt();
+  }, []);
+
+  if (loading || !inviteData) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#fdf6ec] text-[#a67c52]">
+        <div className="animate-pulse font-serif text-xl italic tracking-widest">Unfolding your invitation...</div>
+      </div>
+    );
   }
 
   return (

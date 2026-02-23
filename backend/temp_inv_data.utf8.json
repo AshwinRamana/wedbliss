@@ -1,0 +1,38 @@
+[
+  {
+    "data": {
+      "couple": {
+        "bride": {
+          "parents": "krishnan",
+          "lastName": "",
+          "firstName": "sneha",
+          "grandparents": ""
+        },
+        "groom": {
+          "parents": "rajan",
+          "lastName": "",
+          "firstName": "gowtham",
+          "grandparents": ""
+        },
+        "storyMessage": ""
+      },
+      "events": [
+        {
+          "id": "ev-1",
+          "date": "2026-02-27",
+          "time": "22:33",
+          "type": "muhurtham",
+          "title": "Wedding / Muhurtham",
+          "venueName": "krishna mahal",
+          "venueAddress": "",
+          "googleMapsUrl": ""
+        }
+      ],
+      "metadata": {
+        "plan": "basic",
+        "createdAt": "2026-02-23T11:58:21.452Z",
+        "template_id": "tm-mallipoo"
+      }
+    }
+  }
+]

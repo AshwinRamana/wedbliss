@@ -3,16 +3,24 @@ import Image from "next/image";
 export default function Home() {
   // Hardcoded dummy data for demo purposes.
   // In production, this data would be fetched from the database based on the domain/subdomain.
-  const couple = {
-    bride: "Hema",
-    groom: "Siva",
-    date: "12 May 2026",
-    time: "6:48 AM - 8:30 AM",
-    venueName: "Padmavathi Kalyana Mandapam",
-    venueAddress: "123 Tirupati Road, Chennai 600 028",
-    brideParents: "D/o Kumar & Thenmozhi",
-    groomParents: "S/o Rajan & Viji",
-    welcomeMessage: "We joyfully invite you to share in our happiness as we unite in marriage.",
+  const inviteData = {
+    metadata: { plan: "basic", template_id: "tm-mallipoo", createdAt: new Date().toISOString() },
+    couple: {
+      bride: { firstName: "Hema", lastName: "", parents: "D/o Kumar & Thenmozhi" },
+      groom: { firstName: "Siva", lastName: "", parents: "S/o Rajan & Viji" },
+      storyMessage: "We joyfully invite you to share in our happiness as we unite in marriage."
+    },
+    events: [
+      {
+        id: "ev-1",
+        type: "muhurtham",
+        title: "Muhurtham",
+        date: "12 May 2026",
+        time: "6:48 AM - 8:30 AM",
+        venueName: "Padmavathi Kalyana Mandapam",
+        venueAddress: "123 Tirupati Road, Chennai 600 028"
+      }
+    ]
   };
 
   return (
@@ -40,17 +48,17 @@ export default function Home() {
           </div>
 
           <h1 className="text-5xl md:text-7xl font-serif italic mb-8 mt-2 text-[#6b4020]">
-            {couple.groom} <span className="text-3xl mx-2 text-[#c8a070]">&amp;</span> {couple.bride}
+            {inviteData.couple.groom.firstName} <span className="text-3xl mx-2 text-[#c8a070]">&amp;</span> {inviteData.couple.bride.firstName}
           </h1>
 
           <div className="w-24 h-[1px] bg-[#c8a070] mx-auto mb-8 opacity-50"></div>
 
           <p className="text-lg md:text-xl text-[#8b6040] mb-10 max-w-lg mx-auto leading-relaxed">
-            {couple.welcomeMessage}
+            {inviteData.couple.storyMessage}
           </p>
 
           <div className="inline-block bg-[#fff] px-8 py-4 rounded-full border border-[#e8c8a0] shadow-sm">
-            <p className="text-xl font-medium text-[#6b4020]">{couple.date}</p>
+            <p className="text-xl font-medium text-[#6b4020]">{inviteData.events[0]?.date}</p>
           </div>
         </div>
       </section>
@@ -62,21 +70,21 @@ export default function Home() {
 
           <div className="grid md:grid-cols-2 gap-12">
             <div className="p-8 bg-[#fdf6ec] rounded-3xl border border-[#e8c8a0]/50">
-              <h3 className="text-sm tracking-[0.2em] uppercase font-bold text-[#8b6040] mb-4">Muhurtham</h3>
-              <p className="text-2xl text-[#6b4020] font-serif mb-2">{couple.time}</p>
-              <p className="text-[#8b6040]">{couple.date}</p>
+              <h3 className="text-sm tracking-[0.2em] uppercase font-bold text-[#8b6040] mb-4">{inviteData.events[0]?.title}</h3>
+              <p className="text-2xl text-[#6b4020] font-serif mb-2">{inviteData.events[0]?.time}</p>
+              <p className="text-[#8b6040]">{inviteData.events[0]?.date}</p>
             </div>
 
             <div className="p-8 bg-[#fdf6ec] rounded-3xl border border-[#e8c8a0]/50">
               <h3 className="text-sm tracking-[0.2em] uppercase font-bold text-[#8b6040] mb-4">Venue</h3>
-              <p className="text-xl text-[#6b4020] font-serif mb-2">{couple.venueName}</p>
-              <p className="text-[#8b6040] text-sm leading-relaxed">{couple.venueAddress}</p>
+              <p className="text-xl text-[#6b4020] font-serif mb-2">{inviteData.events[0]?.venueName}</p>
+              <p className="text-[#8b6040] text-sm leading-relaxed">{inviteData.events[0]?.venueAddress}</p>
             </div>
           </div>
 
           <div className="mt-16 text-sm text-[#8b6040] opacity-80">
             <p>With blessings from</p>
-            <p className="mt-2 font-medium">{couple.groomParents} &nbsp; | &nbsp; {couple.brideParents}</p>
+            <p className="mt-2 font-medium">{inviteData.couple.groom.parents} &nbsp; | &nbsp; {inviteData.couple.bride.parents}</p>
           </div>
         </div>
       </section>

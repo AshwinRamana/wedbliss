@@ -10,14 +10,7 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 router.post('/', async (req, res) => {
     try {
         const {
-            user_email, plan, template_id,
-            bride_first, bride_last, bride_qual,
-            groom_first, groom_last, groom_qual,
-            events,
-            bride_parents, bride_grands,
-            groom_parents, groom_grands, best_wishes,
-            video_url, music_track,
-            subdomain
+            user_email, plan, template_id, subdomain, data: invitationData
         } = req.body;
 
         if (!user_email || !plan) {
@@ -28,14 +21,9 @@ router.post('/', async (req, res) => {
             .from('invitations')
             .insert({
                 user_email, plan, template_id,
-                bride_first, bride_last, bride_qual,
-                groom_first, groom_last, groom_qual,
-                events: events || [],
-                bride_parents, bride_grands,
-                groom_parents, groom_grands, best_wishes,
-                video_url, music_track,
                 subdomain: subdomain || null,
-                domain_status: subdomain ? 'pending' : null
+                domain_status: subdomain ? 'pending' : null,
+                data: invitationData || {}
             })
             .select()
             .single();
@@ -83,7 +71,6 @@ router.put('/:id', async (req, res) => {
     try {
         const { id } = req.params;
         const updates = req.body;
-        updates.updated_at = new Date().toISOString();
 
         const { data, error } = await supabase
             .from('invitations')

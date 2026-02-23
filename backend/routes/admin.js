@@ -20,7 +20,7 @@ router.get('/domains', async (req, res) => {
     try {
         const { data, error } = await supabase
             .from('invitations')
-            .select('id, user_email, subdomain, domain_status, cloudfront_id, created_at, bride_first, groom_first')
+            .select('id, user_email, subdomain, domain_status, cloudfront_id, created_at, data')
             .not('subdomain', 'is', null)
             .order('created_at', { ascending: false });
 
@@ -82,8 +82,7 @@ router.delete('/domains/:id', async (req, res) => {
             .update({
                 subdomain: null,
                 domain_status: null,
-                cloudfront_id: null,
-                updated_at: new Date().toISOString()
+                cloudfront_id: null
             })
             .eq('id', id);
 

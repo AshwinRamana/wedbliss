@@ -122,20 +122,21 @@ function CheckoutFormContent() {
                     user_email: userEmail,
                     plan,
                     template_id: template !== "unknown" ? template : null,
-                    bride_first: brideFirst,
-                    bride_last: brideLast,
-                    bride_qual: brideQual,
-                    groom_first: groomFirst,
-                    groom_last: groomLast,
-                    groom_qual: groomQual,
-                    events,
-                    bride_parents: brideParents,
-                    bride_grands: brideGrands,
-                    groom_parents: groomParents,
-                    groom_grands: groomGrands,
-                    best_wishes: bestWishes,
-                    music_track: isPremium ? musicTrack : null,
-                    subdomain: subdomain || null
+                    subdomain: subdomain || null,
+                    data: {
+                        metadata: {
+                            plan,
+                            template_id: template !== "unknown" ? template : "tm-mallipoo",
+                            createdAt: new Date().toISOString()
+                        },
+                        couple: {
+                            bride: { firstName: brideFirst, lastName: brideLast, parents: brideParents, grandparents: brideGrands },
+                            groom: { firstName: groomFirst, lastName: groomLast, parents: groomParents, grandparents: groomGrands },
+                            storyMessage: bestWishes
+                        },
+                        events,
+                        media: isPremium ? { backgroundMusicUrl: musicTrack } : undefined
+                    }
                 };
 
                 const res = await fetch(`${BACKEND_URL}/api/invitations`, {

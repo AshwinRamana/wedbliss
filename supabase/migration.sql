@@ -63,7 +63,7 @@ create policy "Service role can insert orders"
 
 
 -- ── 4. Invitations Table ─────────────────────────────────────────────────────
--- Stores all wedding form data. One user can have multiple invitations.
+-- Stores all wedding form data in a unified JSON structure.
 create table if not exists public.invitations (
   id              uuid primary key default gen_random_uuid(),
   user_email      text not null,
@@ -71,37 +71,19 @@ create table if not exists public.invitations (
   template_id     text references public.templates(id) on delete set null,
   subdomain       text unique,
   domain_status   text default 'pending' check (domain_status in ('pending','provisioning','active','failed')),
-
-  -- Couple Details
-  bride_first     text,
-  bride_last      text,
-  bride_qual      text,
-  groom_first     text,
-  groom_last      text,
-  groom_qual      text,
-
-  -- Events (JSON array for flexibility)
-  events          jsonb default '[]'::jsonb,
-
-  -- Family
-  bride_parents   text,
-  bride_grands    text,
-  groom_parents   text,
-  groom_grands    text,
-  best_wishes     text,
-
-  -- Media (Premium only)
-  video_url       text,
-  music_track     text,
+  
+  -- The unified JSON data structure containing couple details, events, media, etc.
+  data            jsonb not null default '{}'::jsonb,
 
   -- References
   order_id        uuid references public.orders(id) on delete set null,
   cloudfront_id   text,
 
-  created_at      timestamptz default now(),
-  updated_at      timestamptz default now()
+  created_at      timestamptz default now()
 );
 
+-- Note: In a production migration, you would normally move existing data into the 
+-- new `data` JSON column here. Since this is early development, we just replace the columns.
 alter table public.invitations enable row level security;
 
 -- Users can read their own invitations

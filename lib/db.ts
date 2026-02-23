@@ -120,6 +120,58 @@ export async function insertOrder(
 // Invitations
 // ─────────────────────────────────────────────────────────────────────────────
 
+export interface InvitationData {
+    metadata: {
+        plan: "basic" | "premium";
+        template_id: string;
+        createdAt: string;
+    };
+    couple: {
+        bride: {
+            firstName: string;
+            lastName: string;
+            parents: string;
+            grandparents?: string;
+            photoUrl?: string;
+        };
+        groom: {
+            firstName: string;
+            lastName: string;
+            parents: string;
+            grandparents?: string;
+            photoUrl?: string;
+        };
+        storyMessage: string;
+    };
+    events: Array<{
+        id: string;
+        type: string;
+        title: string;
+        date: string;
+        time: string;
+        venueName: string;
+        venueAddress: string;
+        googleMapsUrl?: string;
+    }>;
+    gallery?: {
+        coverPhotoUrl?: string;
+        images: string[];
+    };
+    media?: {
+        youtubeVideoId?: string;
+        backgroundMusicUrl?: string;
+    };
+    design?: {
+        primaryColor?: string;
+        fontOverride?: string;
+    };
+    rsvp?: {
+        enabled: boolean;
+        whatsappNumber?: string;
+        deadline?: string;
+    };
+}
+
 export type DbInvitation = {
     id: string;
     user_email: string;
@@ -127,29 +179,15 @@ export type DbInvitation = {
     template_id: string | null;
     subdomain: string | null;
     domain_status: 'pending' | 'provisioning' | 'active' | 'failed' | null;
-    bride_first: string | null;
-    bride_last: string | null;
-    bride_qual: string | null;
-    groom_first: string | null;
-    groom_last: string | null;
-    groom_qual: string | null;
-    events: unknown[];
-    bride_parents: string | null;
-    bride_grands: string | null;
-    groom_parents: string | null;
-    groom_grands: string | null;
-    best_wishes: string | null;
-    video_url: string | null;
-    music_track: string | null;
+    data: InvitationData;
     order_id: string | null;
     cloudfront_id: string | null;
     created_at: string;
-    updated_at: string;
 };
 
 /** Create a new invitation. */
 export async function createInvitation(
-    invitation: Omit<DbInvitation, 'id' | 'created_at' | 'updated_at'>
+    invitation: Omit<DbInvitation, 'id' | 'created_at'>
 ): Promise<{ data: DbInvitation | null; error: string | null }> {
     const { data, error } = await supabase
         .from('invitations')
@@ -186,7 +224,7 @@ export async function updateInvitation(
 ): Promise<{ error: string | null }> {
     const { error } = await supabase
         .from('invitations')
-        .update({ ...updates, updated_at: new Date().toISOString() })
+        .update(updates)
         .eq('id', id);
 
     if (error) {

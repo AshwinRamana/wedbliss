@@ -11,8 +11,12 @@ type DomainRecord = {
     domain_status: string | null;
     cloudfront_id: string | null;
     created_at: string;
-    bride_first: string | null;
-    groom_first: string | null;
+    data?: {
+        couple?: {
+            bride?: { firstName: string };
+            groom?: { firstName: string };
+        };
+    };
 };
 
 export default function LiveDomainsSection() {
@@ -107,7 +111,9 @@ export default function LiveDomainsSection() {
                                     </a>
                                 </td>
                                 <td className="p-4 font-bold text-slate-800">
-                                    {d.bride_first && d.groom_first ? `${d.bride_first} & ${d.groom_first}` : "—"}
+                                    {d.data?.couple?.bride?.firstName && d.data?.couple?.groom?.firstName
+                                        ? `${d.data.couple.bride.firstName} & ${d.data.couple.groom.firstName}`
+                                        : "—"}
                                 </td>
                                 <td className="p-4 text-slate-500 font-mono text-xs">{d.user_email}</td>
                                 <td className="p-4">

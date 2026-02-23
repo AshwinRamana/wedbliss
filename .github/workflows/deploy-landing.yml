@@ -52,3 +52,16 @@ jobs:
           aws cloudfront create-invalidation \
             --distribution-id ${{ secrets.LANDING_CF_DISTRIBUTION_ID }} \
             --paths "/*"
+
+      - name: Send Email Notification
+        if: always()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          subject: WedBliss Deploy Result - ${{ github.workflow }}
+          to: ashwinramana7@gmail.com
+          from: GitHub Actions
+          body: The deployment job '${{ github.job }}' in workflow '${{ github.workflow }}' finished with status '${{ job.status }}'.

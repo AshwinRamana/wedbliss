@@ -25,3 +25,16 @@ jobs:
             cd backend
             npm install --production
             pm2 restart wedbliss-api || pm2 start server.js --name wedbliss-api
+
+      - name: Send Email Notification
+        if: always()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          subject: WedBliss Deploy Result - ${{ github.workflow }}
+          to: ashwinramana7@gmail.com
+          from: GitHub Actions
+          body: The deployment job '${{ github.job }}' in workflow '${{ github.workflow }}' finished with status '${{ job.status }}'.

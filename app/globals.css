@@ -874,7 +874,7 @@ nav::after {
   cursor: pointer;
   transition: all .45s cubic-bezier(0.4, 0, 0.2, 1);
   border: 2px solid rgba(255, 255, 255, 0.5);
-  aspect-ratio: 3/4;
+  aspect-ratio: 1/1;
 }
 
 .hero-card:hover {
@@ -1945,10 +1945,11 @@ footer {
 
   /* 3D Stack track; deeply stylized modern container */
   #heroCarousel {
-    display: block !important;
-    position: relative;
     width: 100%;
-    height: 100%;
+    height: 60vw;
+    min-height: 250px;
+    position: relative;
+    overflow: visible;
     perspective: 1200px;
     transform-style: preserve-3d;
   }
@@ -1971,6 +1972,7 @@ footer {
   .carousel-card {
     width: 100%;
     height: 100%;
+    aspect-ratio: 1/1;
     border-radius: 16px;
     overflow: hidden;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);

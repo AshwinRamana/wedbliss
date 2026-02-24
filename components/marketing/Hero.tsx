@@ -267,7 +267,7 @@ export default function Hero() {
                                 heroTemplates.slice(0, 4).map((t, idx) => (
                                     <div key={t.id} className="carousel-slide">
                                         <div className={`carousel-card ${idx === 0 ? 'active' : ''} relative overflow-hidden bg-slate-100`}>
-                                            <div className="w-full h-full absolute inset-0 z-0">
+                                            <div className="w-full h-full absolute inset-0 z-0 bg-slate-100">
                                                 {t.thumbnail_url ? (
                                                     /* eslint-disable-next-line @next/next/no-img-element */
                                                     <img src={t.thumbnail_url} alt={t.name} className="w-full h-full object-cover" />

@@ -177,6 +177,25 @@ export default function AdminDashboard() {
     );
 
     // ─────────────────────────────────────────────────────────────────────────
+    // Derived Metrics
+    // ─────────────────────────────────────────────────────────────────────────
+    const activeUsersCount = new Set([
+        ...invitations.map(inv => inv.user_email).filter(Boolean),
+        ...orders.map(o => o.user_email).filter(Boolean)
+    ]).size;
+
+    const totalRevenue = orders
+        .filter(o => o.status === "success" && o.amount_paise)
+        .reduce((sum, o) => sum + o.amount_paise!, 0) / 100;
+
+    const metrics = [
+        { label: "Active Users", color: "bg-blue-50", value: dataLoading ? "—" : activeUsersCount.toString(), sub: "Unique emails with orders/invites" },
+        { label: "Live Invitations", color: "bg-emerald-50", value: dataLoading ? "—" : invitations.length.toString(), sub: "Total invitations created" },
+        { label: "Total Revenue", color: "bg-amber-50", value: dataLoading ? "—" : `₹${totalRevenue.toLocaleString("en-IN")}`, sub: "From successful orders" },
+        { label: "Support Tickets", color: "bg-purple-50", value: "0", sub: "No ticketing system connected yet" },
+    ];
+
+    // ─────────────────────────────────────────────────────────────────────────
     // Main Dashboard
     // ─────────────────────────────────────────────────────────────────────────
     return (
@@ -197,18 +216,13 @@ export default function AdminDashboard() {
 
             <main className="max-w-7xl mx-auto px-8 py-8 flex flex-col gap-10">
 
-                {/* ── Metrics Row (live data pending real integrations) ── */}
+                {/* ── Metrics Row ── */}
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                    {[
-                        { label: "Active Users", color: "bg-blue-50", sub: "Connect analytics to see live count" },
-                        { label: "Live Invitations", color: "bg-emerald-50", sub: "Connect DB to see live count" },
-                        { label: "Total Revenue", color: "bg-amber-50", sub: "Connect Razorpay to see live revenue" },
-                        { label: "Support Tickets", color: "bg-purple-50", sub: "No ticketing system connected yet" },
-                    ].map(m => (
+                    {metrics.map(m => (
                         <div key={m.label} className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col gap-2 relative overflow-hidden">
                             <div className={`absolute top-0 right-0 w-24 h-24 ${m.color} rounded-bl-full -z-0`}></div>
                             <span className="text-sm font-bold text-slate-500 uppercase tracking-wider relative z-10">{m.label}</span>
-                            <span className="text-4xl font-black text-slate-300 relative z-10">—</span>
+                            <span className={`text-4xl font-black relative z-10 ${m.value === "—" ? "text-slate-300" : "text-slate-700"}`}>{m.value}</span>
                             <span className="text-xs font-medium text-slate-400 relative z-10">{m.sub}</span>
                         </div>
                     ))}

@@ -10,6 +10,7 @@ export type DbTemplate = {
     tier: 'basic' | 'premium';
     description: string;
     is_live: boolean;
+    is_hero: boolean;
     demo_url: string | null;
     thumbnail_url: string | null;
     created_at: string;

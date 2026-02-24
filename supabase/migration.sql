@@ -10,6 +10,7 @@ create table if not exists public.templates (
   tier          text not null default 'basic' check (tier in ('basic', 'premium')),
   description   text not null default '',
   is_live       boolean not null default false,
+  is_hero       boolean not null default false,
   demo_url      text default null,
   thumbnail_url text default null,
   created_at    timestamptz default now()
@@ -27,13 +28,13 @@ create policy "Authenticated admin can upsert templates"
   using (auth.role() = 'authenticated');
 
 -- ── 2. Seed the initial 6 templates ──────────────────────────────────────────
-insert into public.templates (id, name, tier, description, is_live, demo_url) values
-  ('tm-mallipoo',   'Malli Poo',       'basic',   'Jasmine-inspired minimal design. Ivory and soft rose gold.',           true,  'http://localhost:3001'),
-  ('tm-kovil',      'Kovil Gopuram',   'basic',   'Temple architecture with rising sun. Forest green & 24k gold.',        false, null),
-  ('tm-tanjore',    'Tanjore Gold',    'basic',   'Classic crimson and gold with Tanjore art. Regal and traditional.',    false, null),
-  ('tm-peacock',    'Peacock Majesty', 'premium', 'Lord Muruga''s peacock with Vel motif. Teal and gold.',               false, null),
-  ('tm-vilakku',    'Kuthu Vilakku',   'premium', 'Traditional oil lamp with warm amber glow. Festive and bright.',       false, null),
-  ('tm-kanjivaram', 'Kanjivaram Silk', 'premium', 'Silk saree weave patterns. Deep navy & zari gold borders.',           false, null)
+insert into public.templates (id, name, tier, description, is_live, is_hero, demo_url) values
+  ('tm-mallipoo',   'Malli Poo',       'basic',   'Jasmine-inspired minimal design. Ivory and soft rose gold.',           true,  true,  'http://localhost:3001'),
+  ('tm-kovil',      'Kovil Gopuram',   'basic',   'Temple architecture with rising sun. Forest green & 24k gold.',        false, true,  null),
+  ('tm-tanjore',    'Tanjore Gold',    'basic',   'Classic crimson and gold with Tanjore art. Regal and traditional.',    false, true,  null),
+  ('tm-peacock',    'Peacock Majesty', 'premium', 'Lord Muruga''s peacock with Vel motif. Teal and gold.',               false, true,  null),
+  ('tm-vilakku',    'Kuthu Vilakku',   'premium', 'Traditional oil lamp with warm amber glow. Festive and bright.',       false, false, null),
+  ('tm-kanjivaram', 'Kanjivaram Silk', 'premium', 'Silk saree weave patterns. Deep navy & zari gold borders.',           false, false, null)
 on conflict (id) do nothing;
 
 

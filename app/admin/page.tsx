@@ -12,12 +12,21 @@ import LiveDomainsSection from "@/components/admin/LiveDomainsSection";
 // ─────────────────────────────────────────────────────────────────────────────
 // Merged type (static SVG artwork + live DB flags)
 // ─────────────────────────────────────────────────────────────────────────────
+type AuthUser = {
+    id: string;
+    email: string;
+    created_at: string;
+    last_sign_in_at?: string;
+    user_metadata?: { name?: string; dob?: string };
+};
+
 type MergedTemplate = {
     id: string;
     name: string;
     tier: "basic" | "premium";
     desc: string;
     isLive: boolean;
+    isHero: boolean;
     href: string | null;
     thumbnailUrl: string | null;
 };
@@ -31,6 +40,7 @@ function mergeWithStatic(dbRows: DbTemplate[]): MergedTemplate[] {
             tier: (db?.tier ?? t.tier) as "basic" | "premium",
             desc: db?.description ?? t.desc,
             isLive: db?.is_live ?? false,
+            isHero: db?.is_hero ?? false,
             href: db?.demo_url ?? null,
             thumbnailUrl: db?.thumbnail_url ?? null,
         };
@@ -48,15 +58,19 @@ export default function AdminDashboard() {
     const [orders, setOrders] = useState<DbOrder[]>([]);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [invitations, setInvitations] = useState<any[]>([]);
+    const [users, setUsers] = useState<AuthUser[]>([]);
+    const [usersLoading, setUsersLoading] = useState(true);
     const [dataLoading, setDataLoading] = useState(true);
+
+    const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
     // UI state
     const [editingId, setEditingId] = useState<string | null>(null);
-    const [form, setForm] = useState({ href: "", thumbnailUrl: "", isLive: false });
+    const [form, setForm] = useState({ href: "", thumbnailUrl: "", isLive: false, isHero: false });
     const [saveMsg, setSaveMsg] = useState<{ id: string; msg: string } | null>(null);
     const [savingId, setSavingId] = useState<string | null>(null);
     const [showAdd, setShowAdd] = useState(false);
-    const [newTpl, setNewTpl] = useState({ id: "", name: "", tier: "basic" as "basic" | "premium", desc: "", href: "", thumbnailUrl: "" });
+    const [newTpl, setNewTpl] = useState({ id: "", name: "", tier: "basic" as "basic" | "premium", desc: "", href: "", thumbnailUrl: "", isHero: false });
     const [addSaving, setAddSaving] = useState(false);
     const [addError, setAddError] = useState<string | null>(null);
 
@@ -91,13 +105,28 @@ export default function AdminDashboard() {
             setInvitations(dbInvs || []);
             setDataLoading(false);
         };
+        const fetchUsers = async () => {
+            setUsersLoading(true);
+            try {
+                const res = await fetch(`${BACKEND_URL}/api/admin/users`);
+                if (res.ok) {
+                    const json = await res.json();
+                    setUsers(json.users || []);
+                }
+            } catch (err) {
+                console.error("Failed to fetch users", err);
+            }
+            setUsersLoading(false);
+        };
+
         fetchData();
-    }, [loading, accessDenied]);
+        fetchUsers();
+    }, [loading, accessDenied, BACKEND_URL]);
 
     // ── Template CRUD ─────────────────────────────────────────────────────────
     const openEdit = (t: MergedTemplate) => {
         setEditingId(t.id);
-        setForm({ href: t.href ?? "", thumbnailUrl: t.thumbnailUrl ?? "", isLive: t.isLive });
+        setForm({ href: t.href ?? "", thumbnailUrl: t.thumbnailUrl ?? "", isLive: t.isLive, isHero: t.isHero });
     };
 
     const saveEdit = async (id: string) => {
@@ -110,6 +139,7 @@ export default function AdminDashboard() {
             tier: existing.tier as "basic" | "premium",
             description: existing.desc,
             is_live: form.isLive,
+            is_hero: form.isHero,
             demo_url: form.href || null,
             thumbnail_url: form.thumbnailUrl || null,
         });
@@ -118,7 +148,7 @@ export default function AdminDashboard() {
             setSaveMsg({ id, msg: "✗ " + error });
         } else {
             setTemplates(prev => prev.map(t => t.id === id
-                ? { ...t, isLive: form.isLive, href: form.href || null, thumbnailUrl: form.thumbnailUrl || null }
+                ? { ...t, isLive: form.isLive, isHero: form.isHero, href: form.href || null, thumbnailUrl: form.thumbnailUrl || null }
                 : t
             ));
             setEditingId(null);
@@ -142,6 +172,7 @@ export default function AdminDashboard() {
             tier: newTpl.tier,
             description: newTpl.desc,
             is_live: false,
+            is_hero: newTpl.isHero,
             demo_url: newTpl.href || null,
             thumbnail_url: newTpl.thumbnailUrl || null,
         });
@@ -149,11 +180,32 @@ export default function AdminDashboard() {
         if (error) { setAddError(error); return; }
         setTemplates(prev => [...prev, {
             id: newTpl.id, name: newTpl.name, tier: newTpl.tier,
-            desc: newTpl.desc, isLive: false,
+            desc: newTpl.desc, isLive: false, isHero: newTpl.isHero,
             href: newTpl.href || null, thumbnailUrl: newTpl.thumbnailUrl || null,
         }]);
-        setNewTpl({ id: "", name: "", tier: "basic", desc: "", href: "", thumbnailUrl: "" });
+        setNewTpl({ id: "", name: "", tier: "basic", desc: "", href: "", thumbnailUrl: "", isHero: false });
         setShowAdd(false);
+    };
+
+    // ── Delete User ───────────────────────────────────────────────────────────
+    const handleDeleteUser = async (uid: string, email: string) => {
+        if (!window.confirm(`Are you extremely sure you want to completely delete ${email}? This action is permanent and removes their Supabase Auth record.`)) {
+            return;
+        }
+
+        try {
+            const res = await fetch(`${BACKEND_URL}/api/admin/users/${uid}`, { method: 'DELETE' });
+            if (!res.ok) {
+                const errorData = await res.json();
+                alert(`Failed to delete user: ${errorData.error}`);
+                return;
+            }
+            // Remove from local state
+            setUsers(prev => prev.filter(u => u.id !== uid));
+        } catch (err) {
+            console.error("Delete user error", err);
+            alert("Network error trying to delete user.");
+        }
     };
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -259,7 +311,7 @@ export default function AdminDashboard() {
                                             <span className="text-xs font-bold text-slate-500 uppercase">{f.label}</span>
                                             <input className="border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
                                                 placeholder={f.placeholder}
-                                                value={(newTpl as Record<string, string>)[f.key]}
+                                                value={(newTpl as unknown as Record<string, string>)[f.key]}
                                                 onChange={e => setNewTpl(p => ({ ...p, [f.key]: e.target.value }))} />
                                         </label>
                                     ))}
@@ -270,6 +322,10 @@ export default function AdminDashboard() {
                                             <option value="basic">Basic</option>
                                             <option value="premium">Premium</option>
                                         </select>
+                                    </label>
+                                    <label className="flex items-center gap-2 cursor-pointer mt-1">
+                                        <input type="checkbox" checked={newTpl.isHero} onChange={e => setNewTpl(p => ({ ...p, isHero: e.target.checked }))} className="rounded accent-indigo-600" />
+                                        <span className="text-xs font-bold text-slate-600">Mark as Hero (show on landing page)</span>
                                     </label>
                                 </div>
                                 <div className="flex gap-3 mt-2">
@@ -310,6 +366,7 @@ export default function AdminDashboard() {
                                             <span className="font-mono text-xs text-slate-400">{t.id}</span>
                                             <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${t.tier === "premium" ? "bg-amber-100 text-amber-700" : "bg-slate-100 text-slate-600"}`}>{t.tier}</span>
                                             <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${t.isLive ? "bg-emerald-100 text-emerald-700" : "bg-red-50 text-red-500"}`}>{t.isLive ? "● Live" : "○ Coming Soon"}</span>
+                                            {t.isHero && <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700">★ Hero</span>}
                                         </div>
                                         <p className="text-xs text-slate-500 mt-0.5">{t.desc}</p>
                                         {editingId !== t.id && t.href && (
@@ -335,6 +392,10 @@ export default function AdminDashboard() {
                                                 <input type="checkbox" checked={form.isLive} onChange={e => setForm(p => ({ ...p, isLive: e.target.checked }))} className="rounded accent-emerald-600" />
                                                 <span className="text-xs font-bold text-slate-600">Mark as Live (shows &quot;View Demo&quot; site-wide)</span>
                                             </label>
+                                            <label className="flex items-center gap-2 cursor-pointer mb-2">
+                                                <input type="checkbox" checked={form.isHero} onChange={e => setForm(p => ({ ...p, isHero: e.target.checked }))} className="rounded accent-indigo-600" />
+                                                <span className="text-xs font-bold text-slate-600">Mark as Hero (show on landing page)</span>
+                                            </label>
                                             <div className="flex gap-2">
                                                 <button onClick={() => setEditingId(null)} className="flex-1 py-1.5 text-xs border border-slate-200 rounded-lg font-bold text-slate-600 hover:bg-slate-100 transition-colors">Cancel</button>
                                                 <button onClick={() => saveEdit(t.id)} disabled={savingId === t.id} className="flex-1 py-1.5 text-xs bg-emerald-600 hover:bg-emerald-700 disabled:opacity-60 text-white rounded-lg font-bold transition-colors">
@@ -355,11 +416,11 @@ export default function AdminDashboard() {
                 </section>
 
                 {/* ── Customer Invitations & Domains ── */}
-                <section className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
-                    <div className="p-6 border-b border-slate-100 flex justify-between items-center">
+                <section className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden flex flex-col">
+                    <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50 sticky top-0 z-10">
                         <h2 className="font-bold text-lg text-slate-800">Customer Invitations & Domains</h2>
                     </div>
-                    <div className="overflow-x-auto">
+                    <div className="overflow-auto max-h-[400px]">
                         <table className="w-full text-left border-collapse">
                             <thead>
                                 <tr className="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider">
@@ -411,15 +472,59 @@ export default function AdminDashboard() {
                     </div>
                 </section>
 
+                {/* ── Signed-Up Users Management ── */}
+                <section className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden flex flex-col">
+                    <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50 sticky top-0 z-10">
+                        <h2 className="font-bold text-lg text-slate-800">Registered Customers</h2>
+                        <span className="text-xs font-medium bg-blue-100 text-blue-700 px-3 py-1 rounded-full">{users.length} Users</span>
+                    </div>
+                    <div className="overflow-auto max-h-[400px]">
+                        <table className="w-full text-left border-collapse relative">
+                            <thead className="sticky top-0 bg-white z-10 shadow-sm">
+                                <tr className="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider">
+                                    <th className="p-4 font-bold border-b border-slate-200">Email</th>
+                                    <th className="p-4 font-bold border-b border-slate-200">Name</th>
+                                    <th className="p-4 font-bold border-b border-slate-200">Signed Up</th>
+                                    <th className="p-4 font-bold border-b border-slate-200">Last Login</th>
+                                    <th className="p-4 font-bold border-b border-slate-200">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody className="text-sm">
+                                {usersLoading ? (
+                                    <tr><td colSpan={5} className="p-8 text-center text-slate-400">Loading Auth Users…</td></tr>
+                                ) : users.length === 0 ? (
+                                    <tr><td colSpan={5} className="p-12 text-center text-slate-400">No users found.</td></tr>
+                                ) : users.map(u => (
+                                    <tr key={u.id} className="hover:bg-slate-50 transition-colors border-b border-slate-100 last:border-0">
+                                        <td className="p-4 font-mono text-xs text-slate-700">{u.email}</td>
+                                        <td className="p-4 font-bold text-slate-800">{u.user_metadata?.name || "—"}</td>
+                                        <td className="p-4 text-xs text-slate-500">
+                                            {new Date(u.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                                        </td>
+                                        <td className="p-4 text-xs text-slate-500">
+                                            {u.last_sign_in_at ? new Date(u.last_sign_in_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "—"}
+                                        </td>
+                                        <td className="p-4">
+                                            <button onClick={() => handleDeleteUser(u.id, u.email)} className="px-3 py-1.5 text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors border border-red-100">
+                                                Delete
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
                 {/* ── Recent Orders (from Supabase, no dummy rows) ── */}
-                <section className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
-                    <div className="p-6 border-b border-slate-100 flex justify-between items-center">
+                <section className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden flex flex-col">
+                    <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50 sticky top-0 z-10">
                         <h2 className="font-bold text-lg text-slate-800">Recent Payment Reports</h2>
                         <span className="text-xs text-slate-400 font-medium">Populated by Razorpay webhook → Supabase</span>
                     </div>
-                    <div className="overflow-x-auto">
-                        <table className="w-full text-left border-collapse">
-                            <thead>
+                    <div className="overflow-auto max-h-[400px]">
+                        <table className="w-full text-left border-collapse relative">
+                            <thead className="sticky top-0 bg-white z-10 shadow-sm">
                                 <tr className="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider">
                                     <th className="p-4 font-bold border-b border-slate-200">Transaction ID</th>
                                     <th className="p-4 font-bold border-b border-slate-200">User / Couple</th>

@@ -3,9 +3,11 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { getTemplates, DbTemplate } from "@/lib/db";
+import { TemplateSVG } from "./Templates";
 
 export default function Hero() {
     const [liveUrls, setLiveUrls] = useState<Record<string, string | null>>({});
+    const [heroTemplates, setHeroTemplates] = useState<DbTemplate[]>([]);
 
     useEffect(() => {
         const fetchUrls = async () => {
@@ -15,6 +17,7 @@ export default function Hero() {
                 urlMap[t.id] = t.demo_url || null;
             });
             setLiveUrls(urlMap);
+            setHeroTemplates(dbTemplates.filter(t => t.is_hero));
         };
         fetchUrls();
     }, []);
@@ -221,239 +224,68 @@ export default function Hero() {
 
                     {/* ── Desktop 2-col grid (hidden on mobile via CSS) ── */}
                     <div className="hero-cards">
-
-                        {/* Card 1 — Malli Poo (LIVE DEMO) */}
-                        <div className="hero-card">
-                            <div className="hc-overlay">
-                                {liveUrls['tm-mallipoo'] ? (
-                                    <a href={liveUrls['tm-mallipoo']} target="_blank" rel="noopener noreferrer" className="hc-btn">View Demo →</a>
-                                ) : (
-                                    <button className="hc-btn" style={{ opacity: 0.6, cursor: 'not-allowed' }}>Coming Soon</button>
-                                )}
-                            </div>
-                            <svg width="100%" height="100%" viewBox="0 0 160 214" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-                                <rect width="160" height="214" fill="#fdf6ec" />
-                                <circle cx="0" cy="0" r="60" fill="rgba(251,207,232,0.2)" /><circle cx="160" cy="214" r="60" fill="rgba(251,207,232,0.2)" />
-                                <rect x="4" y="4" width="152" height="206" fill="none" stroke="#c8a070" strokeWidth="0.8" rx="2" />
-                                <path d="M15 22 Q40 16 80 18 Q120 16 145 22" stroke="#c8a070" strokeWidth="0.8" fill="none" />
-                                <circle cx="25" cy="19" r="4" fill="white" stroke="#e8c8a0" strokeWidth="0.5" />
-                                <circle cx="50" cy="17" r="4" fill="white" stroke="#e8c8a0" strokeWidth="0.5" />
-                                <circle cx="80" cy="15" r="5" fill="white" stroke="#e8c8a0" strokeWidth="0.5" />
-                                <circle cx="115" cy="17" r="4" fill="white" stroke="#e8c8a0" strokeWidth="0.5" />
-                                <circle cx="140" cy="19" r="4" fill="white" stroke="#e8c8a0" strokeWidth="0.5" />
-                                <text x="80" y="50" textAnchor="middle" fontSize="16" fill="#c8922a" opacity="0.45" fontFamily="serif">ஓம்</text>
-                                <text x="80" y="68" textAnchor="middle" fontSize="6" fill="#8b6040" letterSpacing="3" opacity="0.65">WEDDING INVITATION</text>
-                                <line x1="30" y1="74" x2="130" y2="74" stroke="#c8a070" strokeWidth="0.5" opacity="0.6" />
-                                <text x="80" y="92" textAnchor="middle" fontSize="12" fill="#4a2c0a" fontFamily="Georgia,serif" fontStyle="italic">Siva &amp; Hema</text>
-                                <text x="80" y="104" textAnchor="middle" fontSize="5.5" fill="#8b6040" letterSpacing="2">KALYANAM</text>
-                                <line x1="40" y1="110" x2="120" y2="110" stroke="#c8a070" strokeWidth="0.5" opacity="0.5" />
-                                <text x="80" y="123" textAnchor="middle" fontSize="6" fill="#6b4020">12 May 2026 · 6:48 AM</text>
-                                <text x="80" y="135" textAnchor="middle" fontSize="5.5" fill="#8b6040">Padmavathi Kalyana Mandapam</text>
-                                <text x="80" y="146" textAnchor="middle" fontSize="5" fill="#8b6040">Chennai 600 028</text>
-                                <text x="80" y="162" textAnchor="middle" fontSize="5" fill="#a08060">S/o Rajan &amp; Viji · D/o Kumar &amp; Thenmozhi</text>
-                                <circle cx="18" cy="196" r="5" fill="white" stroke="#e8c8a0" strokeWidth="0.5" opacity="0.7" />
-                                <circle cx="142" cy="196" r="5" fill="white" stroke="#e8c8a0" strokeWidth="0.5" opacity="0.7" />
-                            </svg>
-                            <div className="hc-label"><strong>Malli Poo</strong><span>Ivory &amp; Rose Gold</span></div>
-                        </div>
-
-                        {/* Card 2 — Tanjore Gold (Coming Soon) */}
-                        <div className="hero-card">
-                            <div className="hc-overlay"><button className="hc-btn" style={{ opacity: 0.6, cursor: 'not-allowed' }}>Coming Soon</button></div>
-                            <svg width="100%" height="100%" viewBox="0 0 160 214" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-                                <rect width="160" height="214" fill="#6b0f0f" />
-                                <rect x="4" y="4" width="152" height="206" fill="none" stroke="#d4af37" strokeWidth="1.5" rx="2" />
-                                <rect x="7" y="7" width="146" height="200" fill="none" stroke="rgba(212,175,55,0.3)" strokeWidth="0.5" />
-                                <circle cx="13" cy="13" r="6" fill="#d4af37" opacity="0.55" /><circle cx="147" cy="13" r="6" fill="#d4af37" opacity="0.55" />
-                                <circle cx="13" cy="201" r="6" fill="#d4af37" opacity="0.55" /><circle cx="147" cy="201" r="6" fill="#d4af37" opacity="0.55" />
-                                <ellipse cx="80" cy="48" rx="18" ry="22" fill="#d4af37" opacity="0.18" />
-                                <ellipse cx="80" cy="38" rx="11" ry="15" fill="#d4af37" opacity="0.35" />
-                                <ellipse cx="68" cy="32" rx="7" ry="4" fill="#c8a010" opacity="0.5" transform="rotate(-15 68 32)" />
-                                <ellipse cx="92" cy="32" rx="7" ry="4" fill="#c8a010" opacity="0.5" transform="rotate(15 92 32)" />
-                                <path d="M77 44 Q70 52 74 57 Q80 62 86 57" stroke="#d4af37" strokeWidth="2" fill="none" opacity="0.6" />
-                                <path d="M73 22 L76 15 L80 11 L84 15 L87 22" fill="#d4af37" opacity="0.7" />
-                                <text x="80" y="85" textAnchor="middle" fontSize="6.5" fill="#ffd700" fontFamily="sans-serif" letterSpacing="2">✦ KALYANAM ✦</text>
-                                <text x="80" y="102" textAnchor="middle" fontSize="10.5" fill="#ffd700" fontFamily="Georgia,serif" fontWeight="bold">Arun &amp; Kavitha</text>
-                                <line x1="28" y1="108" x2="132" y2="108" stroke="#d4af37" strokeWidth="0.6" opacity="0.5" />
-                                <text x="80" y="119" textAnchor="middle" fontSize="5.5" fill="rgba(255,215,0,0.75)">Vivaha Muhurtham</text>
-                                <text x="80" y="131" textAnchor="middle" fontSize="8" fill="white" fontWeight="bold">15 Mar 2025 · 7:48 AM</text>
-                                <text x="80" y="143" textAnchor="middle" fontSize="5.5" fill="rgba(255,215,0,0.65)">Meenakshi Kalyana Mandapam</text>
-                                <text x="80" y="153" textAnchor="middle" fontSize="5" fill="rgba(255,215,0,0.5)">Mumbai, India</text>
-                                <line x1="28" y1="160" x2="132" y2="160" stroke="#d4af37" strokeWidth="0.4" opacity="0.35" />
-                                <text x="80" y="172" textAnchor="middle" fontSize="5" fill="rgba(255,255,255,0.4)">Ramasamy &amp; Gomathi weds Shankar &amp; Valli</text>
-                                <ellipse cx="60" cy="204" rx="10" ry="5" fill="#d4af37" opacity="0.18" transform="rotate(-30 60 204)" />
-                                <ellipse cx="100" cy="204" rx="10" ry="5" fill="#d4af37" opacity="0.18" transform="rotate(30 100 204)" />
-                            </svg>
-                            <div className="hc-label"><strong>Tanjore Gold</strong><span>Crimson &amp; Gold</span></div>
-                        </div>
-
-                        {/* Card 3 — Peacock Majesty (Coming Soon) */}
-                        <div className="hero-card">
-                            <div className="hc-overlay"><button className="hc-btn" style={{ opacity: 0.6, cursor: 'not-allowed' }}>Coming Soon</button></div>
-                            <svg width="100%" height="100%" viewBox="0 0 160 214" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-                                <defs><radialGradient id="pcBg" cx="50%" cy="30%"><stop offset="0%" stopColor="#1a5c70" /><stop offset="100%" stopColor="#0e1a4a" /></radialGradient></defs>
-                                <rect width="160" height="214" fill="url(#pcBg)" />
-                                <rect x="4" y="4" width="152" height="206" fill="none" stroke="#14b8a6" strokeWidth="1" rx="2" />
-                                <line x1="80" y1="62" x2="32" y2="6" stroke="#14b8a6" strokeWidth="1.2" opacity="0.7" />
-                                <line x1="80" y1="62" x2="52" y2="4" stroke="#0d9488" strokeWidth="1.3" opacity="0.8" />
-                                <line x1="80" y1="62" x2="68" y2="4" stroke="#14b8a6" strokeWidth="1.5" opacity="0.85" />
-                                <line x1="80" y1="62" x2="80" y2="4" stroke="#0d9488" strokeWidth="1.6" opacity="0.9" />
-                                <line x1="80" y1="62" x2="92" y2="4" stroke="#14b8a6" strokeWidth="1.5" opacity="0.85" />
-                                <line x1="80" y1="62" x2="108" y2="4" stroke="#0d9488" strokeWidth="1.3" opacity="0.8" />
-                                <line x1="80" y1="62" x2="128" y2="6" stroke="#14b8a6" strokeWidth="1.2" opacity="0.7" />
-                                <circle cx="80" cy="5" r="6.5" fill="#14b8a6" opacity="0.7" /><circle cx="80" cy="5" r="4" fill="#7c3aed" opacity="0.7" /><circle cx="80" cy="5" r="2" fill="#d4af37" />
-                                <line x1="80" y1="46" x2="80" y2="72" stroke="#d4af37" strokeWidth="2" opacity="0.8" />
-                                <polygon points="80,40 76,50 84,50" fill="#d4af37" opacity="0.9" />
-                                <text x="80" y="90" textAnchor="middle" fontSize="6" fill="#14b8a6" letterSpacing="1.5">✦ திருமணம் ✦</text>
-                                <text x="80" y="107" textAnchor="middle" fontSize="10.5" fill="#d4af37" fontFamily="Georgia,serif" fontWeight="bold">Deepak &amp; Meena</text>
-                                <line x1="28" y1="113" x2="132" y2="113" stroke="#14b8a6" strokeWidth="0.5" opacity="0.5" />
-                                <text x="80" y="124" textAnchor="middle" fontSize="6" fill="rgba(255,255,255,0.7)">5 April 2025 · 10:24 AM</text>
-                                <text x="80" y="135" textAnchor="middle" fontSize="6.5" fill="#d4af37">Nalla Neram</text>
-                                <text x="80" y="147" textAnchor="middle" fontSize="5.5" fill="rgba(20,184,166,0.8)">Vel Murugan Mandapam, Chennai</text>
-                                <text x="80" y="182" textAnchor="middle" fontSize="5.5" fill="rgba(212,175,55,0.4)">wedbliss.co/deepakmeena</text>
-                            </svg>
-                            <div className="hc-label"><strong>Peacock Majesty</strong><span>Teal &amp; Purple</span></div>
-                        </div>
-
-                        {/* Card 4 — Kuthu Vilakku (Coming Soon) */}
-                        <div className="hero-card">
-                            <div className="hc-overlay"><button className="hc-btn" style={{ opacity: 0.6, cursor: 'not-allowed' }}>Coming Soon</button></div>
-                            <svg width="100%" height="100%" viewBox="0 0 160 214" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-                                <defs>
-                                    <radialGradient id="vbg" cx="50%" cy="50%"><stop offset="0%" stopColor="#3d1f00" /><stop offset="100%" stopColor="#1a0a00" /></radialGradient>
-                                    <radialGradient id="vglow" cx="50%" cy="0%"><stop offset="0%" stopColor="rgba(255,180,0,0.28)" /><stop offset="100%" stopColor="transparent" /></radialGradient>
-                                </defs>
-                                <rect width="160" height="214" fill="url(#vbg)" />
-                                <ellipse cx="80" cy="68" rx="80" ry="60" fill="url(#vglow)" />
-                                <rect x="4" y="4" width="152" height="206" fill="none" stroke="#d4af37" strokeWidth="1.2" rx="2" />
-                                <ellipse cx="80" cy="94" rx="22" ry="5" fill="#b8960f" opacity="0.8" />
-                                <rect x="68" y="74" width="24" height="20" rx="3" fill="#c8922a" opacity="0.9" />
-                                <ellipse cx="80" cy="74" rx="24" ry="7" fill="#d4af37" opacity="0.9" />
-                                <rect x="75" y="54" width="10" height="22" rx="3" fill="#c8922a" opacity="0.8" />
-                                <ellipse cx="80" cy="54" rx="18" ry="6" fill="#d4af37" opacity="0.9" />
-                                <ellipse cx="70" cy="50" rx="2.5" ry="5" fill="#fbbf24" opacity="0.9" /><ellipse cx="70" cy="47" rx="1.5" ry="3.5" fill="#fef08a" /><ellipse cx="70" cy="45" rx="1" ry="2.5" fill="white" opacity="0.8" />
-                                <ellipse cx="90" cy="50" rx="2.5" ry="5" fill="#fbbf24" opacity="0.9" /><ellipse cx="90" cy="47" rx="1.5" ry="3.5" fill="#fef08a" /><ellipse cx="90" cy="45" rx="1" ry="2.5" fill="white" opacity="0.8" />
-                                <ellipse cx="80" cy="48" rx="3" ry="6" fill="#fbbf24" opacity="0.9" /><ellipse cx="80" cy="44" rx="1.8" ry="4.5" fill="white" opacity="0.85" />
-                                <text x="80" y="114" textAnchor="middle" fontSize="6" fill="#fbbf24" letterSpacing="1.2">KALYANA VILAKKU</text>
-                                <text x="80" y="130" textAnchor="middle" fontSize="10.5" fill="#ffd700" fontFamily="Georgia,serif" fontWeight="bold">Raj &amp; Anitha</text>
-                                <line x1="28" y1="136" x2="132" y2="136" stroke="#d4af37" strokeWidth="0.5" opacity="0.5" />
-                                <text x="80" y="159" textAnchor="middle" fontSize="8" fill="white" fontWeight="bold">22 Feb 2025 · 8:36 AM</text>
-                                <text x="80" y="170" textAnchor="middle" fontSize="5.5" fill="rgba(255,200,80,0.65)">Bhavani Mandapam, Coimbatore</text>
-                                <text x="80" y="202" textAnchor="middle" fontSize="5" fill="rgba(255,200,80,0.35)">wedbliss.co/rajanitha2025</text>
-                            </svg>
-                            <div className="hc-label"><strong>Kuthu Vilakku</strong><span>Amber &amp; Saffron</span></div>
-                        </div>
-
+                        {heroTemplates.length === 0 ? (
+                            /* Skeleton loading cards */
+                            [1, 2, 3, 4].map(i => (
+                                <div key={i} className="hero-card bg-slate-100/10 animate-pulse border border-slate-200/10 rounded-xl" style={{ height: "214px" }} />
+                            ))
+                        ) : (
+                            heroTemplates.slice(0, 4).map(t => (
+                                <div key={t.id} className="hero-card relative overflow-hidden">
+                                    <div className="hc-overlay z-20">
+                                        {liveUrls[t.id] ? (
+                                            <a href={liveUrls[t.id]!} target="_blank" rel="noopener noreferrer" className="hc-btn">View Demo →</a>
+                                        ) : (
+                                            <button className="hc-btn" style={{ opacity: 0.6, cursor: 'not-allowed' }}>Coming Soon</button>
+                                        )}
+                                    </div>
+                                    <div className="w-full h-full absolute inset-0 z-0 bg-slate-100">
+                                        {t.thumbnail_url ? (
+                                            /* eslint-disable-next-line @next/next/no-img-element */
+                                            <img src={t.thumbnail_url} alt={t.name} className="w-full h-full object-cover" />
+                                        ) : (
+                                            <TemplateSVG id={t.id} />
+                                        )}
+                                    </div>
+                                    <div className="hc-label z-10">
+                                        <strong>{t.name}</strong>
+                                        <span>{t.tier === "premium" ? "Premium Design" : "Basic Design"}</span>
+                                    </div>
+                                </div>
+                            ))
+                        )}
                     </div>{/* end .hero-cards (desktop) */}
 
                     {/* ── Mobile carousel — cards embedded directly so they show on first paint ── */}
                     <div className="hero-cards-wrapper">
                         <div id="heroCarousel">
-
-                            {/* Slide 1 — Malli Poo (LIVE DEMO) */}
-                            <div className="carousel-slide">
-                                <div className="carousel-card active">
-                                    <svg width="100%" height="100%" viewBox="0 0 160 214" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-                                        <rect width="160" height="214" fill="#fdf6ec" />
-                                        <circle cx="0" cy="0" r="60" fill="rgba(251,207,232,0.2)" /><circle cx="160" cy="214" r="60" fill="rgba(251,207,232,0.2)" />
-                                        <rect x="4" y="4" width="152" height="206" fill="none" stroke="#c8a070" strokeWidth="0.8" rx="2" />
-                                        <path d="M15 22 Q40 16 80 18 Q120 16 145 22" stroke="#c8a070" strokeWidth="0.8" fill="none" />
-                                        <circle cx="25" cy="19" r="4" fill="white" stroke="#e8c8a0" strokeWidth="0.5" />
-                                        <circle cx="80" cy="15" r="5" fill="white" stroke="#e8c8a0" strokeWidth="0.5" />
-                                        <circle cx="140" cy="19" r="4" fill="white" stroke="#e8c8a0" strokeWidth="0.5" />
-                                        <text x="80" y="50" textAnchor="middle" fontSize="16" fill="#c8922a" opacity="0.45" fontFamily="serif">ஓம்</text>
-                                        <text x="80" y="68" textAnchor="middle" fontSize="6" fill="#8b6040" letterSpacing="2" opacity="0.65">WEDDING INVITATION</text>
-                                        <line x1="30" y1="74" x2="130" y2="74" stroke="#c8a070" strokeWidth="0.5" opacity="0.6" />
-                                        <text x="80" y="92" textAnchor="middle" fontSize="12" fill="#4a2c0a" fontFamily="Georgia,serif" fontStyle="italic">Siva &amp; Hema</text>
-                                        <text x="80" y="104" textAnchor="middle" fontSize="5.5" fill="#8b6040" letterSpacing="2">KALYANAM</text>
-                                        <line x1="40" y1="110" x2="120" y2="110" stroke="#c8a070" strokeWidth="0.5" opacity="0.5" />
-                                        <text x="80" y="123" textAnchor="middle" fontSize="6" fill="#6b4020">12 May 2026 · 6:48 AM</text>
-                                        <text x="80" y="135" textAnchor="middle" fontSize="5.5" fill="#8b6040">Padmavathi Kalyana Mandapam</text>
-                                        <text x="80" y="162" textAnchor="middle" fontSize="5" fill="#a08060">S/o Rajan &amp; Viji · D/o Kumar &amp; Thenmozhi</text>
-                                    </svg>
-                                    <div className="hc-overlay">
-                                        {liveUrls['tm-mallipoo'] ? (
-                                            <a href={liveUrls['tm-mallipoo']} target="_blank" rel="noopener noreferrer" className="hc-btn">View Demo →</a>
-                                        ) : (
-                                            <button className="hc-btn" style={{ opacity: 0.6, cursor: 'not-allowed' }}>Coming Soon</button>
-                                        )}
+                            {heroTemplates.length === 0 ? (
+                                <div className="carousel-slide">
+                                    <div className="carousel-card active bg-slate-100/10 animate-pulse border border-slate-200/10 rounded-xl" style={{ height: "214px" }} />
+                                </div>
+                            ) : (
+                                heroTemplates.slice(0, 4).map((t, idx) => (
+                                    <div key={t.id} className="carousel-slide">
+                                        <div className={`carousel-card ${idx === 0 ? 'active' : ''} relative overflow-hidden bg-slate-100`}>
+                                            <div className="w-full h-full absolute inset-0 z-0">
+                                                {t.thumbnail_url ? (
+                                                    /* eslint-disable-next-line @next/next/no-img-element */
+                                                    <img src={t.thumbnail_url} alt={t.name} className="w-full h-full object-cover" />
+                                                ) : (
+                                                    <TemplateSVG id={t.id} />
+                                                )}
+                                            </div>
+                                            <div className="hc-overlay z-20 relative">
+                                                {liveUrls[t.id] ? (
+                                                    <a href={liveUrls[t.id]!} target="_blank" rel="noopener noreferrer" className="hc-btn">View Demo →</a>
+                                                ) : (
+                                                    <button className="hc-btn" style={{ opacity: 0.6, cursor: 'not-allowed' }}>Coming Soon</button>
+                                                )}
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-
-                            {/* Slide 2 — Tanjore Gold (Coming Soon) */}
-                            <div className="carousel-slide">
-                                <div className="carousel-card">
-                                    <svg width="100%" height="100%" viewBox="0 0 160 214" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-                                        <rect width="160" height="214" fill="#6b0f0f" />
-                                        <rect x="4" y="4" width="152" height="206" fill="none" stroke="#d4af37" strokeWidth="1.5" rx="2" />
-                                        <circle cx="13" cy="13" r="6" fill="#d4af37" opacity="0.55" /><circle cx="147" cy="13" r="6" fill="#d4af37" opacity="0.55" />
-                                        <circle cx="13" cy="201" r="6" fill="#d4af37" opacity="0.55" /><circle cx="147" cy="201" r="6" fill="#d4af37" opacity="0.55" />
-                                        <ellipse cx="80" cy="42" rx="14" ry="18" fill="#d4af37" opacity="0.22" />
-                                        <path d="M77 44 Q70 52 74 57 Q80 62 86 57" stroke="#d4af37" strokeWidth="2" fill="none" opacity="0.6" />
-                                        <path d="M73 22 L76 15 L80 11 L84 15 L87 22" fill="#d4af37" opacity="0.7" />
-                                        <text x="80" y="85" textAnchor="middle" fontSize="6.5" fill="#ffd700" letterSpacing="2">✦ KALYANAM ✦</text>
-                                        <text x="80" y="102" textAnchor="middle" fontSize="10.5" fill="#ffd700" fontFamily="Georgia,serif" fontWeight="bold">Arun &amp; Kavitha</text>
-                                        <line x1="28" y1="108" x2="132" y2="108" stroke="#d4af37" strokeWidth="0.6" opacity="0.5" />
-                                        <text x="80" y="119" textAnchor="middle" fontSize="5.5" fill="rgba(255,215,0,0.75)">Vivaha Muhurtham</text>
-                                        <text x="80" y="131" textAnchor="middle" fontSize="8" fill="white" fontWeight="bold">15 Mar 2025 · 7:48 AM</text>
-                                        <text x="80" y="143" textAnchor="middle" fontSize="5.5" fill="rgba(255,215,0,0.65)">Meenakshi Kalyana Mandapam, Madurai</text>
-                                    </svg>
-                                    <div className="hc-overlay"><button className="hc-btn" style={{ opacity: 0.6, cursor: 'not-allowed' }}>Coming Soon</button></div>
-                                </div>
-                            </div>
-
-                            {/* Slide 3 — Peacock Majesty (Coming Soon) */}
-                            <div className="carousel-slide">
-                                <div className="carousel-card">
-                                    <svg width="100%" height="100%" viewBox="0 0 160 214" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-                                        <defs><radialGradient id="mob-pcBg" cx="50%" cy="30%"><stop offset="0%" stopColor="#1a5c70" /><stop offset="100%" stopColor="#0e1a4a" /></radialGradient></defs>
-                                        <rect width="160" height="214" fill="url(#mob-pcBg)" />
-                                        <rect x="4" y="4" width="152" height="206" fill="none" stroke="#14b8a6" strokeWidth="1" rx="2" />
-                                        <line x1="80" y1="62" x2="80" y2="4" stroke="#0d9488" strokeWidth="1.6" opacity="0.9" />
-                                        <line x1="80" y1="62" x2="52" y2="4" stroke="#0d9488" strokeWidth="1.3" opacity="0.8" />
-                                        <line x1="80" y1="62" x2="108" y2="4" stroke="#0d9488" strokeWidth="1.3" opacity="0.8" />
-                                        <circle cx="80" cy="5" r="6.5" fill="#14b8a6" opacity="0.7" /><circle cx="80" cy="5" r="4" fill="#7c3aed" opacity="0.7" /><circle cx="80" cy="5" r="2" fill="#d4af37" />
-                                        <line x1="80" y1="46" x2="80" y2="72" stroke="#d4af37" strokeWidth="2" opacity="0.8" />
-                                        <polygon points="80,40 76,50 84,50" fill="#d4af37" opacity="0.9" />
-                                        <text x="80" y="90" textAnchor="middle" fontSize="6" fill="#14b8a6" letterSpacing="1.5">✦ திருமணம் ✦</text>
-                                        <text x="80" y="107" textAnchor="middle" fontSize="10.5" fill="#d4af37" fontFamily="Georgia,serif" fontWeight="bold">Deepak &amp; Meena</text>
-                                        <line x1="28" y1="113" x2="132" y2="113" stroke="#14b8a6" strokeWidth="0.5" opacity="0.5" />
-                                        <text x="80" y="124" textAnchor="middle" fontSize="6" fill="rgba(255,255,255,0.7)">5 April 2025 · 10:24 AM</text>
-                                        <text x="80" y="135" textAnchor="middle" fontSize="6.5" fill="#d4af37">Nalla Neram</text>
-                                        <text x="80" y="147" textAnchor="middle" fontSize="5.5" fill="rgba(20,184,166,0.8)">Vel Murugan Mandapam, Chennai</text>
-                                    </svg>
-                                    <div className="hc-overlay"><button className="hc-btn" style={{ opacity: 0.6, cursor: 'not-allowed' }}>Coming Soon</button></div>
-                                </div>
-                            </div>
-
-                            {/* Slide 4 — Kuthu Vilakku (Coming Soon) */}
-                            <div className="carousel-slide">
-                                <div className="carousel-card">
-                                    <svg width="100%" height="100%" viewBox="0 0 160 214" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-                                        <defs>
-                                            <radialGradient id="mob-vbg" cx="50%" cy="50%"><stop offset="0%" stopColor="#3d1f00" /><stop offset="100%" stopColor="#1a0a00" /></radialGradient>
-                                            <radialGradient id="mob-vglow" cx="50%" cy="0%"><stop offset="0%" stopColor="rgba(255,180,0,0.28)" /><stop offset="100%" stopColor="transparent" /></radialGradient>
-                                        </defs>
-                                        <rect width="160" height="214" fill="url(#mob-vbg)" />
-                                        <ellipse cx="80" cy="68" rx="80" ry="60" fill="url(#mob-vglow)" />
-                                        <rect x="4" y="4" width="152" height="206" fill="none" stroke="#d4af37" strokeWidth="1.2" rx="2" />
-                                        <ellipse cx="80" cy="94" rx="22" ry="5" fill="#b8960f" opacity="0.8" />
-                                        <rect x="68" y="74" width="24" height="20" rx="3" fill="#c8922a" opacity="0.9" />
-                                        <ellipse cx="80" cy="74" rx="24" ry="7" fill="#d4af37" opacity="0.9" />
-                                        <rect x="75" y="54" width="10" height="22" rx="3" fill="#c8922a" opacity="0.8" />
-                                        <ellipse cx="80" cy="54" rx="18" ry="6" fill="#d4af37" opacity="0.9" />
-                                        <ellipse cx="80" cy="48" rx="3" ry="6" fill="#fbbf24" opacity="0.9" /><ellipse cx="80" cy="44" rx="1.8" ry="4.5" fill="white" opacity="0.85" />
-                                        <text x="80" y="114" textAnchor="middle" fontSize="6" fill="#fbbf24" letterSpacing="1.2">KALYANA VILAKKU</text>
-                                        <text x="80" y="130" textAnchor="middle" fontSize="10.5" fill="#ffd700" fontFamily="Georgia,serif" fontWeight="bold">Raj &amp; Anitha</text>
-                                        <line x1="28" y1="136" x2="132" y2="136" stroke="#d4af37" strokeWidth="0.5" opacity="0.5" />
-                                        <text x="80" y="159" textAnchor="middle" fontSize="8" fill="white" fontWeight="bold">22 Feb 2025 · 8:36 AM</text>
-                                        <text x="80" y="170" textAnchor="middle" fontSize="5.5" fill="rgba(255,200,80,0.65)">Bhavani Mandapam, Coimbatore</text>
-                                    </svg>
-                                    <div className="hc-overlay"><button className="hc-btn" style={{ opacity: 0.6, cursor: 'not-allowed' }}>Coming Soon</button></div>
-                                </div>
-                            </div>
-
+                                ))
+                            )}
                         </div>{/* end #heroCarousel */}
                     </div>{/* end .hero-cards-wrapper */}
 

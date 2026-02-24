@@ -104,4 +104,57 @@ router.delete('/domains/:id', async (req, res) => {
     }
 });
 
+// ── GET /api/admin/users — List all registered Supabase Auth users ──────────
+router.get('/users', async (req, res) => {
+    try {
+        const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+        if (!serviceRoleKey) {
+            return res.status(500).json({ error: 'SUPABASE_SERVICE_ROLE_KEY is not configured on the server.' });
+        }
+
+        const adminSupabase = createClient(supabaseUrl, serviceRoleKey, {
+            auth: { autoRefreshToken: false, persistSession: false }
+        });
+
+        // Fetch up to 1000 users from Supabase Auth
+        const { data, error } = await adminSupabase.auth.admin.listUsers();
+        if (error) {
+            console.error('[admin] Fetch users error:', error.message);
+            return res.status(500).json({ error: error.message });
+        }
+
+        res.status(200).json({ users: data.users || [] });
+    } catch (err) {
+        console.error('[admin] Fetch users exception:', err);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+// ── DELETE /api/admin/users/:uid — Delete a Supabase Auth user entirely ────
+router.delete('/users/:uid', async (req, res) => {
+    try {
+        const { uid } = req.params;
+        const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+        if (!serviceRoleKey) {
+            return res.status(500).json({ error: 'SUPABASE_SERVICE_ROLE_KEY is not configured on the server.' });
+        }
+
+        const adminSupabase = createClient(supabaseUrl, serviceRoleKey, {
+            auth: { autoRefreshToken: false, persistSession: false }
+        });
+
+        const { data, error } = await adminSupabase.auth.admin.deleteUser(uid);
+
+        if (error) {
+            console.error(`[admin] Delete user ${uid} error:`, error.message);
+            return res.status(500).json({ error: error.message });
+        }
+
+        res.status(200).json({ success: true, message: 'User deleted successfully' });
+    } catch (err) {
+        console.error('[admin] Delete user exception:', err);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 module.exports = router;

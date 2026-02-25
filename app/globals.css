@@ -874,7 +874,7 @@ nav::after {
   cursor: pointer;
   transition: all .45s cubic-bezier(0.4, 0, 0.2, 1);
   border: 2px solid rgba(255, 255, 255, 0.5);
-  aspect-ratio: 3/4;
+  aspect-ratio: 4/3;
 }
 
 .hero-card:hover {

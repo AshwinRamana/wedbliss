@@ -1,13 +1,18 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { getTemplates, DbTemplate } from "@/lib/db";
 import { TemplateSVG } from "./Templates";
 
 export default function Hero() {
     const [liveUrls, setLiveUrls] = useState<Record<string, string | null>>({});
     const [heroTemplates, setHeroTemplates] = useState<DbTemplate[]>([]);
+
+    // Carousel state
+    const [currentIdx, setCurrentIdx] = useState(0);
+    const [touchStart, setTouchStart] = useState<number | null>(null);
+    const autoTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
     useEffect(() => {
         const fetchUrls = async () => {
@@ -21,6 +26,52 @@ export default function Hero() {
         };
         fetchUrls();
     }, []);
+
+    // Carousel Auto-play logic
+    useEffect(() => {
+        if (heroTemplates.length <= 1) return;
+
+        const startAutoPlay = () => {
+            if (autoTimerRef.current) clearInterval(autoTimerRef.current);
+            autoTimerRef.current = setInterval(() => {
+                setCurrentIdx((prev: number) => (prev + 1) % Math.min(4, heroTemplates.length));
+            }, 3500);
+        };
+
+        startAutoPlay();
+
+        return () => {
+            if (autoTimerRef.current) clearInterval(autoTimerRef.current);
+        };
+    }, [heroTemplates.length]);
+
+    const handleTouchStart = (e: React.TouchEvent) => {
+        setTouchStart(e.touches[0].clientX);
+        if (autoTimerRef.current) clearInterval(autoTimerRef.current);
+    };
+
+    const handleTouchEnd = (e: React.TouchEvent) => {
+        if (touchStart === null || heroTemplates.length <= 1) return;
+        const touchEnd = e.changedTouches[0].clientX;
+        const dx = touchEnd - touchStart;
+        const total = Math.min(4, heroTemplates.length);
+
+        if (dx < -40) {
+            // Swipe left -> next
+            setCurrentIdx((prev: number) => (prev + 1) % total);
+        } else if (dx > 40) {
+            // Swipe right -> prev
+            setCurrentIdx((prev: number) => (prev - 1 + total) % total);
+        }
+
+        setTouchStart(null);
+
+        // Restart autoplay
+        if (autoTimerRef.current) clearInterval(autoTimerRef.current);
+        autoTimerRef.current = setInterval(() => {
+            setCurrentIdx((prev: number) => (prev + 1) % total);
+        }, 3500);
+    };
 
     return (
         <section className="hero">
@@ -257,34 +308,62 @@ export default function Hero() {
                     </div>{/* end .hero-cards (desktop) */}
 
                     {/* ── Mobile carousel — cards embedded directly so they show on first paint ── */}
-                    <div className="hero-cards-wrapper">
+                    <div className="hero-cards-wrapper" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
                         <div id="heroCarousel">
                             {heroTemplates.length === 0 ? (
                                 <div className="carousel-slide">
                                     <div className="carousel-card active bg-slate-100/10 animate-pulse border border-slate-200/10 rounded-xl" style={{ height: "214px" }} />
                                 </div>
                             ) : (
-                                heroTemplates.slice(0, 4).map((t, idx) => (
-                                    <div key={t.id} className="carousel-slide">
-                                        <div className={`carousel-card ${idx === 0 ? 'active' : ''} relative overflow-hidden bg-slate-100`}>
-                                            <div className="w-full h-full absolute inset-0 z-0 bg-slate-100">
-                                                {t.thumbnail_url ? (
-                                                    /* eslint-disable-next-line @next/next/no-img-element */
-                                                    <img src={t.thumbnail_url} alt={t.name} className="w-full h-full object-cover" />
-                                                ) : (
-                                                    <TemplateSVG id={t.id} />
-                                                )}
-                                            </div>
-                                            <div className="hc-overlay z-20 relative">
-                                                {liveUrls[t.id] ? (
-                                                    <a href={liveUrls[t.id]!} target="_blank" rel="noopener noreferrer" className="hc-btn">View Demo →</a>
-                                                ) : (
-                                                    <button className="hc-btn" style={{ opacity: 0.6, cursor: 'not-allowed' }}>Coming Soon</button>
-                                                )}
+                                heroTemplates.slice(0, 4).map((t, idx) => {
+                                    const total = Math.min(4, heroTemplates.length);
+                                    let diff = idx - currentIdx;
+                                    if (diff > total / 2) diff -= total;
+                                    if (diff < -total / 2) diff += total;
+
+                                    let translateX = 0, translateZ = 0, rotateY = 0, opacity = 1, zIndex = 10;
+                                    const isActive = diff === 0;
+
+                                    if (isActive) {
+                                        translateX = 0; translateZ = 0; rotateY = 0; opacity = 1; zIndex = 10;
+                                    } else if (diff === 1 || diff === -3) {
+                                        translateX = 65; translateZ = -60; rotateY = -12; opacity = 0.8; zIndex = 5;
+                                    } else if (diff === -1 || diff === 3) {
+                                        translateX = -65; translateZ = -60; rotateY = 12; opacity = 0.8; zIndex = 5;
+                                    } else {
+                                        translateX = 0; translateZ = -140; rotateY = 0; opacity = 0; zIndex = 1;
+                                    }
+
+                                    return (
+                                        <div
+                                            key={t.id}
+                                            className="carousel-slide"
+                                            style={{
+                                                transform: `translateX(${translateX}%) translateZ(${translateZ}px) rotateY(${rotateY}deg)`,
+                                                opacity,
+                                                zIndex,
+                                            }}
+                                        >
+                                            <div className={`carousel-card ${isActive ? 'active' : ''} relative overflow-hidden bg-slate-100`}>
+                                                <div className="w-full h-full absolute inset-0 z-0 bg-slate-100">
+                                                    {t.thumbnail_url ? (
+                                                        /* eslint-disable-next-line @next/next/no-img-element */
+                                                        <img src={t.thumbnail_url} alt={t.name} className="w-full h-full object-cover" />
+                                                    ) : (
+                                                        <TemplateSVG id={t.id} />
+                                                    )}
+                                                </div>
+                                                <div className="hc-overlay z-20 relative">
+                                                    {liveUrls[t.id] ? (
+                                                        <a href={liveUrls[t.id]!} target="_blank" rel="noopener noreferrer" className="hc-btn">View Demo →</a>
+                                                    ) : (
+                                                        <button className="hc-btn" style={{ opacity: 0.6, cursor: 'not-allowed' }}>Coming Soon</button>
+                                                    )}
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                ))
+                                    );
+                                })
                             )}
                         </div>{/* end #heroCarousel */}
                     </div>{/* end .hero-cards-wrapper */}

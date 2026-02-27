@@ -2043,8 +2043,8 @@ footer {
     }
 
     .carousel-slide {
-      flex: 0 0 76vw;
-      min-width: 76vw;
+      width: 76vw;
+      margin-left: -38vw;
     }
   }
 }

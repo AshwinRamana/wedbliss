@@ -1,7 +1,7 @@
 # Vaazh - Project Memory & Handover Document
 
 ## 📖 Introduction
-This document serves as the persistent memory and technical handover for **Vaazh**, a digital wedding invitation platform. It contains the architectural overview, implemented features, bugs resolved, and future roadmap. **Provide this file to any future AI assistants or developers to instantly resume development or testing from the exact state documented here.**
+This document serves as the persistent memory and technical handover for **Vwedbliss**, a digital wedding invitation platform. It contains the architectural overview, implemented features, bugs resolved, and future roadmap. **Provide this file to any future AI assistants or developers to instantly resume development or testing from the exact state documented here.**
 
 ---
 

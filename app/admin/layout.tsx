@@ -18,7 +18,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
     // ── Auth Guard ─────────────────────────────────────────────────────────────
     useEffect(() => {
-        if (pathname === '/admin/login') {
+        if (pathname?.startsWith('/admin/login')) {
             setLoading(false);
             return;
         }
@@ -39,7 +39,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         router.push('/login');
     };
 
-    if (pathname === '/admin/login') {
+    if (pathname?.startsWith('/admin/login')) {
         return <>{children}</>;
     }
 

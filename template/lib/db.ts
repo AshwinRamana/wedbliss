@@ -10,14 +10,28 @@ export async function getInvitationData(subdomain: string) {
 
     const { data, error } = await supabase
         .from('invitations')
-        .select('data')
+        .select(`
+            data,
+            templates (
+                html_content,
+                css_content,
+                js_content
+            )
+        `)
         .eq('subdomain', subdomain)
         .single();
 
     if (error || !data) {
         console.error("Error fetching invitation from template engine:", error?.message);
-        return null; // Return null to fallback to static default data
+        return null;
     }
 
-    return data.data; // This is the structured JSON
+    const tpl: any = Array.isArray(data.templates) ? data.templates[0] : data.templates;
+
+    return {
+        ...data.data,
+        templateHtml: tpl?.html_content || null,
+        templateCss: tpl?.css_content || null,
+        templateJs: tpl?.js_content || null
+    };
 }

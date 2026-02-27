@@ -1,0 +1,38 @@
+<div class="template-wrapper">
+    <!-- HERO SECTION -->
+    <section id="hero" class="hero-section">
+        <div class="hero-blessed">
+            <p>{{couple.parents}}</p>
+        </div>
+
+        <div class="hero-names">
+            <h1 class="groom-name">{{couple.groom.firstName}}</h1>
+            <span class="weds-text">Weds</span>
+            <h1 class="bride-name">{{couple.bride.firstName}}</h1>
+        </div>
+    </section>
+
+    <!-- EVENT DETAILS -->
+    <section id="events" class="events-section">
+        <h2>The Celebrations</h2>
+
+        <div class="events-list">
+            {{#each events}}
+            <div class="event-card" id="{{this.id}}">
+                <h3 class="event-title">{{this.title}}</h3>
+                <p class="event-date">{{this.date}}</p>
+                <p class="event-time">{{this.time}}</p>
+                <p class="event-venue">{{this.venueName}}</p>
+                {{#if this.googleMapsUrl}}
+                <a href="{{this.googleMapsUrl}}" target="_blank" class="event-map-btn">View on Map</a>
+                {{/if}}
+            </div>
+            {{/each}}
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="template-footer">
+        <p class="powered-by">Powered by Vaazh</p>
+    </footer>
+</div>

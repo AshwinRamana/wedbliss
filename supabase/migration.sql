@@ -13,6 +13,9 @@ create table if not exists public.templates (
   is_hero       boolean not null default false,
   demo_url      text default null,
   thumbnail_url text default null,
+  html_content  text default null,
+  css_content   text default null,
+  js_content    text default null,
   created_at    timestamptz default now()
 );
 

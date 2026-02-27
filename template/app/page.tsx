@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import Handlebars from "handlebars";
 import { getInvitationData } from "@/lib/db";
 
 export default function Home() {
@@ -55,6 +56,20 @@ export default function Home() {
     fetchIt();
   }, []);
 
+  useEffect(() => {
+    // If we have dynamic JS from the DB, execute it after the HTML renders
+    if (inviteData?.templateJs) {
+      const script = document.createElement("script");
+      script.text = inviteData.templateJs;
+      document.body.appendChild(script);
+      return () => {
+        if (document.body.contains(script)) {
+          document.body.removeChild(script);
+        }
+      };
+    }
+  }, [inviteData?.templateJs, inviteData?.templateHtml]);
+
   if (loading || !inviteData) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#fdf6ec] text-[#a67c52]">
@@ -63,6 +78,26 @@ export default function Home() {
     );
   }
 
+  // 1. GENERATIVE UI ENGINE (Handlebars)
+  // If the template has raw HTML stored in the database, compile it!
+  if (inviteData.templateHtml) {
+    try {
+      const template = Handlebars.compile(inviteData.templateHtml);
+      const htmlString = template(inviteData); // Inject universal JSON
+
+      return (
+        <>
+          {inviteData.templateCss && <style dangerouslySetInnerHTML={{ __html: inviteData.templateCss }} />}
+          <div dangerouslySetInnerHTML={{ __html: htmlString }} />
+        </>
+      );
+    } catch (e) {
+      console.error("Handlebars compilation failed:", e);
+    }
+  }
+
+  // 2. FALLBACK/LEGACY ENGINE (React)
+  // If no HTML is stored, render the hardcoded template React tree
   return (
     <main className="min-h-screen bg-[#fdf6ec] text-[#4a2c0a] font-sans selection:bg-[#e8c8a0] selection:text-white">
       {/* Hero Section */}

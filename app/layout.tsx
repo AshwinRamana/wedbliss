@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Playfair_Display, DM_Sans, Italiana } from "next/font/google";
 import "./globals.css";
-import ClientBody from "@/components/ui/ClientBody";
+import ClientBodyBypass from "@/components/ui/ClientBodyBypass";
 
 const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair" });
 const dmSans = DM_Sans({ subsets: ["latin"], variable: "--font-dm-sans" });
@@ -33,9 +33,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <div className="cursor-ring" id="cursorRing"></div>
         <div className="mouse-follower" id="mouseFollower"><div className="follower-orb"></div></div>
 
-        <ClientBody>
+        <ClientBodyBypass>
           {children}
-        </ClientBody>
+        </ClientBodyBypass>
       </body>
     </html>
   );

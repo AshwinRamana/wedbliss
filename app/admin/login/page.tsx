@@ -43,7 +43,7 @@ export default function AdminLoginPage() {
     };
 
     return (
-        <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4 font-sans relative overflow-hidden">
+        <div className="fixed inset-0 min-h-screen bg-slate-900 flex items-center justify-center p-4 font-sans z-[99999] overflow-hidden">
 
             {/* Dark Mode Orbs */}
             <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-emerald-900/40 rounded-full blur-[120px] mix-blend-screen pointer-events-none"></div>

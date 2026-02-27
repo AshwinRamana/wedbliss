@@ -70,7 +70,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     ];
 
     return (
-        <div className="min-h-screen bg-slate-50 text-slate-800 font-sans flex text-sm">
+        <div className="min-h-screen bg-slate-50 text-slate-800 font-sans flex text-sm fixed inset-0 z-[99999] overflow-hidden">
             {/* Sidebar Navigation */}
             <aside className="w-64 bg-white border-r border-slate-200 flex flex-col fixed inset-y-0 left-0 z-50">
                 <div className="p-6 border-b border-slate-100 flex items-center gap-3">
@@ -107,7 +107,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             </aside>
 
             {/* Main Content Area */}
-            <main className="flex-1 ml-64 min-h-screen">
+            <main className="flex-1 ml-64 h-screen overflow-y-auto">
                 <div className="p-8 max-w-7xl mx-auto">
                     {children}
                 </div>

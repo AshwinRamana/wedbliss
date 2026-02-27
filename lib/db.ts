@@ -1,4 +1,5 @@
 import { supabase } from './supabase';
+export { supabase };
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Types — mirror the Supabase table schema exactly

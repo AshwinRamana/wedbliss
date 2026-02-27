@@ -18,6 +18,15 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
+      <head>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            if (window.location.hostname.startsWith('admin.') && !window.location.pathname.startsWith('/admin')) {
+              window.location.replace('/admin' + (window.location.pathname === '/' ? '' : window.location.pathname));
+            }
+          `
+        }} />
+      </head>
       <body className={`${playfair.variable} ${dmSans.variable} ${italiana.variable}`}>
         {/* Cursor elements - Global application */}
         <div className="cursor-dot" id="cursorDot"></div>

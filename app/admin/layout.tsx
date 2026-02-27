@@ -18,6 +18,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
     // ── Auth Guard ─────────────────────────────────────────────────────────────
     useEffect(() => {
+        if (pathname === '/admin/login') {
+            setLoading(false);
+            return;
+        }
         const checkAdmin = async () => {
             const { data: { session } } = await supabase.auth.getSession();
             if (!session) { router.replace("/admin/login"); return; }
@@ -28,12 +32,16 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             setLoading(false);
         };
         checkAdmin();
-    }, [router, ADMIN_EMAIL]);
+    }, [pathname, router, ADMIN_EMAIL]);
 
     const handleSignOut = async () => {
         await supabase.auth.signOut();
         router.push('/login');
     };
+
+    if (pathname === '/admin/login') {
+        return <>{children}</>;
+    }
 
     if (loading) return (
         <div className="min-h-screen flex items-center justify-center bg-slate-900 text-emerald-500 font-bold">
@@ -80,8 +88,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                         return (
                             <Link key={item.href} href={item.href}
                                 className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors font-medium ${isActive
-                                        ? 'bg-emerald-50 text-emerald-700'
-                                        : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                                    ? 'bg-emerald-50 text-emerald-700'
+                                    : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                                     }`}>
                                 <Icon className={`w-4 h-4 ${isActive ? 'text-emerald-600' : 'text-slate-400'}`} />
                                 {item.label}

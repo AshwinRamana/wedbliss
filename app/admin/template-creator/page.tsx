@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { Copy, Code, LayoutTemplate, Play, Save, Trash2, Wand2 } from "lucide-react";
 import { upsertTemplate } from "@/lib/db";
-import { GoogleGenAI } from "@google/genai";
 import Handlebars from "handlebars";
 
 export default function TemplateCreatorPage() {
@@ -81,8 +80,8 @@ export default function TemplateCreatorPage() {
         setSaveStatus({ type: null, msg: "" });
 
         try {
-            // Initialize Client-Side AI with strict local public API Key
-            const ai = new GoogleGenAI({ apiKey: process.env.NEXT_PUBLIC_GEMINI_API_KEY });
+            const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+            if (!apiKey) throw new Error("Missing NEXT_PUBLIC_GEMINI_API_KEY in environment variables");
 
             // Hardcode base skeletons since we cannot access local fs from browser
             const baseBasic = `<!-- 
@@ -255,17 +254,25 @@ ${prompt}
 
 Now, redesign and output the modified HTML inside <html-response> tags, and the completely new raw CSS inside <css-response> tags. Output nothing else.
 `;
-
-            const response = await ai.models.generateContent({
-                model: "gemini-2.5-flash",
-                contents: userPrompt,
-                config: {
-                    systemInstruction: systemInstruction,
-                    temperature: 0.7,
-                }
+            // Execute generation request against pure REST endpoint to bypass Node SDK blocks
+            const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+            const apiRes = await fetch(endpoint, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    systemInstruction: { parts: [{ text: systemInstruction }] },
+                    contents: [{ parts: [{ text: userPrompt }] }],
+                    generationConfig: { temperature: 0.7 }
+                })
             });
 
-            const textOutput = response.text || "<!-- No text returned from model -->";
+            if (!apiRes.ok) {
+                const errData = await apiRes.json();
+                throw new Error(errData.error?.message || "REST API Request Failed");
+            }
+
+            const payloadData = await apiRes.json();
+            const textOutput = payloadData.candidates?.[0]?.content?.parts?.[0]?.text || "<!-- No text returned from model -->";
 
             const htmlMatch = textOutput.match(/<html-response>([\s\S]*?)<\/html-response>/);
             const cssMatch = textOutput.match(/<css-response>([\s\S]*?)<\/css-response>/);

@@ -49,6 +49,21 @@ export async function getTemplates(): Promise<DbTemplate[]> {
     return data as DbTemplate[];
 }
 
+/** Fetch a single template by ID. */
+export async function getTemplateById(id: string): Promise<DbTemplate | null> {
+    const { data, error } = await supabase
+        .from('templates')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+    if (error) {
+        console.error('[db] getTemplateById error:', error.message);
+        return null;
+    }
+    return data as DbTemplate;
+}
+
 /**
  * Upsert a template record (insert or update based on `id`).
  * Call this from the admin panel when saving edits or adding a new template.
@@ -251,4 +266,21 @@ export async function checkSubdomainAvailable(subdomain: string): Promise<boolea
         return false;
     }
     return !data || data.length === 0;
+}
+
+/** Fetch a single invitation by subdomain. */
+export async function getInvitationBySubdomain(subdomain: string): Promise<DbInvitation | null> {
+    const { data, error } = await supabase
+        .from('invitations')
+        .select('*')
+        .eq('subdomain', subdomain)
+        .single();
+
+    if (error) {
+        if (error.code !== 'PGRST116') { // Ignore "Rows not found" error
+            console.error('[db] getInvitationBySubdomain error:', error.message);
+        }
+        return null;
+    }
+    return data as DbInvitation;
 }

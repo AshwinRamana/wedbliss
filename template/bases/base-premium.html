@@ -1,102 +1,89 @@
-<div class="template-wrapper">
+<!-- 
+  WEDBLISS PREMIUM AI BASE SKELETON
+  Theme: Generic Structured Events
+  Required AI Handling: MUST retain all Handlebars tags and structural IDs.
+-->
+<div id="wedbliss-premium-wrapper" class="wb-theme-container">
 
-    <!-- HERO SECTION -->
-    <section id="hero" class="hero-section">
-        <div class="hero-blessed">
-            <p>{{couple.parents}}</p>
-        </div>
-        <div class="hero-names">
-            <h1 class="groom-name">{{couple.groom.firstName}}</h1>
-            <span class="weds-text">Weds</span>
-            <h1 class="bride-name">{{couple.bride.firstName}}</h1>
-        </div>
-    </section>
+  <!-- 1. Envelope Cover / Hero -->
+  <section id="cover-reveal" class="wb-section wb-hero">
+    <div class="wb-envelope-anim">
+      <h1 class="wb-title">{{couple.groom.firstName}} &amp; {{couple.bride.firstName}}</h1>
+      <p class="wb-subtitle">Are getting married</p>
+    </div>
+  </section>
 
-    <!-- DATE & COUNTDOWN -->
-    <section id="date" class="date-section">
-        <h2 class="date-title">Mark Your Calendars</h2>
-        <div class="date-details">
-            {{#if events.[0]}}
-            <p class="primary-date">{{events.[0].date}}</p>
-            <p class="primary-time">{{events.[0].time}}</p>
-            {{/if}}
-        </div>
-        <!-- Simple countdown hooks for JS -->
-        <div class="countdown-timer">
-            <span id="cd-days">--</span> Days
-            <span id="cd-hours">--</span> Hrs
-            <span id="cd-mins">--</span> Min
-        </div>
-    </section>
+  <!-- 2. Inside Details -->
+  <section id="details" class="wb-section wb-details">
+    <div class="wb-parents-note">
+      <p>{{couple.parents}}</p>
+      <p>Invite you to celebrate the wedding of their children</p>
+      <h2>{{couple.groom.firstName}} <span class="wb-amp">&amp;</span> {{couple.bride.firstName}}</h2>
+    </div>
+  </section>
 
-    <!-- COUPLE STORY (If provided) -->
-    {{#if couple.storyMessage}}
-    <section id="story" class="story-section">
-        <h2>Our Story</h2>
-        <p>{{couple.storyMessage}}</p>
-    </section>
-    {{/if}}
-
-    <!-- EVENT DETAILS -->
-    <section id="events" class="events-section">
-        <h2>The Celebrations</h2>
-        <div class="events-list">
-            {{#each events}}
-            <div class="event-card" id="{{this.id}}">
-                <h3 class="event-title">{{this.title}}</h3>
-                <p class="event-date">{{this.date}}</p>
-                <p class="event-time">{{this.time}}</p>
-                <div class="event-venue">
-                    <p class="venue-name">{{this.venueName}}</p>
-                    <p class="venue-address">{{this.venueAddress}}</p>
-                </div>
-                {{#if this.googleMapsUrl}}
-                <a href="{{this.googleMapsUrl}}" target="_blank" class="event-map-btn">View on Map</a>
-                {{/if}}
-            </div>
-            {{/each}}
-        </div>
-    </section>
-
-    <!-- GALLERY (PREMIUM) -->
-    {{#if gallery.images}}
-    <section id="gallery" class="gallery-section">
-        <h2>Moments Together</h2>
-        <div class="gallery-grid">
-            {{#each gallery.images}}
-            <div class="gallery-item">
-                <img src="{{this}}" alt="Couple Photo" class="gallery-img" />
-            </div>
-            {{/each}}
-        </div>
-    </section>
-    {{/if}}
-
-    <!-- VIDEO INVITE (PREMIUM) -->
-    {{#if media.videoUrl}}
-    <section id="video" class="video-section">
-        <h2>Our Video Invitation</h2>
-        <div class="video-container">
-            <!-- The AI can style this play button over a thumbnail, or embed an iframe -->
-            <a href="{{media.videoUrl}}" target="_blank" class="play-video-btn">Play Video</a>
-        </div>
-    </section>
-    {{/if}}
-
-    <!-- RSVP (PREMIUM) -->
-    {{#if rsvp.enabled}}
-    <section id="rsvp" class="rsvp-section">
-        <h2>Please RSVP</h2>
-        <p>By {{rsvp.deadline}}</p>
-        {{#if rsvp.whatsappNumber}}
-        <a href="https://wa.me/{{rsvp.whatsappNumber}}?text=Hello! We would love to attend the wedding." target="_blank"
-            class="rsvp-wa-btn">RSVP via WhatsApp</a>
+  <!-- 3. Event Loop (Map & Calendar logic included) -->
+  <section id="events" class="wb-section wb-events">
+    {{#each events}}
+    <div class="wb-event-card" id="event-{{id}}">
+      <h3 class="wb-event-title">{{title}}</h3>
+      <p class="wb-event-datetime">{{date}} | {{time}}</p>
+      <p class="wb-event-venue">{{venueName}}</p>
+      
+      <div class="wb-event-actions">
+        {{#if googleMapsUrl}}
+        <a href="{{googleMapsUrl}}" target="_blank" class="wb-btn wb-btn-map">View on Map</a>
         {{/if}}
-    </section>
-    {{/if}}
+        <!-- Note to AI: you can style this button, do not alter its class or data attributes if present -->
+        <button class="wb-btn wb-btn-cal">Add to Calendar</button>
+      </div>
+    </div>
+    {{/each}}
+  </section>
 
-    <!-- FOOTER -->
-    <footer class="template-footer">
-        <p class="powered-by">Powered by Vaazh</p>
-    </footer>
+  <!-- 4. Countdown to earliest event -->
+  <section id="countdown" class="wb-section wb-countdown">
+    <h3 class="wb-countdown-title">The Celebration Begins In</h3>
+    <div class="wb-cd-grid" id="cd-timer">
+      <div class="wb-cd-box"><span id="cd-days">00</span><small>Days</small></div>
+      <div class="wb-cd-box"><span id="cd-hours">00</span><small>Hrs</small></div>
+      <div class="wb-cd-box"><span id="cd-mins">00</span><small>Min</small></div>
+    </div>
+  </section>
+
+  <!-- 5. Photo Gallery (Premium only) -->
+  {{#if gallery.images}}
+  <section id="gallery" class="wb-section wb-gallery">
+    <h3 class="wb-gallery-title">Capturing Our Moments</h3>
+    <div class="wb-gallery-grid">
+      {{#each gallery.images}}
+        <img src="{{this}}" alt="Couple Moment" class="wb-gallery-img" />
+      {{/each}}
+    </div>
+  </section>
+  {{/if}}
+
+  <!-- 6. Hear it from the couple / Video -->
+  {{#if media.videoUrl}}
+  <section id="our-story" class="wb-section wb-story">
+    <h3 class="wb-story-title">Hear From Us</h3>
+    <div class="wb-video-wrapper">
+       <iframe src="{{media.videoUrl}}" allowfullscreen class="wb-video-embed"></iframe>
+    </div>
+  </section>
+  {{/if}}
+
+  <!-- 7. Interested / RSVP Form -->
+  {{#if rsvp.enabled}}
+  <section id="rsvp" class="wb-section wb-rsvp">
+    <h3 class="wb-rsvp-title">We'd love your presence</h3>
+    <div class="wb-rsvp-form">
+      <!-- Note to AI: Do not change the form logic -->
+      <a href="https://wa.me/{{rsvp.whatsappNumber}}?text=Hi!%20I%20will%20be%20attending%20the%20wedding!" target="_blank" class="wb-btn wb-btn-rsvp">
+        RSVP on WhatsApp
+      </a>
+    </div>
+  </section>
+  {{/if}}
+
 </div>

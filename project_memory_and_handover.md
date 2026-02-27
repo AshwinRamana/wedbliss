@@ -72,5 +72,11 @@ If building Playwright or Cypress tests, note the following element behaviors:
 ## 🎯 Next Steps & Future Roadmap
 1. **Database Schema Design**: Initialize the `Invitations` and `Events` public tables in Supabase to save the payload from the `/checkout/form` mega-form.
 2. **Payment Gateway Integration**: Wire up Razorpay or Stripe at the end of the Checkout flow.
-3. **Template Rendering Engine**: Build the actual standalone invitation pages (e.g., `vaazh.co/[invite-id]`) that render the designs dynamically using the DB data.
-4. **Admin Approval Flow**: Build out the `/admin` dashboard to view user orders, approve them, and publish links.
+3. **Template Rendering Engine**: Implement the `AI-Template-Forge-Architecture.md` methodology, enforcing predefined Handlebars layouts structure (Envelope -> Details -> Event 1/2 -> Countdown -> Gallery -> Quotes -> RSVP) and allowing AI to style it.
+4. **Admin Subdomain Portal**: Overhaul the `/admin` section to support isolated subdomain resolving (e.g. `admin.wedbliss.co`). Includes features for:
+   - Dashboard Analytics
+   - Customer Management
+   - Live Website Tracking
+   - AI Template Creator Studio
+   - Template Manager (dynamic content replacement for basic/premium templates)
+   - Payment Reports

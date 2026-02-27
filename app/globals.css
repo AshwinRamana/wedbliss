@@ -1937,7 +1937,8 @@ footer {
   .hero-cards-wrapper {
     display: block !important;
     width: 100%;
-    height: 360px;
+    height: 48vw;
+    min-height: 250px;
     /* Taller for modern 3D scale breathing room */
     position: relative;
     touch-action: pan-y;
@@ -1946,7 +1947,8 @@ footer {
   /* 3D Stack track; deeply stylized modern container */
   #heroCarousel {
     width: 100%;
-    height: 380px;
+    height: 100%;
+    min-height: 250px;
     position: relative;
     overflow: visible;
     perspective: 1200px;
@@ -1956,13 +1958,14 @@ footer {
   /* Each slide stacked absolutely in the center */
   .carousel-slide {
     position: absolute;
-    top: 20px;
-    /* padding for 3D scaling */
+    top: 50%;
     left: 50%;
     width: 60vw;
     margin-left: -30vw;
-    /* hard-center */
-    height: calc(100% - 40px);
+    aspect-ratio: 16 / 9;
+    height: auto;
+    margin-top: -16.875vw;
+    /* half of 60vw * 9/16 */
     transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.6s ease;
     will-change: transform, opacity, z-index;
   }
@@ -2039,12 +2042,15 @@ footer {
     }
 
     .hero-cards-wrapper {
-      height: 250px;
+      height: 60vw;
+      min-height: 220px;
     }
 
     .carousel-slide {
       width: 76vw;
       margin-left: -38vw;
+      margin-top: -21.375vw;
+      /* half of 76vw * 9/16 */
     }
   }
 }

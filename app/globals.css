@@ -1962,10 +1962,10 @@ footer {
     left: 50%;
     width: 60vw;
     margin-left: -30vw;
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 4 / 3;
     height: auto;
-    margin-top: -16.875vw;
-    /* half of 60vw * 9/16 */
+    margin-top: -22.5vw;
+    /* half of 60vw * 3/4 */
     transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.6s ease;
     will-change: transform, opacity, z-index;
   }
@@ -2049,8 +2049,8 @@ footer {
     .carousel-slide {
       width: 76vw;
       margin-left: -38vw;
-      margin-top: -21.375vw;
-      /* half of 76vw * 9/16 */
+      margin-top: -28.5vw;
+      /* half of 76vw * 3/4 */
     }
   }
 }

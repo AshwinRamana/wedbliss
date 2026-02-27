@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Copy, Code, LayoutTemplate, Play, Save, Trash2, Wand2 } from "lucide-react";
 import { upsertTemplate } from "@/lib/db";
+import { GoogleGenAI } from "@google/genai";
 import Handlebars from "handlebars";
 
 export default function TemplateCreatorPage() {
@@ -80,20 +81,207 @@ export default function TemplateCreatorPage() {
         setSaveStatus({ type: null, msg: "" });
 
         try {
-            const res = await fetch("/api/admin/generate-template", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ prompt, tier })
+            // Initialize Client-Side AI with strict local public API Key
+            const ai = new GoogleGenAI({ apiKey: process.env.NEXT_PUBLIC_GEMINI_API_KEY });
+
+            // Hardcode base skeletons since we cannot access local fs from browser
+            const baseBasic = `<!-- 
+  WEDBLISS BASIC AI BASE SKELETON
+  Theme: Generic Structured Events (No Premium arrays like Gallery/Video/RSVP)
+  Required AI Handling: MUST retain all Handlebars tags and structural IDs.
+-->
+<div id="wedbliss-basic-wrapper" class="wb-theme-container wb-basic">
+
+    <!-- 1. Envelope Cover / Hero -->
+    <section id="cover-reveal" class="wb-section wb-hero">
+        <div class="wb-envelope-anim">
+            <h1 class="wb-title">{{couple.groom.firstName}} &amp; {{couple.bride.firstName}}</h1>
+            <p class="wb-subtitle">Are getting married</p>
+        </div>
+    </section>
+
+    <!-- 2. Inside Details -->
+    <section id="details" class="wb-section wb-details">
+        <div class="wb-parents-note">
+            <p>{{couple.parents}}</p>
+            <p>Invite you to celebrate the wedding of their children</p>
+            <h2>{{couple.groom.firstName}} <span class="wb-amp">&amp;</span> {{couple.bride.firstName}}</h2>
+        </div>
+    </section>
+
+    <!-- 3. Event Loop -->
+    <section id="events" class="wb-section wb-events">
+        {{#each events}}
+        <div class="wb-event-card" id="event-{{id}}">
+            <h3 class="wb-event-title">{{title}}</h3>
+            <p class="wb-event-datetime">{{date}} | {{time}}</p>
+            <p class="wb-event-venue">{{venueName}}</p>
+
+            <div class="wb-event-actions">
+                {{#if googleMapsUrl}}
+                <a href="{{googleMapsUrl}}" target="_blank" class="wb-btn wb-btn-map">View on Map</a>
+                {{/if}}
+                <button class="wb-btn wb-btn-cal">Add to Calendar</button>
+            </div>
+        </div>
+        {{/each}}
+    </section>
+
+    <!-- 4. Countdown to earliest event -->
+    <section id="countdown" class="wb-section wb-countdown">
+        <h3 class="wb-countdown-title">The Celebration Begins In</h3>
+        <div class="wb-cd-grid" id="cd-timer">
+            <div class="wb-cd-box"><span id="cd-days">00</span><small>Days</small></div>
+            <div class="wb-cd-box"><span id="cd-hours">00</span><small>Hrs</small></div>
+            <div class="wb-cd-box"><span id="cd-mins">00</span><small>Min</small></div>
+        </div>
+    </section>
+
+    <!-- Note: Basic templates do not include Gallery, Video Story, or WhatsApp RSVP. -->
+</div>`;
+
+            const basePremium = `<!-- 
+  WEDBLISS PREMIUM AI BASE SKELETON
+   Theme: Generic Structured Events
+   Required AI Handling: MUST retain all Handlebars tags and structural IDs.
+ -->
+ <div id="wedbliss-premium-wrapper" class="wb-theme-container">
+ 
+   <!-- 1. Envelope Cover / Hero -->
+   <section id="cover-reveal" class="wb-section wb-hero">
+     <div class="wb-envelope-anim">
+       <h1 class="wb-title">{{couple.groom.firstName}} &amp; {{couple.bride.firstName}}</h1>
+       <p class="wb-subtitle">Are getting married</p>
+     </div>
+   </section>
+ 
+   <!-- 2. Inside Details -->
+   <section id="details" class="wb-section wb-details">
+     <div class="wb-parents-note">
+       <p>{{couple.parents}}</p>
+       <p>Invite you to celebrate the wedding of their children</p>
+       <h2>{{couple.groom.firstName}} <span class="wb-amp">&amp;</span> {{couple.bride.firstName}}</h2>
+     </div>
+   </section>
+ 
+   <!-- 3. Event Loop (Map & Calendar logic included) -->
+   <section id="events" class="wb-section wb-events">
+     {{#each events}}
+     <div class="wb-event-card" id="event-{{id}}">
+       <h3 class="wb-event-title">{{title}}</h3>
+       <p class="wb-event-datetime">{{date}} | {{time}}</p>
+       <p class="wb-event-venue">{{venueName}}</p>
+       
+       <div class="wb-event-actions">
+         {{#if googleMapsUrl}}
+         <a href="{{googleMapsUrl}}" target="_blank" class="wb-btn wb-btn-map">View on Map</a>
+         {{/if}}
+         <!-- Note to AI: you can style this button, do not alter its class or data attributes if present -->
+         <button class="wb-btn wb-btn-cal">Add to Calendar</button>
+       </div>
+     </div>
+     {{/each}}
+   </section>
+ 
+   <!-- 4. Countdown to earliest event -->
+   <section id="countdown" class="wb-section wb-countdown">
+     <h3 class="wb-countdown-title">The Celebration Begins In</h3>
+     <div class="wb-cd-grid" id="cd-timer">
+       <div class="wb-cd-box"><span id="cd-days">00</span><small>Days</small></div>
+       <div class="wb-cd-box"><span id="cd-hours">00</span><small>Hrs</small></div>
+       <div class="wb-cd-box"><span id="cd-mins">00</span><small>Min</small></div>
+     </div>
+   </section>
+ 
+   <!-- 5. Photo Gallery (Premium only) -->
+   {{#if gallery.images}}
+   <section id="gallery" class="wb-section wb-gallery">
+     <h3 class="wb-gallery-title">Capturing Our Moments</h3>
+     <div class="wb-gallery-grid">
+       {{#each gallery.images}}
+         <img src="{{this}}" alt="Couple Moment" class="wb-gallery-img" />
+       {{/each}}
+     </div>
+   </section>
+   {{/if}}
+ 
+   <!-- 6. Hear it from the couple / Video -->
+   {{#if media.videoUrl}}
+   <section id="our-story" class="wb-section wb-story">
+     <h3 class="wb-story-title">Hear From Us</h3>
+     <div class="wb-video-wrapper">
+        <iframe src="{{media.videoUrl}}" allowfullscreen class="wb-video-embed"></iframe>
+     </div>
+   </section>
+   {{/if}}
+ 
+   <!-- 7. Interested / RSVP Form -->
+   {{#if rsvp.enabled}}
+   <section id="rsvp" class="wb-section wb-rsvp">
+     <h3 class="wb-rsvp-title">We'd love your presence</h3>
+     <div class="wb-rsvp-form">
+       <!-- Note to AI: Do not change the form logic -->
+       <a href="https://wa.me/{{rsvp.whatsappNumber}}?text=Hi!%20I%20will%20be%20attending%20the%20wedding!" target="_blank" class="wb-btn wb-btn-rsvp">
+         RSVP on WhatsApp
+       </a>
+     </div>
+   </section>
+   {{/if}}
+ 
+ </div>`;
+
+            const systemInstruction = `
+You are the Wedbliss AI Template Stylist, an expert UI/UX developer. 
+I will provide you with a 'Golden Base HTML Skeleton' that uses Handlebars {{tags}} for dynamic data.
+Your job is to completely redesign the aesthetics—colors, fonts, layout styling, CSS animations, and SVG decorative elements according to the user's prompt. 
+
+CRITICAL RULES:
+1. You MUST keep every single Handlebars {{tag}} exactly as it is. Do not alter, delete, or hallucinate new tags.
+2. You MUST keep the section order exactly the same as the Golden Base.
+3. You MUST keep the core HTML IDs intact for Javascript logic (like id="cd-days" for the countdown).
+4. You must write responsive Vanilla CSS and inline SVGs/Base64. Do not use external CSS frameworks.
+5. You must return your response cleanly. Start your HTML response with <html-response> and end it with </html-response>. Start your CSS response with <css-response> and end it with </css-response>. Include NOTHING else.`;
+
+            const userPrompt = `
+Here is the raw Base HTML Skeleton:
+\`\`\`html
+${tier === 'basic' ? baseBasic : basePremium}
+\`\`\`
+
+Here is the User's Design Request:
+"""
+${prompt}
+"""
+
+Now, redesign and output the modified HTML inside <html-response> tags, and the completely new raw CSS inside <css-response> tags. Output nothing else.
+`;
+
+            const response = await ai.models.generateContent({
+                model: "gemini-2.5-flash",
+                contents: userPrompt,
+                config: {
+                    systemInstruction: systemInstruction,
+                    temperature: 0.7,
+                }
             });
 
-            if (!res.ok) {
-                const err = await res.json();
-                throw new Error(err.error || "Generation API failed");
+            const textOutput = response.text || "<!-- No text returned from model -->";
+
+            const htmlMatch = textOutput.match(/<html-response>([\s\S]*?)<\/html-response>/);
+            const cssMatch = textOutput.match(/<css-response>([\s\S]*?)<\/css-response>/);
+
+            let finalHtml = htmlMatch ? htmlMatch[1].trim() : textOutput;
+            let finalCss = cssMatch ? cssMatch[1].trim() : "/* Failed to extract pure CSS */";
+
+            if (finalHtml.startsWith("\`\`\`html")) {
+                finalHtml = finalHtml.replace(/\`\`\`html/g, "").replace(/\`\`\`/g, "").trim();
+            }
+            if (finalCss.startsWith("\`\`\`css")) {
+                finalCss = finalCss.replace(/\`\`\`css/g, "").replace(/\`\`\`/g, "").trim();
             }
 
-            const data = await res.json();
-            setGeneratedHtml(data.html);
-            setGeneratedCss(data.css);
+            setGeneratedHtml(finalHtml);
+            setGeneratedCss(finalCss);
 
             // Auto-fill template metadata if empty
             if (!templateName) setTemplateName("AI Generated Theme");

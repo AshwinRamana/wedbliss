@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Copy, Code, LayoutTemplate, Play, Save, Trash2, Wand2 } from "lucide-react";
+import { upsertTemplate } from "@/lib/db";
+import Handlebars from "handlebars";
 
 export default function TemplateCreatorPage() {
     // 1. Core State
@@ -12,23 +14,139 @@ export default function TemplateCreatorPage() {
     // 2. Editor State (The Raw Code from AI)
     const [generatedHtml, setGeneratedHtml] = useState("<!-- AI Generated HTML with Handlebars tags will appear here -->");
     const [generatedCss, setGeneratedCss] = useState("/* AI Generated CSS will appear here */");
+    const [compiledLiveHtml, setCompiledLiveHtml] = useState("");
 
-    // 3. UI State
+    // 3. Metadata State (For DB Save)
+    const [templateId, setTemplateId] = useState("");
+    const [templateName, setTemplateName] = useState("");
+    const [templateDesc, setTemplateDesc] = useState("");
+    const [isSaving, setIsSaving] = useState(false);
+    const [saveStatus, setSaveStatus] = useState<{ type: "success" | "error" | null, msg: string }>({ type: null, msg: "" });
+
+    // 4. UI State
     const [activeTab, setActiveTab] = useState<"split" | "html" | "css">("split");
+
+    // Dummy JSON Data matching Universal Schema for Live Preview
+    const dummyData = {
+        couple: {
+            bride: { firstName: "Priya" },
+            groom: { firstName: "Karthik" },
+            parents: "D/o Kamakshi & Krishnaswamy | S/o Saraswathi & Ramasamy"
+        },
+        events: [
+            {
+                id: "ev-1",
+                title: "Muhurtham",
+                date: "28 February 2026",
+                time: "8:24 AM - 10:48 AM",
+                venueName: "Sri Murugan Kalyana Mandapam",
+                googleMapsUrl: "https://maps.google.com"
+            }
+        ],
+        gallery: {
+            images: [
+                "https://images.unsplash.com/photo-1583939003579-730e3918a45a?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60"
+            ]
+        },
+        media: {
+            videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ"
+        },
+        rsvp: {
+            enabled: true,
+            whatsappNumber: "+919876543210"
+        }
+    };
+
+    // Live Compilation Effect
+    useEffect(() => {
+        if (!generatedHtml || generatedHtml.includes("<!-- AI Generated")) {
+            setCompiledLiveHtml("");
+            return;
+        }
+        try {
+            const template = Handlebars.compile(generatedHtml);
+            const resolvedHtml = template(dummyData);
+            setCompiledLiveHtml(`<style>${generatedCss}</style>${resolvedHtml}`);
+        } catch (e) {
+            console.error("Handlebars compilation error:", e);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [generatedHtml, generatedCss]);
+
 
     const handleGenerate = async () => {
         if (!prompt) return;
         setIsGenerating(true);
-        // TODO: In actual implementation, this hits an API route that calls @google/genai
-        // using the master prompt strategy defined in AI-Template-Forge-Architecture.md
+        setSaveStatus({ type: null, msg: "" });
 
-        // Mock generation delay
-        setTimeout(() => {
-            setGeneratedHtml(`<div class="wedding-wrapper">\n  <header class="hero-section">\n    <h1 class="couple-names">{{couple.groom.firstName}} Weds {{couple.bride.firstName}}</h1>\n    <p class="date">{{events.[0].date}}</p>\n  </header>\n  \n  <!-- Event Loop -->\n  {{#each events}}\n    <section class="event-card">\n      <h2>{{title}}</h2>\n      <p>{{venueName}}</p>\n    </section>\n  {{/each}}\n\n  {{#if gallery}}\n    <section class="gallery">\n      {{#each gallery.images}}\n        <img src="{{this}}" alt="Couple photo" />\n      {{/each}}\n    </section>\n  {{/if}}\n</div>`);
+        try {
+            const res = await fetch("/api/admin/generate-template", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ prompt, tier })
+            });
 
-            setGeneratedCss(`.wedding-wrapper {\n  font-family: 'Inter', sans-serif;\n  background: #f8fafc;\n  color: #0f172a;\n  text-align: center;\n}\n\n.hero-section {\n  padding: 100px 20px;\n  background: linear-gradient(135deg, #10b981 0%, #059669 100%);\n  color: white;\n}\n\n.couple-names {\n  font-size: 3rem;\n  font-weight: 800;\n  margin-bottom: 20px;\n}\n\n.event-card {\n  margin: 40px auto;\n  padding: 30px;\n  max-width: 600px;\n  background: white;\n  border-radius: 16px;\n  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);\n}\n\n.gallery img {\n  border-radius: 12px;\n  width: 100%;\n  max-width: 300px;\n  margin: 10px;\n}`);
+            if (!res.ok) {
+                const err = await res.json();
+                throw new Error(err.error || "Generation API failed");
+            }
+
+            const data = await res.json();
+            setGeneratedHtml(data.html);
+            setGeneratedCss(data.css);
+
+            // Auto-fill template metadata if empty
+            if (!templateName) setTemplateName("AI Generated Theme");
+            if (!templateDesc) setTemplateDesc(prompt.substring(0, 50) + "...");
+            if (!templateId) setTemplateId(`tm-ai-${Date.now().toString().slice(-6)}`);
+
+        } catch (error: unknown) {
+            alert(`Generation Error: ${error instanceof Error ? error.message : String(error)}`);
+        } finally {
             setIsGenerating(false);
-        }, 2500);
+        }
+    };
+
+    const handleSaveToDB = async () => {
+        if (!templateId || !templateName) {
+            alert("Template ID and Display Name are required");
+            return;
+        }
+        if (generatedHtml.includes("<!-- AI Generated")) {
+            alert("Please generate a template first before saving.");
+            return;
+        }
+
+        setIsSaving(true);
+        setSaveStatus({ type: null, msg: "" });
+
+        const { error } = await upsertTemplate({
+            id: templateId,
+            name: templateName,
+            tier: tier,
+            description: templateDesc,
+            is_live: false, // Default to coming soon so it can be reviewed in manager
+            is_hero: false,
+            html_content: generatedHtml,
+            css_content: generatedCss,
+            demo_url: null,
+            thumbnail_url: null,
+        });
+
+        setIsSaving(false);
+        if (error) {
+            setSaveStatus({ type: "error", msg: error });
+        } else {
+            setSaveStatus({ type: "success", msg: "Successfully pushed to Database!" });
+        }
+    };
+
+    const handleClear = () => {
+        setPrompt("");
+        setGeneratedHtml("<!-- AI Generated HTML with Handlebars tags will appear here -->");
+        setGeneratedCss("/* AI Generated CSS will appear here */");
+        setCompiledLiveHtml("");
+        setSaveStatus({ type: null, msg: "" });
     };
 
     return (
@@ -42,11 +160,11 @@ export default function TemplateCreatorPage() {
                     <p className="text-slate-500 mt-1">Generate new Handlebars-compatible HTML/CSS using Gemini.</p>
                 </div>
                 <div className="flex gap-3">
-                    <button className="flex items-center gap-2 px-4 py-2 border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold rounded-lg transition-colors shadow-sm">
+                    <button onClick={handleClear} className="flex items-center gap-2 px-4 py-2 border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold rounded-lg transition-colors shadow-sm">
                         <Trash2 className="w-4 h-4" /> Clear
                     </button>
-                    <button className="flex items-center gap-2 px-6 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg transition-colors shadow-lg shadow-emerald-600/20">
-                        <Save className="w-4 h-4" /> Save to DB
+                    <button onClick={handleSaveToDB} disabled={isSaving} className="flex items-center gap-2 px-6 py-2 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-bold rounded-lg transition-colors shadow-lg shadow-emerald-600/20">
+                        {isSaving ? <span className="animate-pulse">Saving...</span> : <><Save className="w-4 h-4" /> Save to DB</>}
                     </button>
                 </div>
             </div>
@@ -54,7 +172,7 @@ export default function TemplateCreatorPage() {
             {/* Main Studio Grid */}
             <div className="grid grid-cols-12 gap-6 flex-1 min-h-0">
 
-                {/* Left Column: Prompt & Code Editor */}
+                {/* Left Column: Prompt, Metadata & Code Editor */}
                 <div className="col-span-12 lg:col-span-5 flex flex-col gap-4 min-h-0 bg-white border border-slate-200 rounded-2xl shadow-sm p-4">
 
                     {/* Prompt Box */}
@@ -87,9 +205,24 @@ export default function TemplateCreatorPage() {
                         </button>
                     </div>
 
-                    <hr className="border-slate-100 my-2" />
+                    <hr className="border-slate-100 my-1" />
 
-                    {/* Code Editor Mock */}
+                    {/* DB Metadata Mapping */}
+                    <div className="flex flex-col gap-2 flex-shrink-0">
+                        <label className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Database Map Details</label>
+                        <div className="flex gap-2">
+                            <input value={templateId} onChange={e => setTemplateId(e.target.value)} placeholder="Template ID (tm-theme)" className="flex-1 text-xs border border-slate-200 rounded px-2 py-1.5 outline-none" />
+                            <input value={templateName} onChange={e => setTemplateName(e.target.value)} placeholder="Display Name" className="flex-1 text-xs border border-slate-200 rounded px-2 py-1.5 outline-none" />
+                        </div>
+                        <input value={templateDesc} onChange={e => setTemplateDesc(e.target.value)} placeholder="Short Description..." className="w-full text-xs border border-slate-200 rounded px-2 py-1.5 outline-none" />
+                        {saveStatus.msg && (
+                            <div className={`text-xs font-bold mt-1 ${saveStatus.type === "success" ? "text-emerald-600" : "text-red-500"}`}>{saveStatus.msg}</div>
+                        )}
+                    </div>
+
+                    <hr className="border-slate-100 my-1" />
+
+                    {/* Code Editor */}
                     <div className="flex-1 flex flex-col min-h-0 bg-slate-900 rounded-xl overflow-hidden shadow-inner border border-slate-800">
                         <div className="flex items-center justify-between bg-slate-950 px-4 py-2 border-b border-slate-800">
                             <div className="flex gap-4">
@@ -97,7 +230,7 @@ export default function TemplateCreatorPage() {
                                 <button onClick={() => setActiveTab("html")} className={`text-xs font-bold font-mono transition-colors ${activeTab === 'html' ? 'text-emerald-400' : 'text-slate-500 hover:text-slate-300'}`}>.HTML</button>
                                 <button onClick={() => setActiveTab("css")} className={`text-xs font-bold font-mono transition-colors ${activeTab === 'css' ? 'text-sky-400' : 'text-slate-500 hover:text-slate-300'}`}>.CSS</button>
                             </div>
-                            <button className="text-slate-500 hover:text-white transition-colors" title="Copy to clipboard"><Copy className="w-4 h-4" /></button>
+                            <button onClick={() => navigator.clipboard.writeText(activeTab === 'css' ? generatedCss : generatedHtml)} className="text-slate-500 hover:text-white transition-colors" title="Copy to clipboard"><Copy className="w-4 h-4" /></button>
                         </div>
 
                         <div className="flex-1 overflow-auto p-4 text-xs font-mono leading-relaxed">
@@ -137,25 +270,24 @@ export default function TemplateCreatorPage() {
                         </div>
                     </div>
 
-                    <div className="flex-1 relative bg-white bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] flex items-center justify-center p-8">
-                        {/* 
-                            In the final version, this iframe will receive the Handlebars HTML + test JSON data,
-                            compile it in the browser, and inject the styling to preview.
-                            For now, we mock the compiled result visually.
-                        */}
+                    <div className="flex-1 relative bg-white bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] flex items-center justify-center py-8">
                         {isGenerating ? (
                             <div className="flex flex-col items-center gap-4 text-slate-400">
                                 <LayoutTemplate className="w-16 h-16 animate-pulse" />
-                                <span className="text-sm font-bold tracking-widest uppercase">Rendering Preview...</span>
+                                <span className="text-sm font-bold tracking-widest uppercase">Consulting Gemini Stylist...</span>
                             </div>
-                        ) : generatedHtml.includes("AI Generated") ? (
+                        ) : !compiledLiveHtml ? (
                             <div className="flex flex-col items-center gap-4 text-slate-400">
                                 <Code className="w-16 h-16" />
                                 <span className="text-sm font-bold tracking-widest uppercase">Awaiting Prompt</span>
                             </div>
                         ) : (
-                            <div className="w-full max-w-sm h-full bg-white rounded-[2rem] border-8 border-slate-800 shadow-2xl overflow-auto relative">
-                                <div dangerouslySetInnerHTML={{ __html: `<style>${generatedCss}</style>${generatedHtml}`.replace(/{{couple\.groom\.firstName}}/g, "Karthik").replace(/{{couple\.bride\.firstName}}/g, "Priya").replace(/{{events\.\[0\]\.date}}/g, "28th Feb 2026").replace(/{{title}}/g, "Muhurtham").replace(/{{venueName}}/g, "Sri Murugan Kalyana Mandapam").replace(/{{#each events}}|<\/section>|{{#if gallery}}|{{#each gallery.images}}|{{this}}|{{\/each}}|{{\/if}}/g, "") }} />
+                            <div className="w-full max-w-md h-full bg-white rounded-[2.5rem] border-[12px] border-slate-800 shadow-2xl overflow-hidden relative">
+                                <iframe
+                                    className="w-full h-full border-none"
+                                    srcDoc={compiledLiveHtml}
+                                    title="Live AI Preview"
+                                />
                             </div>
                         )}
                     </div>

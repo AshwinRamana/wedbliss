@@ -11,6 +11,9 @@ export type DbTemplate = {
     description: string;
     is_live: boolean;
     is_hero: boolean;
+    html_content: string | null;
+    css_content: string | null;
+    js_content: string | null;
     demo_url: string | null;
     thumbnail_url: string | null;
     created_at: string;

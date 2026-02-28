@@ -32,7 +32,8 @@ function TemplateSelectionContent() {
 
             // Fetch live template flags from Supabase and merge
             const dbTemplates = await getTemplates();
-            const merged = TEMPLATES.map(t => {
+            // 1. Map over static templates and enrich with DB data
+            const enrichedStatic = TEMPLATES.map(t => {
                 const db = dbTemplates.find(d => d.id === t.id);
                 return {
                     ...t,
@@ -42,7 +43,28 @@ function TemplateSelectionContent() {
                     desc: db?.description ?? t.desc,
                 };
             });
-            setMergedTemplates(merged);
+
+            // 2. Find dynamically uploaded DB templates
+            const dynamicDBTemplates = dbTemplates
+                .filter(db => !TEMPLATES.some(t => t.id === db.id))
+                .map(db => ({
+                    id: db.id,
+                    name: db.name,
+                    tier: (db.tier as "basic" | "premium") || "basic",
+                    desc: db.description || "A beautifully crafted custom design.",
+                    isLive: db.is_live,
+                    href: db.demo_url ?? undefined,
+                    thumbnailUrl: db.thumbnail_url ?? null,
+                }));
+
+            // 3. Combine and sort: Live templates first
+            const allTemplates = [...enrichedStatic, ...dynamicDBTemplates].sort((a, b) => {
+                if (a.isLive && !b.isLive) return -1;
+                if (!a.isLive && b.isLive) return 1;
+                return 0;
+            });
+
+            setMergedTemplates(allTemplates);
         };
         init();
 

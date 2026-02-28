@@ -151,8 +151,21 @@ export function TemplateSVG({ id }: { id: string }) {
         default:
             return (
                 <svg width="100%" height="100%" viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
-                    <rect width="320" height="240" fill="#fdf6ec" />
-                    <text x="160" y="120" textAnchor="middle" fontSize="14" fill="#8b6040">Template Preview</text>
+                    <defs>
+                        <pattern id="cubesT" x="0" y="0" width="16" height="16" patternUnits="userSpaceOnUse">
+                            <rect width="16" height="16" fill="#0f172a" />
+                            <circle cx="8" cy="8" r="1.5" fill="#334155" opacity="0.6" />
+                            <path d="M0 16L16 0M-2 2L2 -2M14 18L18 14" stroke="#1e293b" strokeWidth="1" opacity="0.4" />
+                        </pattern>
+                    </defs>
+                    <rect width="320" height="240" fill="url(#cubesT)" />
+                    <rect x="8" y="8" width="304" height="224" fill="none" stroke="#334155" strokeWidth="1.5" rx="4" />
+
+                    <circle cx="160" cy="100" r="32" fill="#1e293b" stroke="#334155" strokeWidth="1" />
+                    <text x="160" y="105" textAnchor="middle" fontSize="18" fill="#94a3b8" fontFamily="sans-serif">✨</text>
+
+                    <text x="160" y="150" textAnchor="middle" fontSize="12" fill="#e2e8f0" fontWeight="bold">Custom Theme</text>
+                    <text x="160" y="166" textAnchor="middle" fontSize="8" fill="#94a3b8" letterSpacing="1">NEWLY UPLOADED</text>
                 </svg>
             );
     }
@@ -185,7 +198,9 @@ export default function Templates() {
     useEffect(() => {
         const fetchTemplates = async () => {
             const dbTemplates = await getTemplates();
-            setMerged(TEMPLATES.map(t => {
+
+            // 1. Map over static templates and enrich with DB data
+            const enrichedStatic = TEMPLATES.map(t => {
                 const db = dbTemplates.find(d => d.id === t.id);
                 return {
                     ...t,
@@ -194,7 +209,30 @@ export default function Templates() {
                     thumbnailUrl: db?.thumbnail_url ?? null,
                     desc: db?.description ?? t.desc,
                 };
-            }));
+            });
+
+            // 2. Find any dynamically uploaded DB templates that aren't in the static array
+            const dynamicDBTemplates = dbTemplates
+                .filter(db => !TEMPLATES.some(t => t.id === db.id))
+                .map(db => ({
+                    id: db.id,
+                    name: db.name,
+                    tier: (db.tier as "basic" | "premium") || "basic",
+                    desc: db.description || "A beautifully crafted custom design.",
+                    isLive: db.is_live,
+                    href: db.demo_url ?? undefined,
+                    thumbnailUrl: db.thumbnail_url ?? null,
+                }));
+
+            // 3. Combine and sort: Live templates first, then by tier, then by name
+            const allTemplates = [...enrichedStatic, ...dynamicDBTemplates].sort((a, b) => {
+                if (a.isLive && !b.isLive) return -1;
+                if (!a.isLive && b.isLive) return 1;
+                // If both are live or both are not live, fallback to current array order
+                return 0;
+            });
+
+            setMerged(allTemplates);
         };
         fetchTemplates();
     }, []);

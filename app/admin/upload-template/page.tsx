@@ -1,0 +1,257 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { Copy, Code, Play, Save, Trash2, Upload, TestTube } from "lucide-react";
+import { upsertTemplate } from "@/lib/db";
+import Handlebars from "handlebars";
+
+export default function UploadTemplatePage() {
+    // 1. Editor State (Raw Input from User)
+    const [inputHtml, setInputHtml] = useState("");
+    const [inputCss, setInputCss] = useState("");
+    const [compiledLiveHtml, setCompiledLiveHtml] = useState("");
+
+    // 2. Metadata State (For DB Save)
+    const [templateId, setTemplateId] = useState("");
+    const [templateName, setTemplateName] = useState("");
+    const [templateDesc, setTemplateDesc] = useState("");
+    const [tier, setTier] = useState<"basic" | "premium">("premium");
+    const [thumbnailUrl, setThumbnailUrl] = useState("");
+
+    // 3. UI Status
+    const [isSaving, setIsSaving] = useState(false);
+    const [saveStatus, setSaveStatus] = useState<{ type: "success" | "error" | null, msg: string }>({ type: null, msg: "" });
+    const [activeTab, setActiveTab] = useState<"html" | "css">("html");
+
+    // 4. Test Data Injector (Mock S3 Data)
+    const dummyData = {
+        couple: {
+            bride: { firstName: "Ananya" },
+            groom: { firstName: "Rahul" },
+            parents: "D/o Lakshmi & Balasubramanian | S/o Saraswathi & Venkatraman"
+        },
+        events: [
+            {
+                id: "ev-1",
+                title: "Muhurtham",
+                date: "14 May 2026",
+                time: "9:00 AM - 10:30 AM",
+                venueName: "Sri Krishna Temple Grounds",
+                googleMapsUrl: "https://maps.google.com"
+            },
+            {
+                id: "ev-2",
+                title: "Reception",
+                date: "14 May 2026",
+                time: "7:00 PM Onwards",
+                venueName: "Grand Chola Banquet Hall",
+                googleMapsUrl: "https://maps.google.com"
+            }
+        ],
+        gallery: {
+            images: [
+                "https://images.unsplash.com/photo-1544365558-35aa4afcf11f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                "https://images.unsplash.com/photo-1519741497674-611481863552?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+            ]
+        },
+        media: {
+            videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ"
+        },
+        rsvp: {
+            enabled: true,
+            whatsappNumber: "+919876543210"
+        }
+    };
+
+    // Live Compilation Effect
+    useEffect(() => {
+        if (!inputHtml) {
+            setCompiledLiveHtml("");
+            return;
+        }
+        try {
+            const template = Handlebars.compile(inputHtml);
+            const resolvedHtml = template(dummyData);
+            setCompiledLiveHtml(`<style>${inputCss}</style>${resolvedHtml}`);
+        } catch (e) {
+            console.error("Handlebars compilation error:", e);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [inputHtml, inputCss]);
+
+
+    const handleSaveToDB = async () => {
+        if (!templateId || !templateName || !inputHtml || !inputCss) {
+            alert("Template ID, Display Name, HTML, and CSS are all required.");
+            return;
+        }
+
+        setIsSaving(true);
+        setSaveStatus({ type: null, msg: "" });
+
+        const { error } = await upsertTemplate({
+            id: templateId,
+            name: templateName,
+            tier: tier,
+            description: templateDesc,
+            is_live: false, // Default to coming soon so it can be reviewed in manager
+            is_hero: false,
+            html_content: inputHtml,
+            css_content: inputCss,
+            demo_url: null,
+            thumbnail_url: thumbnailUrl || null,
+        });
+
+        setIsSaving(false);
+        if (error) {
+            setSaveStatus({ type: "error", msg: error });
+            alert("Database Error: " + error);
+        } else {
+            setSaveStatus({ type: "success", msg: "Successfully pushed to Database!" });
+        }
+    };
+
+    const handleClear = () => {
+        if (confirm("Are you sure you want to clear the editor?")) {
+            setInputHtml("");
+            setInputCss("");
+            setCompiledLiveHtml("");
+            setSaveStatus({ type: null, msg: "" });
+        }
+    };
+
+    return (
+        <div className="flex flex-col gap-6 h-[calc(100vh-80px)]">
+            <div className="flex justify-between items-end flex-shrink-0">
+                <div>
+                    <h1 className="text-2xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
+                        <Upload className="w-6 h-6 text-indigo-600" />
+                        External Template Uploader
+                    </h1>
+                    <p className="text-slate-500 mt-1">Paste Handlebars HTML/CSS generated by AI models like ChatGPT or Claude, test dynamic S3 data, and push to the registry.</p>
+                </div>
+                <div className="flex gap-3">
+                    <button onClick={handleClear} className="flex items-center gap-2 px-4 py-2 border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold rounded-lg transition-colors shadow-sm">
+                        <Trash2 className="w-4 h-4" /> Clear Console
+                    </button>
+                    <button onClick={handleSaveToDB} disabled={isSaving} className="flex items-center gap-2 px-6 py-2 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-bold rounded-lg transition-colors shadow-lg shadow-emerald-600/20">
+                        {isSaving ? <span className="animate-pulse">Pushing...</span> : <><Save className="w-4 h-4" /> Push to Registry</>}
+                    </button>
+                </div>
+            </div>
+
+            {/* Main Studio Grid */}
+            <div className="grid grid-cols-12 gap-6 flex-1 min-h-0">
+
+                {/* Left Column: Code Injector & Metadata */}
+                <div className="col-span-12 lg:col-span-5 flex flex-col gap-4 min-h-0 bg-white border border-slate-200 rounded-2xl shadow-sm p-4">
+
+                    {/* Metadata Mapping */}
+                    <div className="flex flex-col gap-3 flex-shrink-0">
+                        <div className="flex justify-between items-center">
+                            <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Registry Details</label>
+                            <select
+                                value={tier}
+                                onChange={(e) => setTier(e.target.value as "basic" | "premium")}
+                                className="text-xs border border-slate-200 rounded p-1 font-medium bg-slate-50 outline-none">
+                                <option value="basic">Basic Tier</option>
+                                <option value="premium">Premium Tier</option>
+                            </select>
+                        </div>
+                        <div className="flex gap-2">
+                            <input value={templateId} onChange={e => setTemplateId(e.target.value)} placeholder="Template ID (e.g., tm-gold-scroll)" className="flex-1 text-sm border border-slate-200 rounded-lg px-3 py-2 outline-none focus:border-indigo-500 font-medium" />
+                            <input value={templateName} onChange={e => setTemplateName(e.target.value)} placeholder="Display Name" className="flex-1 text-sm border border-slate-200 rounded-lg px-3 py-2 outline-none focus:border-indigo-500 font-medium" />
+                        </div>
+                        <input value={templateDesc} onChange={e => setTemplateDesc(e.target.value)} placeholder="Theme Description..." className="w-full text-sm border border-slate-200 rounded-lg px-3 py-2 outline-none focus:border-indigo-500" />
+                        <input value={thumbnailUrl} onChange={e => setThumbnailUrl(e.target.value)} placeholder="Thumbnail S3 URL (Optional)" className="w-full text-sm border border-slate-200 rounded-lg px-3 py-2 outline-none focus:border-indigo-500 text-slate-500" />
+
+                        {saveStatus.msg && (
+                            <div className={`text-xs font-bold ${saveStatus.type === "success" ? "text-emerald-600" : "text-red-500"}`}>{saveStatus.msg}</div>
+                        )}
+                    </div>
+
+                    <hr className="border-slate-100 my-1" />
+
+                    {/* Code Editor */}
+                    <div className="flex-1 flex flex-col min-h-0 bg-slate-900 rounded-xl overflow-hidden shadow-inner border border-slate-800">
+                        <div className="flex items-center justify-between bg-slate-950 px-4 py-2 border-b border-slate-800">
+                            <div className="flex gap-2">
+                                <button
+                                    onClick={() => setActiveTab("html")}
+                                    className={`px-3 py-1 rounded text-xs font-bold font-mono transition-colors ${activeTab === 'html' ? 'bg-indigo-500/20 text-indigo-300' : 'text-slate-500 hover:text-slate-300 hover:bg-white/5'}`}>
+                                    index.html
+                                </button>
+                                <button
+                                    onClick={() => setActiveTab("css")}
+                                    className={`px-3 py-1 rounded text-xs font-bold font-mono transition-colors ${activeTab === 'css' ? 'bg-sky-500/20 text-sky-300' : 'text-slate-500 hover:text-slate-300 hover:bg-white/5'}`}>
+                                    styles.css
+                                </button>
+                            </div>
+                            <button onClick={() => navigator.clipboard.writeText(activeTab === 'css' ? inputCss : inputHtml)} className="text-slate-500 hover:text-white transition-colors" title="Copy from clipboard"><Copy className="w-4 h-4" /></button>
+                        </div>
+
+                        <div className="flex-1 overflow-hidden relative">
+                            {activeTab === 'html' ? (
+                                <textarea
+                                    value={inputHtml}
+                                    onChange={(e) => setInputHtml(e.target.value)}
+                                    placeholder="<!-- Paste your AI-Generated Handlebars HTML here... -->"
+                                    className="w-full h-full bg-transparent text-emerald-300 font-mono text-xs p-4 resize-none focus:outline-none placeholder:text-slate-700 leading-relaxed"
+                                    spellCheck={false}
+                                />
+                            ) : (
+                                <textarea
+                                    value={inputCss}
+                                    onChange={(e) => setInputCss(e.target.value)}
+                                    placeholder="/* Paste your AI-Generated Vanilla CSS here... */"
+                                    className="w-full h-full bg-transparent text-sky-300 font-mono text-xs p-4 resize-none focus:outline-none placeholder:text-slate-700 leading-relaxed"
+                                    spellCheck={false}
+                                />
+                            )}
+                        </div>
+                    </div>
+                </div>
+
+                {/* Right Column: Live Iframe Preview */}
+                <div className="col-span-12 lg:col-span-7 bg-slate-200 border border-slate-300 rounded-2xl shadow-inner relative flex flex-col overflow-hidden">
+                    <div className="bg-slate-300 border-b border-slate-400 px-4 py-2 flex items-center justify-between gap-2 relative">
+                        <div className="flex gap-1.5 w-20"> {/* Fixed width to balance flex */}
+                            <div className="w-3 h-3 rounded-full bg-slate-400"></div>
+                            <div className="w-3 h-3 rounded-full bg-slate-400"></div>
+                            <div className="w-3 h-3 rounded-full bg-slate-400"></div>
+                        </div>
+                        <div className="bg-slate-200 px-8 py-1 rounded-md text-[10px] font-bold text-slate-500 font-mono border border-slate-300 shadow-sm flex items-center gap-2">
+                            <Play className="w-3 h-3 text-emerald-600 fill-emerald-600" />
+                            Live Handlebars Compilation Engine
+                        </div>
+
+                        {/* Test Injector Info */}
+                        <div className="flex items-center gap-1.5 text-[10px] font-bold text-indigo-600 bg-indigo-100 px-3 py-1 rounded-full border border-indigo-200">
+                            <TestTube className="w-3 h-3" /> MOCK DATA INJECTED
+                        </div>
+                    </div>
+
+                    <div className="flex-1 relative bg-white bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] flex items-center justify-center py-8">
+                        {!compiledLiveHtml ? (
+                            <div className="flex flex-col items-center gap-4 text-slate-400">
+                                <Code className="w-16 h-16" />
+                                <span className="text-sm font-bold tracking-widest uppercase">Awaiting Code Injection</span>
+                            </div>
+                        ) : (
+                            <div className="w-full max-w-md h-full bg-white rounded-[2.5rem] border-[12px] border-slate-800 shadow-2xl overflow-hidden relative">
+                                <iframe
+                                    className="w-full h-full border-none"
+                                    srcDoc={compiledLiveHtml}
+                                    title="Live AI Preview"
+                                />
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    );
+}
+

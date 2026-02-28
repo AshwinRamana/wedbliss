@@ -64,7 +64,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
         { label: "Customers", href: "/admin/customers", icon: Users },
         { label: "Live Websites", href: "/admin/live-websites", icon: Globe },
-        { label: "Template Studio", href: "/admin/template-creator", icon: Wand2 },
+        { label: "Template Studio (AI)", href: "/admin/template-creator", icon: Wand2 },
+        { label: "Upload Template", href: "/admin/upload-template", icon: LayoutTemplate },
         { label: "Template Manager", href: "/admin/template-manager", icon: LayoutTemplate },
         { label: "Payments", href: "/admin/payments", icon: IndianRupee },
     ];

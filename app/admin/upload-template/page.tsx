@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react";
 import { Copy, Code, Play, Save, Trash2, Upload, TestTube } from "lucide-react";
 import { upsertTemplate } from "@/lib/db";
-import Handlebars from "handlebars";
+// @ts-expect-error - missing declaration file
+import Handlebars from "handlebars/dist/handlebars";
 
 export default function UploadTemplatePage() {
     // 1. Editor State (Raw Input from User)

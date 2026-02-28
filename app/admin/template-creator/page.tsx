@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react";
 import { Copy, Code, LayoutTemplate, Play, Save, Trash2, Wand2 } from "lucide-react";
 import { upsertTemplate } from "@/lib/db";
-import Handlebars from "handlebars";
+// @ts-expect-error - missing declaration file
+import Handlebars from "handlebars/dist/handlebars";
 
 export default function TemplateCreatorPage() {
     // 1. Core State

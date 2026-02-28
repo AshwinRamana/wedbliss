@@ -45,8 +45,8 @@ export async function GET(req: NextRequest) {
         const publicUrl = `https://${targetBucket}.s3.${awsConfig.region}.amazonaws.com/${objectKey}`;
 
         return NextResponse.json({ signedUrl, publicUrl, objectKey });
-    } catch (error: any) {
-        console.error("[upload-api] Error generating presigned URL:", error.message);
+    } catch (error: unknown) {
+        console.error("[upload-api] Error generating presigned URL:", error instanceof Error ? error.message : String(error));
         return NextResponse.json({ error: "Failed to generate upload URL" }, { status: 500 });
     }
 }

@@ -18,19 +18,35 @@ type MergedTemplate = {
 };
 
 function mergeWithStatic(dbRows: DbTemplate[]): MergedTemplate[] {
-    return TEMPLATES.map(t => {
-        const db = dbRows.find(d => d.id === t.id);
-        return {
-            id: t.id,
-            name: db?.name ?? t.name,
-            tier: (db?.tier ?? t.tier) as "basic" | "premium",
-            desc: db?.description ?? t.desc,
-            isLive: db?.is_live ?? false,
-            isHero: db?.is_hero ?? false,
-            href: db?.demo_url ?? null,
-            thumbnailUrl: db?.thumbnail_url ?? null,
-        };
+    // Start with all DB rows
+    const merged: MergedTemplate[] = dbRows.map(db => ({
+        id: db.id,
+        name: db.name,
+        tier: db.tier,
+        desc: db.description,
+        isLive: db.is_live,
+        isHero: db.is_hero,
+        href: db.demo_url,
+        thumbnailUrl: db.thumbnail_url,
+    }));
+
+    // Add any static templates that aren't in the DB
+    TEMPLATES.forEach(t => {
+        if (!merged.find(m => m.id === t.id)) {
+            merged.push({
+                id: t.id,
+                name: t.name,
+                tier: t.tier,
+                desc: t.desc,
+                isLive: false,
+                isHero: false,
+                href: null,
+                thumbnailUrl: null,
+            });
+        }
     });
+
+    return merged;
 }
 
 export default function TemplateManagerPage() {

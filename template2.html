@@ -1976,6 +1976,7 @@
             </svg>
 
             <div class="vid-inner" style="position:relative;z-index:2;">
+                {{#if media.videoUrl}}
                 <span class="vid-chapter sr">Hear It From Them</span>
 
                 <div class="sr" style="margin-bottom:20px;">
@@ -1988,10 +1989,11 @@
                     </div>
                 </div>
 
-                <div class="vid-title sr">A Message from<br />Karthik &amp; Priya</div>
+                <div class="vid-title sr">A Message from<br />{{couple.groom.firstName}} &amp;
+                    {{couple.bride.firstName}}</div>
                 <div class="vid-sub sr">Watch their personal video note</div>
 
-                <div class="vid-frame sr" onclick="openVideo()">
+                <div class="vid-frame sr" onclick="window.open('{{media.videoUrl}}', '_blank')">
                     <div class="vid-thumb-content">
                         <!-- Decorative rings in thumbnail -->
                         <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:.08" viewBox="0 0 640 360"
@@ -2002,8 +2004,8 @@
                             <line x1="180" y1="180" x2="460" y2="180" stroke="#C4A070" stroke-width=".5" />
                             <line x1="320" y1="40" x2="320" y2="320" stroke="#C4A070" stroke-width=".5" />
                         </svg>
-                        <div class="vid-thumb-text">Karthik &amp; Priya</div>
-                        <div class="vid-thumb-sub">February 28, 2026 · Chennai</div>
+                        <div class="vid-thumb-text">{{couple.groom.firstName}} &amp; {{couple.bride.firstName}}</div>
+                        <div class="vid-thumb-sub">{{weddingDate}}</div>
                     </div>
                     <div class="vid-play-btn">
                         <div class="vid-play-circle">
@@ -2014,7 +2016,8 @@
                     </div>
                 </div>
 
-                <p class="vid-note sr">Add your video link by replacing the onclick handler above</p>
+                <p class="vid-note sr">Tap to view video message</p>
+                {{/if}}
 
                 <!-- RSVP -->
                 <div class="sr" style="width:100%;margin:32px 0 20px;">

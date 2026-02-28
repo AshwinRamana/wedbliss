@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-    <title>{{couple.groom.firstName}} &amp; {{couple.bride.firstName}} — Wedding Invitation</title>
+    <title>Karthik & Priya — Wedding Invitation</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
         href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600&family=Jost:wght@200;300;400;500;600&display=swap"
@@ -172,24 +172,6 @@
             transform: rotateY(-180deg);
         }
 
-        
-        /* ── CORNER FLORA ── */
-        .card-corner-svg {
-            position: absolute;
-            width: 70px;
-            height: 70px;
-            pointer-events: none;
-            opacity: 0;
-            animation: fadeInFlora 2s 0.5s ease-out forwards;
-        }
-        @keyframes fadeInFlora {
-            to { opacity: 0.8; }
-        }
-        .corner-tl { top: 10px; left: 10px; }
-        .corner-tr { top: 10px; right: 10px; transform: scaleX(-1); }
-        .corner-bl { bottom: 10px; left: 10px; transform: scaleY(-1); }
-        .corner-br { bottom: 10px; right: 10px; transform: scale(-1, -1); }
-
         /* Front face */
         .card-front,
         .card-back {
@@ -209,7 +191,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 24px 20px;
+            padding: 32px 28px;
             gap: 0;
         }
 
@@ -284,35 +266,13 @@
         }
 
         .cf-names {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            margin: 16px 0;
-            width: 100%;
-        }
-
-        .cf-name {
             font-family: var(--ff-d);
-            font-size: clamp(32px, 7vw, 44px);
+            font-size: clamp(22px, 5vw, 34px);
             font-weight: 600;
-            color: var(--text);
-            line-height: 0.9;
-        }
-
-        .cf-name.bride {
-            font-style: italic;
-            color: var(--terra2);
-        }
-
-        .cf-and {
-            font-family: var(--ff-d);
-            font-size: clamp(16px, 3.5vw, 24px);
-            font-weight: 300;
-            font-style: italic;
             color: var(--gold);
-            margin: 4px 0;
+            text-align: center;
+            line-height: 1.2;
+            margin: 14px 0;
         }
 
         .cf-date {
@@ -322,13 +282,6 @@
             text-transform: uppercase;
             color: var(--text3);
             margin-top: 16px;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            width: 100%;
-            padding: 0 10px;
-            line-height: 1.5;
         }
 
         .cf-bottom-ornament {
@@ -469,9 +422,8 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            gap: 8px; /* Added gap to prevent overlap */
-            margin: 24px 0 32px; /* Extra breathing room */
+            gap: 0;
+            margin: 12px 0 20px;
         }
 
         .p1-name {
@@ -614,12 +566,12 @@
 
         .ev-row {
             display: grid;
-            grid-template-columns: 110px 1fr;
+            grid-template-columns: 100px 1fr;
             padding: 16px 0;
             border-bottom: 1px solid rgba(180, 140, 80, .10);
             text-align: left;
             gap: 0 20px;
-            align-items: start;
+            align-items: center;
         }
 
         .ev-row:last-child {
@@ -1079,29 +1031,6 @@
             color: var(--gold);
         }
 
-        
-        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-           SUBTLE AMBIENT ANIMATIONS
-        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-        .ambient-float {
-            position: absolute;
-            pointer-events: none;
-            opacity: 0.1;
-            animation: floatSlow 20s ease-in-out infinite alternate;
-        }
-        .ambient-float.alt {
-            animation: floatSlowAlt 25s ease-in-out infinite alternate-reverse;
-            opacity: 0.06;
-        }
-        @keyframes floatSlow {
-            0% { transform: translate(0, 0) rotate(0deg) scale(1); }
-            100% { transform: translate(40px, -60px) rotate(15deg) scale(1.05); }
-        }
-        @keyframes floatSlowAlt {
-            0% { transform: translate(0, 0) rotate(0deg) scale(1.05); }
-            100% { transform: translate(-50px, 40px) rotate(-15deg) scale(1); }
-        }
-
         /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
    SOUTH INDIAN ART MOTIFS (SVG ELEMENTS)
    Reused across pages as subtle borders and watermarks
@@ -1215,9 +1144,7 @@
             }
 
             .ev-row {
-                grid-template-columns: 1fr;
-                text-align: center;
-                gap: 8px;
+                grid-template-columns: 80px 1fr;
             }
 
             .site-footer {
@@ -1253,49 +1180,6 @@
 
                 <!-- FRONT FACE -->
                 <div class="card-front">
-
-                    <!-- Corner Flora -->
-                    <svg class="card-corner-svg corner-tl" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M0 0 L 100 0 C 100 50 50 100 0 100 Z" fill="rgba(196, 160, 112, 0.05)" />
-                        <path d="M10 10 Q 50 10 70 30 Q 90 50 90 90" stroke="#C4A070" stroke-width="0.8" />
-                        <circle cx="30" cy="30" r="15" stroke="#C4A070" stroke-width="0.5" />
-                        <path d="M30 15 Q 45 15 45 30 Q 45 45 30 45 Q 15 45 15 30 Q 15 15 30 15" stroke="#C4A070" stroke-width="0.5" />
-                        <circle cx="70" cy="30" r="3" fill="#C8A84B" opacity="0.6" />
-                        <circle cx="30" cy="70" r="3" fill="#C8A84B" opacity="0.6" />
-                        <path d="M40 40 L 60 60" stroke="#7A9A50" stroke-width="1" opacity="0.5" />
-                        <ellipse cx="65" cy="65" rx="8" ry="3" fill="#7A9A50" opacity="0.4" transform="rotate(45 65 65)" />
-                    </svg>
-                    <svg class="card-corner-svg corner-tr" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M0 0 L 100 0 C 100 50 50 100 0 100 Z" fill="rgba(196, 160, 112, 0.05)" />
-                        <path d="M10 10 Q 50 10 70 30 Q 90 50 90 90" stroke="#C4A070" stroke-width="0.8" />
-                        <circle cx="30" cy="30" r="15" stroke="#C4A070" stroke-width="0.5" />
-                        <path d="M30 15 Q 45 15 45 30 Q 45 45 30 45 Q 15 45 15 30 Q 15 15 30 15" stroke="#C4A070" stroke-width="0.5" />
-                        <circle cx="70" cy="30" r="3" fill="#C8A84B" opacity="0.6" />
-                        <circle cx="30" cy="70" r="3" fill="#C8A84B" opacity="0.6" />
-                        <path d="M40 40 L 60 60" stroke="#7A9A50" stroke-width="1" opacity="0.5" />
-                        <ellipse cx="65" cy="65" rx="8" ry="3" fill="#7A9A50" opacity="0.4" transform="rotate(45 65 65)" />
-                    </svg>
-                    <svg class="card-corner-svg corner-bl" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M0 0 L 100 0 C 100 50 50 100 0 100 Z" fill="rgba(196, 160, 112, 0.05)" />
-                        <path d="M10 10 Q 50 10 70 30 Q 90 50 90 90" stroke="#C4A070" stroke-width="0.8" />
-                        <circle cx="30" cy="30" r="15" stroke="#C4A070" stroke-width="0.5" />
-                        <path d="M30 15 Q 45 15 45 30 Q 45 45 30 45 Q 15 45 15 30 Q 15 15 30 15" stroke="#C4A070" stroke-width="0.5" />
-                        <circle cx="70" cy="30" r="3" fill="#C8A84B" opacity="0.6" />
-                        <circle cx="30" cy="70" r="3" fill="#C8A84B" opacity="0.6" />
-                        <path d="M40 40 L 60 60" stroke="#7A9A50" stroke-width="1" opacity="0.5" />
-                        <ellipse cx="65" cy="65" rx="8" ry="3" fill="#7A9A50" opacity="0.4" transform="rotate(45 65 65)" />
-                    </svg>
-                    <svg class="card-corner-svg corner-br" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M0 0 L 100 0 C 100 50 50 100 0 100 Z" fill="rgba(196, 160, 112, 0.05)" />
-                        <path d="M10 10 Q 50 10 70 30 Q 90 50 90 90" stroke="#C4A070" stroke-width="0.8" />
-                        <circle cx="30" cy="30" r="15" stroke="#C4A070" stroke-width="0.5" />
-                        <path d="M30 15 Q 45 15 45 30 Q 45 45 30 45 Q 15 45 15 30 Q 15 15 30 15" stroke="#C4A070" stroke-width="0.5" />
-                        <circle cx="70" cy="30" r="3" fill="#C8A84B" opacity="0.6" />
-                        <circle cx="30" cy="70" r="3" fill="#C8A84B" opacity="0.6" />
-                        <path d="M40 40 L 60 60" stroke="#7A9A50" stroke-width="1" opacity="0.5" />
-                        <ellipse cx="65" cy="65" rx="8" ry="3" fill="#7A9A50" opacity="0.4" transform="rotate(45 65 65)" />
-                    </svg>
-
 
                     <!-- Top lotus border ornament -->
                     <div class="cf-top-ornament">
@@ -1413,9 +1297,10 @@
                     </div>
 
                     <div class="cf-names">
-                        <div class="cf-name">{{couple.groom.firstName}}</div>
-                        <div class="cf-and">&amp;</div>
-                        <div class="cf-name bride">{{couple.bride.firstName}}</div>
+                        Karthik<br />
+                        <span
+                            style="font-size:clamp(14px,3vw,22px);font-weight:300;font-style:italic;color:var(--muted);">&amp;</span><br />
+                        <span style="font-style:italic;">Priya</span>
                     </div>
 
                     <div style="margin:16px 0; width:100%;">
@@ -1428,7 +1313,7 @@
                         </div>
                     </div>
 
-                    <div class="cf-date"><span>{{events.0.date}}</span><span style="color:var(--gold); font-size:6px; opacity:0.5;">◆</span><span>{{events.0.venueName}}</span></div>
+                    <div class="cf-date">February 28, 2026 · Chennai</div>
 
                     <!-- Bottom lotus border -->
                     <div class="cf-bottom-ornament">
@@ -1500,35 +1385,6 @@
 ══════════════════════════ -->
         <section class="page page-p1" id="page1">
             <div class="page-frame"></div>
-
-        <!-- Elegant Frame Arch -->
-        <div class="p1-arch-container">
-            <svg class="p1-arch-svg" viewBox="0 0 400 600" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <!-- Outer Arch -->
-                <path d="M50 600 V 200 A 150 150 0 0 1 350 200 V 600" stroke="#C4A070" stroke-width="2" />
-                <!-- Inner Arch -->
-                <path d="M70 600 V 200 A 130 130 0 0 1 330 200 V 600" stroke="#C4A070" stroke-width="0.75" />
-                
-                <!-- Decorative Top Flower -->
-                <g stroke="#C4A070" stroke-width="1.5" transform="translate(200, 50)">
-                    <circle cx="0" cy="0" r="10" />
-                    <circle cx="0" cy="0" r="5" />
-                    <path d="M0 -10 L0 -25 M0 10 L0 25 M-10 0 L-25 0 M10 0 L25 0" />
-                    <path d="M-7 -7 L-18 -18 M7 7 L18 18 M-7 7 L-18 18 M7 -7 L18 -18" />
-                </g>
-                
-                <!-- Pillar Bases -->
-                <rect x="30" y="580" width="40" height="20" stroke="#C4A070" stroke-width="2" />
-                <rect x="330" y="580" width="40" height="20" stroke="#C4A070" stroke-width="2" />
-                
-                <!-- Hanging Vines -->
-                <path d="M50 200 Q 80 230 110 200" stroke="#C4A070" stroke-width="1" />
-                <path d="M350 200 Q 320 230 290 200" stroke="#C4A070" stroke-width="1" />
-                <path d="M110 180 Q 140 210 170 180" stroke="#C4A070" stroke-width="1" />
-                <path d="M290 180 Q 260 210 230 180" stroke="#C4A070" stroke-width="1" />
-            </svg>
-        </div>
-
 
             <!-- Top lotus border -->
             <div style="position:absolute;top:0;left:0;right:0;z-index:1;overflow:hidden;">
@@ -1675,26 +1531,13 @@
             </svg>
 
             <!-- Page content -->
-            <svg class="ambient-float" style="top:15%; left:10%; width:140px; height:140px;" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-    <g stroke="#C4A070" stroke-width="1" fill="none">
-        <circle cx="50" cy="50" r="30" />
-        <circle cx="50" cy="50" r="20" />
-        <circle cx="50" cy="50" r="10" />
-        <path d="M50 0 L50 100 M0 50 L100 50 M15 15 L85 85 M15 85 L85 15" stroke-width="0.5" />
-    </g>
-</svg><svg class="ambient-float alt" style="bottom:15%; right:10%; width:160px; height:160px;" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-    <g stroke="#C4A070" stroke-width="1" fill="none">
-        <path d="M50 20 Q65 0 80 20 Q100 35 80 50 Q65 70 50 50 Q35 30 50 20" />
-        <path d="M50 80 Q65 100 80 80 Q100 65 80 50 Q65 30 50 50 Q35 70 50 80" />
-    </g>
-</svg>
             <div class="p1-inner" style="position:relative;z-index:2;">
-                <p class="p1-bless sr" data-d="200">
+                <p class="p1-bless sr">
                     With the blessings of God and our families,<br />
                     we joyfully announce our marriage
                 </p>
 
-                <div class="sr" data-d="450" style="width:100%;margin-bottom:20px;">
+                <div class="sr" style="width:100%;margin-bottom:20px;">
                     <div class="ornament-rule">
                         <div class="line"></div>
                         <div class="dot"></div>
@@ -1705,12 +1548,12 @@
                 </div>
 
                 <div class="p1-names">
-                    <div class="p1-name sr" data-d="700">{{couple.groom.firstName}}</div>
-                    <div class="p1-and sr" data-d="950">&amp;</div>
-                    <div class="p1-name bride sr" data-d="1200">{{couple.bride.firstName}}</div>
+                    <div class="p1-name sr">Karthik</div>
+                    <div class="p1-and sr">&amp;</div>
+                    <div class="p1-name bride sr">Priya</div>
                 </div>
 
-                <div class="sr" data-d="1450" style="width:100%;margin:20px 0;">
+                <div class="sr" style="width:100%;margin:20px 0;">
                     <div class="ornament-rule">
                         <div class="line"></div>
                         <div class="dot"></div>
@@ -1720,16 +1563,30 @@
                     </div>
                 </div>
 
-                <div class="p1-together sr" data-d="1700">Together with their families</div>
+                <div class="p1-together sr">Together with their families</div>
 
-                <div class="p1-parents sr" data-d="1950" style="display:block; text-align:center;">
-                    <div
-                        style="font-family: var(--ff-d);font-size: clamp(14px, 2.5vw, 18px);font-weight: 500;color: var(--text2);line-height: 1.8;letter-spacing: 0.5px;">
-                        {{couple.parents}}</div>
+                <div class="p1-parents sr">
+                    <div class="p1-parent-col">
+                        <span class="p1-parent-label">Groom's Parents</span>
+                        <div class="p1-parent-names">
+                            Smt. Saraswathi Ammal<br />
+                            &amp; Shri Ramasamy Iyer
+                        </div>
+                        <span class="p1-parent-city">Coimbatore</span>
+                    </div>
+                    <div class="p1-parent-div"></div>
+                    <div class="p1-parent-col">
+                        <span class="p1-parent-label">Bride's Parents</span>
+                        <div class="p1-parent-names">
+                            Smt. Kamakshi Ammal<br />
+                            &amp; Shri Krishnaswamy Iyer
+                        </div>
+                        <span class="p1-parent-city">Chennai</span>
+                    </div>
                 </div>
 
-                <div class="p1-date-line sr" data-d="2200" style="margin-top:28px;">
-                    {{events.0.date}} · {{events.0.venueName}}
+                <div class="p1-date-line sr" style="margin-top:28px;">
+                    Saturday · February 28, 2026 · Chennai
                 </div>
             </div>
 
@@ -1774,8 +1631,7 @@
         <!-- ══════════════════════════
   PAGE 2 — EVENT 1: NICHAYATHARTHAM
 ══════════════════════════ -->
-        {{#each events}}
-        <section class="page {{#if @first}}page-p2{{else}}page-p3{{/if}}">
+        <section class="page page-p2" id="page2">
             <div class="page-frame"></div>
 
             <!-- Kolam dot watermark grid (center-right) -->
@@ -1810,11 +1666,8 @@
                 </g>
             </svg>
 
-            <svg class="ambient-float" style="top:40%; right:-10%; width:200px; height:200px; opacity:0.04;" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-    <path d="M50 10 A40 40 0 0 1 90 50 A40 40 0 0 1 50 90 A40 40 0 0 1 10 50 A40 40 0 0 1 50 10" stroke="#C4A070" stroke-width="1" stroke-dasharray="5,5" fill="none" />
-</svg>
             <div class="ev-page-inner" style="position:relative;z-index:2;">
-                <div class="ev-chapter sr">Event</div>
+                <div class="ev-chapter sr">Event One</div>
 
                 <div class="sr" style="width:100%;margin-bottom:20px;">
                     <div class="ornament-rule">
@@ -1826,56 +1679,49 @@
                     </div>
                 </div>
 
-                <div class="ev-name sr">{{title}}</div>
+                <div class="ev-name sr">Nichayathartham</div>
+                <div class="ev-name-sub sr">The Engagement Ceremony</div>
 
                 <div class="ev-details sr">
                     <div class="ev-row">
                         <span class="ev-row-label">Date</span>
-                        <span class="ev-row-val">{{date}}</span>
+                        <span class="ev-row-val">Friday, 27 February 2026</span>
                     </div>
                     <div class="ev-row">
                         <span class="ev-row-label">Time</span>
-                        <span class="ev-row-val">{{time}}</span>
+                        <span class="ev-row-val">10:00 AM — 1:00 PM</span>
                     </div>
                     <div class="ev-row">
                         <span class="ev-row-label">Venue</span>
-                        <span class="ev-row-val">{{venueName}}</span>
+                        <span class="ev-row-val">
+                            Kapaleeshwarar Kalyana Mandapam
+                            <small>Mylapore, Chennai — 600 004</small>
+                        </span>
                     </div>
                 </div>
 
-                <div class="sr" style="display:flex; gap:12px; flex-wrap:wrap; justify-content:center;">
-                    <a href="#" class="add-cal-btn"
-                        onclick="addToCalendar('{{title}} - {{../couple.groom.firstName}} & {{../couple.bride.firstName}}','{{date}}','{{time}}','{{venueName}}');return false;">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <rect x="3" y="4" width="18" height="18" rx="2" />
-                            <line x1="16" y1="2" x2="16" y2="6" />
-                            <line x1="8" y1="2" x2="8" y2="6" />
-                            <line x1="3" y1="10" x2="21" y2="10" />
-                        </svg>
-                        <span>Add to Calendar</span>
-                    </a>
-                    <a href="{{googleMapsUrl}}" target="_blank" class="add-cal-btn">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                            <circle cx="12" cy="10" r="3" />
-                        </svg>
-                        <span>View Location</span>
-                    </a>
-                </div>
+                <a href="#" class="add-cal-btn sr"
+                    onclick="addToCalendar('Nichayathartham - Karthik & Priya','2026-02-27T10:00:00','2026-02-27T13:00:00','Kapaleeshwarar Kalyana Mandapam, Mylapore, Chennai');return false;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" />
+                        <line x1="16" y1="2" x2="16" y2="6" />
+                        <line x1="8" y1="2" x2="8" y2="6" />
+                        <line x1="3" y1="10" x2="21" y2="10" />
+                    </svg>
+                    <span>Add to Calendar</span>
+                </a>
 
                 <!-- Countdown -->
-                <div class="ev-countdown sr dynamic-countdown" data-date="{{date}} {{time}}">
+                <div class="ev-countdown sr">
                     <span class="ev-cdown-label">Counting down to this event</span>
                     <div class="ev-cdown-boxes">
-                        <div class="ev-cd-box"><span class="ev-cd-n dval">--</span><span class="ev-cd-l">Days</span>
+                        <div class="ev-cd-box"><span class="ev-cd-n" id="e1d">--</span><span class="ev-cd-l">Days</span>
                         </div>
-                        <div class="ev-cd-box"><span class="ev-cd-n hval">--</span><span class="ev-cd-l">Hours</span>
+                        <div class="ev-cd-box"><span class="ev-cd-n" id="e1h">--</span><span
+                                class="ev-cd-l">Hours</span></div>
+                        <div class="ev-cd-box"><span class="ev-cd-n" id="e1m">--</span><span class="ev-cd-l">Mins</span>
                         </div>
-                        <div class="ev-cd-box"><span class="ev-cd-n mval">--</span><span class="ev-cd-l">Mins</span>
-                        </div>
-                        <div class="ev-cd-box"><span class="ev-cd-n sval">--</span><span class="ev-cd-l">Secs</span>
+                        <div class="ev-cd-box"><span class="ev-cd-n" id="e1s">--</span><span class="ev-cd-l">Secs</span>
                         </div>
                     </div>
                 </div>
@@ -1891,12 +1737,117 @@
                 </div>
             </div>
         </section>
-        {{/each}}
 
 
         <!-- ══════════════════════════
   PAGE 3 — EVENT 2: MUHURTHAM
 ══════════════════════════ -->
+        <section class="page page-p3" id="page3">
+            <div class="page-frame"></div>
+
+            <svg class="kolam-bg" style="left:5%;top:50%;transform:translateY(-50%);width:200px;height:200px"
+                viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                <g fill="#C4A070">
+                    <circle cx="40" cy="40" r="3" />
+                    <circle cx="100" cy="40" r="3" />
+                    <circle cx="160" cy="40" r="3" />
+                    <circle cx="40" cy="100" r="3" />
+                    <circle cx="100" cy="100" r="4.5" />
+                    <circle cx="160" cy="100" r="3" />
+                    <circle cx="40" cy="160" r="3" />
+                    <circle cx="100" cy="160" r="3" />
+                    <circle cx="160" cy="160" r="3" />
+                    <circle cx="70" cy="70" r="2.5" />
+                    <circle cx="130" cy="70" r="2.5" />
+                    <circle cx="70" cy="130" r="2.5" />
+                    <circle cx="130" cy="130" r="2.5" />
+                </g>
+                <g fill="none" stroke="#C4A070" stroke-width=".8">
+                    <circle cx="100" cy="100" r="30" />
+                    <circle cx="100" cy="100" r="50" />
+                    <path d="M70 70 Q100 55 130 70" />
+                    <path d="M70 130 Q100 145 130 130" />
+                    <path d="M70 70 Q55 100 70 130" />
+                    <path d="M130 70 Q145 100 130 130" />
+                </g>
+            </svg>
+
+            <div class="ev-page-inner" style="position:relative;z-index:2;">
+                <div class="ev-chapter sr">Event Two</div>
+
+                <div class="sr" style="width:100%;margin-bottom:20px;">
+                    <div class="ornament-rule">
+                        <div class="line"></div>
+                        <div class="dot"></div>
+                        <div class="diamond"></div>
+                        <div class="dot"></div>
+                        <div class="line r"></div>
+                    </div>
+                </div>
+
+                <div class="ev-name sr">Muhurtham</div>
+                <div class="ev-name-sub sr">The Wedding Ceremony &amp; Reception</div>
+
+                <div class="ev-details sr">
+                    <div class="ev-row">
+                        <span class="ev-row-label">Date</span>
+                        <span class="ev-row-val">Saturday, 28 February 2026</span>
+                    </div>
+                    <div class="ev-row">
+                        <span class="ev-row-label">Ceremony</span>
+                        <span class="ev-row-val">8:24 AM</span>
+                    </div>
+                    <div class="ev-row">
+                        <span class="ev-row-label">Lunch</span>
+                        <span class="ev-row-val">From 11:30 AM</span>
+                    </div>
+                    <div class="ev-row">
+                        <span class="ev-row-label">Venue</span>
+                        <span class="ev-row-val">
+                            Sri Murugan Kalyana Mandapam
+                            <small>Anna Nagar, Chennai — 600 040</small>
+                        </span>
+                    </div>
+                </div>
+
+                <a href="#" class="add-cal-btn sr"
+                    onclick="addToCalendar('Muhurtham - Karthik & Priya','2026-02-28T08:24:00','2026-02-28T13:00:00','Sri Murugan Kalyana Mandapam, Anna Nagar, Chennai');return false;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" />
+                        <line x1="16" y1="2" x2="16" y2="6" />
+                        <line x1="8" y1="2" x2="8" y2="6" />
+                        <line x1="3" y1="10" x2="21" y2="10" />
+                    </svg>
+                    <span>Add to Calendar</span>
+                </a>
+
+                <div class="ev-countdown sr">
+                    <span class="ev-cdown-label">Counting down to the big day</span>
+                    <div class="ev-cdown-boxes">
+                        <div class="ev-cd-box"><span class="ev-cd-n" id="e2d">--</span><span class="ev-cd-l">Days</span>
+                        </div>
+                        <div class="ev-cd-box"><span class="ev-cd-n" id="e2h">--</span><span
+                                class="ev-cd-l">Hours</span></div>
+                        <div class="ev-cd-box"><span class="ev-cd-n" id="e2m">--</span><span class="ev-cd-l">Mins</span>
+                        </div>
+                        <div class="ev-cd-box"><span class="ev-cd-n" id="e2s">--</span><span class="ev-cd-l">Secs</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sr" style="width:100%;margin-top:28px;">
+                    <div class="ornament-rule">
+                        <div class="line"></div>
+                        <div class="dot"></div>
+                        <div class="diamond"></div>
+                        <div class="dot"></div>
+                        <div class="line r"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
         <!-- ══════════════════════════
   PAGE 4 — COUPLE NOTE + PHOTOS
 ══════════════════════════ -->
@@ -1937,9 +1888,9 @@
                 <div class="note-grid">
                     <div class="note-card sr-l">
                         <div class="note-who">
-                            <div class="note-av">{{couple.groom.firstName.[0]}}</div>
+                            <div class="note-av">K</div>
                             <div>
-                                <div class="note-nm">{{couple.groom.firstName}}</div>
+                                <div class="note-nm">Karthik</div>
                                 <div class="note-role">The Groom</div>
                             </div>
                         </div>
@@ -1949,10 +1900,9 @@
                     </div>
                     <div class="note-card sr-r">
                         <div class="note-who">
-                            <div class="note-av" style="background:linear-gradient(135deg,#D4A0A0,#A07080);">
-                                {{couple.bride.firstName.[0]}}</div>
+                            <div class="note-av" style="background:linear-gradient(135deg,#D4A0A0,#A07080);">P</div>
                             <div>
-                                <div class="note-nm">{{couple.bride.firstName}}</div>
+                                <div class="note-nm">Priya</div>
                                 <div class="note-role">The Bride</div>
                             </div>
                         </div>
@@ -1973,108 +1923,135 @@
                     </div>
                 </div>
                 <div class="photo-strip sr">
-                    {{#each gallery.images}}
-                    <div class="photo-ph" style="padding:0; overflow:hidden; border:none; opacity:1;"><img
-                            src="{{this}}" style="width:100%; height:100%; object-fit:cover;" /></div>
-                    {{/each}}
+                    <div class="photo-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <rect x="3" y="3" width="18" height="18" rx="2" />
+                            <circle cx="8.5" cy="8.5" r="1.5" />
+                            <polyline points="21 15 16 10 5 21" />
+                        </svg><span>Photo</span></div>
+                    <div class="photo-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <rect x="3" y="3" width="18" height="18" rx="2" />
+                            <circle cx="8.5" cy="8.5" r="1.5" />
+                            <polyline points="21 15 16 10 5 21" />
+                        </svg><span>Photo</span></div>
+                    <div class="photo-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <rect x="3" y="3" width="18" height="18" rx="2" />
+                            <circle cx="8.5" cy="8.5" r="1.5" />
+                            <polyline points="21 15 16 10 5 21" />
+                        </svg><span>Photo</span></div>
                 </div>
-                
-                
             </div>
-    </div>
-    </section>
+        </section>
 
 
-    <!-- ══════════════════════════
+        <!-- ══════════════════════════
   PAGE 5 — VIDEO + RSVP
 ══════════════════════════ -->
-    <section class="page page-p5" id="page5">
-        <div class="page-frame"></div>
+        <section class="page page-p5" id="page5">
+            <div class="page-frame"></div>
 
-        <!-- Center kolam watermark -->
-        <svg class="kolam-bg"
-            style="left:50%;top:50%;transform:translate(-50%,-50%);width:360px;height:360px;opacity:.04"
-            viewBox="0 0 360 360" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="180" cy="180" r="160" stroke="#C4A070" stroke-width="1" fill="none" />
-            <circle cx="180" cy="180" r="120" stroke="#C4A070" stroke-width=".8" fill="none" />
-            <circle cx="180" cy="180" r="80" stroke="#C4A070" stroke-width=".7" fill="none" />
-            <circle cx="180" cy="180" r="40" stroke="#C4A070" stroke-width=".6" fill="none" />
-            <line x1="180" y1="20" x2="180" y2="340" stroke="#C4A070" stroke-width=".5" />
-            <line x1="20" y1="180" x2="340" y2="180" stroke="#C4A070" stroke-width=".5" />
-            <line x1="67" y1="67" x2="293" y2="293" stroke="#C4A070" stroke-width=".4" />
-            <line x1="293" y1="67" x2="67" y2="293" stroke="#C4A070" stroke-width=".4" />
-            <!-- 8-petal flower at center -->
-            <g transform="translate(180,180)">
-                <ellipse cx="0" cy="-28" rx="10" ry="18" fill="#C4A070" opacity=".4" />
-                <ellipse cx="0" cy="-28" rx="10" ry="18" fill="#C4A070" opacity=".4" transform="rotate(45)" />
-                <ellipse cx="0" cy="-28" rx="10" ry="18" fill="#C4A070" opacity=".4" transform="rotate(90)" />
-                <ellipse cx="0" cy="-28" rx="10" ry="18" fill="#C4A070" opacity=".4" transform="rotate(135)" />
-                <ellipse cx="0" cy="-28" rx="10" ry="18" fill="#C4A070" opacity=".4" transform="rotate(180)" />
-                <ellipse cx="0" cy="-28" rx="10" ry="18" fill="#C4A070" opacity=".4" transform="rotate(225)" />
-                <ellipse cx="0" cy="-28" rx="10" ry="18" fill="#C4A070" opacity=".4" transform="rotate(270)" />
-                <ellipse cx="0" cy="-28" rx="10" ry="18" fill="#C4A070" opacity=".4" transform="rotate(315)" />
-                <circle r="12" fill="#C8A84B" opacity=".5" />
-            </g>
-        </svg>
+            <!-- Center kolam watermark -->
+            <svg class="kolam-bg"
+                style="left:50%;top:50%;transform:translate(-50%,-50%);width:360px;height:360px;opacity:.04"
+                viewBox="0 0 360 360" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="180" cy="180" r="160" stroke="#C4A070" stroke-width="1" fill="none" />
+                <circle cx="180" cy="180" r="120" stroke="#C4A070" stroke-width=".8" fill="none" />
+                <circle cx="180" cy="180" r="80" stroke="#C4A070" stroke-width=".7" fill="none" />
+                <circle cx="180" cy="180" r="40" stroke="#C4A070" stroke-width=".6" fill="none" />
+                <line x1="180" y1="20" x2="180" y2="340" stroke="#C4A070" stroke-width=".5" />
+                <line x1="20" y1="180" x2="340" y2="180" stroke="#C4A070" stroke-width=".5" />
+                <line x1="67" y1="67" x2="293" y2="293" stroke="#C4A070" stroke-width=".4" />
+                <line x1="293" y1="67" x2="67" y2="293" stroke="#C4A070" stroke-width=".4" />
+                <!-- 8-petal flower at center -->
+                <g transform="translate(180,180)">
+                    <ellipse cx="0" cy="-28" rx="10" ry="18" fill="#C4A070" opacity=".4" />
+                    <ellipse cx="0" cy="-28" rx="10" ry="18" fill="#C4A070" opacity=".4" transform="rotate(45)" />
+                    <ellipse cx="0" cy="-28" rx="10" ry="18" fill="#C4A070" opacity=".4" transform="rotate(90)" />
+                    <ellipse cx="0" cy="-28" rx="10" ry="18" fill="#C4A070" opacity=".4" transform="rotate(135)" />
+                    <ellipse cx="0" cy="-28" rx="10" ry="18" fill="#C4A070" opacity=".4" transform="rotate(180)" />
+                    <ellipse cx="0" cy="-28" rx="10" ry="18" fill="#C4A070" opacity=".4" transform="rotate(225)" />
+                    <ellipse cx="0" cy="-28" rx="10" ry="18" fill="#C4A070" opacity=".4" transform="rotate(270)" />
+                    <ellipse cx="0" cy="-28" rx="10" ry="18" fill="#C4A070" opacity=".4" transform="rotate(315)" />
+                    <circle r="12" fill="#C8A84B" opacity=".5" />
+                </g>
+            </svg>
 
-        <div class="vid-inner" style="position:relative;z-index:2;">
-            <span class="vid-chapter sr">Hear It From Them</span>
+            <div class="vid-inner" style="position:relative;z-index:2;">
+                {{#if media.videoUrl}}
+                <span class="vid-chapter sr">Hear It From Them</span>
 
-            <div class="sr" style="margin-bottom:20px;">
-                <div class="ornament-rule">
-                    <div class="line"></div>
-                    <div class="dot"></div>
-                    <div class="diamond"></div>
-                    <div class="dot"></div>
-                    <div class="line r"></div>
+                <div class="sr" style="margin-bottom:20px;">
+                    <div class="ornament-rule">
+                        <div class="line"></div>
+                        <div class="dot"></div>
+                        <div class="diamond"></div>
+                        <div class="dot"></div>
+                        <div class="line r"></div>
+                    </div>
+                </div>
+
+                <div class="vid-title sr">A Message from<br />{{couple.groom.firstName}} &amp;
+                    {{couple.bride.firstName}}</div>
+                <div class="vid-sub sr">Watch their personal video note</div>
+
+                <div class="vid-frame sr" onclick="window.open('{{media.videoUrl}}', '_blank')">
+                    <div class="vid-thumb-content">
+                        <!-- Decorative rings in thumbnail -->
+                        <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:.08" viewBox="0 0 640 360"
+                            xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+                            <circle cx="320" cy="180" r="140" stroke="#C4A070" stroke-width=".8" fill="none" />
+                            <circle cx="320" cy="180" r="100" stroke="#C4A070" stroke-width=".6" fill="none" />
+                            <circle cx="320" cy="180" r="60" stroke="#C4A070" stroke-width=".5" fill="none" />
+                            <line x1="180" y1="180" x2="460" y2="180" stroke="#C4A070" stroke-width=".5" />
+                            <line x1="320" y1="40" x2="320" y2="320" stroke="#C4A070" stroke-width=".5" />
+                        </svg>
+                        <div class="vid-thumb-text">{{couple.groom.firstName}} &amp; {{couple.bride.firstName}}</div>
+                        <div class="vid-thumb-sub">{{weddingDate}}</div>
+                    </div>
+                    <div class="vid-play-btn">
+                        <div class="vid-play-circle">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <polygon points="5 3 19 12 5 21 5 3" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="vid-note sr">Tap to view video message</p>
+                {{/if}}
+
+                <!-- RSVP -->
+                <div class="sr" style="width:100%;margin:32px 0 20px;">
+                    <div class="ornament-rule">
+                        <div class="line"></div>
+                        <div class="dot"></div>
+                        <div class="diamond"></div>
+                        <div class="dot"></div>
+                        <div class="line r"></div>
+                    </div>
+                </div>
+
+                <div class="rsvp-bar">
+                    <span class="rsvp-label sr">Your presence means everything to us</span>
+                    <a href="https://wa.me/919876543210" class="rsvp-btn sr" target="_blank">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347" />
+                        </svg>
+                        RSVP via WhatsApp
+                    </a>
+                    <div class="sh-row sr">
+                        <button class="sh-b" onclick="doShare()">Share Invite</button>
+                        <button class="sh-b" onclick="doCopy(this)">Copy Link</button>
+                    </div>
                 </div>
             </div>
+        </section>
 
-            <div class="vid-title sr">A Message from<br />{{couple.groom.firstName}} &amp; {{couple.bride.firstName}}
-            </div>
-            <div class="vid-sub sr">Watch their personal video note</div>
-
-            <div class="vid-frame sr" style="background:none;">
-                <iframe src="{{media.videoUrl}}" width="100%" height="100%" style="border:none;"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen></iframe>
-            </div>
-
-            <!-- RSVP -->
-            <div class="sr" style="width:100%;margin:32px 0 20px;">
-                <div class="ornament-rule">
-                    <div class="line"></div>
-                    <div class="dot"></div>
-                    <div class="diamond"></div>
-                    <div class="dot"></div>
-                    <div class="line r"></div>
-                </div>
-            </div>
-
-            <div class="rsvp-bar">
-                <span class="rsvp-label sr">Your presence means everything to us</span>
-                <button class="rsvp-btn sr interested-btn" onclick="incrementInterested()">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                        <path
-                            d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                    </svg>
-                    <span id="interestedText">Interested</span>
-                    <span id="interestedCount"
-                        style="background:rgba(255,255,255,0.2); border-radius:10px; padding:2px 8px; font-weight:bold;">142</span>
-                </button>
-                <div class="sh-row sr">
-                    <button class="sh-b" onclick="doShare()">Share Invite</button>
-                    <button class="sh-b" onclick="doCopy(this)">Copy Link</button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- FOOTER -->
-    <footer class="site-footer">
-        <span class="sf-name">{{couple.groom.firstName}} &amp; {{couple.bride.firstName}} — {{events.0.date}}</span>
-        <span class="sf-credit">Vaazh · vaazh.co</span>
-    </footer>
+        <!-- FOOTER -->
+        <footer class="site-footer">
+            <span class="sf-name">Karthik &amp; Priya — February 28, 2026</span>
+            <span class="sf-credit">Vaazh · vaazh.co</span>
+        </footer>
 
     </div><!-- /invite -->
 
@@ -2144,21 +2121,20 @@
         function diff(target) { return Math.max(0, new Date(target) - Date.now()); }
 
         function startCountdowns() {
-            const boxes = document.querySelectorAll('.dynamic-countdown');
             function tick() {
-                boxes.forEach(box => {
-                    // Try parsing date from Handlebars binding
-                    const dateStr = box.getAttribute('data-date');
-                    // Simple parse: May 14 2026 09:00:00
-                    let target = new Date(dateStr).getTime();
-                    if (isNaN(target)) target = Date.now() + 86400000; //Fallback 1 day
+                // Event 1 — Nichayathartham
+                const d1 = diff('2026-02-27T10:00:00+05:30');
+                document.getElementById('e1d').textContent = pad(Math.floor(d1 / 86400000));
+                document.getElementById('e1h').textContent = pad(Math.floor((d1 % 86400000) / 3600000));
+                document.getElementById('e1m').textContent = pad(Math.floor((d1 % 3600000) / 60000));
+                document.getElementById('e1s').textContent = pad(Math.floor((d1 % 60000) / 1000));
 
-                    const d1 = Math.max(0, target - Date.now());
-                    if (box.querySelector('.dval')) box.querySelector('.dval').textContent = pad(Math.floor(d1 / 86400000));
-                    if (box.querySelector('.hval')) box.querySelector('.hval').textContent = pad(Math.floor((d1 % 86400000) / 3600000));
-                    if (box.querySelector('.mval')) box.querySelector('.mval').textContent = pad(Math.floor((d1 % 3600000) / 60000));
-                    if (box.querySelector('.sval')) box.querySelector('.sval').textContent = pad(Math.floor((d1 % 60000) / 1000));
-                });
+                // Event 2 — Muhurtham
+                const d2 = diff('2026-02-28T08:24:00+05:30');
+                document.getElementById('e2d').textContent = pad(Math.floor(d2 / 86400000));
+                document.getElementById('e2h').textContent = pad(Math.floor((d2 % 86400000) / 3600000));
+                document.getElementById('e2m').textContent = pad(Math.floor((d2 % 3600000) / 60000));
+                document.getElementById('e2s').textContent = pad(Math.floor((d2 % 60000) / 1000));
             }
             tick();
             setInterval(tick, 1000);
@@ -2179,20 +2155,8 @@
         /* ══════════════════════
            VIDEO / SHARE
         ══════════════════════ */
-        let intCount = 142;
-        let intPressed = false;
-        function incrementInterested() {
-            if (!intPressed) {
-                intCount++;
-                document.getElementById('interestedCount').innerText = intCount;
-                document.getElementById('interestedText').innerText = "You're Going!";
-                intPressed = true;
-            } else {
-                intCount--;
-                document.getElementById('interestedCount').innerText = intCount;
-                document.getElementById('interestedText').innerText = "Interested";
-                intPressed = false;
-            }
+        function openVideo() {
+            alert('Replace this with your YouTube or Vimeo embed URL.');
         }
         function doShare() {
             if (navigator.share) navigator.share({ title: 'Karthik & Priya — Wedding Invitation', url: location.href });

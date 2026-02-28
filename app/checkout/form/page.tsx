@@ -61,13 +61,16 @@ function CheckoutFormContent() {
 
     // Media (Premium)
     const [videoUrl, setVideoUrl] = useState("");
+    const [videoUploading, setVideoUploading] = useState(false);
     const [photos, setPhotos] = useState<string[]>([]);
     const [uploading, setUploading] = useState(false);
 
+    const getCoupleName = () => subdomain || `${brideFirst}-${groomFirst}`.toLowerCase();
+
     const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files?.length) return;
-        if (photos.length >= 4) {
-            alert("Maximum 4 photos allowed.");
+        if (photos.length >= 3) {
+            alert("Maximum 3 photos allowed.");
             return;
         }
 
@@ -79,7 +82,7 @@ function CheckoutFormContent() {
 
         setUploading(true);
         try {
-            const res = await fetch(`${BACKEND_URL}/api/upload/presigned-url?fileName=${encodeURIComponent(file.name)}&fileType=${encodeURIComponent(file.type)}`);
+            const res = await fetch(`${BACKEND_URL}/api/upload/presigned-url?fileName=${encodeURIComponent(file.name)}&fileType=${encodeURIComponent(file.type)}&couplename=${encodeURIComponent(getCoupleName())}`);
             const data = await res.json();
 
             if (!res.ok || data.error) throw new Error(data.error || "Failed to generate upload URL");
@@ -96,6 +99,37 @@ function CheckoutFormContent() {
             alert("Upload error: " + (err instanceof Error ? err.message : String(err)));
         }
         setUploading(false);
+        e.target.value = '';
+    };
+
+    const handleVideoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (!e.target.files?.length) return;
+
+        const file = e.target.files[0];
+        if (file.size > 30 * 1024 * 1024) {
+            alert("Video must be less than 30MB.");
+            return;
+        }
+
+        setVideoUploading(true);
+        try {
+            const res = await fetch(`${BACKEND_URL}/api/upload/presigned-url?fileName=${encodeURIComponent(file.name)}&fileType=${encodeURIComponent(file.type)}&couplename=${encodeURIComponent(getCoupleName())}`);
+            const data = await res.json();
+
+            if (!res.ok || data.error) throw new Error(data.error || "Failed to generate upload URL");
+
+            const uploadRes = await fetch(data.signedUrl, {
+                method: "PUT",
+                headers: { "Content-Type": file.type },
+                body: file
+            });
+
+            if (!uploadRes.ok) throw new Error("Failed to upload video to S3");
+            setVideoUrl(data.publicUrl);
+        } catch (err: unknown) {
+            alert("Video upload error: " + (err instanceof Error ? err.message : String(err)));
+        }
+        setVideoUploading(false);
         e.target.value = '';
     };
 
@@ -462,12 +496,33 @@ function CheckoutFormContent() {
                                         <div className="w-full md:w-1/3 p-6 bg-slate-50 rounded-2xl border border-slate-200 text-center">
                                             <span className="text-3xl mb-2 block">📹</span>
                                             <h4 className="font-bold text-slate-800">Couple&apos;s Video Invite</h4>
-                                            <p className="text-xs text-slate-700 mt-2">Paste a YouTube link to a video greeting for your guests.</p>
+                                            <p className="text-xs text-slate-700 mt-2">Upload a short 30-second video greeting (Max 30MB). Optional.</p>
                                         </div>
                                         <div className="flex-1 w-full flex flex-col gap-4 pt-2">
-                                            <label className="text-xs font-bold text-slate-700 uppercase">YouTube Link</label>
-                                            <input type="url" placeholder="https://youtube.com/watch?v=..." className={inputClass} value={videoUrl} onChange={e => setVideoUrl(e.target.value)} />
-                                            <p className="text-xs text-slate-400">Example: https://youtube.com/watch?v=dQw4w9WgXcQ</p>
+                                            <label className="text-xs font-bold text-slate-700 uppercase">Upload Video</label>
+
+                                            {videoUrl ? (
+                                                <div className="relative w-full max-w-sm rounded-lg overflow-hidden border-2 border-slate-200">
+                                                    <video src={videoUrl} controls className="w-full h-auto max-h-48 object-cover bg-black" />
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => setVideoUrl("")}
+                                                        className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm shadow-md hover:bg-red-600 transition-colors"
+                                                    >✕</button>
+                                                </div>
+                                            ) : (
+                                                <div className="flex flex-col gap-2">
+                                                    <input
+                                                        type="file"
+                                                        accept="video/mp4,video/quicktime"
+                                                        onChange={handleVideoUpload}
+                                                        disabled={videoUploading}
+                                                        className="w-full text-sm text-slate-700 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition-colors cursor-pointer disabled:opacity-50"
+                                                    />
+                                                    {videoUploading && <p className="text-xs text-indigo-600 font-bold animate-pulse">Uploading video... Please wait.</p>}
+                                                    <p className="text-xs text-slate-400">If you prefer not to include a video, simply skip this step.</p>
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
 
@@ -475,10 +530,10 @@ function CheckoutFormContent() {
                                         <div className="w-full md:w-1/3 p-6 bg-slate-50 rounded-2xl border border-slate-200 text-center">
                                             <span className="text-3xl mb-2 block">📸</span>
                                             <h4 className="font-bold text-slate-800">Photo Gallery</h4>
-                                            <p className="text-xs text-slate-700 mt-2">Upload up to 4 photos to feature in your invitation.</p>
+                                            <p className="text-xs text-slate-700 mt-2">Upload exactly up to 3 photos to feature in your invitation.</p>
                                         </div>
                                         <div className="flex-1 w-full flex flex-col gap-4 pt-2">
-                                            <label className="text-xs font-bold text-slate-700 uppercase">Upload Photos (Max 4)</label>
+                                            <label className="text-xs font-bold text-slate-700 uppercase">Upload Photos (Max 3)</label>
 
                                             <div className="flex flex-wrap gap-4 mb-2">
                                                 {photos.map((url, i) => (
@@ -503,10 +558,10 @@ function CheckoutFormContent() {
                                                 type="file"
                                                 accept="image/*"
                                                 onChange={handlePhotoUpload}
-                                                disabled={photos.length >= 4 || uploading}
+                                                disabled={photos.length >= 3 || uploading}
                                                 className="w-full text-sm text-slate-700 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 transition-colors cursor-pointer disabled:opacity-50"
                                             />
-                                            <p className="text-xs text-slate-400">Upload high-quality images. Safe to skip and upload later.</p>
+                                            <p className="text-xs text-slate-400">Upload exactly 3 images for the perfect layout.</p>
                                         </div>
                                     </div>
                                 </div>

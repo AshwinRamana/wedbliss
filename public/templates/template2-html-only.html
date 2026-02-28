@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>{{couple.groom.firstName}} &amp; {{couple.bride.firstName}} — Wedding Invitation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600&family=Jost:wght@200;300;400;500;600&display=swap"
+        rel="stylesheet" />
+    
+</head>
+
+<body>
+
+    <!-- ═══════════════════════════════════════════
+     COVER — CARD REVEAL
+═══════════════════════════════════════════ -->
+    <div id="cover">
+        <div class="inv-card-wrap" id="cardWrap">
+            <div class="inv-card" id="invCard">
+
+                <!-- FRONT FACE -->
+                <div class="card-front">
+
+                    <!-- Corner Flora -->
+                    <svg class="card-corner-svg corner-tl" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M0 0 L 100 0 C 100 50 50 100 0 100 Z" fill="rgba(196, 160, 112, 0.05)" />
+                        <path d="M10 10 Q 50 10 70 30 Q 90 50 90 90" stroke="#C4A070" stroke-width="0.8" />
+                        <circle cx="30" cy="30" r="15" stroke="#C4A070" stroke-width="0.5" />
+                        <path d="M30 15 Q 45 15 45 30 Q 45 45 30 45 Q 15 45 15 30 Q 15 15 30 15" stroke="#C4A070" stroke-width="0.5" />
+                        <circle cx="70" cy="30" r="3" fill="#C8A84B" opacity="0.6" />
+                        <circle cx="30" cy="70" r="3" fill="#C8A84B" opacity="0.6" />
+                        <path d="M40 40 L 60 60" stroke="#7A9A50" stroke-width="1" opacity="0.5" />
+                        <ellipse cx="65" cy="65" rx="8" ry="3" fill="#7A9A50" opacity="0.4" transform="rotate(45 65 65)" />
+                    </svg>
+                    <svg class="card-corner-svg corner-tr" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M0 0 L 100 0 C 100 50 50 100 0 100 Z" fill="rgba(196, 160, 112, 0.05)" />
+                        <path d="M10 10 Q 50 10 70 30 Q 90 50 90 90" stroke="#C4A070" stroke-width="0.8" />
+                        <circle cx="30" cy="30" r="15" stroke="#C4A070" stroke-width="0.5" />
+                        <path d="M30 15 Q 45 15 45 30 Q 45 45 30 45 Q 15 45 15 30 Q 15 15 30 15" stroke="#C4A070" stroke-width="0.5" />
+                        <circle cx="70" cy="30" r="3" fill="#C8A84B" opacity="0.6" />
+                        <circle cx="30" cy="70" r="3" fill="#C8A84B" opacity="0.6" />
+                        <path d="M40 40 L 60 60" stroke="#7A9A50" stroke-width="1" opacity="0.5" />
+                        <ellipse cx="65" cy="65" rx="8" ry="3" fill="#7A9A50" opacity="0.4" transform="rotate(45 65 65)" />
+                    </svg>
+                    <svg class="card-corner-svg corner-bl" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M0 0 L 100 0 C 100 50 50 100 0 100 Z" fill="rgba(196, 160, 112, 0.05)" />
+                        <path d="M10 10 Q 50 10 70 30 Q 90 50 90 90" stroke="#C4A070" stroke-width="0.8" />
+                        <circle cx="30" cy="30" r="15" stroke="#C4A070" stroke-width="0.5" />
+                        <path d="M30 15 Q 45 15 45 30 Q 45 45 30 45 Q 15 45 15 30 Q 15 15 30 15" stroke="#C4A070" stroke-width="0.5" />
+                        <circle cx="70" cy="30" r="3" fill="#C8A84B" opacity="0.6" />
+                        <circle cx="30" cy="70" r="3" fill="#C8A84B" opacity="0.6" />
+                        <path d="M40 40 L 60 60" stroke="#7A9A50" stroke-width="1" opacity="0.5" />
+                        <ellipse cx="65" cy="65" rx="8" ry="3" fill="#7A9A50" opacity="0.4" transform="rotate(45 65 65)" />
+                    </svg>
+                    <svg class="card-corner-svg corner-br" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M0 0 L 100 0 C 100 50 50 100 0 100 Z" fill="rgba(196, 160, 112, 0.05)" />
+                        <path d="M10 10 Q 50 10 70 30 Q 90 50 90 90" stroke="#C4A070" stroke-width="0.8" />
+                        <circle cx="30" cy="30" r="15" stroke="#C4A070" stroke-width="0.5" />
+                        <path d="M30 15 Q 45 15 45 30 Q 45 45 30 45 Q 15 45 15 30 Q 15 15 30 15" stroke="#C4A070" stroke-width="0.5" />
+                        <circle cx="70" cy="30" r="3" fill="#C8A84B" opacity="0.6" />
+                        <circle cx="30" cy="70" r="3" fill="#C8A84B" opacity="0.6" />
+                        <path d="M40 40 L 60 60" stroke="#7A9A50" stroke-width="1" opacity="0.5" />
+                        <ellipse cx="65" cy="65" rx="8" ry="3" fill="#7A9A50" opacity="0.4" transform="rotate(45 65 65)" />
+                    </svg>
+
+
+                    <!-- Top lotus border ornament -->
+                    <div class="cf-top-ornament">
+                        <svg viewBox="0 0 360 36" width="100%" height="36" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Horizontal center vine -->
+                            <line x1="0" y1="18" x2="360" y2="18" stroke="#C4A070" stroke-width=".6" opacity=".4" />
+                            <!-- Center lotus -->
+                            <g transform="translate(180,18)">
+                                <ellipse cx="0" cy="-6" rx="7" ry="10" fill="none" stroke="#C4A070" stroke-width=".8"
+                                    opacity=".7" />
+                                <ellipse cx="-10" cy="-4" rx="6" ry="9" fill="none" stroke="#C4A070" stroke-width=".7"
+                                    opacity=".6" transform="rotate(-25 -10 -4)" />
+                                <ellipse cx="10" cy="-4" rx="6" ry="9" fill="none" stroke="#C4A070" stroke-width=".7"
+                                    opacity=".6" transform="rotate(25 10 -4)" />
+                                <ellipse cx="-18" cy="0" rx="5" ry="7" fill="none" stroke="#C4A070" stroke-width=".6"
+                                    opacity=".5" transform="rotate(-45 -18 0)" />
+                                <ellipse cx="18" cy="0" rx="5" ry="7" fill="none" stroke="#C4A070" stroke-width=".6"
+                                    opacity=".5" transform="rotate(45 18 0)" />
+                                <circle cx="0" cy="-6" r="2.5" fill="#C8A84B" opacity=".6" />
+                                <ellipse cx="0" cy="6" rx="14" ry="4" fill="none" stroke="#C4A070" stroke-width=".5"
+                                    opacity=".35" />
+                            </g>
+                            <!-- Left smaller lotus -->
+                            <g transform="translate(80,18)">
+                                <ellipse cx="0" cy="-5" rx="5" ry="7" fill="none" stroke="#C4A070" stroke-width=".7"
+                                    opacity=".55" />
+                                <ellipse cx="-7" cy="-3" rx="4" ry="6" fill="none" stroke="#C4A070" stroke-width=".6"
+                                    opacity=".45" transform="rotate(-28 -7 -3)" />
+                                <ellipse cx="7" cy="-3" rx="4" ry="6" fill="none" stroke="#C4A070" stroke-width=".6"
+                                    opacity=".45" transform="rotate(28 7 -3)" />
+                                <circle cx="0" cy="-5" r="1.8" fill="#C8A84B" opacity=".5" />
+                            </g>
+                            <!-- Right smaller lotus -->
+                            <g transform="translate(280,18)">
+                                <ellipse cx="0" cy="-5" rx="5" ry="7" fill="none" stroke="#C4A070" stroke-width=".7"
+                                    opacity=".55" />
+                                <ellipse cx="-7" cy="-3" rx="4" ry="6" fill="none" stroke="#C4A070" stroke-width=".6"
+                                    opacity=".45" transform="rotate(-28 -7 -3)" />
+                                <ellipse cx="7" cy="-3" rx="4" ry="6" fill="none" stroke="#C4A070" stroke-width=".6"
+                                    opacity=".45" transform="rotate(28 7 -3)" />
+                                <circle cx="0" cy="-5" r="1.8" fill="#C8A84B" opacity=".5" />
+                            </g>
+                            <!-- Dot chain on vine -->
+                            <circle cx="30" cy="18" r="1.5" fill="#C4A070" opacity=".3" />
+                            <circle cx="55" cy="18" r="1.5" fill="#C4A070" opacity=".3" />
+                            <circle cx="130" cy="18" r="1.5" fill="#C4A070" opacity=".3" />
+                            <circle cx="155" cy="18" r="1.5" fill="#C4A070" opacity=".3" />
+                            <circle cx="205" cy="18" r="1.5" fill="#C4A070" opacity=".3" />
+                            <circle cx="230" cy="18" r="1.5" fill="#C4A070" opacity=".3" />
+                            <circle cx="305" cy="18" r="1.5" fill="#C4A070" opacity=".3" />
+                            <circle cx="330" cy="18" r="1.5" fill="#C4A070" opacity=".3" />
+                            <!-- Leaf pairs along vine -->
+                            <ellipse cx="42" cy="14" rx="5" ry="2.5" fill="#8A9A60" opacity=".3"
+                                transform="rotate(-20 42 14)" />
+                            <ellipse cx="42" cy="22" rx="5" ry="2.5" fill="#8A9A60" opacity=".3"
+                                transform="rotate(20 42 22)" />
+                            <ellipse cx="318" cy="14" rx="5" ry="2.5" fill="#8A9A60" opacity=".3"
+                                transform="rotate(-160 318 14)" />
+                            <ellipse cx="318" cy="22" rx="5" ry="2.5" fill="#8A9A60" opacity=".3"
+                                transform="rotate(160 318 22)" />
+                        </svg>
+                    </div>
+
+                    <!-- Double border frame inside card -->
+                    <div
+                        style="position:absolute;inset:10px;border:1px solid rgba(180,140,80,.25);pointer-events:none;">
+                    </div>
+                    <div
+                        style="position:absolute;inset:16px;border:1px solid rgba(180,140,80,.12);pointer-events:none;">
+                    </div>
+
+                    <!-- Corner diamond ornaments -->
+                    <svg style="position:absolute;top:22px;left:22px;width:24px;height:24px;opacity:.4"
+                        viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <line x1="0" y1="12" x2="24" y2="12" stroke="#C4A070" stroke-width=".8" />
+                        <line x1="12" y1="0" x2="12" y2="24" stroke="#C4A070" stroke-width=".8" />
+                        <circle cx="12" cy="12" r="3" fill="none" stroke="#C4A070" stroke-width="1" />
+                        <circle cx="12" cy="12" r="1.2" fill="#C8A84B" />
+                    </svg>
+                    <svg style="position:absolute;top:22px;right:22px;width:24px;height:24px;opacity:.4"
+                        viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <line x1="0" y1="12" x2="24" y2="12" stroke="#C4A070" stroke-width=".8" />
+                        <line x1="12" y1="0" x2="12" y2="24" stroke="#C4A070" stroke-width=".8" />
+                        <circle cx="12" cy="12" r="3" fill="none" stroke="#C4A070" stroke-width="1" />
+                        <circle cx="12" cy="12" r="1.2" fill="#C8A84B" />
+                    </svg>
+                    <svg style="position:absolute;bottom:22px;left:22px;width:24px;height:24px;opacity:.4"
+                        viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <line x1="0" y1="12" x2="24" y2="12" stroke="#C4A070" stroke-width=".8" />
+                        <line x1="12" y1="0" x2="12" y2="24" stroke="#C4A070" stroke-width=".8" />
+                        <circle cx="12" cy="12" r="3" fill="none" stroke="#C4A070" stroke-width="1" />
+                        <circle cx="12" cy="12" r="1.2" fill="#C8A84B" />
+                    </svg>
+                    <svg style="position:absolute;bottom:22px;right:22px;width:24px;height:24px;opacity:.4"
+                        viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <line x1="0" y1="12" x2="24" y2="12" stroke="#C4A070" stroke-width=".8" />
+                        <line x1="12" y1="0" x2="12" y2="24" stroke="#C4A070" stroke-width=".8" />
+                        <circle cx="12" cy="12" r="3" fill="none" stroke="#C4A070" stroke-width="1" />
+                        <circle cx="12" cy="12" r="1.2" fill="#C8A84B" />
+                    </svg>
+
+                    <!-- Card text content -->
+                    <div class="cf-tag">Wedding Invitation</div>
+
+                    <div class="cf-title">We Are<br />Getting Married</div>
+
+                    <div style="margin:18px 0; width:100%;">
+                        <div class="ornament-rule">
+                            <div class="line"></div>
+                            <div class="dot"></div>
+                            <div class="diamond"></div>
+                            <div class="dot"></div>
+                            <div class="line r"></div>
+                        </div>
+                    </div>
+
+                    <div class="cf-names">
+                        <div class="cf-name">{{couple.groom.firstName}}</div>
+                        <div class="cf-and">&amp;</div>
+                        <div class="cf-name bride">{{couple.bride.firstName}}</div>
+                    </div>
+
+                    <div style="margin:16px 0; width:100%;">
+                        <div class="ornament-rule">
+                            <div class="line"></div>
+                            <div class="dot"></div>
+                            <div class="diamond"></div>
+                            <div class="dot"></div>
+                            <div class="line r"></div>
+                        </div>
+                    </div>
+
+                    <div class="cf-date"><span>{{events.0.date}}</span><span style="color:var(--gold); font-size:6px; opacity:0.5;">◆</span><span>{{events.0.venueName}}</span></div>
+
+                    <!-- Bottom lotus border -->
+                    <div class="cf-bottom-ornament">
+                        <svg viewBox="0 0 360 36" width="100%" height="36" xmlns="http://www.w3.org/2000/svg"
+                            style="transform:scaleY(-1)">
+                            <line x1="0" y1="18" x2="360" y2="18" stroke="#C4A070" stroke-width=".6" opacity=".4" />
+                            <g transform="translate(180,18)">
+                                <ellipse cx="0" cy="-6" rx="7" ry="10" fill="none" stroke="#C4A070" stroke-width=".8"
+                                    opacity=".7" />
+                                <ellipse cx="-10" cy="-4" rx="6" ry="9" fill="none" stroke="#C4A070" stroke-width=".7"
+                                    opacity=".6" transform="rotate(-25 -10 -4)" />
+                                <ellipse cx="10" cy="-4" rx="6" ry="9" fill="none" stroke="#C4A070" stroke-width=".7"
+                                    opacity=".6" transform="rotate(25 10 -4)" />
+                                <ellipse cx="-18" cy="0" rx="5" ry="7" fill="none" stroke="#C4A070" stroke-width=".6"
+                                    opacity=".5" transform="rotate(-45 -18 0)" />
+                                <ellipse cx="18" cy="0" rx="5" ry="7" fill="none" stroke="#C4A070" stroke-width=".6"
+                                    opacity=".5" transform="rotate(45 18 0)" />
+                                <circle cx="0" cy="-6" r="2.5" fill="#C8A84B" opacity=".6" />
+                            </g>
+                            <g transform="translate(80,18)">
+                                <ellipse cx="0" cy="-5" rx="5" ry="7" fill="none" stroke="#C4A070" stroke-width=".7"
+                                    opacity=".55" />
+                                <ellipse cx="-7" cy="-3" rx="4" ry="6" fill="none" stroke="#C4A070" stroke-width=".6"
+                                    opacity=".45" transform="rotate(-28 -7 -3)" />
+                                <ellipse cx="7" cy="-3" rx="4" ry="6" fill="none" stroke="#C4A070" stroke-width=".6"
+                                    opacity=".45" transform="rotate(28 7 -3)" />
+                                <circle cx="0" cy="-5" r="1.8" fill="#C8A84B" opacity=".5" />
+                            </g>
+                            <g transform="translate(280,18)">
+                                <ellipse cx="0" cy="-5" rx="5" ry="7" fill="none" stroke="#C4A070" stroke-width=".7"
+                                    opacity=".55" />
+                                <ellipse cx="-7" cy="-3" rx="4" ry="6" fill="none" stroke="#C4A070" stroke-width=".6"
+                                    opacity=".45" transform="rotate(-28 -7 -3)" />
+                                <ellipse cx="7" cy="-3" rx="4" ry="6" fill="none" stroke="#C4A070" stroke-width=".6"
+                                    opacity=".45" transform="rotate(28 7 -3)" />
+                                <circle cx="0" cy="-5" r="1.8" fill="#C8A84B" opacity=".5" />
+                            </g>
+                            <circle cx="130" cy="18" r="1.5" fill="#C4A070" opacity=".3" />
+                            <circle cx="155" cy="18" r="1.5" fill="#C4A070" opacity=".3" />
+                            <circle cx="205" cy="18" r="1.5" fill="#C4A070" opacity=".3" />
+                            <circle cx="230" cy="18" r="1.5" fill="#C4A070" opacity=".3" />
+                        </svg>
+                    </div>
+
+                </div><!-- /card-front -->
+
+                <div class="card-back">
+                    <p class="card-back-text">Opening your invitation...</p>
+                </div>
+            </div><!-- /inv-card -->
+
+            <div class="open-hint">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
+                </svg>
+                Tap card to open
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ═══════════════════════════════════════════
+     MAIN INVITATION CONTENT
+═══════════════════════════════════════════ -->
+    <div id="invite">
+
+        <!-- ══════════════════════════
+  PAGE 1 — BRIDE, GROOM, PARENTS
+══════════════════════════ -->
+        <section class="page page-p1" id="page1">
+            <div class="page-frame"></div>
+
+        <!-- Elegant Frame Arch -->
+        <div class="p1-arch-container">
+            <svg class="p1-arch-svg" viewBox="0 0 400 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Outer Arch -->
+                <path d="M50 600 V 200 A 150 150 0 0 1 350 200 V 600" stroke="#C4A070" stroke-width="2" />
+                <!-- Inner Arch -->
+                <path d="M70 600 V 200 A 130 130 0 0 1 330 200 V 600" stroke="#C4A070" stroke-width="0.75" />
+                
+                <!-- Decorative Top Flower -->
+                <g stroke="#C4A070" stroke-width="1.5" transform="translate(200, 50)">
+                    <circle cx="0" cy="0" r="10" />
+                    <circle cx="0" cy="0" r="5" />
+                    <path d="M0 -10 L0 -25 M0 10 L0 25 M-10 0 L-25 0 M10 0 L25 0" />
+                    <path d="M-7 -7 L-18 -18 M7 7 L18 18 M-7 7 L-18 18 M7 -7 L18 -18" />
+                </g>
+                
+                <!-- Pillar Bases -->
+                <rect x="30" y="580" width="40" height="20" stroke="#C4A070" stroke-width="2" />
+                <rect x="330" y="580" width="40" height="20" stroke="#C4A070" stroke-width="2" />
+                
+                <!-- Hanging Vines -->
+                <path d="M50 200 Q 80 230 110 200" stroke="#C4A070" stroke-width="1" />
+                <path d="M350 200 Q 320 230 290 200" stroke="#C4A070" stroke-width="1" />
+                <path d="M110 180 Q 140 210 170 180" stroke="#C4A070" stroke-width="1" />
+                <path d="M290 180 Q 260 210 230 180" stroke="#C4A070" stroke-width="1" />
+            </svg>
+        </div>
+
+
+            <!-- Top lotus border -->
+            <div style="position:absolute;top:0;left:0;right:0;z-index:1;overflow:hidden;">
+                <svg viewBox="0 0 1200 52" width="100%" height="52" preserveAspectRatio="xMidYMid meet"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <line x1="0" y1="26" x2="1200" y2="26" stroke="#C4A070" stroke-width=".6" opacity=".3" />
+                    <!-- Repeating lotus motifs along top edge -->
+                    <g opacity=".4">
+                        <!-- Every 120px a lotus -->
+                        <g transform="translate(60,26)">
+                            <ellipse cx="0" cy="-7" rx="6" ry="9" fill="none" stroke="#C4A070" stroke-width=".8" />
+                            <ellipse cx="-9" cy="-4" rx="5" ry="7" fill="none" stroke="#C4A070" stroke-width=".7"
+                                transform="rotate(-28 -9 -4)" />
+                            <ellipse cx="9" cy="-4" rx="5" ry="7" fill="none" stroke="#C4A070" stroke-width=".7"
+                                transform="rotate(28 9 -4)" />
+                            <circle cx="0" cy="-7" r="2" fill="#C8A84B" opacity=".6" />
+                        </g>
+                        <g transform="translate(180,26)">
+                            <ellipse cx="0" cy="-7" rx="6" ry="9" fill="none" stroke="#C4A070" stroke-width=".8" />
+                            <ellipse cx="-9" cy="-4" rx="5" ry="7" fill="none" stroke="#C4A070" stroke-width=".7"
+                                transform="rotate(-28 -9 -4)" />
+                            <ellipse cx="9" cy="-4" rx="5" ry="7" fill="none" stroke="#C4A070" stroke-width=".7"
+                                transform="rotate(28 9 -4)" />
+                            <circle cx="0" cy="-7" r="2" fill="#C8A84B" opacity=".6" />
+                        </g>
+                        <g transform="translate(300,26)">
+                            <ellipse cx="0" cy="-7" rx="6" ry="9" fill="none" stroke="#C4A070" stroke-width=".8" />
+                            <ellipse cx="-9" cy="-4" rx="5" ry="7" fill="none" stroke="#C4A070" stroke-width=".7"
+                                transform="rotate(-28 -9 -4)" />
+                            <ellipse cx="9" cy="-4" rx="5" ry="7" fill="none" stroke="#C4A070" stroke-width=".7"
+                                transform="rotate(28 9 -4)" />
+                            <circle cx="0" cy="-7" r="2" fill="#C8A84B" opacity=".6" />
+                        </g>
+                        <g transform="translate(600,26)">
+                            <ellipse cx="0" cy="-8" rx="7" ry="11" fill="none" stroke="#C4A070" stroke-width=".9" />
+                            <ellipse cx="-11" cy="-5" rx="6" ry="8" fill="none" stroke="#C4A070" stroke-width=".8"
+                                transform="rotate(-28 -11 -5)" />
+                            <ellipse cx="11" cy="-5" rx="6" ry="8" fill="none" stroke="#C4A070" stroke-width=".8"
+                                transform="rotate(28 11 -5)" />
+                            <ellipse cx="-20" cy="0" rx="4" ry="6" fill="none" stroke="#C4A070" stroke-width=".6"
+                                transform="rotate(-50 -20 0)" />
+                            <ellipse cx="20" cy="0" rx="4" ry="6" fill="none" stroke="#C4A070" stroke-width=".6"
+                                transform="rotate(50 20 0)" />
+                            <circle cx="0" cy="-8" r="2.5" fill="#C8A84B" opacity=".7" />
+                        </g>
+                        <g transform="translate(900,26)">
+                            <ellipse cx="0" cy="-7" rx="6" ry="9" fill="none" stroke="#C4A070" stroke-width=".8" />
+                            <ellipse cx="-9" cy="-4" rx="5" ry="7" fill="none" stroke="#C4A070" stroke-width=".7"
+                                transform="rotate(-28 -9 -4)" />
+                            <ellipse cx="9" cy="-4" rx="5" ry="7" fill="none" stroke="#C4A070" stroke-width=".7"
+                                transform="rotate(28 9 -4)" />
+                            <circle cx="0" cy="-7" r="2" fill="#C8A84B" opacity=".6" />
+                        </g>
+                        <g transform="translate(1020,26)">
+                            <ellipse cx="0" cy="-7" rx="6" ry="9" fill="none" stroke="#C4A070" stroke-width=".8" />
+                            <ellipse cx="-9" cy="-4" rx="5" ry="7" fill="none" stroke="#C4A070" stroke-width=".7"
+                                transform="rotate(-28 -9 -4)" />
+                            <ellipse cx="9" cy="-4" rx="5" ry="7" fill="none" stroke="#C4A070" stroke-width=".7"
+                                transform="rotate(28 9 -4)" />
+                            <circle cx="0" cy="-7" r="2" fill="#C8A84B" opacity=".6" />
+                        </g>
+                        <g transform="translate(1140,26)">
+                            <ellipse cx="0" cy="-7" rx="6" ry="9" fill="none" stroke="#C4A070" stroke-width=".8" />
+                            <ellipse cx="-9" cy="-4" rx="5" ry="7" fill="none" stroke="#C4A070" stroke-width=".7"
+                                transform="rotate(-28 -9 -4)" />
+                            <ellipse cx="9" cy="-4" rx="5" ry="7" fill="none" stroke="#C4A070" stroke-width=".7"
+                                transform="rotate(28 9 -4)" />
+                            <circle cx="0" cy="-7" r="2" fill="#C8A84B" opacity=".6" />
+                        </g>
+                        <!-- Vine dots between -->
+                        <circle cx="120" cy="26" r="2" fill="#C4A070" opacity=".4" />
+                        <circle cx="240" cy="26" r="2" fill="#C4A070" opacity=".4" />
+                        <circle cx="420" cy="26" r="2" fill="#C4A070" opacity=".35" />
+                        <circle cx="480" cy="26" r="2" fill="#C4A070" opacity=".35" />
+                        <circle cx="720" cy="26" r="2" fill="#C4A070" opacity=".35" />
+                        <circle cx="780" cy="26" r="2" fill="#C4A070" opacity=".35" />
+                        <circle cx="960" cy="26" r="2" fill="#C4A070" opacity=".4" />
+                        <circle cx="1080" cy="26" r="2" fill="#C4A070" opacity=".4" />
+                        <!-- Leaf pairs -->
+                        <ellipse cx="150" cy="21" rx="6" ry="2.5" fill="#7A9A50" opacity=".3"
+                            transform="rotate(-15 150 21)" />
+                        <ellipse cx="150" cy="31" rx="6" ry="2.5" fill="#7A9A50" opacity=".3"
+                            transform="rotate(15 150 31)" />
+                        <ellipse cx="450" cy="21" rx="6" ry="2.5" fill="#7A9A50" opacity=".3"
+                            transform="rotate(-15 450 21)" />
+                        <ellipse cx="450" cy="31" rx="6" ry="2.5" fill="#7A9A50" opacity=".3"
+                            transform="rotate(15 450 31)" />
+                        <ellipse cx="750" cy="21" rx="6" ry="2.5" fill="#7A9A50" opacity=".3"
+                            transform="rotate(-15 750 21)" />
+                        <ellipse cx="750" cy="31" rx="6" ry="2.5" fill="#7A9A50" opacity=".3"
+                            transform="rotate(15 750 31)" />
+                        <ellipse cx="1050" cy="21" rx="6" ry="2.5" fill="#7A9A50" opacity=".3"
+                            transform="rotate(-15 1050 21)" />
+                        <ellipse cx="1050" cy="31" rx="6" ry="2.5" fill="#7A9A50" opacity=".3"
+                            transform="rotate(15 1050 31)" />
+                    </g>
+                </svg>
+            </div>
+
+            <!-- Paisley/vine watermark left -->
+            <svg class="vine-bg" style="left:0;top:10%;height:80%;width:160px;opacity:.06" viewBox="0 0 160 600"
+                preserveAspectRatio="xMinYMid meet" xmlns="http://www.w3.org/2000/svg">
+                <!-- Central vine stem -->
+                <path d="M80 600 Q60 500 80 400 Q100 300 70 200 Q50 130 80 40" stroke="#C4A070" stroke-width="1.5"
+                    fill="none" />
+                <!-- Paisley shapes along vine -->
+                <g fill="none" stroke="#C4A070" stroke-width="1">
+                    <path d="M80 520 Q110 510 115 490 Q120 470 105 460 Q85 458 80 475 Q75 490 80 520Z" opacity=".7" />
+                    <path d="M80 400 Q50 388 46 368 Q42 348 58 340 Q78 338 82 355 Q86 372 80 400Z" opacity=".65" />
+                    <path d="M80 280 Q112 268 116 248 Q120 228 104 220 Q84 218 80 235 Q76 252 80 280Z" opacity=".6" />
+                    <path d="M80 160 Q50 148 46 128 Q42 108 58 100 Q78 98 82 115 Q86 132 80 160Z" opacity=".55" />
+                </g>
+                <!-- Small leaf pairs -->
+                <ellipse cx="60" cy="460" rx="12" ry="5" fill="#7A9A50" opacity=".5" transform="rotate(-35 60 460)" />
+                <ellipse cx="100" cy="340" rx="12" ry="5" fill="#7A9A50" opacity=".45" transform="rotate(40 100 340)" />
+                <ellipse cx="60" cy="220" rx="12" ry="5" fill="#7A9A50" opacity=".4" transform="rotate(-35 60 220)" />
+                <ellipse cx="100" cy="110" rx="12" ry="5" fill="#7A9A50" opacity=".4" transform="rotate(40 100 110)" />
+                <!-- Dot flowers -->
+                <circle cx="80" cy="520" r="3" fill="#C8A84B" opacity=".5" />
+                <circle cx="80" cy="400" r="3" fill="#C8A84B" opacity=".45" />
+                <circle cx="80" cy="280" r="3" fill="#C8A84B" opacity=".4" />
+                <circle cx="80" cy="160" r="3" fill="#C8A84B" opacity=".38" />
+            </svg>
+
+            <!-- Mirror right side -->
+            <svg class="vine-bg" style="right:0;top:10%;height:80%;width:160px;opacity:.06;transform:scaleX(-1)"
+                viewBox="0 0 160 600" preserveAspectRatio="xMinYMid meet" xmlns="http://www.w3.org/2000/svg">
+                <path d="M80 600 Q60 500 80 400 Q100 300 70 200 Q50 130 80 40" stroke="#C4A070" stroke-width="1.5"
+                    fill="none" />
+                <g fill="none" stroke="#C4A070" stroke-width="1">
+                    <path d="M80 520 Q110 510 115 490 Q120 470 105 460 Q85 458 80 475 Q75 490 80 520Z" opacity=".7" />
+                    <path d="M80 400 Q50 388 46 368 Q42 348 58 340 Q78 338 82 355 Q86 372 80 400Z" opacity=".65" />
+                    <path d="M80 280 Q112 268 116 248 Q120 228 104 220 Q84 218 80 235 Q76 252 80 280Z" opacity=".6" />
+                    <path d="M80 160 Q50 148 46 128 Q42 108 58 100 Q78 98 82 115 Q86 132 80 160Z" opacity=".55" />
+                </g>
+                <ellipse cx="60" cy="460" rx="12" ry="5" fill="#7A9A50" opacity=".5" transform="rotate(-35 60 460)" />
+                <ellipse cx="100" cy="340" rx="12" ry="5" fill="#7A9A50" opacity=".45" transform="rotate(40 100 340)" />
+                <ellipse cx="60" cy="220" rx="12" ry="5" fill="#7A9A50" opacity=".4" transform="rotate(-35 60 220)" />
+                <ellipse cx="100" cy="110" rx="12" ry="5" fill="#7A9A50" opacity=".4" transform="rotate(40 100 110)" />
+                <circle cx="80" cy="520" r="3" fill="#C8A84B" opacity=".5" />
+                <circle cx="80" cy="400" r="3" fill="#C8A84B" opacity=".45" />
+                <circle cx="80" cy="280" r="3" fill="#C8A84B" opacity=".4" />
+                <circle cx="80" cy="160" r="3" fill="#C8A84B" opacity=".38" />
+            </svg>
+
+            <!-- Page content -->
+            <svg class="ambient-float" style="top:15%; left:10%; width:140px; height:140px;" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <g stroke="#C4A070" stroke-width="1" fill="none">
+        <circle cx="50" cy="50" r="30" />
+        <circle cx="50" cy="50" r="20" />
+        <circle cx="50" cy="50" r="10" />
+        <path d="M50 0 L50 100 M0 50 L100 50 M15 15 L85 85 M15 85 L85 15" stroke-width="0.5" />
+    </g>
+</svg><svg class="ambient-float alt" style="bottom:15%; right:10%; width:160px; height:160px;" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <g stroke="#C4A070" stroke-width="1" fill="none">
+        <path d="M50 20 Q65 0 80 20 Q100 35 80 50 Q65 70 50 50 Q35 30 50 20" />
+        <path d="M50 80 Q65 100 80 80 Q100 65 80 50 Q65 30 50 50 Q35 70 50 80" />
+    </g>
+</svg>
+            <div class="p1-inner" style="position:relative;z-index:2;">
+                <p class="p1-bless sr" data-d="200">
+                    With the blessings of God and our families,<br />
+                    we joyfully announce our marriage
+                </p>
+
+                <div class="sr" data-d="450" style="width:100%;margin-bottom:20px;">
+                    <div class="ornament-rule">
+                        <div class="line"></div>
+                        <div class="dot"></div>
+                        <div class="diamond"></div>
+                        <div class="dot"></div>
+                        <div class="line r"></div>
+                    </div>
+                </div>
+
+                <div class="p1-names">
+                    <div class="p1-name sr" data-d="700">{{couple.groom.firstName}}</div>
+                    <div class="p1-and sr" data-d="950">&amp;</div>
+                    <div class="p1-name bride sr" data-d="1200">{{couple.bride.firstName}}</div>
+                </div>
+
+                <div class="sr" data-d="1450" style="width:100%;margin:20px 0;">
+                    <div class="ornament-rule">
+                        <div class="line"></div>
+                        <div class="dot"></div>
+                        <div class="diamond"></div>
+                        <div class="dot"></div>
+                        <div class="line r"></div>
+                    </div>
+                </div>
+
+                <div class="p1-together sr" data-d="1700">Together with their families</div>
+
+                <div class="p1-parents sr" data-d="1950" style="display:block; text-align:center;">
+                    <div
+                        style="font-family: var(--ff-d);font-size: clamp(14px, 2.5vw, 18px);font-weight: 500;color: var(--text2);line-height: 1.8;letter-spacing: 0.5px;">
+                        {{couple.parents}}</div>
+                </div>
+
+                <div class="p1-date-line sr" data-d="2200" style="margin-top:28px;">
+                    {{events.0.date}} · {{events.0.venueName}}
+                </div>
+            </div>
+
+            <!-- Bottom lotus border (flipped) -->
+            <div style="position:absolute;bottom:0;left:0;right:0;z-index:1;overflow:hidden;transform:scaleY(-1)">
+                <svg viewBox="0 0 1200 52" width="100%" height="52" preserveAspectRatio="xMidYMid meet"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <line x1="0" y1="26" x2="1200" y2="26" stroke="#C4A070" stroke-width=".6" opacity=".3" />
+                    <g opacity=".4">
+                        <g transform="translate(60,26)">
+                            <ellipse cx="0" cy="-7" rx="6" ry="9" fill="none" stroke="#C4A070" stroke-width=".8" />
+                            <ellipse cx="-9" cy="-4" rx="5" ry="7" fill="none" stroke="#C4A070" stroke-width=".7"
+                                transform="rotate(-28 -9 -4)" />
+                            <ellipse cx="9" cy="-4" rx="5" ry="7" fill="none" stroke="#C4A070" stroke-width=".7"
+                                transform="rotate(28 9 -4)" />
+                            <circle cx="0" cy="-7" r="2" fill="#C8A84B" opacity=".6" />
+                        </g>
+                        <g transform="translate(600,26)">
+                            <ellipse cx="0" cy="-8" rx="7" ry="11" fill="none" stroke="#C4A070" stroke-width=".9" />
+                            <ellipse cx="-11" cy="-5" rx="6" ry="8" fill="none" stroke="#C4A070" stroke-width=".8"
+                                transform="rotate(-28 -11 -5)" />
+                            <ellipse cx="11" cy="-5" rx="6" ry="8" fill="none" stroke="#C4A070" stroke-width=".8"
+                                transform="rotate(28 11 -5)" />
+                            <circle cx="0" cy="-8" r="2.5" fill="#C8A84B" opacity=".7" />
+                        </g>
+                        <g transform="translate(1140,26)">
+                            <ellipse cx="0" cy="-7" rx="6" ry="9" fill="none" stroke="#C4A070" stroke-width=".8" />
+                            <ellipse cx="-9" cy="-4" rx="5" ry="7" fill="none" stroke="#C4A070" stroke-width=".7"
+                                transform="rotate(-28 -9 -4)" />
+                            <ellipse cx="9" cy="-4" rx="5" ry="7" fill="none" stroke="#C4A070" stroke-width=".7"
+                                transform="rotate(28 9 -4)" />
+                            <circle cx="0" cy="-7" r="2" fill="#C8A84B" opacity=".6" />
+                        </g>
+                        <circle cx="300" cy="26" r="2" fill="#C4A070" opacity=".4" />
+                        <circle cx="900" cy="26" r="2" fill="#C4A070" opacity=".4" />
+                    </g>
+                </svg>
+            </div>
+        </section>
+
+
+        <!-- ══════════════════════════
+  PAGE 2 — EVENT 1: NICHAYATHARTHAM
+══════════════════════════ -->
+        {{#each events}}
+        <section class="page {{#if @first}}page-p2{{else}}page-p3{{/if}}">
+            <div class="page-frame"></div>
+
+            <!-- Kolam dot watermark grid (center-right) -->
+            <svg class="kolam-bg" style="right:5%;top:50%;transform:translateY(-50%);width:200px;height:200px"
+                viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                <!-- 5x5 kolam grid of dots with connecting arcs -->
+                <g fill="#C4A070">
+                    <circle cx="40" cy="40" r="3" />
+                    <circle cx="100" cy="40" r="3" />
+                    <circle cx="160" cy="40" r="3" />
+                    <circle cx="40" cy="100" r="3" />
+                    <circle cx="100" cy="100" r="4.5" />
+                    <circle cx="160" cy="100" r="3" />
+                    <circle cx="40" cy="160" r="3" />
+                    <circle cx="100" cy="160" r="3" />
+                    <circle cx="160" cy="160" r="3" />
+                    <circle cx="70" cy="70" r="2.5" />
+                    <circle cx="130" cy="70" r="2.5" />
+                    <circle cx="70" cy="130" r="2.5" />
+                    <circle cx="130" cy="130" r="2.5" />
+                </g>
+                <!-- Connecting arcs -->
+                <g fill="none" stroke="#C4A070" stroke-width=".8">
+                    <path d="M40 40 Q70 40 100 40" />
+                    <path d="M40 100 Q40 70 40 40" />
+                    <circle cx="100" cy="100" r="30" />
+                    <circle cx="100" cy="100" r="50" />
+                    <path d="M70 70 Q100 55 130 70" />
+                    <path d="M70 130 Q100 145 130 130" />
+                    <path d="M70 70 Q55 100 70 130" />
+                    <path d="M130 70 Q145 100 130 130" />
+                </g>
+            </svg>
+
+            <svg class="ambient-float" style="top:40%; right:-10%; width:200px; height:200px; opacity:0.04;" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <path d="M50 10 A40 40 0 0 1 90 50 A40 40 0 0 1 50 90 A40 40 0 0 1 10 50 A40 40 0 0 1 50 10" stroke="#C4A070" stroke-width="1" stroke-dasharray="5,5" fill="none" />
+</svg>
+            <div class="ev-page-inner" style="position:relative;z-index:2;">
+                <div class="ev-chapter sr">Event</div>
+
+                <div class="sr" style="width:100%;margin-bottom:20px;">
+                    <div class="ornament-rule">
+                        <div class="line"></div>
+                        <div class="dot"></div>
+                        <div class="diamond"></div>
+                        <div class="dot"></div>
+                        <div class="line r"></div>
+                    </div>
+                </div>
+
+                <div class="ev-name sr">{{title}}</div>
+
+                <div class="ev-details sr">
+                    <div class="ev-row">
+                        <span class="ev-row-label">Date</span>
+                        <span class="ev-row-val">{{date}}</span>
+                    </div>
+                    <div class="ev-row">
+                        <span class="ev-row-label">Time</span>
+                        <span class="ev-row-val">{{time}}</span>
+                    </div>
+                    <div class="ev-row">
+                        <span class="ev-row-label">Venue</span>
+                        <span class="ev-row-val">{{venueName}}</span>
+                    </div>
+                </div>
+
+                <div class="sr" style="display:flex; gap:12px; flex-wrap:wrap; justify-content:center;">
+                    <a href="#" class="add-cal-btn"
+                        onclick="addToCalendar('{{title}} - {{../couple.groom.firstName}} & {{../couple.bride.firstName}}','{{date}}','{{time}}','{{venueName}}');return false;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <rect x="3" y="4" width="18" height="18" rx="2" />
+                            <line x1="16" y1="2" x2="16" y2="6" />
+                            <line x1="8" y1="2" x2="8" y2="6" />
+                            <line x1="3" y1="10" x2="21" y2="10" />
+                        </svg>
+                        <span>Add to Calendar</span>
+                    </a>
+                    <a href="{{googleMapsUrl}}" target="_blank" class="add-cal-btn">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                            <circle cx="12" cy="10" r="3" />
+                        </svg>
+                        <span>View Location</span>
+                    </a>
+                </div>
+
+                <!-- Countdown -->
+                <div class="ev-countdown sr dynamic-countdown" data-date="{{date}} {{time}}">
+                    <span class="ev-cdown-label">Counting down to this event</span>
+                    <div class="ev-cdown-boxes">
+                        <div class="ev-cd-box"><span class="ev-cd-n dval">--</span><span class="ev-cd-l">Days</span>
+                        </div>
+                        <div class="ev-cd-box"><span class="ev-cd-n hval">--</span><span class="ev-cd-l">Hours</span>
+                        </div>
+                        <div class="ev-cd-box"><span class="ev-cd-n mval">--</span><span class="ev-cd-l">Mins</span>
+                        </div>
+                        <div class="ev-cd-box"><span class="ev-cd-n sval">--</span><span class="ev-cd-l">Secs</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sr" style="width:100%;margin-top:28px;">
+                    <div class="ornament-rule">
+                        <div class="line"></div>
+                        <div class="dot"></div>
+                        <div class="diamond"></div>
+                        <div class="dot"></div>
+                        <div class="line r"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        {{/each}}
+
+
+        <!-- ══════════════════════════
+  PAGE 3 — EVENT 2: MUHURTHAM
+══════════════════════════ -->
+        <!-- ══════════════════════════
+  PAGE 4 — COUPLE NOTE + PHOTOS
+══════════════════════════ -->
+        <section class="page page-p4" id="page4">
+            <div class="page-frame"></div>
+
+            <svg class="vine-bg" style="right:0;top:0;bottom:0;height:100%;width:100px;opacity:.05"
+                viewBox="0 0 100 800" preserveAspectRatio="xMaxYMid meet" xmlns="http://www.w3.org/2000/svg">
+                <path d="M50 800 Q30 680 50 560 Q70 440 45 320 Q28 220 50 80" stroke="#C4A070" stroke-width="1.2"
+                    fill="none" />
+                <g fill="none" stroke="#C4A070" stroke-width=".9">
+                    <path d="M50 700 Q75 690 78 672 Q81 654 68 648 Q52 646 50 660 Q48 674 50 700Z" opacity=".7" />
+                    <path d="M50 540 Q25 528 22 510 Q19 492 33 486 Q50 484 52 498 Q54 512 50 540Z" opacity=".65" />
+                    <path d="M50 360 Q76 348 78 330 Q81 312 67 306 Q51 304 50 318 Q49 332 50 360Z" opacity=".6" />
+                    <path d="M50 180 Q24 168 21 150 Q18 132 33 126 Q50 124 52 138 Q54 152 50 180Z" opacity=".55" />
+                </g>
+                <circle cx="50" cy="700" r="2.5" fill="#C8A84B" opacity=".5" />
+                <circle cx="50" cy="540" r="2.5" fill="#C8A84B" opacity=".45" />
+                <circle cx="50" cy="360" r="2.5" fill="#C8A84B" opacity=".4" />
+                <circle cx="50" cy="180" r="2.5" fill="#C8A84B" opacity=".38" />
+            </svg>
+
+            <div class="note-inner" style="position:relative;z-index:2;">
+                <span class="note-chapter sr">From The Couple</span>
+
+                <div class="sr" style="margin-bottom:20px;">
+                    <div class="ornament-rule">
+                        <div class="line"></div>
+                        <div class="dot"></div>
+                        <div class="diamond"></div>
+                        <div class="dot"></div>
+                        <div class="line r"></div>
+                    </div>
+                </div>
+
+                <h2 class="note-title sr">A Note from the <em>Heart</em></h2>
+
+                <div class="note-grid">
+                    <div class="note-card sr-l">
+                        <div class="note-who">
+                            <div class="note-av">{{couple.groom.firstName.[0]}}</div>
+                            <div>
+                                <div class="note-nm">{{couple.groom.firstName}}</div>
+                                <div class="note-role">The Groom</div>
+                            </div>
+                        </div>
+                        <p class="note-text">The day I met Priya changed everything. She carries this quiet warmth that
+                            makes every room feel like home. I could not imagine walking into this next chapter of life
+                            with anyone else. I am grateful beyond words.</p>
+                    </div>
+                    <div class="note-card sr-r">
+                        <div class="note-who">
+                            <div class="note-av" style="background:linear-gradient(135deg,#D4A0A0,#A07080);">
+                                {{couple.bride.firstName.[0]}}</div>
+                            <div>
+                                <div class="note-nm">{{couple.bride.firstName}}</div>
+                                <div class="note-role">The Bride</div>
+                            </div>
+                        </div>
+                        <p class="note-text">Karthik has this wonderful way of turning ordinary moments into memories.
+                            He makes me laugh, he listens with patience, and he shows up. I am so happy to begin this
+                            beautiful journey together with our families by our side.</p>
+                    </div>
+                </div>
+
+                <!-- Photo placeholders -->
+                <div class="sr" style="margin-top:8px;">
+                    <div class="ornament-rule" style="margin-bottom:18px;">
+                        <div class="line"></div>
+                        <div class="dot"></div>
+                        <div class="diamond"></div>
+                        <div class="dot"></div>
+                        <div class="line r"></div>
+                    </div>
+                </div>
+                <div class="photo-strip sr">
+                    {{#each gallery.images}}
+                    <div class="photo-ph" style="padding:0; overflow:hidden; border:none; opacity:1;"><img
+                            src="{{this}}" style="width:100%; height:100%; object-fit:cover;" /></div>
+                    {{/each}}
+                </div>
+                
+                
+            </div>
+    </div>
+    </section>
+
+
+    <!-- ══════════════════════════
+  PAGE 5 — VIDEO + RSVP
+══════════════════════════ -->
+    <section class="page page-p5" id="page5">
+        <div class="page-frame"></div>
+
+        <!-- Center kolam watermark -->
+        <svg class="kolam-bg"
+            style="left:50%;top:50%;transform:translate(-50%,-50%);width:360px;height:360px;opacity:.04"
+            viewBox="0 0 360 360" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="180" cy="180" r="160" stroke="#C4A070" stroke-width="1" fill="none" />
+            <circle cx="180" cy="180" r="120" stroke="#C4A070" stroke-width=".8" fill="none" />
+            <circle cx="180" cy="180" r="80" stroke="#C4A070" stroke-width=".7" fill="none" />
+            <circle cx="180" cy="180" r="40" stroke="#C4A070" stroke-width=".6" fill="none" />
+            <line x1="180" y1="20" x2="180" y2="340" stroke="#C4A070" stroke-width=".5" />
+            <line x1="20" y1="180" x2="340" y2="180" stroke="#C4A070" stroke-width=".5" />
+            <line x1="67" y1="67" x2="293" y2="293" stroke="#C4A070" stroke-width=".4" />
+            <line x1="293" y1="67" x2="67" y2="293" stroke="#C4A070" stroke-width=".4" />
+            <!-- 8-petal flower at center -->
+            <g transform="translate(180,180)">
+                <ellipse cx="0" cy="-28" rx="10" ry="18" fill="#C4A070" opacity=".4" />
+                <ellipse cx="0" cy="-28" rx="10" ry="18" fill="#C4A070" opacity=".4" transform="rotate(45)" />
+                <ellipse cx="0" cy="-28" rx="10" ry="18" fill="#C4A070" opacity=".4" transform="rotate(90)" />
+                <ellipse cx="0" cy="-28" rx="10" ry="18" fill="#C4A070" opacity=".4" transform="rotate(135)" />
+                <ellipse cx="0" cy="-28" rx="10" ry="18" fill="#C4A070" opacity=".4" transform="rotate(180)" />
+                <ellipse cx="0" cy="-28" rx="10" ry="18" fill="#C4A070" opacity=".4" transform="rotate(225)" />
+                <ellipse cx="0" cy="-28" rx="10" ry="18" fill="#C4A070" opacity=".4" transform="rotate(270)" />
+                <ellipse cx="0" cy="-28" rx="10" ry="18" fill="#C4A070" opacity=".4" transform="rotate(315)" />
+                <circle r="12" fill="#C8A84B" opacity=".5" />
+            </g>
+        </svg>
+
+        <div class="vid-inner" style="position:relative;z-index:2;">
+            <span class="vid-chapter sr">Hear It From Them</span>
+
+            <div class="sr" style="margin-bottom:20px;">
+                <div class="ornament-rule">
+                    <div class="line"></div>
+                    <div class="dot"></div>
+                    <div class="diamond"></div>
+                    <div class="dot"></div>
+                    <div class="line r"></div>
+                </div>
+            </div>
+
+            <div class="vid-title sr">A Message from<br />{{couple.groom.firstName}} &amp; {{couple.bride.firstName}}
+            </div>
+            <div class="vid-sub sr">Watch their personal video note</div>
+
+            <div class="vid-frame sr" style="background:none;">
+                <iframe src="{{media.videoUrl}}" width="100%" height="100%" style="border:none;"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
+            </div>
+
+            <!-- RSVP -->
+            <div class="sr" style="width:100%;margin:32px 0 20px;">
+                <div class="ornament-rule">
+                    <div class="line"></div>
+                    <div class="dot"></div>
+                    <div class="diamond"></div>
+                    <div class="dot"></div>
+                    <div class="line r"></div>
+                </div>
+            </div>
+
+            <div class="rsvp-bar">
+                <span class="rsvp-label sr">Your presence means everything to us</span>
+                <button class="rsvp-btn sr interested-btn" onclick="incrementInterested()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                    </svg>
+                    <span id="interestedText">Interested</span>
+                    <span id="interestedCount"
+                        style="background:rgba(255,255,255,0.2); border-radius:10px; padding:2px 8px; font-weight:bold;">142</span>
+                </button>
+                <div class="sh-row sr">
+                    <button class="sh-b" onclick="doShare()">Share Invite</button>
+                    <button class="sh-b" onclick="doCopy(this)">Copy Link</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <span class="sf-name">{{couple.groom.firstName}} &amp; {{couple.bride.firstName}} — {{events.0.date}}</span>
+        <span class="sf-credit">Vaazh · vaazh.co</span>
+    </footer>
+
+    </div><!-- /invite -->
+
+
+    <script>
+        /* ══════════════════════
+           CARD FLIP REVEAL
+        ══════════════════════ */
+        let revealed = false;
+        document.getElementById('cardWrap').addEventListener('click', () => {
+            if (revealed) return;
+            revealed = true;
+
+            const card = document.getElementById('invCard');
+            const wrap = document.getElementById('cardWrap');
+            const cover = document.getElementById('cover');
+            const invite = document.getElementById('invite');
+
+            // Flip the card
+            card.classList.add('open');
+            wrap.classList.add('opened');
+
+            // After card flip: fade out cover, show invite
+            setTimeout(() => {
+                cover.style.transition = 'opacity .8s ease, transform .8s ease';
+                cover.style.opacity = '0';
+                cover.style.transform = 'scale(1.03)';
+                cover.style.pointerEvents = 'none';
+
+                invite.classList.add('visible');
+
+                setTimeout(() => {
+                    cover.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                    setupReveal();
+                    startCountdowns();
+                }, 800);
+            }, 1200);
+        });
+
+        /* ══════════════════════
+           SCROLL REVEAL
+        ══════════════════════ */
+        function setupReveal() {
+            const obs = new IntersectionObserver(entries => {
+                entries.forEach((e, i) => {
+                    if (e.isIntersecting) {
+                        const delay = parseInt(e.target.dataset.d || 0);
+                        setTimeout(() => {
+                            e.target.classList.add('up');
+                        }, delay);
+                        obs.unobserve(e.target);
+                    }
+                });
+            }, { threshold: 0.1, rootMargin: '0px 0px -32px 0px' });
+
+            document.querySelectorAll('.sr, .sr-l, .sr-r').forEach((el, i) => {
+                el.style.transitionDelay = (i % 5) * 60 + 'ms';
+                obs.observe(el);
+            });
+        }
+
+        /* ══════════════════════
+           COUNTDOWNS
+        ══════════════════════ */
+        function pad(n) { return String(n).padStart(2, '0'); }
+        function diff(target) { return Math.max(0, new Date(target) - Date.now()); }
+
+        function startCountdowns() {
+            const boxes = document.querySelectorAll('.dynamic-countdown');
+            function tick() {
+                boxes.forEach(box => {
+                    // Try parsing date from Handlebars binding
+                    const dateStr = box.getAttribute('data-date');
+                    // Simple parse: May 14 2026 09:00:00
+                    let target = new Date(dateStr).getTime();
+                    if (isNaN(target)) target = Date.now() + 86400000; //Fallback 1 day
+
+                    const d1 = Math.max(0, target - Date.now());
+                    if (box.querySelector('.dval')) box.querySelector('.dval').textContent = pad(Math.floor(d1 / 86400000));
+                    if (box.querySelector('.hval')) box.querySelector('.hval').textContent = pad(Math.floor((d1 % 86400000) / 3600000));
+                    if (box.querySelector('.mval')) box.querySelector('.mval').textContent = pad(Math.floor((d1 % 3600000) / 60000));
+                    if (box.querySelector('.sval')) box.querySelector('.sval').textContent = pad(Math.floor((d1 % 60000) / 1000));
+                });
+            }
+            tick();
+            setInterval(tick, 1000);
+        }
+
+        /* ══════════════════════
+           ADD TO CALENDAR
+        ══════════════════════ */
+        function addToCalendar(title, start, end, location) {
+            const fmt = d => d.replace(/[-:]/g, '').replace('T', 'T').split('+')[0];
+            const url = `https://calendar.google.com/calendar/render?action=TEMPLATE`
+                + `&text=${encodeURIComponent(title)}`
+                + `&dates=${fmt(start)}/${fmt(end)}`
+                + `&location=${encodeURIComponent(location)}`;
+            window.open(url, '_blank');
+        }
+
+        /* ══════════════════════
+           VIDEO / SHARE
+        ══════════════════════ */
+        let intCount = 142;
+        let intPressed = false;
+        function incrementInterested() {
+            if (!intPressed) {
+                intCount++;
+                document.getElementById('interestedCount').innerText = intCount;
+                document.getElementById('interestedText').innerText = "You're Going!";
+                intPressed = true;
+            } else {
+                intCount--;
+                document.getElementById('interestedCount').innerText = intCount;
+                document.getElementById('interestedText').innerText = "Interested";
+                intPressed = false;
+            }
+        }
+        function doShare() {
+            if (navigator.share) navigator.share({ title: 'Karthik & Priya — Wedding Invitation', url: location.href });
+            else doCopy(document.querySelector('[onclick^="doCopy"]'));
+        }
+        function doCopy(btn) {
+            navigator.clipboard.writeText(location.href).then(() => {
+                const t = btn.textContent;
+                btn.textContent = 'Copied!';
+                setTimeout(() => btn.textContent = t, 2000);
+            });
+        }
+
+        /* Lock scroll until invite opens */
+        document.body.style.overflow = 'hidden';
+    </script>
+</body>
+
+</html>

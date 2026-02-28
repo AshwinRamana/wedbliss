@@ -119,20 +119,22 @@ async function removeCloudFrontAlias(domain) {
  * Generate a pre-signed S3 URL for direct client-side uploads.
  * @param {string} fileName - Original file name
  * @param {string} fileType - MIME type
+ * @param {string} couplename - Folder name for the couple
  */
-async function generatePresignedUrl(fileName, fileType) {
-    if (!process.env.AWS_S3_BUCKET_NAME) {
-        console.warn('[aws] AWS_S3_BUCKET_NAME is not set. Using default: wedbliss-gallery');
-    }
+async function generatePresignedUrl(fileName, fileType, couplename) {
+    // Override default bucket to user requested wedbliss.images
+    const targetBucket = process.env.AWS_S3_BUCKET_NAME || 'wedbliss.images';
 
     // Sanitize file name and create unique object key
     const uniqueId = Date.now() + '-' + Math.round(Math.random() * 1e9);
     const sanitizedName = fileName.replace(/[^a-zA-Z0-9.-]/g, '_');
-    const objectKey = `gallery/${uniqueId}-${sanitizedName}`;
+    const folder = couplename ? couplename.replace(/[^a-zA-Z0-9-_]/g, '') : 'gallery';
+
+    const objectKey = `${folder}/${uniqueId}-${sanitizedName}`;
 
     try {
         const command = new PutObjectCommand({
-            Bucket: S3_BUCKET_NAME,
+            Bucket: targetBucket,
             Key: objectKey,
             ContentType: fileType,
         });
@@ -141,7 +143,7 @@ async function generatePresignedUrl(fileName, fileType) {
         const signedUrl = await getSignedUrl(s3Client, command, { expiresIn: 180 });
 
         // Construct the public URL (assuming bucket is public or accessed via CF)
-        const publicUrl = `https://${S3_BUCKET_NAME}.s3.${awsConfig.region}.amazonaws.com/${objectKey}`;
+        const publicUrl = `https://${targetBucket}.s3.${awsConfig.region}.amazonaws.com/${objectKey}`;
 
         return { signedUrl, publicUrl, objectKey };
     } catch (error) {

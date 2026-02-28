@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-    <title>Karthik & Priya — Wedding Invitation</title>
+    <title>{{couple.groom.firstName}} & {{couple.bride.firstName}} — Wedding Invitation</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
         href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600&family=Jost:wght@200;300;400;500;600&display=swap"
@@ -1297,10 +1297,10 @@
                     </div>
 
                     <div class="cf-names">
-                        Karthik<br />
+                        {{couple.groom.firstName}}<br />
                         <span
                             style="font-size:clamp(14px,3vw,22px);font-weight:300;font-style:italic;color:var(--muted);">&amp;</span><br />
-                        <span style="font-style:italic;">Priya</span>
+                        <span style="font-style:italic;">{{couple.bride.firstName}}</span>
                     </div>
 
                     <div style="margin:16px 0; width:100%;">
@@ -1548,9 +1548,9 @@
                 </div>
 
                 <div class="p1-names">
-                    <div class="p1-name sr">Karthik</div>
+                    <div class="p1-name sr">{{couple.groom.firstName}}</div>
                     <div class="p1-and sr">&amp;</div>
-                    <div class="p1-name bride sr">Priya</div>
+                    <div class="p1-name bride sr">{{couple.bride.firstName}}</div>
                 </div>
 
                 <div class="sr" style="width:100%;margin:20px 0;">
@@ -1679,29 +1679,29 @@
                     </div>
                 </div>
 
-                <div class="ev-name sr">Nichayathartham</div>
-                <div class="ev-name-sub sr">The Engagement Ceremony</div>
+                <div class="ev-name sr">{{events.[0].title}}</div>
+                <div class="ev-name-sub sr">{{events.[0].type}}</div>
 
                 <div class="ev-details sr">
                     <div class="ev-row">
                         <span class="ev-row-label">Date</span>
-                        <span class="ev-row-val">Friday, 27 February 2026</span>
+                        <span class="ev-row-val">{{events.[0].date}}</span>
                     </div>
                     <div class="ev-row">
                         <span class="ev-row-label">Time</span>
-                        <span class="ev-row-val">10:00 AM — 1:00 PM</span>
+                        <span class="ev-row-val">{{events.[0].startTime}} — {{events.[0].endTime}}</span>
                     </div>
                     <div class="ev-row">
                         <span class="ev-row-label">Venue</span>
                         <span class="ev-row-val">
-                            Kapaleeshwarar Kalyana Mandapam
-                            <small>Mylapore, Chennai — 600 004</small>
+                            {{events.[0].venueName}}
+                            <small>{{events.[0].venueAddress}}</small>
                         </span>
                     </div>
                 </div>
 
                 <a href="#" class="add-cal-btn sr"
-                    onclick="addToCalendar('Nichayathartham - Karthik & Priya','2026-02-27T10:00:00','2026-02-27T13:00:00','Kapaleeshwarar Kalyana Mandapam, Mylapore, Chennai');return false;">
+                    onclick="addToCalendar('{{events.[0].title}} - {{couple.groom.firstName}} & {{couple.bride.firstName}}','{{events.[0].date}}T{{events.[0].startTime}}','{{events.[0].date}}T{{events.[0].endTime}}','{{events.[0].venueName}}, Mylapore, Chennai');return false;">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <rect x="3" y="4" width="18" height="18" rx="2" />
                         <line x1="16" y1="2" x2="16" y2="6" />
@@ -1739,6 +1739,7 @@
         </section>
 
 
+        {{#if events.[1]}}
         <!-- ══════════════════════════
   PAGE 3 — EVENT 2: MUHURTHAM
 ══════════════════════════ -->
@@ -1785,17 +1786,17 @@
                     </div>
                 </div>
 
-                <div class="ev-name sr">Muhurtham</div>
-                <div class="ev-name-sub sr">The Wedding Ceremony &amp; Reception</div>
+                <div class="ev-name sr">{{events.[1].title}}</div>
+                <div class="ev-name-sub sr">{{events.[1].type}}</div>
 
                 <div class="ev-details sr">
                     <div class="ev-row">
                         <span class="ev-row-label">Date</span>
-                        <span class="ev-row-val">Saturday, 28 February 2026</span>
+                        <span class="ev-row-val">{{#if events.[1]}}{{events.[1].date}}{{/if}}</span>
                     </div>
                     <div class="ev-row">
                         <span class="ev-row-label">Ceremony</span>
-                        <span class="ev-row-val">8:24 AM</span>
+                        <span class="ev-row-val">{{events.[1].startTime}}</span>
                     </div>
                     <div class="ev-row">
                         <span class="ev-row-label">Lunch</span>
@@ -1804,14 +1805,14 @@
                     <div class="ev-row">
                         <span class="ev-row-label">Venue</span>
                         <span class="ev-row-val">
-                            Sri Murugan Kalyana Mandapam
-                            <small>Anna Nagar, Chennai — 600 040</small>
+                            {{events.[1].venueName}}
+                            <small>{{events.[1].venueAddress}}</small>
                         </span>
                     </div>
                 </div>
 
                 <a href="#" class="add-cal-btn sr"
-                    onclick="addToCalendar('Muhurtham - Karthik & Priya','2026-02-28T08:24:00','2026-02-28T13:00:00','Sri Murugan Kalyana Mandapam, Anna Nagar, Chennai');return false;">
+                    onclick="addToCalendar('{{events.[1].title}} - {{couple.groom.firstName}} & {{couple.bride.firstName}}','{{events.[1].date}}T{{events.[1].startTime}}','{{events.[1].date}}T{{events.[1].endTime}}','{{events.[1].venueName}}, Anna Nagar, Chennai');return false;">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <rect x="3" y="4" width="18" height="18" rx="2" />
                         <line x1="16" y1="2" x2="16" y2="6" />
@@ -1890,11 +1891,11 @@
                         <div class="note-who">
                             <div class="note-av">K</div>
                             <div>
-                                <div class="note-nm">Karthik</div>
+                                <div class="note-nm">{{couple.groom.firstName}}</div>
                                 <div class="note-role">The Groom</div>
                             </div>
                         </div>
-                        <p class="note-text">The day I met Priya changed everything. She carries this quiet warmth that
+                        <p class="note-text">The day I met {{couple.bride.firstName}} changed everything. She carries this quiet warmth that
                             makes every room feel like home. I could not imagine walking into this next chapter of life
                             with anyone else. I am grateful beyond words.</p>
                     </div>
@@ -1902,11 +1903,11 @@
                         <div class="note-who">
                             <div class="note-av" style="background:linear-gradient(135deg,#D4A0A0,#A07080);">P</div>
                             <div>
-                                <div class="note-nm">Priya</div>
+                                <div class="note-nm">{{couple.bride.firstName}}</div>
                                 <div class="note-role">The Bride</div>
                             </div>
                         </div>
-                        <p class="note-text">Karthik has this wonderful way of turning ordinary moments into memories.
+                        <p class="note-text">{{couple.groom.firstName}} has this wonderful way of turning ordinary moments into memories.
                             He makes me laugh, he listens with patience, and he shows up. I am so happy to begin this
                             beautiful journey together with our families by our side.</p>
                     </div>
@@ -2057,7 +2058,7 @@
 
         <!-- FOOTER -->
         <footer class="site-footer">
-            <span class="sf-name">Karthik &amp; Priya — February 28, 2026</span>
+            <span class="sf-name">{{couple.groom.firstName}} &amp; {{couple.bride.firstName}} — February 28, 2026</span>
             <span class="sf-credit">Vaazh · vaazh.co</span>
         </footer>
 
@@ -2130,19 +2131,27 @@
 
         function startCountdowns() {
             function tick() {
-                // Event 1 — Nichayathartham
-                const d1 = diff('2026-02-27T10:00:00+05:30');
-                document.getElementById('e1d').textContent = pad(Math.floor(d1 / 86400000));
-                document.getElementById('e1h').textContent = pad(Math.floor((d1 % 86400000) / 3600000));
-                document.getElementById('e1m').textContent = pad(Math.floor((d1 % 3600000) / 60000));
-                document.getElementById('e1s').textContent = pad(Math.floor((d1 % 60000) / 1000));
+                // Event 1 — {{events.[0].title}}
+                
+                // Event 1
+                const d1 = diff('{{events.[0].date}}T{{events.[0].startTime}}');
+                if (!isNaN(d1)) {
+                    document.getElementById('e1d').textContent = pad(Math.floor(d1 / 86400000));
+                    document.getElementById('e1h').textContent = pad(Math.floor((d1 % 86400000) / 3600000));
+                    document.getElementById('e1m').textContent = pad(Math.floor((d1 % 3600000) / 60000));
+                    document.getElementById('e1s').textContent = pad(Math.floor((d1 % 60000) / 1000));
+                }
 
-                // Event 2 — Muhurtham
-                const d2 = diff('2026-02-28T08:24:00+05:30');
-                document.getElementById('e2d').textContent = pad(Math.floor(d2 / 86400000));
-                document.getElementById('e2h').textContent = pad(Math.floor((d2 % 86400000) / 3600000));
-                document.getElementById('e2m').textContent = pad(Math.floor((d2 % 3600000) / 60000));
-                document.getElementById('e2s').textContent = pad(Math.floor((d2 % 60000) / 1000));
+                // Event 2
+                {{#if events.[1]}}
+                const d2 = diff('{{events.[1].date}}T{{events.[1].startTime}}');
+                if (!isNaN(d2)) {
+                    document.getElementById('e2d').textContent = pad(Math.floor(d2 / 86400000));
+                    document.getElementById('e2h').textContent = pad(Math.floor((d2 % 86400000) / 3600000));
+                    document.getElementById('e2m').textContent = pad(Math.floor((d2 % 3600000) / 60000));
+                    document.getElementById('e2s').textContent = pad(Math.floor((d2 % 60000) / 1000));
+                }
+                {{/if}}
             }
             tick();
             setInterval(tick, 1000);
@@ -2164,10 +2173,10 @@
            VIDEO / SHARE
         ══════════════════════ */
         function openVideo() {
-            alert('Replace this with your YouTube or Vimeo embed URL.');
+            console.log('Video tapped');
         }
         function doShare() {
-            if (navigator.share) navigator.share({ title: 'Karthik & Priya — Wedding Invitation', url: location.href });
+            if (navigator.share) navigator.share({ title: '{{couple.groom.firstName}} & {{couple.bride.firstName}} — Wedding Invitation', url: location.href });
             else doCopy(document.querySelector('[onclick^="doCopy"]'));
         }
         function doCopy(btn) {

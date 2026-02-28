@@ -31,8 +31,8 @@ function CheckoutFormContent() {
 
     // Events
     const [eventsList, setEventsList] = useState([
-        { id: "ev-1", title: "Wedding / Muhurtham", type: "muhurtham", date: "", time: "", venueName: "", venueAddress: "", googleMapsUrl: "" },
-        { id: "ev-2", title: "Reception", type: "reception", date: "", time: "", venueName: "", venueAddress: "", googleMapsUrl: "" }
+        { id: "ev-1", title: "Wedding / Muhurtham", type: "muhurtham", date: "", startTime: "", endTime: "", venueName: "", venueAddress: "", googleMapsUrl: "" },
+        { id: "ev-2", title: "Reception", type: "reception", date: "", startTime: "", endTime: "", venueName: "", venueAddress: "", googleMapsUrl: "" }
     ]);
 
     const handleEventChange = (index: number, field: string, value: string) => {
@@ -43,7 +43,7 @@ function CheckoutFormContent() {
 
     const addEvent = () => {
         if (!isPremium && eventsList.length >= 2) return;
-        setEventsList([...eventsList, { id: `ev-${Date.now()}`, type: "other", title: "Custom Event", date: "", time: "", venueName: "", venueAddress: "", googleMapsUrl: "" }]);
+        setEventsList([...eventsList, { id: `ev-${Date.now()}`, type: "other", title: "Custom Event", date: "", startTime: "", endTime: "", venueName: "", venueAddress: "", googleMapsUrl: "" }]);
     };
 
     const removeEvent = (index: number) => {
@@ -82,7 +82,7 @@ function CheckoutFormContent() {
 
         setUploading(true);
         try {
-            const res = await fetch(`${BACKEND_URL}/api/upload/presigned-url?fileName=${encodeURIComponent(file.name)}&fileType=${encodeURIComponent(file.type)}&couplename=${encodeURIComponent(getCoupleName())}`);
+            const res = await fetch(`/api/upload/presigned-url?fileName=${encodeURIComponent(file.name)}&fileType=${encodeURIComponent(file.type)}&couplename=${encodeURIComponent(getCoupleName())}`);
             const data = await res.json();
 
             if (!res.ok || data.error) throw new Error(data.error || "Failed to generate upload URL");
@@ -113,7 +113,7 @@ function CheckoutFormContent() {
 
         setVideoUploading(true);
         try {
-            const res = await fetch(`${BACKEND_URL}/api/upload/presigned-url?fileName=${encodeURIComponent(file.name)}&fileType=${encodeURIComponent(file.type)}&couplename=${encodeURIComponent(getCoupleName())}`);
+            const res = await fetch(`/api/upload/presigned-url?fileName=${encodeURIComponent(file.name)}&fileType=${encodeURIComponent(file.type)}&couplename=${encodeURIComponent(getCoupleName())}`);
             const data = await res.json();
 
             if (!res.ok || data.error) throw new Error(data.error || "Failed to generate upload URL");
@@ -357,9 +357,15 @@ function CheckoutFormContent() {
                                                     <label className="text-xs font-bold text-slate-700 uppercase">Date *</label>
                                                     <input type="date" required className={inputClass} value={event.date} onChange={e => handleEventChange(index, "date", e.target.value)} />
                                                 </div>
-                                                <div className="flex flex-col gap-2">
-                                                    <label className="text-xs font-bold text-slate-700 uppercase">Time *</label>
-                                                    <input type="time" required className={inputClass} value={event.time} onChange={e => handleEventChange(index, "time", e.target.value)} />
+                                                <div className="grid grid-cols-2 gap-4 mt-4">
+                                                    <div>
+                                                        <label className="block text-sm font-bold text-slate-700 mb-1">Start Time *</label>
+                                                        <input type="time" required className={inputClass} value={event.startTime || ""} onChange={e => handleEventChange(index, "startTime", e.target.value)} />
+                                                    </div>
+                                                    <div>
+                                                        <label className="block text-sm font-bold text-slate-700 mb-1">End Time *</label>
+                                                        <input type="time" required className={inputClass} value={event.endTime || ""} onChange={e => handleEventChange(index, "endTime", e.target.value)} />
+                                                    </div>
                                                 </div>
                                                 <div className="flex flex-col gap-2 md:col-span-2">
                                                     <label className="text-xs font-bold text-slate-700 uppercase">Venue Name & Address *</label>

@@ -1569,24 +1569,22 @@
                     <div class="p1-parent-col">
                         <span class="p1-parent-label">Groom's Parents</span>
                         <div class="p1-parent-names">
-                            Smt. Saraswathi Ammal<br />
-                            &amp; Shri Ramasamy Iyer
+                            {{couple.groom.parents}}
                         </div>
-                        <span class="p1-parent-city">Coimbatore</span>
+                        
                     </div>
                     <div class="p1-parent-div"></div>
                     <div class="p1-parent-col">
                         <span class="p1-parent-label">Bride's Parents</span>
                         <div class="p1-parent-names">
-                            Smt. Kamakshi Ammal<br />
-                            &amp; Shri Krishnaswamy Iyer
+                            {{couple.bride.parents}}
                         </div>
-                        <span class="p1-parent-city">Chennai</span>
+                        
                     </div>
                 </div>
 
                 <div class="p1-date-line sr" style="margin-top:28px;">
-                    Saturday · February 28, 2026 · Chennai
+                    {{events.[0].date}}
                 </div>
             </div>
 
@@ -1701,7 +1699,7 @@
                 </div>
 
                 <a href="#" class="add-cal-btn sr"
-                    onclick="addToCalendar('{{events.[0].title}} - {{couple.groom.firstName}} & {{couple.bride.firstName}}','{{events.[0].date}}T{{events.[0].startTime}}','{{events.[0].date}}T{{events.[0].endTime}}','{{events.[0].venueName}}, Mylapore, Chennai');return false;">
+                    onclick="addToCalendar('{{events.[0].title}} - {{couple.groom.firstName}} & {{couple.bride.firstName}}','{{events.[0].date}}T{{events.[0].startTime}}','{{events.[0].date}}T{{events.[0].endTime}}','{{events.[0].venueName}}');return false;">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <rect x="3" y="4" width="18" height="18" rx="2" />
                         <line x1="16" y1="2" x2="16" y2="6" />
@@ -1796,7 +1794,7 @@
                     </div>
                     <div class="ev-row">
                         <span class="ev-row-label">Ceremony</span>
-                        <span class="ev-row-val">{{events.[1].startTime}}</span>
+                        <span class="ev-row-val">{{events.[1].startTime}} — {{events.[1].endTime}}</span>
                     </div>
                     <div class="ev-row">
                         <span class="ev-row-label">Lunch</span>
@@ -1812,7 +1810,7 @@
                 </div>
 
                 <a href="#" class="add-cal-btn sr"
-                    onclick="addToCalendar('{{events.[1].title}} - {{couple.groom.firstName}} & {{couple.bride.firstName}}','{{events.[1].date}}T{{events.[1].startTime}}','{{events.[1].date}}T{{events.[1].endTime}}','{{events.[1].venueName}}, Anna Nagar, Chennai');return false;">
+                    onclick="addToCalendar('{{events.[1].title}} - {{couple.groom.firstName}} & {{couple.bride.firstName}}','{{events.[1].date}}T{{events.[1].startTime}}','{{events.[1].date}}T{{events.[1].endTime}}','{{events.[1].venueName}}');return false;">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <rect x="3" y="4" width="18" height="18" rx="2" />
                         <line x1="16" y1="2" x2="16" y2="6" />
@@ -1895,9 +1893,7 @@
                                 <div class="note-role">The Groom</div>
                             </div>
                         </div>
-                        <p class="note-text">The day I met {{couple.bride.firstName}} changed everything. She carries this quiet warmth that
-                            makes every room feel like home. I could not imagine walking into this next chapter of life
-                            with anyone else. I am grateful beyond words.</p>
+                        <p class="note-text">{{couple.storyMessage}}</p>
                     </div>
                     <div class="note-card sr-r">
                         <div class="note-who">
@@ -1907,9 +1903,7 @@
                                 <div class="note-role">The Bride</div>
                             </div>
                         </div>
-                        <p class="note-text">{{couple.groom.firstName}} has this wonderful way of turning ordinary moments into memories.
-                            He makes me laugh, he listens with patience, and he shows up. I am so happy to begin this
-                            beautiful journey together with our families by our side.</p>
+                        <p class="note-text">{{couple.storyMessage}}</p>
                     </div>
                 </div>
 
@@ -2014,7 +2008,7 @@
                             <line x1="320" y1="40" x2="320" y2="320" stroke="#C4A070" stroke-width=".5" />
                         </svg>
                         <div class="vid-thumb-text">{{couple.groom.firstName}} &amp; {{couple.bride.firstName}}</div>
-                        <div class="vid-thumb-sub">{{weddingDate}}</div>
+                        <div class="vid-thumb-sub">{{events.[0].date}}</div>
                     </div>
                     <div class="vid-play-btn">
                         <div class="vid-play-circle">
@@ -2058,7 +2052,7 @@
 
         <!-- FOOTER -->
         <footer class="site-footer">
-            <span class="sf-name">{{couple.groom.firstName}} &amp; {{couple.bride.firstName}} — February 28, 2026</span>
+            <span class="sf-name">{{couple.groom.firstName}} &amp; {{couple.bride.firstName}} — {{events.[0].date}}</span>
             <span class="sf-credit">Vaazh · vaazh.co</span>
         </footer>
 

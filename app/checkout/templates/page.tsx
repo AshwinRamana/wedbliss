@@ -7,12 +7,18 @@ import Link from "next/link";
 import { Suspense, useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { User } from "@supabase/supabase-js";
-import { TEMPLATES, TemplateSVG } from "@/components/marketing/Templates";
+import { TemplateSVG } from "@/components/marketing/Templates";
 import { getTemplates } from "@/lib/db";
 
-type MergedTemplate = typeof TEMPLATES[0] & { thumbnailUrl?: string | null };
-
-
+type TemplateItem = {
+    id: string;
+    name: string;
+    tier: "basic" | "premium";
+    desc: string;
+    isLive: boolean;
+    href?: string;
+    thumbnailUrl: string | null;
+};
 
 function TemplateSelectionContent() {
     const searchParams = useSearchParams();
@@ -22,7 +28,7 @@ function TemplateSelectionContent() {
     const isPremium = plan === "premium";
 
     const [user, setUser] = useState<User | null>(null);
-    const [mergedTemplates, setMergedTemplates] = useState<MergedTemplate[]>(TEMPLATES);
+    const [allTemplates, setAllTemplates] = useState<TemplateItem[]>([]);
 
     useEffect(() => {
         const init = async () => {
@@ -30,41 +36,26 @@ function TemplateSelectionContent() {
             const { data } = await supabase.auth.getSession();
             setUser(data.session?.user || null);
 
-            // Fetch live template flags from Supabase and merge
+            // Fetch all templates from Supabase — single source of truth
             const dbTemplates = await getTemplates();
-            // 1. Map over static templates and enrich with DB data
-            const enrichedStatic = TEMPLATES.map(t => {
-                const db = dbTemplates.find(d => d.id === t.id);
-                return {
-                    ...t,
-                    isLive: db?.is_live ?? t.isLive,
-                    href: db?.demo_url ?? undefined,
-                    thumbnailUrl: db?.thumbnail_url ?? null,
-                    desc: db?.description ?? t.desc,
-                };
-            });
+            const mapped: TemplateItem[] = dbTemplates.map(db => ({
+                id: db.id,
+                name: db.name,
+                tier: (db.tier as "basic" | "premium") || "basic",
+                desc: db.description || "A beautifully crafted custom design.",
+                isLive: db.is_live,
+                href: db.demo_url ?? undefined,
+                thumbnailUrl: db.thumbnail_url ?? null,
+            }));
 
-            // 2. Find dynamically uploaded DB templates
-            const dynamicDBTemplates = dbTemplates
-                .filter(db => !TEMPLATES.some(t => t.id === db.id))
-                .map(db => ({
-                    id: db.id,
-                    name: db.name,
-                    tier: (db.tier as "basic" | "premium") || "basic",
-                    desc: db.description || "A beautifully crafted custom design.",
-                    isLive: db.is_live,
-                    href: db.demo_url ?? undefined,
-                    thumbnailUrl: db.thumbnail_url ?? null,
-                }));
-
-            // 3. Combine and sort: Live templates first
-            const allTemplates = [...enrichedStatic, ...dynamicDBTemplates].sort((a, b) => {
+            // Sort: Live templates first
+            mapped.sort((a, b) => {
                 if (a.isLive && !b.isLive) return -1;
                 if (!a.isLive && b.isLive) return 1;
                 return 0;
             });
 
-            setMergedTemplates(allTemplates);
+            setAllTemplates(mapped);
         };
         init();
 
@@ -79,7 +70,7 @@ function TemplateSelectionContent() {
         return () => window.removeEventListener("popstate", handlePopState);
     }, [router]);
 
-    const availableTemplates = mergedTemplates.filter(t => isPremium ? true : t.tier === "basic");
+    const availableTemplates = allTemplates.filter(t => isPremium ? true : t.tier === "basic");
 
     return (
         <div className="min-h-screen flex flex-col justify-between" style={{ background: "linear-gradient(135deg, #fffbf5 0%, #fff8ed 55%, #fef3e2 100%)" }}>
@@ -110,9 +101,9 @@ function TemplateSelectionContent() {
                                 }`}>
                                 {/* Template Thumbnail */}
                                 <div className="w-full h-64 bg-slate-900 relative overflow-hidden flex items-center justify-center">
-                                    {(tmpl as MergedTemplate).thumbnailUrl ? (
+                                    {tmpl.thumbnailUrl ? (
                                         /* eslint-disable-next-line @next/next/no-img-element */
-                                        <img src={(tmpl as MergedTemplate).thumbnailUrl!} alt={tmpl.name} className="w-full h-full object-cover" />
+                                        <img src={tmpl.thumbnailUrl!} alt={tmpl.name} className="w-full h-full object-cover" />
                                     ) : (
                                         <TemplateSVG id={tmpl.id} />
                                     )}
@@ -130,8 +121,8 @@ function TemplateSelectionContent() {
                                         </div>
                                     )}
                                     {/* Live demo link */}
-                                    {!isComingSoon && (tmpl as MergedTemplate).href && (
-                                        <a href={(tmpl as MergedTemplate).href!} target="_blank" rel="noopener noreferrer"
+                                    {!isComingSoon && tmpl.href && (
+                                        <a href={tmpl.href!} target="_blank" rel="noopener noreferrer"
                                             className="absolute bottom-4 left-1/2 -translate-x-1/2 px-4 py-1.5 bg-emerald-800/80 backdrop-blur-sm rounded-full text-white text-xs font-bold border border-emerald-400/30 opacity-0 group-hover:opacity-100 transition-opacity">
                                             View Live Demo →
                                         </a>

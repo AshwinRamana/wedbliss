@@ -14,6 +14,10 @@ const s3Client = new S3Client(awsConfig);
 
 export async function GET(req: NextRequest) {
     try {
+        if (!process.env.AWS_ACCESS_KEY_ID || !process.env.AWS_SECRET_ACCESS_KEY) {
+            return NextResponse.json({ error: "AWS credentials not configured. Add AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY to your environment variables." }, { status: 500 });
+        }
+
         const { searchParams } = new URL(req.url);
         const fileName = searchParams.get("fileName");
         const fileType = searchParams.get("fileType");

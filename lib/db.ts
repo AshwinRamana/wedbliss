@@ -168,7 +168,8 @@ export interface InvitationData {
         type: string;
         title: string;
         date: string;
-        time: string;
+        startTime: string;
+        endTime: string;
         venueName: string;
         venueAddress: string;
         googleMapsUrl?: string;
@@ -178,7 +179,7 @@ export interface InvitationData {
         images: string[];
     };
     media?: {
-        youtubeVideoId?: string;
+        videoUrl?: string;
         backgroundMusicUrl?: string;
     };
     design?: {

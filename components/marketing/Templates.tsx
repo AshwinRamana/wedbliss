@@ -188,51 +188,39 @@ export const TEMPLATES = [
 // Server Component — fetches template flags from Supabase at request time
 // ─────────────────────────────────────────────────────────────────────────────
 export default function Templates() {
-    // Merge DB data onto the static SVG list by ID (initially static)
-    const [merged, setMerged] = useState(() => TEMPLATES.map(t => ({
-        ...t,
-        thumbnailUrl: null as string | null
-    })));
+    const [templates, setTemplates] = useState<Array<{
+        id: string;
+        name: string;
+        tier: "basic" | "premium";
+        desc: string;
+        isLive: boolean;
+        href?: string;
+        thumbnailUrl: string | null;
+    }>>([]);
 
-    // Fetch live template registry from Supabase on mount
+    // Fetch all templates from Supabase — single source of truth
     useEffect(() => {
         const fetchTemplates = async () => {
             const dbTemplates = await getTemplates();
 
-            // 1. Map over static templates and enrich with DB data
-            const enrichedStatic = TEMPLATES.map(t => {
-                const db = dbTemplates.find(d => d.id === t.id);
-                return {
-                    ...t,
-                    isLive: db?.is_live ?? t.isLive,
-                    href: db?.demo_url ?? t.href,
-                    thumbnailUrl: db?.thumbnail_url ?? null,
-                    desc: db?.description ?? t.desc,
-                };
-            });
+            const allTemplates = dbTemplates.map(db => ({
+                id: db.id,
+                name: db.name,
+                tier: (db.tier as "basic" | "premium") || "basic",
+                desc: db.description || "A beautifully crafted custom design.",
+                isLive: db.is_live,
+                href: db.demo_url ?? undefined,
+                thumbnailUrl: db.thumbnail_url ?? null,
+            }));
 
-            // 2. Find any dynamically uploaded DB templates that aren't in the static array
-            const dynamicDBTemplates = dbTemplates
-                .filter(db => !TEMPLATES.some(t => t.id === db.id))
-                .map(db => ({
-                    id: db.id,
-                    name: db.name,
-                    tier: (db.tier as "basic" | "premium") || "basic",
-                    desc: db.description || "A beautifully crafted custom design.",
-                    isLive: db.is_live,
-                    href: db.demo_url ?? undefined,
-                    thumbnailUrl: db.thumbnail_url ?? null,
-                }));
-
-            // 3. Combine and sort: Live templates first, then by tier, then by name
-            const allTemplates = [...enrichedStatic, ...dynamicDBTemplates].sort((a, b) => {
+            // Sort: Live templates first
+            allTemplates.sort((a, b) => {
                 if (a.isLive && !b.isLive) return -1;
                 if (!a.isLive && b.isLive) return 1;
-                // If both are live or both are not live, fallback to current array order
                 return 0;
             });
 
-            setMerged(allTemplates);
+            setTemplates(allTemplates);
         };
         fetchTemplates();
     }, []);
@@ -245,7 +233,7 @@ export default function Templates() {
                 <p className="sec-desc">Every template is designed with elegance and attention to detail. Hover to preview.</p>
             </div>
             <div className="templates-grid">
-                {merged.map((t) => (
+                {templates.map((t) => (
                     <div className="template-card" key={t.id}>
                         <div className="template-preview">
                             {/* Hover overlay */}

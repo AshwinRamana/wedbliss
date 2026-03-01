@@ -82,7 +82,7 @@ function CheckoutFormContent() {
 
         setUploading(true);
         try {
-            const res = await fetch(`/api/upload/presigned-url?fileName=${encodeURIComponent(file.name)}&fileType=${encodeURIComponent(file.type)}&couplename=${encodeURIComponent(getCoupleName())}`);
+            const res = await fetch(`${BACKEND_URL}/api/upload/presigned-url?fileName=${encodeURIComponent(file.name)}&fileType=${encodeURIComponent(file.type)}&couplename=${encodeURIComponent(getCoupleName())}`);
             const data = await res.json();
 
             if (!res.ok || data.error) throw new Error(data.error || "Failed to generate upload URL");
@@ -113,7 +113,7 @@ function CheckoutFormContent() {
 
         setVideoUploading(true);
         try {
-            const res = await fetch(`/api/upload/presigned-url?fileName=${encodeURIComponent(file.name)}&fileType=${encodeURIComponent(file.type)}&couplename=${encodeURIComponent(getCoupleName())}`);
+            const res = await fetch(`${BACKEND_URL}/api/upload/presigned-url?fileName=${encodeURIComponent(file.name)}&fileType=${encodeURIComponent(file.type)}&couplename=${encodeURIComponent(getCoupleName())}`);
             const data = await res.json();
 
             if (!res.ok || data.error) throw new Error(data.error || "Failed to generate upload URL");
@@ -220,7 +220,7 @@ function CheckoutFormContent() {
                     }
                 };
 
-                const res = await fetch(`/api/invitations`, {
+                const res = await fetch(`${BACKEND_URL}/api/invitations`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(payload)

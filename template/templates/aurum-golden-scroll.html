@@ -1,0 +1,1128 @@
+<!--
+  WEDBLISS TEMPLATE: Aurum — The Golden Scroll
+  Style: Modern + Traditional Indian blend
+  Tier: Premium
+  Features: Envelope reveal, scroll animations, countdown, gallery, video, notes
+  Handlebars: Fully compliant with template-config.json v1.0
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Noto+Sans:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+
+    <style>
+        /* ═══════════════════════════════════════════════════════════════
+   AURUM — THE GOLDEN SCROLL
+   A premium wedding invitation template by Wedbliss
+   ═══════════════════════════════════════════════════════════════ */
+
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --gold: #c9a84c;
+            --gold-light: #e8d48b;
+            --gold-dark: #8b6914;
+            --burgundy: #6b1d3a;
+            --burgundy-deep: #4a0e26;
+            --cream: #fdf8ef;
+            --cream-warm: #faf3e3;
+            --ivory: #fffdf8;
+            --charcoal: #2c2c2c;
+            --text-dark: #3b2a1a;
+            --text-muted: #7a6b5d;
+            --text-light: #a39585;
+            --shadow-gold: rgba(201, 168, 76, 0.25);
+            --shadow-dark: rgba(44, 44, 44, 0.08);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            background: var(--cream);
+            color: var(--text-dark);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ─── REVEAL / COVER PAGE ─── */
+        .wb-cover {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--burgundy-deep) 0%, var(--burgundy) 40%, #8b2252 100%);
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+            cursor: pointer;
+        }
+
+        .wb-cover.opened {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .wb-cover-inner {
+            text-align: center;
+            animation: coverFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes coverFloat {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-12px);
+            }
+        }
+
+        .wb-cover-ornament {
+            width: 80px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold-light), transparent);
+            margin: 0 auto 20px;
+            opacity: 0.7;
+        }
+
+        .wb-cover-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 24px;
+            opacity: 0.9;
+        }
+
+        .wb-cover-icon svg {
+            width: 100%;
+            height: 100%;
+            fill: none;
+            stroke: var(--gold-light);
+            stroke-width: 1.2;
+            filter: drop-shadow(0 0 20px rgba(232, 212, 139, 0.4));
+        }
+
+        .wb-cover-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.6rem, 5vw, 2.8rem);
+            font-weight: 600;
+            color: var(--gold-light);
+            letter-spacing: 0.08em;
+            line-height: 1.3;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .wb-cover-subtitle {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(0.9rem, 2.5vw, 1.15rem);
+            color: rgba(255, 255, 255, 0.65);
+            font-style: italic;
+            letter-spacing: 0.15em;
+            margin-bottom: 32px;
+        }
+
+        .wb-cover-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 32px;
+            font-family: 'Noto Sans', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--gold);
+            border: 1px solid rgba(201, 168, 76, 0.4);
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(8px);
+            cursor: pointer;
+            transition: all 0.4s ease;
+            animation: ctaPulse 2.5s ease-in-out infinite;
+        }
+
+        .wb-cover-cta:hover {
+            background: rgba(201, 168, 76, 0.15);
+            border-color: var(--gold);
+            transform: scale(1.05);
+        }
+
+        @keyframes ctaPulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(201, 168, 76, 0.3);
+            }
+
+            50% {
+                box-shadow: 0 0 0 12px rgba(201, 168, 76, 0);
+            }
+        }
+
+        .wb-cover-particles {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .wb-particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--gold-light);
+            border-radius: 50%;
+            opacity: 0;
+            animation: particleDrift 8s ease-in-out infinite;
+        }
+
+        .wb-particle:nth-child(1) {
+            left: 10%;
+            top: 20%;
+            animation-delay: 0s;
+        }
+
+        .wb-particle:nth-child(2) {
+            left: 80%;
+            top: 15%;
+            animation-delay: 1.5s;
+        }
+
+        .wb-particle:nth-child(3) {
+            left: 30%;
+            top: 70%;
+            animation-delay: 3s;
+        }
+
+        .wb-particle:nth-child(4) {
+            left: 70%;
+            top: 80%;
+            animation-delay: 4.5s;
+        }
+
+        .wb-particle:nth-child(5) {
+            left: 50%;
+            top: 40%;
+            animation-delay: 6s;
+        }
+
+        .wb-particle:nth-child(6) {
+            left: 15%;
+            top: 55%;
+            animation-delay: 2s;
+        }
+
+        .wb-particle:nth-child(7) {
+            left: 85%;
+            top: 50%;
+            animation-delay: 3.5s;
+        }
+
+        .wb-particle:nth-child(8) {
+            left: 40%;
+            top: 10%;
+            animation-delay: 5s;
+        }
+
+        @keyframes particleDrift {
+            0% {
+                opacity: 0;
+                transform: translateY(0) scale(0.5);
+            }
+
+            20% {
+                opacity: 0.6;
+            }
+
+            80% {
+                opacity: 0.6;
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(-120px) scale(1.2);
+            }
+        }
+
+        /* ─── MAIN INVITATION BODY ─── */
+        .wb-invitation {
+            max-width: 540px;
+            margin: 0 auto;
+            background: var(--ivory);
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* ─── SCROLL ANIMATION ─── */
+        .wb-anim {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .wb-anim.wb-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .wb-anim-delay-1 {
+            transition-delay: 0.15s;
+        }
+
+        .wb-anim-delay-2 {
+            transition-delay: 0.3s;
+        }
+
+        .wb-anim-delay-3 {
+            transition-delay: 0.45s;
+        }
+
+        /* ─── DECORATIVE ELEMENTS ─── */
+        .wb-ornament {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin: 8px 0;
+        }
+
+        .wb-ornament-line {
+            width: 60px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
+
+        .wb-ornament-dot {
+            width: 6px;
+            height: 6px;
+            border: 1px solid var(--gold);
+            transform: rotate(45deg);
+        }
+
+        .wb-mandala {
+            display: block;
+            margin: 0 auto;
+            opacity: 0.12;
+        }
+
+        /* ─── SECTION: HERO ─── */
+        .wb-hero {
+            padding: 80px 24px 60px;
+            text-align: center;
+            background: linear-gradient(180deg, var(--cream-warm) 0%, var(--ivory) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .wb-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, var(--shadow-gold) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .wb-hero-label {
+            font-family: 'Noto Sans', sans-serif;
+            font-size: 0.6rem;
+            font-weight: 600;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: var(--gold-dark);
+            opacity: 0.7;
+            margin-bottom: 20px;
+        }
+
+        .wb-hero-names {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.2rem, 8vw, 3.6rem);
+            font-weight: 700;
+            color: var(--text-dark);
+            line-height: 1.15;
+            margin-bottom: 4px;
+        }
+
+        .wb-hero-amp {
+            display: block;
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.2rem, 4vw, 1.8rem);
+            font-weight: 400;
+            font-style: italic;
+            color: var(--gold);
+            margin: 4px 0;
+        }
+
+        .wb-hero-tagline {
+            font-size: 1rem;
+            font-style: italic;
+            color: var(--text-muted);
+            margin-top: 16px;
+            letter-spacing: 0.06em;
+        }
+
+        /* ─── SECTION: FAMILY ─── */
+        .wb-family {
+            padding: 56px 28px;
+            text-align: center;
+            background: var(--ivory);
+        }
+
+        .wb-section-label {
+            font-family: 'Noto Sans', sans-serif;
+            font-size: 0.55rem;
+            font-weight: 600;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--gold-dark);
+            margin-bottom: 6px;
+        }
+
+        .wb-section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.5rem, 5vw, 2rem);
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 28px;
+        }
+
+        .wb-family-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .wb-family-card {
+            padding: 28px 16px;
+            border-radius: 16px;
+            background: var(--cream-warm);
+            border: 1px solid rgba(201, 168, 76, 0.15);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .wb-family-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px var(--shadow-dark);
+        }
+
+        .wb-family-side {
+            font-family: 'Noto Sans', sans-serif;
+            font-size: 0.55rem;
+            font-weight: 600;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--gold-dark);
+            margin-bottom: 14px;
+            opacity: 0.8;
+        }
+
+        .wb-family-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 16px;
+        }
+
+        .wb-parent-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: center;
+            margin: 8px 0;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .wb-parent-icon {
+            font-size: 0.7rem;
+            opacity: 0.5;
+        }
+
+        .wb-parent-name {
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        /* ─── SECTION: EVENTS ─── */
+        .wb-events {
+            padding: 56px 24px;
+            background: linear-gradient(180deg, var(--cream-warm) 0%, var(--ivory) 100%);
+        }
+
+        .wb-event-card {
+            background: var(--ivory);
+            border: 1px solid rgba(201, 168, 76, 0.18);
+            border-radius: 20px;
+            padding: 32px 24px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .wb-event-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 16px 40px var(--shadow-dark);
+        }
+
+        .wb-event-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold));
+        }
+
+        .wb-event-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .wb-event-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .wb-event-meta-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .wb-event-meta-icon {
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold);
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+
+        .wb-event-meta-text {
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .wb-event-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .wb-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 22px;
+            font-family: 'Noto Sans', sans-serif;
+            font-size: 0.68rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            border: none;
+        }
+
+        .wb-btn-map {
+            background: transparent;
+            color: var(--gold-dark);
+            border: 1px solid var(--gold);
+        }
+
+        .wb-btn-map:hover {
+            background: var(--gold);
+            color: white;
+        }
+
+        .wb-btn-cal {
+            background: var(--burgundy);
+            color: white;
+            border: 1px solid var(--burgundy);
+        }
+
+        .wb-btn-cal:hover {
+            background: var(--burgundy-deep);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(107, 29, 58, 0.3);
+        }
+
+        /* ─── SECTION: COUNTDOWN ─── */
+        .wb-countdown {
+            padding: 56px 24px;
+            text-align: center;
+            background: linear-gradient(135deg, var(--burgundy-deep) 0%, var(--burgundy) 100%);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .wb-countdown::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            pointer-events: none;
+        }
+
+        .wb-countdown-label {
+            font-family: 'Noto Sans', sans-serif;
+            font-size: 0.55rem;
+            font-weight: 600;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--gold-light);
+            margin-bottom: 8px;
+            position: relative;
+        }
+
+        .wb-countdown-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.3rem, 4vw, 1.8rem);
+            font-weight: 600;
+            color: white;
+            margin-bottom: 32px;
+            position: relative;
+        }
+
+        .wb-cd-grid {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            position: relative;
+        }
+
+        .wb-cd-box {
+            width: 80px;
+            padding: 20px 8px 16px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 16px;
+            backdrop-filter: blur(8px);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .wb-cd-box:hover {
+            transform: scale(1.08);
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .wb-cd-num {
+            display: block;
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--gold-light);
+            line-height: 1;
+        }
+
+        .wb-cd-label {
+            display: block;
+            font-family: 'Noto Sans', sans-serif;
+            font-size: 0.55rem;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 8px;
+        }
+
+        /* ─── SECTION: GALLERY ─── */
+        .wb-gallery {
+            padding: 56px 24px;
+            text-align: center;
+            background: var(--ivory);
+        }
+
+        .wb-gallery-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .wb-gallery-img {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+            border-radius: 16px;
+            border: 2px solid rgba(201, 168, 76, 0.15);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .wb-gallery-img:hover {
+            transform: scale(1.03);
+            box-shadow: 0 12px 32px var(--shadow-dark);
+        }
+
+        .wb-gallery-img:first-child:nth-last-child(1),
+        .wb-gallery-img:first-child:nth-last-child(3) {
+            grid-column: 1 / -1;
+            aspect-ratio: 16/9;
+        }
+
+        /* ─── SECTION: VIDEO ─── */
+        .wb-story {
+            padding: 56px 24px;
+            text-align: center;
+            background: var(--cream-warm);
+        }
+
+        .wb-video-wrapper {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-top: 24px;
+            border: 2px solid rgba(201, 168, 76, 0.15);
+            box-shadow: 0 16px 40px var(--shadow-dark);
+        }
+
+        .wb-video-embed {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* ─── SECTION: NOTES ─── */
+        .wb-notes {
+            padding: 48px 28px;
+            text-align: center;
+            background: var(--ivory);
+        }
+
+        .wb-notes+.wb-notes {
+            padding-top: 0;
+        }
+
+        .wb-notes-quote {
+            position: relative;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            font-weight: 400;
+            font-style: italic;
+            color: var(--text-muted);
+            line-height: 1.7;
+            max-width: 380px;
+            margin: 24px auto 0;
+            padding: 24px;
+            background: var(--cream-warm);
+            border-radius: 16px;
+            border-left: 3px solid var(--gold);
+        }
+
+        .wb-notes-from {
+            display: block;
+            font-family: 'Noto Sans', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--gold-dark);
+            margin-top: 12px;
+            font-style: normal;
+        }
+
+        /* ─── FOOTER ─── */
+        .wb-footer {
+            padding: 40px 24px;
+            text-align: center;
+            background: var(--charcoal);
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .wb-footer-names {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--gold-light);
+            margin-bottom: 8px;
+        }
+
+        .wb-footer-text {
+            font-family: 'Noto Sans', sans-serif;
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+
+        .wb-footer-brand {
+            margin-top: 24px;
+            font-family: 'Noto Sans', sans-serif;
+            font-size: 0.55rem;
+            letter-spacing: 0.15em;
+            opacity: 0.4;
+        }
+
+        .wb-footer-brand a {
+            color: var(--gold-light);
+            text-decoration: none;
+        }
+
+        /* ─── RESPONSIVE ─── */
+        @media (max-width: 480px) {
+            .wb-family-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .wb-cd-box {
+                width: 70px;
+                padding: 16px 6px 12px;
+            }
+
+            .wb-cd-num {
+                font-size: 1.6rem;
+            }
+
+            .wb-event-card {
+                padding: 24px 18px;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <!-- ═══════════════════════════════════════════════════════
+     1. COVER / REVEAL PAGE
+     ═══════════════════════════════════════════════════════ -->
+    <div class="wb-cover" id="cover-reveal" onclick="this.classList.add('opened')">
+        <div class="wb-cover-particles">
+            <div class="wb-particle"></div>
+            <div class="wb-particle"></div>
+            <div class="wb-particle"></div>
+            <div class="wb-particle"></div>
+            <div class="wb-particle"></div>
+            <div class="wb-particle"></div>
+            <div class="wb-particle"></div>
+            <div class="wb-particle"></div>
+        </div>
+
+        <div class="wb-cover-inner">
+            <div class="wb-cover-icon">
+                <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M32 8C20 8 12 20 12 28c0 12 20 28 20 28s20-16 20-28c0-8-8-20-20-20z" />
+                    <path d="M32 18c-4 0-8 4-8 8s8 14 8 14 8-10 8-14-4-8-8-8z" />
+                </svg>
+            </div>
+            <div class="wb-cover-ornament"></div>
+            <div class="wb-cover-title">{{couple.groom.firstName}} &amp; {{couple.bride.firstName}}</div>
+            <div class="wb-cover-subtitle">Request the pleasure of your company</div>
+            <button class="wb-cover-cta">
+                <span>Open Invitation</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- MAIN INVITATION -->
+    <div class="wb-invitation">
+
+        <!-- ═══════════════════════════════════════════════════════
+       2. HERO
+       ═══════════════════════════════════════════════════════ -->
+        <section class="wb-hero" id="details">
+            <svg class="wb-mandala" width="120" height="40" viewBox="0 0 120 40">
+                <path d="M0 20Q30 0 60 20Q90 40 120 20" stroke="#c9a84c" fill="none" stroke-width="0.8" />
+                <path d="M0 20Q30 40 60 20Q90 0 120 20" stroke="#c9a84c" fill="none" stroke-width="0.8" />
+            </svg>
+
+            <div class="wb-anim">
+                <div class="wb-hero-label">Wedding Invitation</div>
+            </div>
+
+            <div class="wb-anim wb-anim-delay-1">
+                <div class="wb-hero-names">
+                    {{couple.groom.firstName}}
+                    <span class="wb-hero-amp">&amp;</span>
+                    {{couple.bride.firstName}}
+                </div>
+            </div>
+
+            <div class="wb-anim wb-anim-delay-2">
+                <div class="wb-ornament">
+                    <span class="wb-ornament-line"></span>
+                    <span class="wb-ornament-dot"></span>
+                    <span class="wb-ornament-line"></span>
+                </div>
+            </div>
+
+            <div class="wb-anim wb-anim-delay-3">
+                <div class="wb-hero-tagline">Together with their families, invite you to celebrate their union</div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════
+       3. FAMILY DETAILS
+       ═══════════════════════════════════════════════════════ -->
+        <section class="wb-family">
+            <div class="wb-anim">
+                <div class="wb-section-label">Our Families</div>
+                <div class="wb-section-title">With the Blessings Of</div>
+            </div>
+
+            <div class="wb-family-grid">
+                <div class="wb-family-card wb-anim">
+                    <div class="wb-family-side">Bride's Family</div>
+                    <div class="wb-family-name">{{couple.bride.firstName}}</div>
+                    <div class="wb-parent-row">
+                        <span class="wb-parent-icon">👨</span>
+                        <span class="wb-parent-name">{{couple.bride.fatherName}}</span>
+                    </div>
+                    <div class="wb-parent-row">
+                        <span class="wb-parent-icon">👩</span>
+                        <span class="wb-parent-name">{{couple.bride.motherName}}</span>
+                    </div>
+                </div>
+
+                <div class="wb-family-card wb-anim wb-anim-delay-1">
+                    <div class="wb-family-side">Groom's Family</div>
+                    <div class="wb-family-name">{{couple.groom.firstName}}</div>
+                    <div class="wb-parent-row">
+                        <span class="wb-parent-icon">👨</span>
+                        <span class="wb-parent-name">{{couple.groom.fatherName}}</span>
+                    </div>
+                    <div class="wb-parent-row">
+                        <span class="wb-parent-icon">👩</span>
+                        <span class="wb-parent-name">{{couple.groom.motherName}}</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════
+       4. EVENTS
+       ═══════════════════════════════════════════════════════ -->
+        <section class="wb-events" id="events">
+            <div class="wb-anim" style="text-align:center; margin-bottom:28px;">
+                <div class="wb-section-label">Save The Date</div>
+                <div class="wb-section-title">Celebration Details</div>
+            </div>
+
+            {{#each events}}
+            <div class="wb-event-card wb-anim">
+                <div class="wb-event-title">{{title}}</div>
+                <div class="wb-event-meta">
+                    <div class="wb-event-meta-row">
+                        <span class="wb-event-meta-icon">📅</span>
+                        <span class="wb-event-meta-text">{{date}}</span>
+                    </div>
+                    <div class="wb-event-meta-row">
+                        <span class="wb-event-meta-icon">🕐</span>
+                        <span class="wb-event-meta-text">{{startTime}} — {{endTime}}</span>
+                    </div>
+                    <div class="wb-event-meta-row">
+                        <span class="wb-event-meta-icon">📍</span>
+                        <span class="wb-event-meta-text">{{venueName}}</span>
+                    </div>
+                </div>
+                <div class="wb-event-actions">
+                    {{#if googleMapsUrl}}
+                    <a href="{{googleMapsUrl}}" target="_blank" class="wb-btn wb-btn-map">📍 View on Map</a>
+                    {{/if}}
+                    <button class="wb-btn wb-btn-cal"
+                        onclick="addToCalendar('{{title}}', '{{date}}', '{{startTime}}', '{{endTime}}', '{{venueName}}')">📅
+                        Add to Calendar</button>
+                </div>
+            </div>
+            {{/each}}
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════
+       5. COUNTDOWN
+       ═══════════════════════════════════════════════════════ -->
+        <section class="wb-countdown" id="countdown">
+            <div class="wb-anim">
+                <div class="wb-countdown-label">Mark Your Calendar</div>
+                <div class="wb-countdown-title">The Celebration Begins In</div>
+            </div>
+            <div class="wb-cd-grid wb-anim wb-anim-delay-1" id="cd-timer">
+                <div class="wb-cd-box">
+                    <span class="wb-cd-num" id="cd-days">00</span>
+                    <small class="wb-cd-label">Days</small>
+                </div>
+                <div class="wb-cd-box">
+                    <span class="wb-cd-num" id="cd-hours">00</span>
+                    <small class="wb-cd-label">Hours</small>
+                </div>
+                <div class="wb-cd-box">
+                    <span class="wb-cd-num" id="cd-mins">00</span>
+                    <small class="wb-cd-label">Mins</small>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════
+       6. GALLERY  (shown only if images uploaded)
+       ═══════════════════════════════════════════════════════ -->
+        {{#if gallery.images}}
+        <section class="wb-gallery" id="gallery">
+            <div class="wb-anim">
+                <div class="wb-section-label">Our Moments</div>
+                <div class="wb-section-title">Capturing Love</div>
+            </div>
+            <div class="wb-gallery-grid wb-anim wb-anim-delay-1">
+                {{#each gallery.images}}
+                <img src="{{this}}" alt="Couple Moment" class="wb-gallery-img" loading="lazy" />
+                {{/each}}
+            </div>
+        </section>
+        {{/if}}
+
+        <!-- ═══════════════════════════════════════════════════════
+       7. VIDEO / STORY  (shown only if video uploaded)
+       ═══════════════════════════════════════════════════════ -->
+        {{#if media.videoUrl}}
+        <section class="wb-story" id="our-story">
+            <div class="wb-anim">
+                <div class="wb-section-label">Our Story</div>
+                <div class="wb-section-title">Hear From Us</div>
+            </div>
+            <div class="wb-video-wrapper wb-anim wb-anim-delay-1">
+                <iframe src="{{media.videoUrl}}" allowfullscreen class="wb-video-embed"></iframe>
+            </div>
+        </section>
+        {{/if}}
+
+        <!-- ═══════════════════════════════════════════════════════
+       8. NOTES FROM COUPLE
+       ═══════════════════════════════════════════════════════ -->
+        {{#if couple.bride.notes}}
+        <section class="wb-notes" id="bride-notes">
+            <div class="wb-anim">
+                <div class="wb-section-label">A Personal Note</div>
+                <div class="wb-notes-quote">
+                    "{{couple.bride.notes}}"
+                    <span class="wb-notes-from">— {{couple.bride.firstName}}</span>
+                </div>
+            </div>
+        </section>
+        {{/if}}
+
+        {{#if couple.groom.notes}}
+        <section class="wb-notes" id="groom-notes">
+            <div class="wb-anim">
+                <div class="wb-notes-quote">
+                    "{{couple.groom.notes}}"
+                    <span class="wb-notes-from">— {{couple.groom.firstName}}</span>
+                </div>
+            </div>
+        </section>
+        {{/if}}
+
+        <!-- ═══════════════════════════════════════════════════════
+       FOOTER
+       ═══════════════════════════════════════════════════════ -->
+        <footer class="wb-footer">
+            <div class="wb-footer-names">{{couple.groom.firstName}} &amp; {{couple.bride.firstName}}</div>
+            <div class="wb-footer-text">We can't wait to celebrate with you</div>
+            <div class="wb-footer-brand">Made with ♥ by <a href="https://wedbliss.co" target="_blank">Wedbliss</a></div>
+        </footer>
+
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+     SCRIPTS: Scroll animations + Countdown Timer
+     ═══════════════════════════════════════════════════════════ -->
+    <script>
+        (function () {
+            // ── Scroll-triggered animations via IntersectionObserver ──
+            var observer = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('wb-visible');
+                    }
+                });
+            }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+            document.querySelectorAll('.wb-anim').forEach(function (el) {
+                observer.observe(el);
+            });
+
+            // ── Countdown Timer ──
+            // Parse the first event date for countdown
+            var eventCards = document.querySelectorAll('.wb-event-card');
+            if (eventCards.length > 0) {
+                var firstDate = eventCards[0].querySelector('.wb-event-meta-text');
+                if (firstDate) {
+                    var dateStr = firstDate.textContent.trim();
+                    var target = new Date(dateStr);
+
+                    if (!isNaN(target.getTime())) {
+                        function updateCountdown() {
+                            var now = new Date();
+                            var diff = target - now;
+
+                            if (diff <= 0) {
+                                document.getElementById('cd-days').textContent = '🎉';
+                                document.getElementById('cd-hours').textContent = '🎊';
+                                document.getElementById('cd-mins').textContent = '💍';
+                                return;
+                            }
+
+                            var days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                            var hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                            var mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+                            document.getElementById('cd-days').textContent = String(days).padStart(2, '0');
+                            document.getElementById('cd-hours').textContent = String(hours).padStart(2, '0');
+                            document.getElementById('cd-mins').textContent = String(mins).padStart(2, '0');
+                        }
+
+                        updateCountdown();
+                        setInterval(updateCountdown, 60000);
+                    }
+                }
+            }
+        })();
+    </script>
+
+</body>
+
+</html>

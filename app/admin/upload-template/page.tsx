@@ -113,8 +113,7 @@ function validateHandlebars(html: string): ValidationResult {
 }
 
 export default function UploadTemplatePage() {
-    // ── File Upload State ──
-    const [_rawFileContent, setRawFileContent] = useState("");
+
     const [fileName, setFileName] = useState("");
 
     // ── Parsed Content ──
@@ -160,7 +159,6 @@ export default function UploadTemplatePage() {
         const reader = new FileReader();
         reader.onload = (ev) => {
             const content = ev.target?.result as string;
-            setRawFileContent(content);
 
             // Parse the file
             const { html, css, js } = parseTemplateFile(content);

@@ -82,13 +82,13 @@ export default function Home() {
     // 2. Inject the universal Add-to-Calendar ICS utility (runs before template scripts)
     const calScript = document.createElement("script");
     calScript.text = `
-      window.addToCalendar = function(title, dateStr, startTime, endTime, venue) {
+      window.addToCalendar = function(title, dateStr, startTime, endTime, venue, coupleNames) {
         try {
           // Parse date - handles formats like "28 February 2026" or "2026-02-28"
           var eventDate = new Date(dateStr);
           if (isNaN(eventDate.getTime())) {
             // Try DD Month YYYY format
-            var parts = dateStr.split(/[\\s,]+/);
+            var parts = dateStr.split(/[\\\\s,]+/);
             eventDate = new Date(parts.slice(0,3).join(' '));
           }
           if (isNaN(eventDate.getTime())) {
@@ -98,7 +98,7 @@ export default function Home() {
           
           // Parse time (e.g., "8:24 AM" or "10:48 AM")
           function parseTime(timeStr) {
-            var match = timeStr.match(/(\\d{1,2}):(\\d{2})\\s*(AM|PM)?/i);
+            var match = timeStr.match(/(\\\\d{1,2}):(\\\\d{2})\\\\s*(AM|PM)?/i);
             if (!match) return { h: 0, m: 0 };
             var h = parseInt(match[1]);
             var m = parseInt(match[2]);
@@ -125,6 +125,12 @@ export default function Home() {
               String(d.getMinutes()).padStart(2,'0') + '00';
           }
           
+          var names = coupleNames || '';
+          var eventSummary = names ? title + ' - ' + names : title;
+          var eventDesc = names 
+            ? 'Wedding event: ' + title + ' of ' + names + ' at ' + (venue || '')
+            : 'Wedding event: ' + title + ' at ' + (venue || '');
+          
           var icsContent = [
             'BEGIN:VCALENDAR',
             'VERSION:2.0',
@@ -134,13 +140,13 @@ export default function Home() {
             'BEGIN:VEVENT',
             'DTSTART:' + toICS(dtStart),
             'DTEND:' + toICS(dtEnd),
-            'SUMMARY:' + title,
+            'SUMMARY:' + eventSummary,
             'LOCATION:' + (venue || ''),
-            'DESCRIPTION:Wedding event - ' + title,
+            'DESCRIPTION:' + eventDesc,
             'STATUS:CONFIRMED',
             'END:VEVENT',
             'END:VCALENDAR'
-          ].join('\\r\\n');
+          ].join('\\\\r\\\\n');
           
           var blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
           var url = URL.createObjectURL(blob);

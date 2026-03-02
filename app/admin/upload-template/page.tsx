@@ -114,7 +114,7 @@ function validateHandlebars(html: string): ValidationResult {
 
 export default function UploadTemplatePage() {
     // ── File Upload State ──
-    const [rawFileContent, setRawFileContent] = useState("");
+    const [_rawFileContent, setRawFileContent] = useState("");
     const [fileName, setFileName] = useState("");
 
     // ── Parsed Content ──

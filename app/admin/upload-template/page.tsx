@@ -5,7 +5,21 @@ import { Upload, Play, Save, Trash2, Code, CheckCircle, XCircle, Eye, FileUp, Al
 import { upsertTemplate } from "@/lib/db";
 // @ts-expect-error - missing declaration file
 import Handlebars from "handlebars/dist/handlebars";
-import templateConfig from "@/template-config.json";
+// ─────────────────────────────────────────────────────────────────────────────
+// Sample data for live preview (matches template-config.json sampleData)
+// ─────────────────────────────────────────────────────────────────────────────
+const SAMPLE_DATA = {
+    couple: {
+        bride: { firstName: "Priya", fatherName: "Krishnaswamy", motherName: "Kamakshi", notes: "Can't wait to start this beautiful journey together!" },
+        groom: { firstName: "Karthik", fatherName: "Ramasamy", motherName: "Saraswathi", notes: "Forever and always, my love." }
+    },
+    events: [
+        { id: "ev-1", title: "Muhurtham", date: "28 February 2026", startTime: "8:24 AM", endTime: "10:48 AM", venueName: "Sri Murugan Kalyana Mandapam", googleMapsUrl: "https://maps.google.com/?q=Sri+Murugan+Kalyana+Mandapam" },
+        { id: "ev-2", title: "Reception", date: "28 February 2026", startTime: "6:00 PM", endTime: "10:00 PM", venueName: "Grand Ballroom, Hotel Savera", googleMapsUrl: "https://maps.google.com/?q=Hotel+Savera+Chennai" }
+    ],
+    gallery: { images: ["https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=500", "https://images.unsplash.com/photo-1519741497674-611481863552?w=500"] },
+    media: { videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ" }
+};
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Utility: Parse a single .html file into html_content, css_content, js_content
@@ -131,8 +145,7 @@ export default function UploadTemplatePage() {
     // ── View Mode ──  
     const [viewMode, setViewMode] = useState<"upload" | "review">("upload");
 
-    // Sample data from template-config.json for preview
-    const sampleData = templateConfig.sampleData;
+    // Sample data is defined as SAMPLE_DATA constant at the top of the file
 
     // ── File Upload Handler ──
     const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -177,7 +190,7 @@ export default function UploadTemplatePage() {
         if (!parsedHtml) { setCompiledLiveHtml(""); return; }
         try {
             const template = Handlebars.compile(parsedHtml);
-            const resolvedHtml = template(sampleData);
+            const resolvedHtml = template(SAMPLE_DATA);
             const fullHtml = `
                 <html><head><meta name="viewport" content="width=device-width, initial-scale=1">
                 <style>${parsedCss}</style></head>

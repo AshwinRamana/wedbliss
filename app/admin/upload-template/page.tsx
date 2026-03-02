@@ -244,7 +244,7 @@ export default function UploadTemplatePage() {
     // ── Clear/Reset ──
     const handleClear = () => {
         if (!confirm("Clear everything and start over?")) return;
-        setRawFileContent(""); setFileName(""); setParsedHtml(""); setParsedCss(""); setParsedJs("");
+        setFileName(""); setParsedHtml(""); setParsedCss(""); setParsedJs("");
         setValidation(null); setCompiledLiveHtml(""); setViewMode("upload");
         setSaveStatus({ type: null, msg: "" });
     };

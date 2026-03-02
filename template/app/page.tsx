@@ -79,7 +79,86 @@ export default function Home() {
     // 1. Inject the compiled HTML into the container
     containerRef.current.innerHTML = compiledHtml;
 
-    // 2. Extract and re-execute all <script> tags from the compiled HTML
+    // 2. Inject the universal Add-to-Calendar ICS utility (runs before template scripts)
+    const calScript = document.createElement("script");
+    calScript.text = `
+      window.addToCalendar = function(title, dateStr, startTime, endTime, venue) {
+        try {
+          // Parse date - handles formats like "28 February 2026" or "2026-02-28"
+          var eventDate = new Date(dateStr);
+          if (isNaN(eventDate.getTime())) {
+            // Try DD Month YYYY format
+            var parts = dateStr.split(/[\\s,]+/);
+            eventDate = new Date(parts.slice(0,3).join(' '));
+          }
+          if (isNaN(eventDate.getTime())) {
+            alert('Could not parse event date: ' + dateStr);
+            return;
+          }
+          
+          // Parse time (e.g., "8:24 AM" or "10:48 AM")
+          function parseTime(timeStr) {
+            var match = timeStr.match(/(\\d{1,2}):(\\d{2})\\s*(AM|PM)?/i);
+            if (!match) return { h: 0, m: 0 };
+            var h = parseInt(match[1]);
+            var m = parseInt(match[2]);
+            var period = (match[3] || '').toUpperCase();
+            if (period === 'PM' && h !== 12) h += 12;
+            if (period === 'AM' && h === 12) h = 0;
+            return { h: h, m: m };
+          }
+          
+          var start = parseTime(startTime);
+          var end = parseTime(endTime);
+          
+          var dtStart = new Date(eventDate);
+          dtStart.setHours(start.h, start.m, 0);
+          var dtEnd = new Date(eventDate);
+          dtEnd.setHours(end.h, end.m, 0);
+          
+          // Format to ICS datetime (YYYYMMDDTHHmmSS)
+          function toICS(d) {
+            return d.getFullYear().toString() +
+              String(d.getMonth()+1).padStart(2,'0') +
+              String(d.getDate()).padStart(2,'0') + 'T' +
+              String(d.getHours()).padStart(2,'0') +
+              String(d.getMinutes()).padStart(2,'0') + '00';
+          }
+          
+          var icsContent = [
+            'BEGIN:VCALENDAR',
+            'VERSION:2.0',
+            'PRODID:-//WedBliss//Wedding Invitation//EN',
+            'CALSCALE:GREGORIAN',
+            'METHOD:PUBLISH',
+            'BEGIN:VEVENT',
+            'DTSTART:' + toICS(dtStart),
+            'DTEND:' + toICS(dtEnd),
+            'SUMMARY:' + title,
+            'LOCATION:' + (venue || ''),
+            'DESCRIPTION:Wedding event - ' + title,
+            'STATUS:CONFIRMED',
+            'END:VEVENT',
+            'END:VCALENDAR'
+          ].join('\\r\\n');
+          
+          var blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+          var url = URL.createObjectURL(blob);
+          var link = document.createElement('a');
+          link.href = url;
+          link.download = title.replace(/[^a-zA-Z0-9]/g, '_') + '.ics';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          URL.revokeObjectURL(url);
+        } catch(err) {
+          alert('Error creating calendar event: ' + err.message);
+        }
+      };
+    `;
+    document.body.appendChild(calScript);
+
+    // 3. Extract and re-execute all <script> tags from the compiled HTML
     //    (dangerouslySetInnerHTML and innerHTML both ignore script execution)
     const scripts = containerRef.current.querySelectorAll("script");
     scripts.forEach(oldScript => {
@@ -92,7 +171,7 @@ export default function Home() {
       oldScript.parentNode?.replaceChild(newScript, oldScript);
     });
 
-    // 3. Also inject templateJs if available (separate JS stored in DB)
+    // 4. Also inject templateJs if available (separate JS stored in DB)
     if (inviteData?.templateJs) {
       const jsScript = document.createElement("script");
       jsScript.text = inviteData.templateJs;

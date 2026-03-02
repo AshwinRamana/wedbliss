@@ -22,7 +22,7 @@ export default function Hero() {
                 urlMap[t.id] = t.demo_url || null;
             });
             setLiveUrls(urlMap);
-            setHeroTemplates(dbTemplates.filter(t => t.is_hero));
+            setHeroTemplates(dbTemplates.filter(t => t.is_hero && t.is_live));
         };
         fetchUrls();
     }, []);

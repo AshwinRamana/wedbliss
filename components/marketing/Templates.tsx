@@ -172,17 +172,10 @@ export function TemplateSVG({ id }: { id: string }) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Fallback static array (used by Hero.tsx and as a code reference).
-// The landing page Templates section fetches live data from Supabase.
+// TEMPLATES array removed — Supabase DB is the single source of truth.
+// All template data (name, tier, is_live, demo_url, thumbnail_url) comes from
+// the `templates` table via getTemplates().
 // ─────────────────────────────────────────────────────────────────────────────
-export const TEMPLATES = [
-    { id: "tm-mallipoo", name: "Malli Poo", tier: "basic" as const, desc: "Jasmine-inspired minimal design. Ivory and soft rose gold.", isLive: false, href: undefined as string | undefined },
-    { id: "tm-kovil", name: "Kovil Gopuram", tier: "basic" as const, desc: "Temple architecture with rising sun. Forest green & 24k gold.", isLive: false, href: undefined as string | undefined },
-    { id: "tm-tanjore", name: "Tanjore Gold", tier: "basic" as const, desc: "Classic crimson and gold with Tanjore art. Regal and traditional.", isLive: false, href: undefined as string | undefined },
-    { id: "tm-peacock", name: "Peacock Majesty", tier: "premium" as const, desc: "Lord Muruga's peacock with Vel motif. Teal and gold.", isLive: false, href: undefined as string | undefined },
-    { id: "tm-vilakku", name: "Kuthu Vilakku", tier: "premium" as const, desc: "Traditional oil lamp with warm amber glow. Festive and bright.", isLive: false, href: undefined as string | undefined },
-    { id: "tm-kanjivaram", name: "Kanjivaram Silk", tier: "premium" as const, desc: "Silk saree weave patterns. Deep navy & zari gold borders.", isLive: false, href: undefined as string | undefined },
-];
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Server Component — fetches template flags from Supabase at request time

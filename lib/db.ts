@@ -149,47 +149,31 @@ export interface InvitationData {
     couple: {
         bride: {
             firstName: string;
-            lastName: string;
-            parents: string;
-            grandparents?: string;
-            photoUrl?: string;
+            fatherName: string;
+            motherName: string;
+            notes?: string;
         };
         groom: {
             firstName: string;
-            lastName: string;
-            parents: string;
-            grandparents?: string;
-            photoUrl?: string;
+            fatherName: string;
+            motherName: string;
+            notes?: string;
         };
-        storyMessage: string;
     };
     events: Array<{
         id: string;
-        type: string;
         title: string;
         date: string;
         startTime: string;
         endTime: string;
         venueName: string;
-        venueAddress: string;
         googleMapsUrl?: string;
     }>;
     gallery?: {
-        coverPhotoUrl?: string;
         images: string[];
     };
     media?: {
         videoUrl?: string;
-        backgroundMusicUrl?: string;
-    };
-    design?: {
-        primaryColor?: string;
-        fontOverride?: string;
-    };
-    rsvp?: {
-        enabled: boolean;
-        whatsappNumber?: string;
-        deadline?: string;
     };
 }
 

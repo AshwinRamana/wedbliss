@@ -1,0 +1,149 @@
+{
+    "version": "1.0",
+    "description": "Single source of truth for all data fields in the Wedbliss template system. The registration form, Handlebars tags, and template validation all read from this contract.",
+    "fields": {
+        "couple.bride.firstName": {
+            "label": "Bride Name",
+            "type": "text",
+            "required": true,
+            "handlebars": "{{couple.bride.firstName}}"
+        },
+        "couple.bride.fatherName": {
+            "label": "Bride's Father Name",
+            "type": "text",
+            "required": true,
+            "handlebars": "{{couple.bride.fatherName}}"
+        },
+        "couple.bride.motherName": {
+            "label": "Bride's Mother Name",
+            "type": "text",
+            "required": true,
+            "handlebars": "{{couple.bride.motherName}}"
+        },
+        "couple.bride.notes": {
+            "label": "Notes from Bride",
+            "type": "textarea",
+            "required": false,
+            "handlebars": "{{couple.bride.notes}}"
+        },
+        "couple.groom.firstName": {
+            "label": "Groom Name",
+            "type": "text",
+            "required": true,
+            "handlebars": "{{couple.groom.firstName}}"
+        },
+        "couple.groom.fatherName": {
+            "label": "Groom's Father Name",
+            "type": "text",
+            "required": true,
+            "handlebars": "{{couple.groom.fatherName}}"
+        },
+        "couple.groom.motherName": {
+            "label": "Groom's Mother Name",
+            "type": "text",
+            "required": true,
+            "handlebars": "{{couple.groom.motherName}}"
+        },
+        "couple.groom.notes": {
+            "label": "Notes from Groom",
+            "type": "textarea",
+            "required": false,
+            "handlebars": "{{couple.groom.notes}}"
+        },
+        "events[].title": {
+            "label": "Event Name",
+            "type": "text",
+            "required": true,
+            "handlebars": "{{title}}"
+        },
+        "events[].date": {
+            "label": "Event Date",
+            "type": "date",
+            "required": true,
+            "handlebars": "{{date}}"
+        },
+        "events[].startTime": {
+            "label": "From Time",
+            "type": "time",
+            "required": true,
+            "handlebars": "{{startTime}}"
+        },
+        "events[].endTime": {
+            "label": "To Time",
+            "type": "time",
+            "required": true,
+            "handlebars": "{{endTime}}"
+        },
+        "events[].venueName": {
+            "label": "Event Location",
+            "type": "text",
+            "required": true,
+            "handlebars": "{{venueName}}"
+        },
+        "events[].googleMapsUrl": {
+            "label": "Google Maps Link",
+            "type": "url",
+            "required": false,
+            "handlebars": "{{googleMapsUrl}}"
+        },
+        "gallery.images[]": {
+            "label": "Photo Uploads",
+            "type": "file",
+            "required": false,
+            "handlebars": "{{#each gallery.images}}<img src=\"{{this}}\"/>{{/each}}",
+            "note": "Gallery section is shown ONLY if images are uploaded"
+        },
+        "media.videoUrl": {
+            "label": "Video Upload",
+            "type": "file",
+            "required": false,
+            "handlebars": "{{media.videoUrl}}",
+            "note": "Video section is shown ONLY if a video is uploaded"
+        }
+    },
+    "sampleData": {
+        "couple": {
+            "bride": {
+                "firstName": "Priya",
+                "fatherName": "Krishnaswamy",
+                "motherName": "Kamakshi",
+                "notes": "Can't wait to start this beautiful journey together!"
+            },
+            "groom": {
+                "firstName": "Karthik",
+                "fatherName": "Ramasamy",
+                "motherName": "Saraswathi",
+                "notes": "Forever and always, my love."
+            }
+        },
+        "events": [
+            {
+                "id": "ev-1",
+                "title": "Muhurtham",
+                "date": "28 February 2026",
+                "startTime": "8:24 AM",
+                "endTime": "10:48 AM",
+                "venueName": "Sri Murugan Kalyana Mandapam",
+                "googleMapsUrl": "https://maps.google.com/?q=Sri+Murugan+Kalyana+Mandapam"
+            },
+            {
+                "id": "ev-2",
+                "title": "Reception",
+                "date": "28 February 2026",
+                "startTime": "6:00 PM",
+                "endTime": "10:00 PM",
+                "venueName": "Grand Ballroom, Hotel Savera",
+                "googleMapsUrl": "https://maps.google.com/?q=Hotel+Savera+Chennai"
+            }
+        ],
+        "gallery": {
+            "images": [
+                "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=500",
+                "https://images.unsplash.com/photo-1519741497674-611481863552?w=500"
+            ]
+        },
+        "media": {
+            "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ"
+        }
+    }
+}

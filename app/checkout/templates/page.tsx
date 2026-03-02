@@ -70,7 +70,7 @@ function TemplateSelectionContent() {
         return () => window.removeEventListener("popstate", handlePopState);
     }, [router]);
 
-    const availableTemplates = allTemplates.filter(t => isPremium ? true : t.tier === "basic");
+    const availableTemplates = allTemplates.filter(t => t.tier === plan);
 
     return (
         <div className="min-h-screen flex flex-col justify-between" style={{ background: "linear-gradient(135deg, #fffbf5 0%, #fff8ed 55%, #fef3e2 100%)" }}>

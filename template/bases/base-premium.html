@@ -1,11 +1,11 @@
 <!-- 
   WEDBLISS PREMIUM AI BASE SKELETON
-  Theme: Generic Structured Events
+  Theme: Generic Structured Events with Gallery, Video, Notes
   Required AI Handling: MUST retain all Handlebars tags and structural IDs.
 -->
 <div id="wedbliss-premium-wrapper" class="wb-theme-container">
 
-  <!-- 1. Envelope Cover / Hero -->
+  <!-- 1. Cover / Hero -->
   <section id="cover-reveal" class="wb-section wb-hero">
     <div class="wb-envelope-anim">
       <h1 class="wb-title">{{couple.groom.firstName}} &amp; {{couple.bride.firstName}}</h1>
@@ -13,12 +13,23 @@
     </div>
   </section>
 
-  <!-- 2. Inside Details -->
+  <!-- 2. Family Details -->
   <section id="details" class="wb-section wb-details">
     <div class="wb-parents-note">
-      <p>{{couple.parents}}</p>
       <p>Invite you to celebrate the wedding of their children</p>
       <h2>{{couple.groom.firstName}} <span class="wb-amp">&amp;</span> {{couple.bride.firstName}}</h2>
+    </div>
+    <div class="wb-family-grid">
+      <div class="wb-family-card wb-bride-family">
+        <h4>Bride&rsquo;s Family</h4>
+        <p class="wb-parent">Father: {{couple.bride.fatherName}}</p>
+        <p class="wb-parent">Mother: {{couple.bride.motherName}}</p>
+      </div>
+      <div class="wb-family-card wb-groom-family">
+        <h4>Groom&rsquo;s Family</h4>
+        <p class="wb-parent">Father: {{couple.groom.fatherName}}</p>
+        <p class="wb-parent">Mother: {{couple.groom.motherName}}</p>
+      </div>
     </div>
   </section>
 
@@ -27,14 +38,13 @@
     {{#each events}}
     <div class="wb-event-card" id="event-{{id}}">
       <h3 class="wb-event-title">{{title}}</h3>
-      <p class="wb-event-datetime">{{date}} | {{time}}</p>
+      <p class="wb-event-datetime">{{date}} | {{startTime}} - {{endTime}}</p>
       <p class="wb-event-venue">{{venueName}}</p>
-      
+
       <div class="wb-event-actions">
         {{#if googleMapsUrl}}
         <a href="{{googleMapsUrl}}" target="_blank" class="wb-btn wb-btn-map">View on Map</a>
         {{/if}}
-        <!-- Note to AI: you can style this button, do not alter its class or data attributes if present -->
         <button class="wb-btn wb-btn-cal">Add to Calendar</button>
       </div>
     </div>
@@ -51,38 +61,40 @@
     </div>
   </section>
 
-  <!-- 5. Photo Gallery (Premium only) -->
+  <!-- 5. Photo Gallery (shown only if images uploaded) -->
   {{#if gallery.images}}
   <section id="gallery" class="wb-section wb-gallery">
     <h3 class="wb-gallery-title">Capturing Our Moments</h3>
     <div class="wb-gallery-grid">
       {{#each gallery.images}}
-        <img src="{{this}}" alt="Couple Moment" class="wb-gallery-img" />
+      <img src="{{this}}" alt="Couple Moment" class="wb-gallery-img" />
       {{/each}}
     </div>
   </section>
   {{/if}}
 
-  <!-- 6. Hear it from the couple / Video -->
+  <!-- 6. Video / Story (shown only if video uploaded) -->
   {{#if media.videoUrl}}
   <section id="our-story" class="wb-section wb-story">
     <h3 class="wb-story-title">Hear From Us</h3>
     <div class="wb-video-wrapper">
-       <iframe src="{{media.videoUrl}}" allowfullscreen class="wb-video-embed"></iframe>
+      <iframe src="{{media.videoUrl}}" allowfullscreen class="wb-video-embed"></iframe>
     </div>
   </section>
   {{/if}}
 
-  <!-- 7. Interested / RSVP Form -->
-  {{#if rsvp.enabled}}
-  <section id="rsvp" class="wb-section wb-rsvp">
-    <h3 class="wb-rsvp-title">We'd love your presence</h3>
-    <div class="wb-rsvp-form">
-      <!-- Note to AI: Do not change the form logic -->
-      <a href="https://wa.me/{{rsvp.whatsappNumber}}?text=Hi!%20I%20will%20be%20attending%20the%20wedding!" target="_blank" class="wb-btn wb-btn-rsvp">
-        RSVP on WhatsApp
-      </a>
-    </div>
+  <!-- 7. Notes from the Couple -->
+  {{#if couple.bride.notes}}
+  <section id="bride-notes" class="wb-section wb-notes">
+    <h3 class="wb-notes-title">From the Bride</h3>
+    <p class="wb-notes-text">{{couple.bride.notes}}</p>
+  </section>
+  {{/if}}
+
+  {{#if couple.groom.notes}}
+  <section id="groom-notes" class="wb-section wb-notes">
+    <h3 class="wb-notes-title">From the Groom</h3>
+    <p class="wb-notes-text">{{couple.groom.notes}}</p>
   </section>
   {{/if}}
 

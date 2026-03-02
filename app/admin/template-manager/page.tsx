@@ -3,9 +3,9 @@
 import { useEffect, useState } from "react";
 import { getTemplates, upsertTemplate, deleteTemplate } from "@/lib/db";
 import type { DbTemplate } from "@/lib/db";
-import { TEMPLATES, TemplateSVG } from "@/components/marketing/Templates";
+import { TemplateSVG } from "@/components/marketing/Templates";
 
-// Merge static vs dynamic
+// Supabase is the single source of truth — no hardcoded array.
 type MergedTemplate = {
     id: string;
     name: string;
@@ -17,9 +17,8 @@ type MergedTemplate = {
     thumbnailUrl: string | null;
 };
 
-function mergeWithStatic(dbRows: DbTemplate[]): MergedTemplate[] {
-    // Start with all DB rows
-    const merged: MergedTemplate[] = dbRows.map(db => ({
+function mapFromDb(dbRows: DbTemplate[]): MergedTemplate[] {
+    return dbRows.map(db => ({
         id: db.id,
         name: db.name,
         tier: db.tier,
@@ -29,24 +28,6 @@ function mergeWithStatic(dbRows: DbTemplate[]): MergedTemplate[] {
         href: db.demo_url,
         thumbnailUrl: db.thumbnail_url,
     }));
-
-    // Add any static templates that aren't in the DB
-    TEMPLATES.forEach(t => {
-        if (!merged.find(m => m.id === t.id)) {
-            merged.push({
-                id: t.id,
-                name: t.name,
-                tier: t.tier,
-                desc: t.desc,
-                isLive: false,
-                isHero: false,
-                href: null,
-                thumbnailUrl: null,
-            });
-        }
-    });
-
-    return merged;
 }
 
 export default function TemplateManagerPage() {
@@ -67,7 +48,7 @@ export default function TemplateManagerPage() {
         const fetchTemplates = async () => {
             setLoading(true);
             const dbTemplates = await getTemplates();
-            setTemplates(mergeWithStatic(dbTemplates));
+            setTemplates(mapFromDb(dbTemplates));
             setLoading(false);
         };
         fetchTemplates();

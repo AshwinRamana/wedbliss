@@ -1,11 +1,11 @@
 <!-- 
   WEDBLISS BASIC AI BASE SKELETON
-  Theme: Generic Structured Events (No Premium arrays like Gallery/Video/RSVP)
+  Theme: Generic Structured Events (No Gallery/Video sections)
   Required AI Handling: MUST retain all Handlebars tags and structural IDs.
 -->
 <div id="wedbliss-basic-wrapper" class="wb-theme-container wb-basic">
 
-    <!-- 1. Envelope Cover / Hero -->
+    <!-- 1. Cover / Hero -->
     <section id="cover-reveal" class="wb-section wb-hero">
         <div class="wb-envelope-anim">
             <h1 class="wb-title">{{couple.groom.firstName}} &amp; {{couple.bride.firstName}}</h1>
@@ -13,12 +13,23 @@
         </div>
     </section>
 
-    <!-- 2. Inside Details -->
+    <!-- 2. Family Details -->
     <section id="details" class="wb-section wb-details">
         <div class="wb-parents-note">
-            <p>{{couple.parents}}</p>
             <p>Invite you to celebrate the wedding of their children</p>
             <h2>{{couple.groom.firstName}} <span class="wb-amp">&amp;</span> {{couple.bride.firstName}}</h2>
+        </div>
+        <div class="wb-family-grid">
+            <div class="wb-family-card wb-bride-family">
+                <h4>Bride&rsquo;s Family</h4>
+                <p class="wb-parent">Father: {{couple.bride.fatherName}}</p>
+                <p class="wb-parent">Mother: {{couple.bride.motherName}}</p>
+            </div>
+            <div class="wb-family-card wb-groom-family">
+                <h4>Groom&rsquo;s Family</h4>
+                <p class="wb-parent">Father: {{couple.groom.fatherName}}</p>
+                <p class="wb-parent">Mother: {{couple.groom.motherName}}</p>
+            </div>
         </div>
     </section>
 
@@ -27,7 +38,7 @@
         {{#each events}}
         <div class="wb-event-card" id="event-{{id}}">
             <h3 class="wb-event-title">{{title}}</h3>
-            <p class="wb-event-datetime">{{date}} | {{time}}</p>
+            <p class="wb-event-datetime">{{date}} | {{startTime}} - {{endTime}}</p>
             <p class="wb-event-venue">{{venueName}}</p>
 
             <div class="wb-event-actions">
@@ -50,5 +61,5 @@
         </div>
     </section>
 
-    <!-- Note: Basic templates do not include Gallery, Video Story, or WhatsApp RSVP. -->
+    <!-- Note: Basic templates do not include Gallery or Video sections. -->
 </div>

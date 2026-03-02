@@ -31,19 +31,18 @@ export default function Home() {
         data = {
           metadata: { plan: "basic", template_id: "tm-mallipoo", createdAt: new Date().toISOString() },
           couple: {
-            bride: { firstName: "Hema", lastName: "", parents: "D/o", grandparents: "" },
-            groom: { firstName: "Siva", lastName: "", parents: "S/o", grandparents: "" },
-            storyMessage: "We joyfully invite you to share in our happiness as we unite in marriage."
+            bride: { firstName: "Priya", fatherName: "Krishnaswamy", motherName: "Kamakshi", notes: "Can't wait to start this beautiful journey together!" },
+            groom: { firstName: "Karthik", fatherName: "Ramasamy", motherName: "Saraswathi", notes: "Forever and always, my love." },
           },
           events: [
             {
               id: "ev-1",
-              type: "muhurtham",
               title: "Muhurtham",
-              date: "12 May 2026",
-              time: "6:48 AM - 8:30 AM",
-              venueName: "Padmavathi Kalyana Mandapam",
-              venueAddress: "123 Tirupati Road, Chennai 600 028"
+              date: "28 February 2026",
+              startTime: "8:24 AM",
+              endTime: "10:48 AM",
+              venueName: "Sri Murugan Kalyana Mandapam",
+              googleMapsUrl: "https://maps.google.com/?q=Sri+Murugan+Kalyana+Mandapam"
             }
           ],
           gallery: { images: [] },

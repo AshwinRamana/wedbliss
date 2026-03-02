@@ -36,11 +36,10 @@ body {
   line-height: 1.6;
 }
 
-@media(pointer:fine) {
-  body {
-    cursor: none;
-  }
-}
+/* Custom cursor: native cursor is kept as fallback.
+   The .cursor-dot/.cursor-ring overlay on top via fixed positioning.
+   cursor:none was removed because it hides the cursor on pages
+   where the custom cursor JS doesn't run (e.g., /admin). */
 
 /* ─── CUSTOM CURSOR (desktop only) ─── */
 .cursor-dot,

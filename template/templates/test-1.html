@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{couple.groom.firstName}} & {{couple.bride.firstName}} Wedding Invitation</title>
+
+    <!-- Temple Heritage Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Playfair+Display:wght@400;500;600&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --maroon: #5a0f1c;
+            --deep-maroon: #3e0a14;
+            --gold: #d4af37;
+            --soft-gold: #f3e2b3;
+            --ivory: #fdf8ee;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Playfair Display', serif;
+            background: var(--ivory);
+            color: var(--deep-maroon);
+            overflow-x: hidden;
+        }
+
+        .wb-container {
+            max-width: 540px;
+            margin: 0 auto;
+            padding: 24px 20px 60px;
+        }
+
+        section {
+            margin-bottom: 80px;
+            text-align: center;
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: 'Cinzel', serif;
+            letter-spacing: 1px;
+        }
+
+        /* ---------------- COVER ---------------- */
+
+        .wb-cover {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at center, var(--maroon), var(--deep-maroon));
+            color: var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            z-index: 9999;
+            transition: transform 1.2s ease, opacity 1s ease;
+        }
+
+        .wb-cover.hidden {
+            transform: translateY(-100%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .wb-cover h1 {
+            font-size: 34px;
+            margin-bottom: 20px;
+        }
+
+        .wb-btn {
+            padding: 12px 28px;
+            border-radius: 40px;
+            border: 1px solid var(--gold);
+            background: transparent;
+            color: var(--gold);
+            font-family: 'Cinzel', serif;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all .3s ease;
+        }
+
+        .wb-btn:hover {
+            background: var(--gold);
+            color: var(--maroon);
+        }
+
+        /* ---------------- HERO ---------------- */
+
+        .wb-hero h1 {
+            font-size: 38px;
+            color: var(--maroon);
+            margin-bottom: 12px;
+        }
+
+        .wb-hero p {
+            font-size: 16px;
+            color: #7b3a44;
+        }
+
+        /* Decorative temple divider */
+        .wb-divider {
+            height: 3px;
+            width: 100px;
+            background: linear-gradient(to right, transparent, var(--gold), transparent);
+            margin: 18px auto 0;
+        }
+
+        /* ---------------- FAMILY ---------------- */
+
+        .wb-family-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .wb-family-card {
+            background: #fffaf0;
+            padding: 18px;
+            border-radius: 16px;
+            border: 1px solid var(--soft-gold);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .wb-family-card h3 {
+            margin-bottom: 8px;
+            color: var(--maroon);
+        }
+
+        /* ---------------- EVENTS ---------------- */
+
+        .wb-event-card {
+            background: linear-gradient(145deg, #fff9e6, #fffdf7);
+            border-radius: 20px;
+            padding: 22px;
+            margin-bottom: 24px;
+            border: 1px solid var(--soft-gold);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+            transition: transform .6s ease, opacity .6s ease;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .wb-visible {
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+        }
+
+        .wb-event-card h3 {
+            margin-bottom: 10px;
+            color: var(--maroon);
+        }
+
+        .wb-event-date {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .wb-btn-cal {
+            margin-top: 12px;
+        }
+
+        .wb-map-link {
+            display: block;
+            margin-top: 6px;
+            font-size: 14px;
+            color: var(--maroon);
+            text-decoration: underline;
+        }
+
+        /* ---------------- COUNTDOWN ---------------- */
+
+        #cd-timer {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        #cd-timer div {
+            background: var(--maroon);
+            color: var(--gold);
+            padding: 16px;
+            border-radius: 14px;
+            width: 80px;
+        }
+
+        #cd-timer span {
+            display: block;
+            font-size: 26px;
+            font-weight: bold;
+        }
+
+        /* ---------------- GALLERY ---------------- */
+
+        .wb-gallery-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .wb-gallery-grid img {
+            width: 100%;
+            border-radius: 14px;
+            object-fit: cover;
+        }
+
+        /* ---------------- VIDEO ---------------- */
+
+        .wb-video iframe {
+            width: 100%;
+            height: 250px;
+            border-radius: 16px;
+            border: none;
+        }
+
+        /* ---------------- NOTES ---------------- */
+
+        .wb-note {
+            background: #fffdf7;
+            padding: 20px;
+            border-radius: 16px;
+            border: 1px solid var(--soft-gold);
+            margin-bottom: 20px;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 14px;
+            padding-bottom: 40px;
+            color: #7b3a44;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- PAGE 1: COVER -->
+    <div class="wb-cover" id="wb-cover">
+        <div>
+            <h1>{{couple.groom.firstName}} & {{couple.bride.firstName}}</h1>
+            <button class="wb-btn" onclick="openInvite()">Open Invitation</button>
+        </div>
+    </div>
+
+    <div class="wb-container">
+
+        <!-- PAGE 2: HERO -->
+        <section class="wb-hero wb-anim">
+            <h1>{{couple.groom.firstName}} & {{couple.bride.firstName}}</h1>
+            <p>Invite you to witness the sacred union</p>
+            <div class="wb-divider"></div>
+        </section>
+
+        <!-- PAGE 3: FAMILY -->
+        <section class="wb-anim">
+            <h2>With the Blessings Of</h2>
+            <div class="wb-divider"></div>
+            <div class="wb-family-cards">
+                <div class="wb-family-card">
+                    <h3>Bride's Parents</h3>
+                    <p>{{couple.bride.fatherName}} & {{couple.bride.motherName}}</p>
+                </div>
+                <div class="wb-family-card">
+                    <h3>Groom's Parents</h3>
+                    <p>{{couple.groom.fatherName}} & {{couple.groom.motherName}}</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 4: EVENTS -->
+        <section>
+            <h2>Wedding Celebrations</h2>
+            <div class="wb-divider"></div>
+
+            {{#each events}}
+            <div class="wb-event-card wb-anim">
+                <h3>{{title}}</h3>
+                <div class="wb-event-date">{{date}}</div>
+                <div>{{startTime}} – {{endTime}}</div>
+                <div>{{venueName}}</div>
+
+                {{#if googleMapsUrl}}
+                <a class="wb-map-link" href="{{googleMapsUrl}}" target="_blank">View on Map</a>
+                {{/if}}
+
+                <button class="wb-btn wb-btn-cal"
+                    onclick="addToCalendar('{{title}}', '{{date}}', '{{startTime}}', '{{endTime}}', '{{venueName}}', '{{../couple.groom.firstName}} & {{../couple.bride.firstName}}')">
+                    Add to Calendar
+                </button>
+            </div>
+            {{/each}}
+        </section>
+
+        <!-- PAGE 5: COUNTDOWN -->
+        <section class="wb-anim">
+            <h2>Countdown to the Sacred Day</h2>
+            <div id="cd-timer">
+                <div><span id="cd-days">00</span>Days</div>
+                <div><span id="cd-hours">00</span>Hours</div>
+                <div><span id="cd-mins">00</span>Mins</div>
+            </div>
+        </section>
+
+        <!-- PAGE 6: GALLERY -->
+        {{#if gallery.images}}
+        <section class="wb-anim">
+            <h2>Moments Together</h2>
+            <div class="wb-gallery-grid">
+                {{#each gallery.images}}
+                <img src="{{this}}" alt="Couple Photo" loading="lazy" />
+                {{/each}}
+            </div>
+        </section>
+        {{/if}}
+
+        <!-- PAGE 7: VIDEO -->
+        {{#if media.videoUrl}}
+        <section class="wb-video wb-anim">
+            <h2>Our Story</h2>
+            <iframe src="{{media.videoUrl}}" allowfullscreen></iframe>
+        </section>
+        {{/if}}
+
+        <!-- PAGE 8: NOTES -->
+        {{#if couple.bride.notes}}
+        <section class="wb-note wb-anim">
+            <p>"{{couple.bride.notes}}"</p>
+            <strong>— {{couple.bride.firstName}}</strong>
+        </section>
+        {{/if}}
+
+        {{#if couple.groom.notes}}
+        <section class="wb-note wb-anim">
+            <p>"{{couple.groom.notes}}"</p>
+            <strong>— {{couple.groom.firstName}}</strong>
+        </section>
+        {{/if}}
+
+        <!-- FOOTER -->
+        <footer>
+            {{couple.groom.firstName}} & {{couple.bride.firstName}}<br>
+            Made with ♥ by Wedbliss
+        </footer>
+
+    </div>
+
+    <script>
+        function openInvite() {
+            document.getElementById('wb-cover').classList.add('hidden');
+        }
+
+        (function () {
+            var observer = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) entry.target.classList.add('wb-visible');
+                });
+            }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+            document.querySelectorAll('.wb-anim').forEach(function (el) {
+                observer.observe(el);
+            });
+
+            var eventCards = document.querySelectorAll('.wb-event-card');
+            if (eventCards.length > 0) {
+                var dateEl = eventCards[0].querySelector('.wb-event-date');
+                if (dateEl) {
+                    var target = new Date(dateEl.textContent.trim());
+                    if (!isNaN(target.getTime())) {
+                        function tick() {
+                            var diff = target - new Date();
+                            if (diff <= 0) {
+                                document.getElementById('cd-days').textContent = '🎉';
+                                document.getElementById('cd-hours').textContent = '🎊';
+                                document.getElementById('cd-mins').textContent = '💍';
+                                return;
+                            }
+                            document.getElementById('cd-days').textContent =
+                                String(Math.floor(diff / 86400000)).padStart(2, '0');
+                            document.getElementById('cd-hours').textContent =
+                                String(Math.floor((diff % 86400000) / 3600000)).padStart(2, '0');
+                            document.getElementById('cd-mins').textContent =
+                                String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0');
+                        }
+                        tick();
+                        setInterval(tick, 60000);
+                    }
+                }
+            }
+        })();
+    </script>
+
+</body>
+
+</html>

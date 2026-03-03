@@ -5,8 +5,8 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Malli Poo — Wedding Invitation",
-  description: "A beautiful digital wedding invitation by Vaazh.",
+  title: "Wedding Invitation",
+  description: "A beautiful digital wedding invitation.",
 };
 
 export default function RootLayout({

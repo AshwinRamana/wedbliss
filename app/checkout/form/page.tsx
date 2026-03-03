@@ -6,6 +6,7 @@ import Footer from "@/components/marketing/Footer";
 import { useState, useEffect, Suspense, useCallback } from "react";
 import { supabase } from "@/lib/supabase";
 
+const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
 
 
 function CheckoutFormContent() {
@@ -77,7 +78,7 @@ function CheckoutFormContent() {
 
         setUploading(true);
         try {
-            const res = await fetch(`/api/upload/presigned-url?fileName=${encodeURIComponent(file.name)}&fileType=${encodeURIComponent(file.type)}&couplename=${encodeURIComponent(getCoupleName())}`);
+            const res = await fetch(`${BACKEND_URL}/api/upload/presigned-url?fileName=${encodeURIComponent(file.name)}&fileType=${encodeURIComponent(file.type)}&couplename=${encodeURIComponent(getCoupleName())}`);
             const data = await res.json();
             if (!res.ok || data.error) throw new Error(data.error || "Failed to generate upload URL");
 
@@ -98,7 +99,7 @@ function CheckoutFormContent() {
 
         setVideoUploading(true);
         try {
-            const res = await fetch(`/api/upload/presigned-url?fileName=${encodeURIComponent(file.name)}&fileType=${encodeURIComponent(file.type)}&couplename=${encodeURIComponent(getCoupleName())}`);
+            const res = await fetch(`${BACKEND_URL}/api/upload/presigned-url?fileName=${encodeURIComponent(file.name)}&fileType=${encodeURIComponent(file.type)}&couplename=${encodeURIComponent(getCoupleName())}`);
             const data = await res.json();
             if (!res.ok || data.error) throw new Error(data.error || "Failed to generate upload URL");
 
@@ -125,7 +126,7 @@ function CheckoutFormContent() {
         setDomainChecking(true);
         setDomainError("");
         try {
-            const res = await fetch(`/api/domains/check?subdomain=${encodeURIComponent(value)}`);
+            const res = await fetch(`${BACKEND_URL}/api/domains/check?subdomain=${encodeURIComponent(value)}`);
             const data = await res.json();
             if (data.error) { setDomainError(data.error); setDomainAvailable(false); }
             else { setDomainAvailable(data.available); if (!data.available) setDomainError("This subdomain is already taken."); }
@@ -172,7 +173,7 @@ function CheckoutFormContent() {
                     }
                 };
 
-                const res = await fetch(`/api/invitations`, {
+                const res = await fetch(`${BACKEND_URL}/api/invitations`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(payload)

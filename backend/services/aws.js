@@ -18,16 +18,24 @@ const {
 const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
 
-const awsConfig = {
-    region: process.env.AWS_REGION || 'us-east-1',
+const cfConfig = {
+    region: 'us-east-1',
     credentials: {
         accessKeyId: process.env.AWS_ACCESS_KEY_ID,
         secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
     }
 };
 
-const client = new CloudFrontClient(awsConfig);
-const s3Client = new S3Client(awsConfig);
+const s3Config = {
+    region: 'ap-south-2',
+    credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+    }
+};
+
+const client = new CloudFrontClient(cfConfig);
+const s3Client = new S3Client(s3Config);
 
 const DISTRIBUTION_ID = process.env.CLOUDFRONT_DISTRIBUTION_ID;
 const S3_BUCKET_NAME = process.env.AWS_S3_BUCKET_NAME || 'wedbliss-gallery';

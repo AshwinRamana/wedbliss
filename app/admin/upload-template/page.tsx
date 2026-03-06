@@ -6,20 +6,23 @@ import { upsertTemplate } from "@/lib/db";
 // @ts-expect-error - missing declaration file
 import Handlebars from "handlebars/dist/handlebars";
 // ─────────────────────────────────────────────────────────────────────────────
-// Sample data for live preview (matches template-config.json sampleData)
+// Sample data for live preview (Initial State)
 // ─────────────────────────────────────────────────────────────────────────────
-const SAMPLE_DATA = {
-    couple: {
-        bride: { firstName: "Priya", fatherName: "Krishnaswamy", motherName: "Kamakshi", notes: "Can't wait to start this beautiful journey together!" },
-        groom: { firstName: "Karthik", fatherName: "Ramasamy", motherName: "Saraswathi", notes: "Forever and always, my love." }
-    },
-    events: [
-        { id: "ev-1", title: "Muhurtham", date: "28 February 2026", startTime: "8:24 AM", endTime: "10:48 AM", venueName: "Sri Murugan Kalyana Mandapam", googleMapsUrl: "https://maps.google.com/?q=Sri+Murugan+Kalyana+Mandapam" },
-        { id: "ev-2", title: "Reception", date: "28 February 2026", startTime: "6:00 PM", endTime: "10:00 PM", venueName: "Grand Ballroom, Hotel Savera", googleMapsUrl: "https://maps.google.com/?q=Hotel+Savera+Chennai" }
-    ],
-    gallery: { images: ["https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=500", "https://images.unsplash.com/photo-1519741497674-611481863552?w=500"] },
-    media: { videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ" }
-};
+const INITIAL_SAMPLE_DATA = `{
+  "couple": {
+    "bride": { "firstName": "Priya", "fatherName": "Krishnaswamy", "motherName": "Kamakshi", "notes": "Can't wait to start this beautiful journey together!" },
+    "groom": { "firstName": "Karthik", "fatherName": "Ramasamy", "motherName": "Saraswathi", "notes": "Forever and always, my love." }
+  },
+  "events": [
+    { "id": "ev-1", "title": "Muhurtham", "date": "28 February 2026", "startTime": "8:24 AM", "endTime": "10:48 AM", "venueName": "Sri Murugan Kalyana Mandapam", "googleMapsUrl": "https://maps.google.com/?q=Sri+Murugan+Kalyana+Mandapam" },
+    { "id": "ev-2", "title": "Reception", "date": "28 February 2026", "startTime": "6:00 PM", "endTime": "10:00 PM", "venueName": "Grand Ballroom, Hotel Savera", "googleMapsUrl": "https://maps.google.com/?q=Hotel+Savera+Chennai" }
+  ],
+  "gallery": { "images": [
+    "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=500", 
+    "https://images.unsplash.com/photo-1519741497674-611481863552?w=500"
+  ] },
+  "media": { "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ" }
+}`;
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Utility: Parse a single .html file into html_content, css_content, js_content
@@ -139,12 +142,39 @@ export default function UploadTemplatePage() {
     const [saveStatus, setSaveStatus] = useState<{ type: "success" | "error" | null; msg: string }>({ type: null, msg: "" });
 
     // ── Active Tab ──
-    const [activeTab, setActiveTab] = useState<"html" | "css" | "js">("html");
+    const [activeTab, setActiveTab] = useState<"html" | "css" | "js" | "json">("html");
+
+    // ── JSON Sample Data ──
+    const [sampleDataJson, setSampleDataJson] = useState(INITIAL_SAMPLE_DATA);
 
     // ── View Mode ──  
     const [viewMode, setViewMode] = useState<"upload" | "review">("upload");
 
-    // Sample data is defined as SAMPLE_DATA constant at the top of the file
+    const [pastedHtmlInput, setPastedHtmlInput] = useState("");
+
+    // ── Paste HTML Handler ──
+    const handlePasteHtml = () => {
+        if (!pastedHtmlInput.trim()) {
+            alert("No HTML pasted.");
+            return;
+        }
+        setFileName("pasted_code.html");
+
+        // Parse the code
+        const { html, css, js } = parseTemplateFile(pastedHtmlInput);
+        setParsedHtml(html);
+        setParsedCss(css);
+        setParsedJs(js);
+
+        // Validate
+        const result = validateHandlebars(html);
+        setValidation(result);
+
+        if (!templateId) {
+            setTemplateId("tm-custom-pasted");
+        }
+        setViewMode("review");
+    };
 
     // ── File Upload Handler ──
     const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -188,7 +218,15 @@ export default function UploadTemplatePage() {
         if (!parsedHtml) { setCompiledLiveHtml(""); return; }
         try {
             const template = Handlebars.compile(parsedHtml);
-            const resolvedHtml = template(SAMPLE_DATA);
+            let parsedData = {};
+            try {
+                parsedData = JSON.parse(sampleDataJson);
+            } catch (jsonErr) {
+                setCompiledLiveHtml(`<div style="padding:2rem;color:red;font-family:monospace;"><b>JSON Format Error:</b><br/>${String(jsonErr)}</div>`);
+                return;
+            }
+
+            const resolvedHtml = template(parsedData);
             const fullHtml = `
                 <html><head><meta name="viewport" content="width=device-width, initial-scale=1">
                 <style>${parsedCss}</style></head>
@@ -199,7 +237,7 @@ export default function UploadTemplatePage() {
             setCompiledLiveHtml(`<div style="padding:2rem;color:red;font-family:monospace;">Compilation Error: ${e instanceof Error ? e.message : String(e)}</div>`);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [parsedHtml, parsedCss]);
+    }, [parsedHtml, parsedCss, sampleDataJson]);
 
     // ── Save Handler (Draft or Live) ──
     const handleSave = async (pushLive: boolean) => {
@@ -247,6 +285,7 @@ export default function UploadTemplatePage() {
         setFileName(""); setParsedHtml(""); setParsedCss(""); setParsedJs("");
         setValidation(null); setCompiledLiveHtml(""); setViewMode("upload");
         setSaveStatus({ type: null, msg: "" });
+        setPastedHtmlInput("");
     };
 
     return (
@@ -287,22 +326,42 @@ export default function UploadTemplatePage() {
 
             {/* ═══ UPLOAD MODE ═══ */}
             {viewMode === "upload" && (
-                <div className="flex-1 flex items-center justify-center">
-                    <div className="text-center flex flex-col items-center gap-6 max-w-lg">
-                        <div className="w-24 h-24 rounded-full bg-indigo-50 flex items-center justify-center">
-                            <FileUp className="w-10 h-10 text-indigo-400" />
+                <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch justify-center min-h-0 py-6">
+
+                    {/* Left box: File Upload */}
+                    <div className="flex flex-col items-center justify-center text-center bg-white rounded-3xl border border-slate-200 border-dashed p-10 hover:border-indigo-400 hover:bg-indigo-50/30 transition-colors">
+                        <div className="w-20 h-20 rounded-full bg-indigo-50 flex items-center justify-center mb-6">
+                            <FileUp className="w-8 h-8 text-indigo-500" />
                         </div>
-                        <div>
-                            <h2 className="text-xl font-bold text-slate-800 mb-2">Upload Template File</h2>
-                            <p className="text-sm text-slate-500">Upload a single <code className="bg-slate-100 px-1.5 py-0.5 rounded text-xs font-mono">.html</code> file. The system will automatically split <code className="bg-slate-100 px-1.5 py-0.5 rounded text-xs font-mono">&lt;style&gt;</code> / <code className="bg-slate-100 px-1.5 py-0.5 rounded text-xs font-mono">&lt;script&gt;</code> tags and validate Handlebars syntax.</p>
-                        </div>
+                        <h2 className="text-xl font-bold text-slate-800 mb-2">Upload HTML File</h2>
+                        <p className="text-sm text-slate-500 max-w-xs mb-8">Upload a single <code className="bg-slate-100 px-1 rounded text-xs font-mono">.html</code> file. We auto-split CSS/JS.</p>
                         <label className="cursor-pointer">
                             <input type="file" accept=".html,.htm" onChange={handleFileUpload} className="hidden" />
                             <div className="px-8 py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition-colors shadow-lg shadow-indigo-600/20 flex items-center gap-2">
-                                <Upload className="w-5 h-5" /> Choose .html File
+                                <Upload className="w-5 h-5" /> Choose File
                             </div>
                         </label>
-                        <p className="text-xs text-slate-400">See <span className="font-mono">template-upload-rules.md</span> for the Handlebars contract</p>
+                    </div>
+
+                    {/* Right box: Paste HTML */}
+                    <div className="flex flex-col relative bg-white rounded-3xl border border-slate-200 border-dashed p-6 hover:border-slate-300 transition-colors overflow-hidden">
+                        <div className="flex justify-between items-center mb-4">
+                            <h2 className="text-sm font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                                <Code className="w-4 h-4" /> Or Paste Raw HTML
+                            </h2>
+                            <button
+                                onClick={handlePasteHtml}
+                                className="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs rounded-lg transition-colors shadow-md">
+                                Parse & Preview
+                            </button>
+                        </div>
+                        <textarea
+                            value={pastedHtmlInput}
+                            onChange={(e) => setPastedHtmlInput(e.target.value)}
+                            placeholder={'<!DOCTYPE html>\n<html>\n  <head><style>...</style></head>\n  <body>\n    <h1>{{couple.bride.firstName}}</h1>\n  </body>\n</html>'}
+                            className="flex-1 w-full bg-slate-50 border border-slate-200 rounded-xl p-4 text-xs font-mono text-slate-600 outline-none focus:border-indigo-400 resize-none shadow-inner"
+                            spellCheck={false}
+                        />
                     </div>
                 </div>
             )}
@@ -362,9 +421,9 @@ export default function UploadTemplatePage() {
                         {/* Code Viewer */}
                         <div className="flex-1 flex flex-col min-h-0 bg-slate-900 rounded-xl overflow-hidden shadow-inner border border-slate-800">
                             <div className="flex items-center bg-slate-950 px-4 py-2 border-b border-slate-800 gap-2">
-                                {["html", "css", "js"].map(tab => (
-                                    <button key={tab} onClick={() => setActiveTab(tab as "html" | "css" | "js")}
-                                        className={`px-3 py-1 rounded text-xs font-bold font-mono transition-colors ${activeTab === tab ? (tab === "html" ? "bg-indigo-500/20 text-indigo-300" : tab === "css" ? "bg-sky-500/20 text-sky-300" : "bg-amber-500/20 text-amber-300") : "text-slate-500 hover:text-slate-300 hover:bg-white/5"}`}>
+                                {["json", "html", "css", "js"].map(tab => (
+                                    <button key={tab} onClick={() => setActiveTab(tab as "html" | "css" | "js" | "json")}
+                                        className={`px-3 py-1 rounded text-xs font-bold font-mono transition-colors ${activeTab === tab ? (tab === "json" ? "bg-purple-500/20 text-purple-300" : tab === "html" ? "bg-indigo-500/20 text-indigo-300" : tab === "css" ? "bg-sky-500/20 text-sky-300" : "bg-amber-500/20 text-amber-300") : "text-slate-500 hover:text-slate-300 hover:bg-white/5"}`}>
                                         .{tab}
                                     </button>
                                 ))}
@@ -373,10 +432,22 @@ export default function UploadTemplatePage() {
                                     <input type="file" accept=".html,.htm" onChange={handleFileUpload} className="hidden" />
                                 </label>
                             </div>
-                            <div className="flex-1 overflow-auto p-4">
-                                <pre className={`text-xs font-mono leading-relaxed ${activeTab === "html" ? "text-emerald-300" : activeTab === "css" ? "text-sky-300" : "text-amber-300"}`}>
-                                    <code>{activeTab === "html" ? parsedHtml : activeTab === "css" ? parsedCss : parsedJs || "// No JavaScript found in template"}</code>
-                                </pre>
+                            <div className="flex-1 overflow-auto p-4 flex flex-col">
+                                {activeTab === "json" ? (
+                                    <div className="flex-1 flex flex-col">
+                                        <p className="text-slate-400 text-[10px] mb-2 font-sans tracking-wide">Edit this mock JSON to instantly update the Live Preview. (Does not save to DB)</p>
+                                        <textarea
+                                            value={sampleDataJson}
+                                            onChange={(e) => setSampleDataJson(e.target.value)}
+                                            className="flex-1 w-full bg-transparent text-purple-300 outline-none resize-none text-xs font-mono"
+                                            spellCheck={false}
+                                        />
+                                    </div>
+                                ) : (
+                                    <pre className={`text-xs font-mono leading-relaxed ${activeTab === "html" ? "text-emerald-300" : activeTab === "css" ? "text-sky-300" : "text-amber-300"}`}>
+                                        <code>{activeTab === "html" ? parsedHtml : activeTab === "css" ? parsedCss : parsedJs || "// No JavaScript found in template"}</code>
+                                    </pre>
+                                )}
                             </div>
                         </div>
                     </div>

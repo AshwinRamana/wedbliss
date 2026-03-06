@@ -249,7 +249,7 @@ export default function Dashboard() {
                                 </div>
                                 <h3 className="text-xl font-bold text-slate-800 mb-2">No Invitations Yet</h3>
                                 <p className="text-slate-500 max-w-sm mb-8">Choose a beautiful template and your digital wedding invitation will appear here.</p>
-                                <Link href="/checkout/templates" className="px-8 py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl shadow-lg hover:-translate-y-0.5 transition-all">
+                                <Link href="/#pricing" className="px-8 py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl shadow-lg hover:-translate-y-0.5 transition-all">
                                     Browse Templates
                                 </Link>
                             </div>

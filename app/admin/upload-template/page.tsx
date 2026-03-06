@@ -31,24 +31,28 @@ function parseTemplateFile(rawHtml: string): { html: string; css: string; js: st
     const parser = new DOMParser();
     const doc = parser.parseFromString(rawHtml, "text/html");
 
-    // Extract all <style> blocks
+    // Extract inline <style> blocks
     const styleNodes = doc.querySelectorAll("style");
     let css = "";
-    styleNodes.forEach(node => {
+    styleNodes.forEach((node) => {
         css += node.textContent + "\n";
         node.remove();
     });
 
-    // Extract all <script> blocks
-    const scriptNodes = doc.querySelectorAll("script");
+    // Extract inline <script> blocks (ignores external CDNs and tailwind configs)
+    const scriptNodes = doc.querySelectorAll("script:not([src]):not([id='tailwind-config'])");
     let js = "";
-    scriptNodes.forEach(node => {
+    scriptNodes.forEach((node) => {
         js += node.textContent + "\n";
         node.remove();
     });
 
-    // Remaining body is the HTML (Handlebars template)
-    const html = doc.body.innerHTML.trim();
+    // We must preserve remaining <head> tags like <link href="..."> and <script src="...">
+    // so the final template retains its Google Fonts, FontAwesome, and Tailwind CDNs.
+    const headHtml = doc.head.innerHTML.trim();
+    const bodyHtml = doc.body.innerHTML.trim();
+
+    const html = `${headHtml}\n${bodyHtml}`.trim();
 
     return { html, css: css.trim(), js: js.trim() };
 }

@@ -150,8 +150,8 @@ async function generatePresignedUrl(fileName, fileType, couplename) {
         // URL expires in 3 minutes
         const signedUrl = await getSignedUrl(s3Client, command, { expiresIn: 180 });
 
-        // Construct the public URL (assuming bucket is public or accessed via CF)
-        const publicUrl = `https://${targetBucket}.s3.${s3Config.region}.amazonaws.com/${objectKey}`;
+        // Construct the public URL using path-style to avoid SSL cert errors with dotted bucket names
+        const publicUrl = `https://s3.${s3Config.region}.amazonaws.com/${targetBucket}/${objectKey}`;
 
         return { signedUrl, publicUrl, objectKey };
     } catch (error) {

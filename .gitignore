@@ -34,3 +34,6 @@ clean_build.log
 
 # Gemini
 .gemini/
+  
+# Prompts  
+prompts/  

@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { Upload, Play, Save, Trash2, Code, CheckCircle, XCircle, Eye, FileUp, AlertTriangle } from "lucide-react";
-import { upsertTemplate, getInvitationBySubdomain, updateInvitation } from "@/lib/db";
+import { upsertTemplate, getInvitationBySubdomain, updateInvitation, createInvitation } from "@/lib/db";
+import { supabase } from "@/lib/supabase";
 // @ts-expect-error - missing declaration file
 import Handlebars from "handlebars/dist/handlebars";
 // ─────────────────────────────────────────────────────────────────────────────
@@ -287,12 +288,27 @@ export default function UploadTemplatePage() {
             return;
         }
 
-        // 2. Find the elegant invitation
-        const elegantInvite = await getInvitationBySubdomain("elegant");
+        // 2. Find or auto-create the elegant demo invitation
+        let elegantInvite = await getInvitationBySubdomain("elegant");
         if (!elegantInvite) {
-            setIsDemoPushing(false);
-            setDemoStatus({ type: "error", msg: "Could not find the 'elegant' demo invitation in the database. Create one first via the dashboard." });
-            return;
+            // First time setup — create the demo slot automatically
+            const { data: { user } } = await supabase.auth.getUser();
+            const { data: created, error: createErr } = await createInvitation({
+                user_email: user?.email || "admin@wedbliss.co",
+                plan: "premium",
+                template_id: templateId,
+                subdomain: "elegant",
+                domain_status: "active",
+                data: { ...parsedData, metadata: { plan: "premium", template_id: templateId, createdAt: new Date().toISOString() } } as never,
+                order_id: null,
+                cloudfront_id: null,
+            });
+            if (createErr || !created) {
+                setIsDemoPushing(false);
+                setDemoStatus({ type: "error", msg: `Failed to create demo invitation: ${createErr}` });
+                return;
+            }
+            elegantInvite = created;
         }
 
         // 3. Update elegant invitation — point at this template + inject mock data

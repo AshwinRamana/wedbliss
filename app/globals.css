@@ -858,6 +858,9 @@ nav::after {
   gap: 12px;
   transform: rotate(-2deg);
   align-items: end;
+  max-width: 320px;
+  /* Reduced by 50% (was expanding to ~640px) */
+  margin: 0 auto;
 }
 
 /* Mobile carousel wrapper — hidden on desktop, shown in mobile media query */
@@ -874,8 +877,8 @@ nav::after {
   cursor: pointer;
   transition: all .45s cubic-bezier(0.4, 0, 0.2, 1);
   border: 2px solid rgba(255, 255, 255, 0.6);
-  /* Portrait phone ratio */
-  aspect-ratio: 9 / 18;
+  /* 1:2.25 exactly as requested */
+  aspect-ratio: 1 / 2.25;
 }
 
 .hero-card:hover {
@@ -1229,11 +1232,12 @@ nav::after {
 }
 
 .templates-grid {
-  max-width: 1060px;
+  /* Reduced from 1060px to scale down card size in the 3-col layout */
+  max-width: 820px;
   margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 18px;
+  gap: 24px;
 }
 
 @media(max-width:860px) {
@@ -1266,8 +1270,8 @@ nav::after {
 }
 
 .template-preview {
-  /* Portrait phone ratio — slightly compact for better grid fit */
-  aspect-ratio: 9 / 14;
+  /* 1:2.25 exactly as requested */
+  aspect-ratio: 1 / 2.25;
   position: relative;
   overflow: hidden;
 }

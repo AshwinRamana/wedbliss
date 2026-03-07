@@ -877,8 +877,8 @@ nav::after {
   cursor: pointer;
   transition: all .45s cubic-bezier(0.4, 0, 0.2, 1);
   border: 2px solid rgba(255, 255, 255, 0.6);
-  /* 1:2.25 exactly as requested */
-  aspect-ratio: 1 / 2.25;
+  /* 1:1.75 exactly as requested */
+  aspect-ratio: 1 / 1.75;
 }
 
 .hero-card:hover {
@@ -1270,8 +1270,8 @@ nav::after {
 }
 
 .template-preview {
-  /* 1:2.25 exactly as requested */
-  aspect-ratio: 1 / 2.25;
+  /* 1:1.75 exactly as requested */
+  aspect-ratio: 1 / 1.75;
   position: relative;
   overflow: hidden;
 }

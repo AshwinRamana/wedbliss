@@ -99,8 +99,8 @@ function TemplateSelectionContent() {
                                 ? "border-slate-200/40 opacity-60 cursor-not-allowed"
                                 : "border-slate-200/60 shadow-slate-200/50 hover:-translate-y-2 hover:shadow-2xl hover:border-emerald-500/30"
                                 }`}>
-                                {/* Template Thumbnail — exact 1:2.25 ratio */}
-                                <div className="w-full bg-slate-900 relative overflow-hidden flex items-center justify-center" style={{ aspectRatio: '1/2.25' }}>
+                                {/* Template Thumbnail — exact 1:1.75 ratio */}
+                                <div className="w-full bg-slate-900 relative overflow-hidden flex items-center justify-center" style={{ aspectRatio: '1/1.75' }}>
                                     {tmpl.thumbnailUrl ? (
                                         /* eslint-disable-next-line @next/next/no-img-element */
                                         <img src={tmpl.thumbnailUrl!} alt={tmpl.name} className="w-full h-full object-cover" />

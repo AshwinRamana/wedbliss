@@ -854,8 +854,8 @@ nav::after {
 
 .hero-cards {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
   transform: rotate(-2deg);
   align-items: end;
 }
@@ -949,13 +949,13 @@ nav::after {
   }
 
   .hero-right {
-    max-width: 560px;
+    max-width: 420px;
     margin: 0 auto;
   }
 
   .hero-cards {
     transform: rotate(0);
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: 1fr 1fr;
   }
 }
 
@@ -1266,8 +1266,8 @@ nav::after {
 }
 
 .template-preview {
-  /* Portrait phone ratio — mirrors how the invitation looks on mobile */
-  aspect-ratio: 9 / 18;
+  /* Portrait phone ratio — slightly compact for better grid fit */
+  aspect-ratio: 9 / 14;
   position: relative;
   overflow: hidden;
 }

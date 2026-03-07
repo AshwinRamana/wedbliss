@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Upload, Play, Save, Trash2, Code, CheckCircle, XCircle, Eye, FileUp, AlertTriangle } from "lucide-react";
-import { upsertTemplate } from "@/lib/db";
+import { upsertTemplate, getInvitationBySubdomain, updateInvitation } from "@/lib/db";
 // @ts-expect-error - missing declaration file
 import Handlebars from "handlebars/dist/handlebars";
 // ─────────────────────────────────────────────────────────────────────────────
@@ -145,10 +145,14 @@ export default function UploadTemplatePage() {
     const [isSaving, setIsSaving] = useState(false);
     const [saveStatus, setSaveStatus] = useState<{ type: "success" | "error" | null; msg: string }>({ type: null, msg: "" });
 
+    // ── Demo Push State ──
+    const [isDemoPushing, setIsDemoPushing] = useState(false);
+    const [demoStatus, setDemoStatus] = useState<{ type: "success" | "error" | null; msg: string }>({ type: null, msg: "" });
+
     // ── Active Tab ──
     const [activeTab, setActiveTab] = useState<"html" | "css" | "js" | "json">("html");
 
-    // ── JSON Sample Data ──
+    // ── JSON Sample Data (also used as Demo mock data) ──
     const [sampleDataJson, setSampleDataJson] = useState(INITIAL_SAMPLE_DATA);
 
     // ── View Mode ──  
@@ -243,6 +247,76 @@ export default function UploadTemplatePage() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [parsedHtml, parsedCss, sampleDataJson]);
 
+    // ── Push to Demo Handler ──
+    // Saves template as draft + points elegant.wedbliss.co at it with mock data
+    const handlePushToDemo = async () => {
+        if (!templateId || !parsedHtml) {
+            alert("Template ID and HTML content are required. Parse your HTML first.");
+            return;
+        }
+
+        let parsedData: Record<string, unknown> = {};
+        try {
+            parsedData = JSON.parse(sampleDataJson);
+        } catch {
+            alert("Mock data JSON is invalid. Fix it in the .json tab first.");
+            return;
+        }
+
+        setIsDemoPushing(true);
+        setDemoStatus({ type: null, msg: "" });
+
+        // 1. Upsert template as draft
+        const { error: tplErr } = await upsertTemplate({
+            id: templateId,
+            name: templateName || templateId,
+            tier,
+            description: templateDesc,
+            is_live: false,
+            is_hero: false,
+            html_content: parsedHtml,
+            css_content: parsedCss,
+            js_content: parsedJs || null,
+            demo_url: null,
+            thumbnail_url: thumbnailUrl || null,
+        });
+
+        if (tplErr) {
+            setIsDemoPushing(false);
+            setDemoStatus({ type: "error", msg: `Template save failed: ${tplErr}` });
+            return;
+        }
+
+        // 2. Find the elegant invitation
+        const elegantInvite = await getInvitationBySubdomain("elegant");
+        if (!elegantInvite) {
+            setIsDemoPushing(false);
+            setDemoStatus({ type: "error", msg: "Could not find the 'elegant' demo invitation in the database. Create one first via the dashboard." });
+            return;
+        }
+
+        // 3. Update elegant invitation — point at this template + inject mock data
+        const demoData = {
+            ...parsedData,
+            metadata: { plan: "premium", template_id: templateId, createdAt: new Date().toISOString() },
+        };
+        const { error: invErr } = await updateInvitation(elegantInvite.id, {
+            template_id: templateId,
+            data: demoData as never,
+        });
+
+        setIsDemoPushing(false);
+
+        if (invErr) {
+            setDemoStatus({ type: "error", msg: `Failed to update demo invitation: ${invErr}` });
+            return;
+        }
+
+        setDemoStatus({ type: "success", msg: "✓ Live on elegant.wedbliss.co — open the link to preview!" });
+        // Open the demo URL in a new tab
+        window.open("https://elegant.wedbliss.co", "_blank");
+    };
+
     // ── Save Handler (Draft or Live) ──
     const handleSave = async (pushLive: boolean) => {
         if (!templateId || !templateName) {
@@ -309,6 +383,16 @@ export default function UploadTemplatePage() {
                     </button>
                     {viewMode === "review" && (
                         <>
+                            <button
+                                onClick={handlePushToDemo}
+                                disabled={isDemoPushing || !parsedHtml || !templateId}
+                                title="Save as draft + preview on elegant.wedbliss.co with mock data"
+                                className="flex items-center gap-2 px-5 py-2 bg-violet-600 hover:bg-violet-700 disabled:opacity-50 text-white font-bold rounded-lg transition-colors shadow-lg shadow-violet-600/20"
+                            >
+                                {isDemoPushing
+                                    ? <span className="animate-pulse">Deploying...</span>
+                                    : <><Play className="w-4 h-4" /> Push to Demo</>}
+                            </button>
                             <button onClick={() => handleSave(false)} disabled={isSaving} className="flex items-center gap-2 px-5 py-2 bg-slate-700 hover:bg-slate-800 disabled:opacity-50 text-white font-bold rounded-lg transition-colors shadow-sm">
                                 {isSaving ? <span className="animate-pulse">Saving...</span> : <><Save className="w-4 h-4" /> Save as Draft</>}
                             </button>
@@ -319,6 +403,23 @@ export default function UploadTemplatePage() {
                     )}
                 </div>
             </div>
+
+            {/* Demo Status Banner */}
+            {demoStatus.msg && (
+                <div className={`px-4 py-3 rounded-xl text-sm font-bold flex items-center gap-2 justify-between ${demoStatus.type === "success" ? "bg-violet-50 text-violet-700 border border-violet-200" : "bg-red-50 text-red-700 border border-red-200"
+                    }`}>
+                    <div className="flex items-center gap-2">
+                        {demoStatus.type === "success" ? <CheckCircle className="w-4 h-4" /> : <XCircle className="w-4 h-4" />}
+                        {demoStatus.msg}
+                    </div>
+                    {demoStatus.type === "success" && (
+                        <a href="https://elegant.wedbliss.co" target="_blank" rel="noopener noreferrer"
+                            className="underline underline-offset-2 text-violet-600 hover:text-violet-800 font-bold text-xs tracking-widest uppercase">
+                            Open → elegant.wedbliss.co
+                        </a>
+                    )}
+                </div>
+            )}
 
             {/* Save Status Banner */}
             {saveStatus.msg && (
@@ -439,7 +540,9 @@ export default function UploadTemplatePage() {
                             <div className="flex-1 overflow-auto p-4 flex flex-col">
                                 {activeTab === "json" ? (
                                     <div className="flex-1 flex flex-col">
-                                        <p className="text-slate-400 text-[10px] mb-2 font-sans tracking-wide">Edit this mock JSON to instantly update the Live Preview. (Does not save to DB)</p>
+                                        <p className="text-slate-400 text-[10px] mb-2 font-sans tracking-wide">
+                                            Edit mock data below — used for Live Preview <span className="text-violet-400 font-bold">and</span> as the data pushed to <span className="text-violet-400 font-bold">elegant.wedbliss.co</span> when you click <span className="text-violet-400 font-bold">Push to Demo</span>. Includes couple names, events, gallery images, and video URL.
+                                        </p>
                                         <textarea
                                             value={sampleDataJson}
                                             onChange={(e) => setSampleDataJson(e.target.value)}

@@ -1,8 +1,3 @@
--- Step 1: Run this first to find your template2 ID
-SELECT id, name, tier, is_live FROM templates ORDER BY created_at DESC;
-
--- Step 2: Replace YOUR_TEMPLATE_ID below with the actual ID from Step 1
--- Then run this query to update the template HTML and CSS
 UPDATE templates SET
   html_content = '<!DOCTYPE html>
 <html lang="en">
@@ -10,12 +5,12 @@ UPDATE templates SET
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-    <title>Karthik & Priya — Wedding Invitation</title>
+    <title>{{couple.groom.firstName}} & {{couple.bride.firstName}} — Wedding Invitation</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
         href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600&family=Jost:wght@200;300;400;500;600&display=swap"
         rel="stylesheet" />
-    
+
 </head>
 
 <body>
@@ -146,10 +141,10 @@ UPDATE templates SET
                     </div>
 
                     <div class="cf-names">
-                        Karthik<br />
+                        {{couple.groom.firstName}}<br />
                         <span
                             style="font-size:clamp(14px,3vw,22px);font-weight:300;font-style:italic;color:var(--muted);">&amp;</span><br />
-                        <span style="font-style:italic;">Priya</span>
+                        <span style="font-style:italic;">{{couple.bride.firstName}}</span>
                     </div>
 
                     <div style="margin:16px 0; width:100%;">
@@ -397,9 +392,9 @@ UPDATE templates SET
                 </div>
 
                 <div class="p1-names">
-                    <div class="p1-name sr">Karthik</div>
+                    <div class="p1-name sr">{{couple.groom.firstName}}</div>
                     <div class="p1-and sr">&amp;</div>
-                    <div class="p1-name bride sr">Priya</div>
+                    <div class="p1-name bride sr">{{couple.bride.firstName}}</div>
                 </div>
 
                 <div class="sr" style="width:100%;margin:20px 0;">
@@ -550,7 +545,7 @@ UPDATE templates SET
                 </div>
 
                 <a href="#" class="add-cal-btn sr"
-                    onclick="addToCalendar(''Nichayathartham - Karthik & Priya'',''2026-02-27T10:00:00'',''2026-02-27T13:00:00'',''Kapaleeshwarar Kalyana Mandapam, Mylapore, Chennai'');return false;">
+                    onclick="addToCalendar(''Nichayathartham - {{couple.groom.firstName}} & {{couple.bride.firstName}}'',''2026-02-27T10:00:00'',''2026-02-27T13:00:00'',''Kapaleeshwarar Kalyana Mandapam, Mylapore, Chennai'');return false;">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <rect x="3" y="4" width="18" height="18" rx="2" />
                         <line x1="16" y1="2" x2="16" y2="6" />
@@ -660,7 +655,7 @@ UPDATE templates SET
                 </div>
 
                 <a href="#" class="add-cal-btn sr"
-                    onclick="addToCalendar(''Muhurtham - Karthik & Priya'',''2026-02-28T08:24:00'',''2026-02-28T13:00:00'',''Sri Murugan Kalyana Mandapam, Anna Nagar, Chennai'');return false;">
+                    onclick="addToCalendar(''Muhurtham - {{couple.groom.firstName}} & {{couple.bride.firstName}}'',''2026-02-28T08:24:00'',''2026-02-28T13:00:00'',''Sri Murugan Kalyana Mandapam, Anna Nagar, Chennai'');return false;">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <rect x="3" y="4" width="18" height="18" rx="2" />
                         <line x1="16" y1="2" x2="16" y2="6" />
@@ -737,27 +732,24 @@ UPDATE templates SET
                 <div class="note-grid">
                     <div class="note-card sr-l">
                         <div class="note-who">
-                            <div class="note-av">K</div>
+                            <div class="note-av">{{couple.groom.firstName.[0]}}</div>
                             <div>
-                                <div class="note-nm">Karthik</div>
+                                <div class="note-nm">{{couple.groom.firstName}}</div>
                                 <div class="note-role">The Groom</div>
                             </div>
                         </div>
-                        <p class="note-text">The day I met Priya changed everything. She carries this quiet warmth that
-                            makes every room feel like home. I could not imagine walking into this next chapter of life
-                            with anyone else. I am grateful beyond words.</p>
+                        <p class="note-text">{{couple.storyMessage}}</p>
                     </div>
                     <div class="note-card sr-r">
                         <div class="note-who">
-                            <div class="note-av" style="background:linear-gradient(135deg,#D4A0A0,#A07080);">P</div>
+                            <div class="note-av" style="background:linear-gradient(135deg,#D4A0A0,#A07080);">
+                                {{couple.bride.firstName.[0]}}</div>
                             <div>
-                                <div class="note-nm">Priya</div>
+                                <div class="note-nm">{{couple.bride.firstName}}</div>
                                 <div class="note-role">The Bride</div>
                             </div>
                         </div>
-                        <p class="note-text">Karthik has this wonderful way of turning ordinary moments into memories.
-                            He makes me laugh, he listens with patience, and he shows up. I am so happy to begin this
-                            beautiful journey together with our families by our side.</p>
+                        <p class="note-text">{{couple.storyMessage}}</p>
                     </div>
                 </div>
 
@@ -898,7 +890,7 @@ UPDATE templates SET
 
         <!-- FOOTER -->
         <footer class="site-footer">
-            <span class="sf-name">Karthik &amp; Priya — February 28, 2026</span>
+            <span class="sf-name">{{couple.groom.firstName}} &amp; {{couple.bride.firstName}} — {{weddingDate}}</span>
             <span class="sf-credit">Vaazh · vaazh.co</span>
         </footer>
 
@@ -1008,7 +1000,7 @@ UPDATE templates SET
             alert(''Replace this with your YouTube or Vimeo embed URL.'');
         }
         function doShare() {
-            if (navigator.share) navigator.share({ title: ''Karthik & Priya — Wedding Invitation'', url: location.href });
+            if (navigator.share) navigator.share({ title: ''{{couple.groom.firstName}} & {{couple.bride.firstName}} — Wedding Invitation'', url: location.href });
             else doCopy(document.querySelector(''[onclick^="doCopy"]''));
         }
         function doCopy(btn) {
@@ -2181,4 +2173,4 @@ UPDATE templates SET
                 font-size: 26px;
             }
         }'
-WHERE id = 'YOUR_TEMPLATE_ID';
+WHERE id = 'template-2';

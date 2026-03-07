@@ -14,162 +14,188 @@ export function TemplateSVG({ id }: { id: string }) {
     switch (id) {
         case "tm-mallipoo":
             return (
-                <svg width="100%" height="100%" viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
-                    <rect width="320" height="240" fill="#fdf6ec" />
-                    <circle cx="0" cy="0" r="80" fill="rgba(251,207,232,0.15)" /><circle cx="320" cy="240" r="80" fill="rgba(251,207,232,0.15)" />
-                    <rect x="8" y="8" width="304" height="224" fill="none" stroke="#c8a070" strokeWidth="1" rx="2" />
-                    <path d="M30 28 Q80 18 160 20 Q240 18 290 28" stroke="#c8a070" strokeWidth="1" fill="none" />
-                    <circle cx="50" cy="24" r="5" fill="white" stroke="#e8c8a0" strokeWidth="0.5" />
-                    <circle cx="90" cy="20" r="5" fill="white" stroke="#e8c8a0" strokeWidth="0.5" />
-                    <circle cx="160" cy="18" r="6" fill="white" stroke="#e8c8a0" strokeWidth="0.5" />
-                    <circle cx="230" cy="20" r="5" fill="white" stroke="#e8c8a0" strokeWidth="0.5" />
-                    <circle cx="270" cy="24" r="5" fill="white" stroke="#e8c8a0" strokeWidth="0.5" />
-                    <text x="160" y="62" textAnchor="middle" fontSize="20" fill="#c8922a" opacity="0.45" fontFamily="serif">ஓம்</text>
-                    <text x="160" y="88" textAnchor="middle" fontSize="8" fill="#8b6040" letterSpacing="3" opacity="0.65">WEDDING INVITATION</text>
-                    <line x1="80" y1="95" x2="240" y2="95" stroke="#c8a070" strokeWidth="0.5" opacity="0.6" />
-                    <text x="160" y="116" textAnchor="middle" fontSize="15" fill="#4a2c0a" fontFamily="Georgia,serif" fontStyle="italic">Siva &amp; Hema</text>
-                    <text x="160" y="129" textAnchor="middle" fontSize="7" fill="#8b6040" letterSpacing="2">KALYANAM</text>
-                    <line x1="100" y1="136" x2="220" y2="136" stroke="#c8a070" strokeWidth="0.5" opacity="0.5" />
-                    <text x="160" y="151" textAnchor="middle" fontSize="7.5" fill="#6b4020">12 May 2026 · 6:48 AM</text>
-                    <text x="160" y="164" textAnchor="middle" fontSize="7" fill="#8b6040">Padmavathi Kalyana Mandapam</text>
-                    <text x="160" y="176" textAnchor="middle" fontSize="6.5" fill="#8b6040">Tirupati Road, Chennai 600 028</text>
-                    <text x="160" y="193" textAnchor="middle" fontSize="6.5" fill="#a08060">S/o Rajan &amp; Viji · D/o Kumar &amp; Thenmozhi</text>
-                    <circle cx="28" cy="218" r="6" fill="white" stroke="#e8c8a0" strokeWidth="0.5" opacity="0.7" />
-                    <circle cx="292" cy="218" r="6" fill="white" stroke="#e8c8a0" strokeWidth="0.5" opacity="0.7" />
+                <svg width="100%" height="100%" viewBox="0 0 160 290" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+                    <rect width="160" height="290" fill="#fdf6ec" />
+                    {/* Top floral image area */}
+                    <rect width="160" height="120" fill="#f5e9d4" />
+                    <ellipse cx="80" cy="60" rx="48" ry="38" fill="rgba(251,207,232,0.4)" />
+                    <circle cx="80" cy="50" r="22" fill="rgba(255,255,255,0.55)" stroke="#e8c8a0" strokeWidth="0.8" />
+                    <text x="80" y="54" textAnchor="middle" fontSize="18" fill="#c8922a" opacity="0.7" fontFamily="serif">ஓம்</text>
+                    {/* Garland line */}
+                    <path d="M10 115 Q40 105 80 108 Q120 105 150 115" stroke="#c8a070" strokeWidth="1" fill="none" />
+                    <circle cx="20" cy="110" r="3.5" fill="white" stroke="#e8c8a0" strokeWidth="0.5" />
+                    <circle cx="50" cy="107" r="3.5" fill="white" stroke="#e8c8a0" strokeWidth="0.5" />
+                    <circle cx="80" cy="106" r="4" fill="white" stroke="#e8c8a0" strokeWidth="0.5" />
+                    <circle cx="110" cy="107" r="3.5" fill="white" stroke="#e8c8a0" strokeWidth="0.5" />
+                    <circle cx="140" cy="110" r="3.5" fill="white" stroke="#e8c8a0" strokeWidth="0.5" />
+                    {/* Text content */}
+                    <text x="80" y="142" textAnchor="middle" fontSize="7" fill="#8b6040" letterSpacing="2.5" opacity="0.7">WEDDING INVITATION</text>
+                    <line x1="32" y1="149" x2="128" y2="149" stroke="#c8a070" strokeWidth="0.5" opacity="0.6" />
+                    <text x="80" y="168" textAnchor="middle" fontSize="16" fill="#4a2c0a" fontFamily="Georgia,serif" fontStyle="italic">Siva &amp; Hema</text>
+                    <text x="80" y="180" textAnchor="middle" fontSize="6" fill="#8b6040" letterSpacing="1.5">KALYAṆAM</text>
+                    <line x1="44" y1="186" x2="116" y2="186" stroke="#c8a070" strokeWidth="0.5" opacity="0.5" />
+                    <text x="80" y="198" textAnchor="middle" fontSize="6.5" fill="#6b4020">12 May 2026 · 6:48 AM</text>
+                    <text x="80" y="210" textAnchor="middle" fontSize="6" fill="#8b6040">Padmavathi Kalyana Mandapam</text>
+                    <text x="80" y="220" textAnchor="middle" fontSize="5.5" fill="#8b6040">Tirupati Road, Chennai 600 028</text>
+                    <text x="80" y="234" textAnchor="middle" fontSize="5.5" fill="#a08060">S/o Rajan &amp; Viji · D/o Kumar &amp; Thenmozhi</text>
+                    {/* Bottom ornament */}
+                    <circle cx="28" cy="270" r="5" fill="white" stroke="#e8c8a0" strokeWidth="0.5" opacity="0.7" />
+                    <circle cx="80" cy="272" r="5.5" fill="white" stroke="#e8c8a0" strokeWidth="0.5" opacity="0.6" />
+                    <circle cx="132" cy="270" r="5" fill="white" stroke="#e8c8a0" strokeWidth="0.5" opacity="0.7" />
                 </svg>
             );
         case "tm-kovil":
             return (
-                <svg width="100%" height="100%" viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
-                    <rect width="320" height="240" fill="#0a3d25" />
-                    <rect x="8" y="8" width="304" height="224" fill="none" stroke="#d4af37" strokeWidth="1.5" rx="2" />
-                    <path d="M100 8 L100 70 Q100 88 118 93 L160 98 L202 93 Q220 88 220 70 L220 8" fill="#0d5c35" stroke="#d4af37" strokeWidth="1" />
-                    <rect x="120" y="16" width="80" height="11" rx="2" fill="#b8960f" opacity="0.7" />
-                    <rect x="128" y="26" width="64" height="9" rx="2" fill="#c8a010" opacity="0.6" />
-                    <rect x="136" y="34" width="48" height="8" rx="2" fill="#d4af37" opacity="0.6" />
-                    <rect x="144" y="41" width="32" height="7" rx="2" fill="#c8a010" opacity="0.5" />
-                    <ellipse cx="160" cy="14" rx="6" ry="9" fill="#d4af37" opacity="0.9" />
-                    <text x="160" y="120" textAnchor="middle" fontSize="22" fill="#d4af37" fontFamily="serif">ஓம்</text>
-                    <text x="160" y="142" textAnchor="middle" fontSize="11" fill="#ffd700" fontFamily="Georgia,serif" fontWeight="bold">Karthik &amp; Priya</text>
-                    <text x="160" y="155" textAnchor="middle" fontSize="7" fill="rgba(255,255,255,0.6)" letterSpacing="1">KALYANAM</text>
-                    <line x1="80" y1="162" x2="240" y2="162" stroke="#d4af37" strokeWidth="0.5" opacity="0.5" />
-                    <text x="160" y="173" textAnchor="middle" fontSize="7.5" fill="rgba(255,255,255,0.75)">28 Feb 2026 · 9:12 AM Nalla Neram</text>
-                    <text x="160" y="185" textAnchor="middle" fontSize="7" fill="rgba(255,215,0,0.65)">Kapaleeshwarar Temple, Mylapore</text>
-                    <text x="160" y="200" textAnchor="middle" fontSize="6.5" fill="rgba(255,255,255,0.38)">திருமண அழைப்பிதழ்</text>
-                    <ellipse cx="30" cy="16" rx="8" ry="5" fill="#15803d" opacity="0.6" transform="rotate(-20 30 16)" />
-                    <ellipse cx="290" cy="16" rx="8" ry="5" fill="#15803d" opacity="0.6" transform="rotate(20 290 16)" />
-                    <circle cx="30" cy="195" r="5" fill="#d4af37" opacity="0.3" />
-                    <circle cx="290" cy="195" r="5" fill="#d4af37" opacity="0.3" />
+                <svg width="100%" height="100%" viewBox="0 0 160 290" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+                    <rect width="160" height="290" fill="#0a3d25" />
+                    <rect x="5" y="5" width="150" height="280" fill="none" stroke="#d4af37" strokeWidth="1.5" rx="3" />
+                    {/* Temple gopuram at top */}
+                    <rect x="50" y="5" width="60" height="55" fill="#0d5c35" />
+                    <rect x="58" y="9" width="44" height="8" rx="1" fill="#b8960f" opacity="0.8" />
+                    <rect x="62" y="16" width="36" height="7" rx="1" fill="#c8a010" opacity="0.7" />
+                    <rect x="66" y="22" width="28" height="6" rx="1" fill="#d4af37" opacity="0.7" />
+                    <rect x="70" y="27" width="20" height="5" rx="1" fill="#c8a010" opacity="0.6" />
+                    <ellipse cx="80" cy="8" rx="5" ry="7" fill="#d4af37" opacity="0.9" />
+                    {/* Om symbol */}
+                    <text x="80" y="82" textAnchor="middle" fontSize="22" fill="#d4af37" fontFamily="serif">ஓம்</text>
+                    {/* Names */}
+                    <text x="80" y="112" textAnchor="middle" fontSize="6.5" fill="rgba(255,255,255,0.6)" letterSpacing="1">KALYAṆAM</text>
+                    <text x="80" y="132" textAnchor="middle" fontSize="15" fill="#ffd700" fontFamily="Georgia,serif" fontWeight="bold">Karthik &amp; Priya</text>
+                    <line x1="28" y1="140" x2="132" y2="140" stroke="#d4af37" strokeWidth="0.5" opacity="0.5" />
+                    <text x="80" y="156" textAnchor="middle" fontSize="6.5" fill="rgba(255,255,255,0.75)">28 Feb 2026 · 9:12 AM</text>
+                    <text x="80" y="168" textAnchor="middle" fontSize="6" fill="rgba(255,215,0,0.65)">Kapaleeshwarar Temple, Mylapore</text>
+                    <text x="80" y="186" textAnchor="middle" fontSize="6" fill="rgba(255,255,255,0.4)">திருமண அழைப்பிதழ்</text>
+                    {/* Decorative leaves */}
+                    <ellipse cx="18" cy="12" rx="7" ry="4" fill="#15803d" opacity="0.7" transform="rotate(-20 18 12)" />
+                    <ellipse cx="142" cy="12" rx="7" ry="4" fill="#15803d" opacity="0.7" transform="rotate(20 142 12)" />
                 </svg>
             );
         case "tm-tanjore":
             return (
-                <svg width="100%" height="100%" viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
-                    <rect width="320" height="240" fill="#6b0f0f" />
-                    <rect x="6" y="6" width="308" height="228" fill="none" stroke="#d4af37" strokeWidth="2" rx="2" />
-                    <circle cx="20" cy="20" r="8" fill="#d4af37" opacity="0.55" /><circle cx="300" cy="20" r="8" fill="#d4af37" opacity="0.55" />
-                    <circle cx="20" cy="220" r="8" fill="#d4af37" opacity="0.55" /><circle cx="300" cy="220" r="8" fill="#d4af37" opacity="0.55" />
-                    <ellipse cx="160" cy="52" rx="22" ry="28" fill="#d4af37" opacity="0.18" />
-                    <ellipse cx="160" cy="40" rx="14" ry="18" fill="#b8960f" opacity="0.35" />
-                    <ellipse cx="160" cy="34" rx="10" ry="12" fill="#d4af37" opacity="0.4" />
-                    <path d="M157 42 Q150 52 155 57 Q162 63 168 57" stroke="#d4af37" strokeWidth="2.5" fill="none" opacity="0.55" />
-                    <path d="M152 22 L156 15 L160 10 L164 15 L168 22" fill="#d4af37" opacity="0.7" />
-                    <text x="160" y="92" textAnchor="middle" fontSize="9" fill="#ffd700" letterSpacing="2" opacity="0.8">✦ KALYANAM ✦</text>
-                    <text x="160" y="112" textAnchor="middle" fontSize="13" fill="#ffd700" fontFamily="Georgia,serif" fontWeight="bold">Arun &amp; Kavitha</text>
-                    <line x1="70" y1="119" x2="250" y2="119" stroke="#d4af37" strokeWidth="0.7" opacity="0.5" />
-                    <text x="160" y="133" textAnchor="middle" fontSize="7.5" fill="rgba(255,215,0,0.75)">Vivaha Muhurtham</text>
-                    <text x="160" y="147" textAnchor="middle" fontSize="9" fill="white" fontWeight="bold">15 Mar 2026 · 7:48 AM</text>
-                    <text x="160" y="162" textAnchor="middle" fontSize="7" fill="rgba(255,215,0,0.65)">Meenakshi Kalyana Mandapam, Madurai</text>
+                <svg width="100%" height="100%" viewBox="0 0 160 290" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+                    <rect width="160" height="290" fill="#6b0f0f" />
+                    <rect x="5" y="5" width="150" height="280" fill="none" stroke="#d4af37" strokeWidth="2" rx="2" />
+                    {/* Corner gold dots */}
+                    <circle cx="14" cy="14" r="6" fill="#d4af37" opacity="0.55" /><circle cx="146" cy="14" r="6" fill="#d4af37" opacity="0.55" />
+                    <circle cx="14" cy="276" r="6" fill="#d4af37" opacity="0.55" /><circle cx="146" cy="276" r="6" fill="#d4af37" opacity="0.55" />
+                    {/* Tanjore painting style central motif */}
+                    <ellipse cx="80" cy="72" rx="26" ry="32" fill="#d4af37" opacity="0.15" />
+                    <ellipse cx="80" cy="62" rx="16" ry="20" fill="#b8960f" opacity="0.3" />
+                    <ellipse cx="80" cy="56" rx="11" ry="14" fill="#d4af37" opacity="0.42" />
+                    <path d="M77 68 Q70 78 75 83 Q82 89 88 83" stroke="#d4af37" strokeWidth="2" fill="none" opacity="0.55" />
+                    <path d="M73 38 L77 30 L80 24 L83 30 L87 38" fill="#d4af37" opacity="0.75" />
+                    {/* Text */}
+                    <text x="80" y="114" textAnchor="middle" fontSize="7.5" fill="#ffd700" letterSpacing="1.5" opacity="0.85">✦  KALYANAM  ✦</text>
+                    <text x="80" y="136" textAnchor="middle" fontSize="14" fill="#ffd700" fontFamily="Georgia,serif" fontWeight="bold">Arun &amp; Kavitha</text>
+                    <line x1="30" y1="144" x2="130" y2="144" stroke="#d4af37" strokeWidth="0.6" opacity="0.55" />
+                    <text x="80" y="160" textAnchor="middle" fontSize="6.5" fill="rgba(255,215,0,0.8)">Vivaha Muhurtham</text>
+                    <text x="80" y="178" textAnchor="middle" fontSize="8" fill="white" fontWeight="bold">15 Mar 2026 · 7:48 AM</text>
+                    <text x="80" y="193" textAnchor="middle" fontSize="6" fill="rgba(255,215,0,0.65)">Meenakshi Kalyana Mandapam</text>
+                    <text x="80" y="204" textAnchor="middle" fontSize="6" fill="rgba(255,215,0,0.55)">Madurai</text>
                 </svg>
             );
         case "tm-peacock":
             return (
-                <svg width="100%" height="100%" viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+                <svg width="100%" height="100%" viewBox="0 0 160 290" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
                     <defs><radialGradient id="pcbgT" cx="50%" cy="30%"><stop offset="0%" stopColor="#1a5c70" /><stop offset="100%" stopColor="#0e1a4a" /></radialGradient></defs>
-                    <rect width="320" height="240" fill="url(#pcbgT)" />
-                    <rect x="7" y="7" width="306" height="226" fill="none" stroke="#14b8a6" strokeWidth="1.5" rx="2" />
-                    <line x1="160" y1="72" x2="98" y2="8" stroke="#14b8a6" strokeWidth="1.5" opacity="0.7" /><line x1="160" y1="72" x2="118" y2="6" stroke="#0d9488" strokeWidth="1.5" opacity="0.75" />
-                    <line x1="160" y1="72" x2="140" y2="6" stroke="#14b8a6" strokeWidth="2" opacity="0.8" /><line x1="160" y1="72" x2="160" y2="6" stroke="#0d9488" strokeWidth="2" opacity="0.9" />
-                    <line x1="160" y1="72" x2="180" y2="6" stroke="#14b8a6" strokeWidth="2" opacity="0.8" /><line x1="160" y1="72" x2="202" y2="6" stroke="#0d9488" strokeWidth="1.5" opacity="0.75" />
-                    <line x1="160" y1="72" x2="222" y2="8" stroke="#14b8a6" strokeWidth="1.5" opacity="0.7" />
-                    <circle cx="160" cy="7" r="8" fill="#14b8a6" opacity="0.7" /><circle cx="160" cy="7" r="5" fill="#7c3aed" opacity="0.7" /><circle cx="160" cy="7" r="2.5" fill="#d4af37" />
-                    <line x1="160" y1="56" x2="160" y2="84" stroke="#d4af37" strokeWidth="2.5" opacity="0.8" />
-                    <polygon points="160,50 155,62 165,62" fill="#d4af37" opacity="0.9" />
-                    <text x="160" y="105" textAnchor="middle" fontSize="8" fill="#14b8a6" letterSpacing="2">✦ திருமணம் ✦</text>
-                    <text x="160" y="124" textAnchor="middle" fontSize="13" fill="#d4af37" fontFamily="Georgia,serif" fontWeight="bold">Deepak &amp; Meena</text>
-                    <line x1="80" y1="131" x2="240" y2="131" stroke="#14b8a6" strokeWidth="0.5" opacity="0.5" />
-                    <text x="160" y="144" textAnchor="middle" fontSize="7.5" fill="rgba(255,255,255,0.75)">5 April 2026 · 10:24 AM Nalla Neram</text>
-                    <text x="160" y="157" textAnchor="middle" fontSize="7" fill="rgba(20,184,166,0.8)">Vel Murugan Mandapam, Chennai</text>
+                    <rect width="160" height="290" fill="url(#pcbgT)" />
+                    <rect x="5" y="5" width="150" height="280" fill="none" stroke="#14b8a6" strokeWidth="1.5" rx="2" />
+                    {/* Peacock feather fan radiating from top */}
+                    <line x1="80" y1="82" x2="40" y2="10" stroke="#14b8a6" strokeWidth="1.5" opacity="0.7" />
+                    <line x1="80" y1="82" x2="53" y2="8" stroke="#0d9488" strokeWidth="1.5" opacity="0.75" />
+                    <line x1="80" y1="82" x2="66" y2="6" stroke="#14b8a6" strokeWidth="2" opacity="0.8" />
+                    <line x1="80" y1="82" x2="80" y2="5" stroke="#0d9488" strokeWidth="2" opacity="0.9" />
+                    <line x1="80" y1="82" x2="94" y2="6" stroke="#14b8a6" strokeWidth="2" opacity="0.8" />
+                    <line x1="80" y1="82" x2="107" y2="8" stroke="#0d9488" strokeWidth="1.5" opacity="0.75" />
+                    <line x1="80" y1="82" x2="120" y2="10" stroke="#14b8a6" strokeWidth="1.5" opacity="0.7" />
+                    {/* Eye circles at feather tips */}
+                    <circle cx="80" cy="7" r="6" fill="#14b8a6" opacity="0.7" /><circle cx="80" cy="7" r="4" fill="#7c3aed" opacity="0.7" /><circle cx="80" cy="7" r="2" fill="#d4af37" />
+                    {/* Peacock body */}
+                    <line x1="80" y1="66" x2="80" y2="92" stroke="#d4af37" strokeWidth="2" opacity="0.85" />
+                    <polygon points="80,60 75,72 85,72" fill="#d4af37" opacity="0.9" />
+                    {/* Text */}
+                    <text x="80" y="114" textAnchor="middle" fontSize="7" fill="#14b8a6" letterSpacing="1.5">✦  திருமணம்  ✦</text>
+                    <text x="80" y="136" textAnchor="middle" fontSize="15" fill="#d4af37" fontFamily="Georgia,serif" fontWeight="bold">Deepak &amp; Meena</text>
+                    <line x1="28" y1="144" x2="132" y2="144" stroke="#14b8a6" strokeWidth="0.5" opacity="0.5" />
+                    <text x="80" y="160" textAnchor="middle" fontSize="6.5" fill="rgba(255,255,255,0.8)">5 April 2026 · 10:24 AM</text>
+                    <text x="80" y="174" textAnchor="middle" fontSize="6" fill="rgba(20,184,166,0.85)">Vel Murugan Mandapam, Chennai</text>
                 </svg>
             );
         case "tm-vilakku":
             return (
-                <svg width="100%" height="100%" viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+                <svg width="100%" height="100%" viewBox="0 0 160 290" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
                     <defs>
                         <radialGradient id="vbgT" cx="50%" cy="50%"><stop offset="0%" stopColor="#3d1f00" /><stop offset="100%" stopColor="#1a0a00" /></radialGradient>
-                        <radialGradient id="vg2T" cx="50%" cy="0%"><stop offset="0%" stopColor="rgba(255,180,0,0.26)" /><stop offset="100%" stopColor="transparent" /></radialGradient>
+                        <radialGradient id="vg2T" cx="50%" cy="0%"><stop offset="0%" stopColor="rgba(255,180,0,0.28)" /><stop offset="100%" stopColor="transparent" /></radialGradient>
                     </defs>
-                    <rect width="320" height="240" fill="url(#vbgT)" />
-                    <ellipse cx="160" cy="90" rx="130" ry="80" fill="url(#vg2T)" />
-                    <rect x="7" y="7" width="306" height="226" fill="none" stroke="#d4af37" strokeWidth="1.5" rx="2" />
-                    <polygon points="7,7 20,7 7,20" fill="#d4af37" opacity="0.5" /><polygon points="313,7 300,7 313,20" fill="#d4af37" opacity="0.5" />
-                    <polygon points="7,233 20,233 7,220" fill="#d4af37" opacity="0.5" /><polygon points="313,233 300,233 313,220" fill="#d4af37" opacity="0.5" />
-                    <ellipse cx="160" cy="100" rx="28" ry="6" fill="#b8960f" opacity="0.8" />
-                    <rect x="146" y="76" width="28" height="24" rx="4" fill="#c8922a" opacity="0.9" />
-                    <ellipse cx="160" cy="76" rx="30" ry="9" fill="#d4af37" />
-                    <rect x="155" y="54" width="10" height="24" rx="3" fill="#c8922a" opacity="0.8" />
-                    <ellipse cx="160" cy="54" rx="22" ry="7" fill="#d4af37" opacity="0.9" />
-                    <ellipse cx="160" cy="48" rx="3" ry="6.5" fill="#fbbf24" /><ellipse cx="160" cy="43" rx="2" ry="5" fill="white" opacity="0.85" />
-                    <text x="160" y="122" textAnchor="middle" fontSize="9" fill="#fbbf24" letterSpacing="1.5">KALYANA VILAKKU</text>
-                    <text x="160" y="142" textAnchor="middle" fontSize="13" fill="#ffd700" fontFamily="Georgia,serif" fontWeight="bold">Raj &amp; Anitha</text>
-                    <line x1="75" y1="149" x2="245" y2="149" stroke="#d4af37" strokeWidth="0.5" opacity="0.5" />
-                    <text x="160" y="175" textAnchor="middle" fontSize="9" fill="white" fontWeight="bold">22 Feb 2026 · 8:36 AM</text>
-                    <text x="160" y="188" textAnchor="middle" fontSize="7" fill="rgba(255,200,80,0.65)">Bhavani Mandapam, Coimbatore</text>
+                    <rect width="160" height="290" fill="url(#vbgT)" />
+                    <ellipse cx="80" cy="80" rx="100" ry="70" fill="url(#vg2T)" />
+                    <rect x="5" y="5" width="150" height="280" fill="none" stroke="#d4af37" strokeWidth="1.5" rx="2" />
+                    <polygon points="5,5 20,5 5,20" fill="#d4af37" opacity="0.5" /><polygon points="155,5 140,5 155,20" fill="#d4af37" opacity="0.5" />
+                    <polygon points="5,285 20,285 5,270" fill="#d4af37" opacity="0.5" /><polygon points="155,285 140,285 155,270" fill="#d4af37" opacity="0.5" />
+                    {/* Vilakku lamp */}
+                    <ellipse cx="80" cy="96" rx="22" ry="6" fill="#b8960f" opacity="0.85" />
+                    <rect x="68" y="76" width="24" height="20" rx="4" fill="#c8922a" opacity="0.9" />
+                    <ellipse cx="80" cy="76" rx="26" ry="8" fill="#d4af37" />
+                    <rect x="76" y="54" width="8" height="24" rx="3" fill="#c8922a" opacity="0.85" />
+                    <ellipse cx="80" cy="55" rx="18" ry="6" fill="#d4af37" opacity="0.9" />
+                    <ellipse cx="80" cy="49" rx="3" ry="6" fill="#fbbf24" /><ellipse cx="80" cy="44" rx="2" ry="5" fill="white" opacity="0.85" />
+                    {/* Text */}
+                    <text x="80" y="126" textAnchor="middle" fontSize="7.5" fill="#fbbf24" letterSpacing="1.5">KALYANA VILAKKU</text>
+                    <text x="80" y="150" textAnchor="middle" fontSize="15" fill="#ffd700" fontFamily="Georgia,serif" fontWeight="bold">Raj &amp; Anitha</text>
+                    <line x1="28" y1="158" x2="132" y2="158" stroke="#d4af37" strokeWidth="0.5" opacity="0.5" />
+                    <text x="80" y="182" textAnchor="middle" fontSize="8" fill="white" fontWeight="bold">22 Feb 2026 · 8:36 AM</text>
+                    <text x="80" y="196" textAnchor="middle" fontSize="6" fill="rgba(255,200,80,0.7)">Bhavani Mandapam, Coimbatore</text>
                 </svg>
             );
         case "tm-kanjivaram":
             return (
-                <svg width="100%" height="100%" viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
-                    <defs><pattern id="sw2T" x="0" y="0" width="16" height="16" patternUnits="userSpaceOnUse"><rect width="16" height="16" fill="#1a0a3d" /><line x1="0" y1="8" x2="16" y2="8" stroke="rgba(212,175,55,0.08)" strokeWidth="0.5" /><line x1="8" y1="0" x2="8" y2="16" stroke="rgba(212,175,55,0.06)" strokeWidth="0.5" /></pattern></defs>
-                    <rect width="320" height="240" fill="url(#sw2T)" />
-                    <rect x="6" y="6" width="308" height="228" fill="none" stroke="#d4af37" strokeWidth="3" rx="2" />
-                    <rect x="6" y="6" width="22" height="228" fill="rgba(212,175,55,0.1)" />
-                    <rect x="292" y="6" width="22" height="228" fill="rgba(212,175,55,0.1)" />
-                    <circle cx="160" cy="52" r="28" fill="none" stroke="#d4af37" strokeWidth="0.8" opacity="0.5" />
-                    <circle cx="160" cy="52" r="18" fill="rgba(212,175,55,0.1)" stroke="#d4af37" strokeWidth="1" opacity="0.6" />
-                    <circle cx="160" cy="52" r="6" fill="#d4af37" opacity="0.6" />
-                    <text x="160" y="98" textAnchor="middle" fontSize="8" fill="#d4af37" letterSpacing="2.5">கல்யாணம்</text>
-                    <line x1="60" y1="105" x2="260" y2="105" stroke="#d4af37" strokeWidth="0.7" opacity="0.4" />
-                    <text x="160" y="123" textAnchor="middle" fontSize="14" fill="#d4af37" fontFamily="Georgia,serif" fontWeight="bold">Vikram &amp; Lavanya</text>
-                    <text x="160" y="136" textAnchor="middle" fontSize="7" fill="rgba(212,175,55,0.6)" letterSpacing="1.5">VIVAHA MUHURTHAM</text>
-                    <line x1="60" y1="143" x2="260" y2="143" stroke="#d4af37" strokeWidth="0.7" opacity="0.35" />
-                    <text x="160" y="157" textAnchor="middle" fontSize="9" fill="white" fontWeight="bold">18 June 2026 · 9:12 AM</text>
-                    <text x="160" y="170" textAnchor="middle" fontSize="7" fill="rgba(212,175,55,0.65)">Kanchi Kamakshi Mandapam</text>
-                    <text x="160" y="182" textAnchor="middle" fontSize="7" fill="rgba(212,175,55,0.5)">Mumbai, India</text>
+                <svg width="100%" height="100%" viewBox="0 0 160 290" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+                    <defs><pattern id="sw2T" x="0" y="0" width="12" height="12" patternUnits="userSpaceOnUse"><rect width="12" height="12" fill="#1a0a3d" /><line x1="0" y1="6" x2="12" y2="6" stroke="rgba(212,175,55,0.08)" strokeWidth="0.5" /><line x1="6" y1="0" x2="6" y2="12" stroke="rgba(212,175,55,0.06)" strokeWidth="0.5" /></pattern></defs>
+                    <rect width="160" height="290" fill="url(#sw2T)" />
+                    <rect x="5" y="5" width="150" height="280" fill="none" stroke="#d4af37" strokeWidth="2.5" rx="2" />
+                    {/* Silk border stripes */}
+                    <rect x="5" y="5" width="14" height="280" fill="rgba(212,175,55,0.1)" />
+                    <rect x="141" y="5" width="14" height="280" fill="rgba(212,175,55,0.1)" />
+                    {/* Kanjivaram mandala motif */}
+                    <circle cx="80" cy="70" r="30" fill="none" stroke="#d4af37" strokeWidth="0.8" opacity="0.5" />
+                    <circle cx="80" cy="70" r="20" fill="rgba(212,175,55,0.08)" stroke="#d4af37" strokeWidth="1" opacity="0.65" />
+                    <circle cx="80" cy="70" r="8" fill="#d4af37" opacity="0.65" />
+                    <circle cx="80" cy="70" r="4" fill="#b8960f" opacity="0.9" />
+                    {/* Text */}
+                    <text x="80" y="122" textAnchor="middle" fontSize="7" fill="#d4af37" letterSpacing="2">கல்யாணம்</text>
+                    <line x1="24" y1="130" x2="136" y2="130" stroke="#d4af37" strokeWidth="0.6" opacity="0.4" />
+                    <text x="80" y="152" textAnchor="middle" fontSize="15" fill="#d4af37" fontFamily="Georgia,serif" fontWeight="bold">Vikram &amp; Lavanya</text>
+                    <text x="80" y="166" textAnchor="middle" fontSize="6" fill="rgba(212,175,55,0.65)" letterSpacing="1.5">VIVAHA MUHURTHAM</text>
+                    <line x1="24" y1="174" x2="136" y2="174" stroke="#d4af37" strokeWidth="0.6" opacity="0.35" />
+                    <text x="80" y="192" textAnchor="middle" fontSize="8.5" fill="white" fontWeight="bold">18 June 2026 · 9:12 AM</text>
+                    <text x="80" y="206" textAnchor="middle" fontSize="6" fill="rgba(212,175,55,0.7)">Kanchi Kamakshi Mandapam</text>
+                    <text x="80" y="217" textAnchor="middle" fontSize="6" fill="rgba(212,175,55,0.55)">Mumbai, India</text>
                 </svg>
             );
         default:
             return (
-                <svg width="100%" height="100%" viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+                <svg width="100%" height="100%" viewBox="0 0 160 290" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
                     <defs>
                         <pattern id="cubesT" x="0" y="0" width="16" height="16" patternUnits="userSpaceOnUse">
                             <rect width="16" height="16" fill="#0f172a" />
                             <circle cx="8" cy="8" r="1.5" fill="#334155" opacity="0.6" />
-                            <path d="M0 16L16 0M-2 2L2 -2M14 18L18 14" stroke="#1e293b" strokeWidth="1" opacity="0.4" />
                         </pattern>
                     </defs>
-                    <rect width="320" height="240" fill="url(#cubesT)" />
-                    <rect x="8" y="8" width="304" height="224" fill="none" stroke="#334155" strokeWidth="1.5" rx="4" />
-
-                    <circle cx="160" cy="100" r="32" fill="#1e293b" stroke="#334155" strokeWidth="1" />
-                    <text x="160" y="105" textAnchor="middle" fontSize="18" fill="#94a3b8" fontFamily="sans-serif">✨</text>
-
-                    <text x="160" y="150" textAnchor="middle" fontSize="12" fill="#e2e8f0" fontWeight="bold">Custom Theme</text>
-                    <text x="160" y="166" textAnchor="middle" fontSize="8" fill="#94a3b8" letterSpacing="1">NEWLY UPLOADED</text>
+                    <rect width="160" height="290" fill="url(#cubesT)" />
+                    <rect x="6" y="6" width="148" height="278" fill="none" stroke="#334155" strokeWidth="1.5" rx="4" />
+                    {/* Top image placeholder area */}
+                    <rect x="6" y="6" width="148" height="120" fill="#1e293b" />
+                    <circle cx="80" cy="66" r="28" fill="#1e293b" stroke="#334155" strokeWidth="1" />
+                    <text x="80" y="71" textAnchor="middle" fontSize="20" fill="#94a3b8" fontFamily="sans-serif">✨</text>
+                    <text x="80" y="158" textAnchor="middle" fontSize="12" fill="#e2e8f0" fontWeight="bold">Custom Theme</text>
+                    <text x="80" y="175" textAnchor="middle" fontSize="7" fill="#94a3b8" letterSpacing="1">NEWLY UPLOADED</text>
                 </svg>
             );
     }
 }
+
+
 
 // ─────────────────────────────────────────────────────────────────────────────
 // TEMPLATES array removed — Supabase DB is the single source of truth.

@@ -69,11 +69,19 @@ export default function Home() {
   })();
 
   // Use a ref to inject HTML and execute scripts AFTER the DOM is ready
+  // (Only used for the standard/legacy path without CDN head dependencies)
   const containerRef = React.useRef<HTMLDivElement>(null);
   const scriptsInjected = React.useRef(false);
 
   useEffect(() => {
     if (!containerRef.current || !compiledHtml || scriptsInjected.current) return;
+
+    // If this template has head-level CDN tags, it's rendered in an iframe — skip div injection
+    const hasHeadTags = /<script\s+[^>]*src=/i.test(inviteData?.templateHtml || "") ||
+      /<link\s+[^>]*rel=["']stylesheet["']/i.test(inviteData?.templateHtml || "") ||
+      /<link\s+[^>]*href=["']https:\/\/fonts\./i.test(inviteData?.templateHtml || "");
+    if (hasHeadTags) return;
+
     scriptsInjected.current = true;
 
     // 1. Inject the compiled HTML into the container
@@ -183,7 +191,7 @@ export default function Home() {
       jsScript.text = inviteData.templateJs;
       document.body.appendChild(jsScript);
     }
-  }, [compiledHtml, inviteData?.templateJs]);
+  }, [compiledHtml, inviteData?.templateJs, inviteData?.templateHtml]);
 
   if (loading || !inviteData) {
     return (
@@ -195,6 +203,72 @@ export default function Home() {
 
   // 1. GENERATIVE UI ENGINE (Handlebars)
   if (compiledHtml) {
+    // Detect if html_content contains head-level tags that need a full document context
+    // (e.g. <script src="tailwindcss.com">, <link rel="stylesheet">, Google Fonts)
+    // These cannot load properly when injected into a div via innerHTML.
+    const hasHeadTags = /<script\s+[^>]*src=/i.test(inviteData.templateHtml || "") ||
+      /<link\s+[^>]*rel=["']stylesheet["']/i.test(inviteData.templateHtml || "") ||
+      /<link\s+[^>]*href=["']https:\/\/fonts\./i.test(inviteData.templateHtml || "");
+
+    if (hasHeadTags) {
+      // ── IFRAME PATH ──
+      // Build a full self-contained HTML document and render in a full-page iframe.
+      // This allows CDN scripts (Tailwind, FontAwesome), Google Fonts, and all
+      // head-level resources to load and execute properly.
+      const icsUtilScript = `
+        window.addToCalendar = function(title, dateStr, startTime, endTime, venue, coupleNames) {
+          try {
+            var eventDate = new Date(dateStr);
+            if (isNaN(eventDate.getTime())) {
+              var parts = dateStr.split(/[\\s,]+/);
+              eventDate = new Date(parts.slice(0,3).join(' '));
+            }
+            function parseTime(t) {
+              var m = t.match(/(\\d{1,2}):(\\d{2})\\s*(AM|PM)?/i);
+              if (!m) return {h:0,m:0};
+              var h=parseInt(m[1]),mn=parseInt(m[2]),p=(m[3]||'').toUpperCase();
+              if(p==='PM'&&h!==12)h+=12; if(p==='AM'&&h===12)h=0;
+              return {h:h,m:mn};
+            }
+            var s=parseTime(startTime),e=parseTime(endTime);
+            var ds=new Date(eventDate); ds.setHours(s.h,s.m,0);
+            var de=new Date(eventDate); de.setHours(e.h,e.m,0);
+            function toICS(d){return d.getFullYear()+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0')+'T'+String(d.getHours()).padStart(2,'0')+String(d.getMinutes()).padStart(2,'0')+'00';}
+            var names=coupleNames||'', sum=names?title+' - '+names:title;
+            var ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//WedBliss//EN','CALSCALE:GREGORIAN','METHOD:PUBLISH','BEGIN:VEVENT','DTSTART:'+toICS(ds),'DTEND:'+toICS(de),'SUMMARY:'+sum,'LOCATION:'+(venue||''),'STATUS:CONFIRMED','END:VEVENT','END:VCALENDAR'].join('\\r\\n');
+            var blob=new Blob([ics],{type:'text/calendar;charset=utf-8'});
+            var url=URL.createObjectURL(blob);
+            var a=document.createElement('a'); a.href=url; a.download=title.replace(/[^a-zA-Z0-9]/g,'_')+'.ics';
+            document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+          } catch(err){alert('Calendar error: '+err.message);}
+        };
+      `;
+
+      const fullDoc = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>${icsUtilScript}<\/script>
+${inviteData.templateCss ? `<style>${inviteData.templateCss}</style>` : ''}
+</head>
+<body>
+${compiledHtml}
+${inviteData.templateJs ? `<script>${inviteData.templateJs}<\/script>` : ''}
+</body>
+</html>`;
+
+      return (
+        <iframe
+          srcDoc={fullDoc}
+          style={{ width: "100%", height: "100vh", border: "none", display: "block" }}
+          title="Wedding Invitation"
+        />
+      );
+    }
+
+    // ── STANDARD DIV PATH ──
+    // For templates without CDN head dependencies — fast, no iframe overhead.
     return (
       <>
         {inviteData.templateCss && <style dangerouslySetInnerHTML={{ __html: inviteData.templateCss }} />}

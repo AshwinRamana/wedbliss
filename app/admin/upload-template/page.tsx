@@ -267,7 +267,8 @@ export default function UploadTemplatePage() {
         setDemoStatus({ type: null, msg: "" });
 
         try {
-            const res = await fetch("/api/admin/push-demo", {
+            const apiBase = process.env.NEXT_PUBLIC_API_URL || 'https://api.wedbliss.co';
+            const res = await fetch(`${apiBase}/api/admin/push-demo`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({

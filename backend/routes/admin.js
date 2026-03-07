@@ -157,4 +157,106 @@ router.delete('/users/:uid', async (req, res) => {
     }
 });
 
+// ── POST /api/admin/push-demo — Update elegant demo invitation ──────────────
+// Uses service role to bypass RLS — works regardless of invitation owner.
+router.post('/push-demo', async (req, res) => {
+    try {
+        const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+        if (!serviceRoleKey) {
+            return res.status(500).json({ error: 'SUPABASE_SERVICE_ROLE_KEY is not configured on the server.' });
+        }
+
+        const adminSupabase = createClient(supabaseUrl, serviceRoleKey, {
+            auth: { autoRefreshToken: false, persistSession: false }
+        });
+
+        const {
+            templateId, templateName, tier, templateDesc,
+            htmlContent, cssContent, jsContent, thumbnailUrl, mockData
+        } = req.body;
+
+        if (!templateId || !htmlContent) {
+            return res.status(400).json({ error: 'templateId and htmlContent are required' });
+        }
+
+        // 1. Upsert template as draft
+        const { error: tplErr } = await adminSupabase
+            .from('templates')
+            .upsert({
+                id: templateId,
+                name: templateName || templateId,
+                tier: tier || 'premium',
+                description: templateDesc || '',
+                is_live: false,
+                is_hero: false,
+                html_content: htmlContent,
+                css_content: cssContent || null,
+                js_content: jsContent || null,
+                demo_url: null,
+                thumbnail_url: thumbnailUrl || null,
+            }, { onConflict: 'id' });
+
+        if (tplErr) {
+            console.error('[push-demo] Template upsert failed:', tplErr.message);
+            return res.status(500).json({ error: `Template save failed: ${tplErr.message}` });
+        }
+
+        // 2. Build demo data payload
+        const demoData = {
+            ...(mockData || {}),
+            metadata: { plan: 'premium', template_id: templateId, createdAt: new Date().toISOString() },
+        };
+
+        // 3. Find existing elegant invitation (any owner — bypasses RLS)
+        const { data: existing } = await adminSupabase
+            .from('invitations')
+            .select('id')
+            .eq('subdomain', 'elegant')
+            .limit(1)
+            .maybeSingle();
+
+        if (existing) {
+            const { error: updErr } = await adminSupabase
+                .from('invitations')
+                .update({ template_id: templateId, data: demoData })
+                .eq('id', existing.id);
+
+            if (updErr) {
+                console.error('[push-demo] Invitation update failed:', updErr.message);
+                return res.status(500).json({ error: `Invitation update failed: ${updErr.message}` });
+            }
+        } else {
+            // First time: create the demo slot
+            const { error: insErr } = await adminSupabase
+                .from('invitations')
+                .insert({
+                    user_email: 'demo@wedbliss.co',
+                    plan: 'premium',
+                    template_id: templateId,
+                    subdomain: 'elegant',
+                    domain_status: 'active',
+                    data: demoData,
+                    order_id: null,
+                    cloudfront_id: null,
+                });
+
+            if (insErr) {
+                console.error('[push-demo] Invitation insert failed:', insErr.message);
+                return res.status(500).json({ error: `Invitation create failed: ${insErr.message}` });
+            }
+        }
+
+        res.status(200).json({
+            ok: true,
+            message: 'Demo updated successfully',
+            demoUrl: 'https://elegant.wedbliss.co',
+            templateId,
+        });
+    } catch (err) {
+        console.error('[push-demo] Unhandled error:', err);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 module.exports = router;
+

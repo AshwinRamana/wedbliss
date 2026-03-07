@@ -48,8 +48,13 @@ function TemplateSelectionContent() {
                 thumbnailUrl: db.thumbnail_url ?? null,
             }));
 
-            // Sort: Live templates first
+            // Sort: Live + Demo URL first, then Live, then Coming Soon
             mapped.sort((a, b) => {
+                const aReady = a.isLive && !!a.href;
+                const bReady = b.isLive && !!b.href;
+
+                if (aReady && !bReady) return -1;
+                if (!aReady && bReady) return 1;
                 if (a.isLive && !b.isLive) return -1;
                 if (!a.isLive && b.isLive) return 1;
                 return 0;

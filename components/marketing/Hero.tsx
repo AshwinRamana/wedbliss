@@ -22,7 +22,21 @@ export default function Hero() {
                 urlMap[t.id] = t.demo_url || null;
             });
             setLiveUrls(urlMap);
-            setHeroTemplates(dbTemplates.filter(t => t.is_hero));
+            const heroes = dbTemplates.filter(t => t.is_hero);
+
+            // Sort: Live + Demo URL first, then Live, then Coming Soon
+            heroes.sort((a, b) => {
+                const aReady = a.is_live && !!a.demo_url;
+                const bReady = b.is_live && !!b.demo_url;
+
+                if (aReady && !bReady) return -1;
+                if (!aReady && bReady) return 1;
+                if (a.is_live && !b.is_live) return -1;
+                if (!a.is_live && b.is_live) return 1;
+                return 0;
+            });
+
+            setHeroTemplates(heroes);
         };
         fetchUrls();
     }, []);

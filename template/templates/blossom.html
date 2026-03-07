@@ -282,6 +282,10 @@
                         <span id="cd-mins" class="text-4xl font-serif font-bold text-primary">--</span>
                         <span class="text-[9px] uppercase tracking-widest mt-2 opacity-60">Mins</span>
                     </div>
+                    <div class="tilt-card w-24 h-28 flex flex-col items-center justify-center rounded-2xl glass-card">
+                        <span id="cd-secs" class="text-4xl font-serif font-bold text-primary">--</span>
+                        <span class="text-[9px] uppercase tracking-widest mt-2 opacity-60">Secs</span>
+                    </div>
                 </div>
             </div>
         </section>
@@ -452,7 +456,18 @@
             if (cards.length > 0) {
                 var dateEl = cards[0].querySelector('.wb-event-date');
                 if (dateEl) {
-                    var target = new Date(dateEl.textContent.trim());
+                    // Robust date parser — handles "28 February 2026" (DD Month YYYY)
+                    // and "February 28, 2026" formats reliably across all browsers
+                    var rawDate = dateEl.textContent.trim();
+                    var target = (function (s) {
+                        // Try native parse first (ISO / "Month DD, YYYY" works natively)
+                        var d = new Date(s);
+                        if (!isNaN(d.getTime())) return d;
+                        // Fallback: convert "DD Month YYYY" → "Month DD, YYYY"
+                        var m = s.match(/^(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})$/);
+                        if (m) return new Date(m[2] + ' ' + m[1] + ', ' + m[3]);
+                        return new Date(NaN);
+                    })(rawDate);
                     if (!isNaN(target.getTime())) {
                         function tick() {
                             var diff = target - new Date();
@@ -460,14 +475,16 @@
                                 document.getElementById('cd-days').textContent = '00';
                                 document.getElementById('cd-hours').textContent = '00';
                                 document.getElementById('cd-mins').textContent = '00';
+                                document.getElementById('cd-secs').textContent = '00';
                                 return;
                             }
                             document.getElementById('cd-days').textContent = String(Math.floor(diff / 86400000)).padStart(2, '0');
                             document.getElementById('cd-hours').textContent = String(Math.floor((diff % 86400000) / 3600000)).padStart(2, '0');
                             document.getElementById('cd-mins').textContent = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0');
+                            document.getElementById('cd-secs').textContent = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0');
                         }
                         tick();
-                        setInterval(tick, 60000);
+                        setInterval(tick, 1000);
                     }
                 }
             }

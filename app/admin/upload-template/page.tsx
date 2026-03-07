@@ -14,8 +14,8 @@ const INITIAL_SAMPLE_DATA = `{
     "groom": { "firstName": "Karthik", "fatherName": "Ramasamy", "motherName": "Saraswathi", "notes": "Forever and always, my love." }
   },
   "events": [
-    { "id": "ev-1", "title": "Muhurtham", "date": "28 February 2026", "startTime": "8:24 AM", "endTime": "10:48 AM", "venueName": "Sri Murugan Kalyana Mandapam", "googleMapsUrl": "https://maps.google.com/?q=Sri+Murugan+Kalyana+Mandapam" },
-    { "id": "ev-2", "title": "Reception", "date": "28 February 2026", "startTime": "6:00 PM", "endTime": "10:00 PM", "venueName": "Grand Ballroom, Hotel Savera", "googleMapsUrl": "https://maps.google.com/?q=Hotel+Savera+Chennai" }
+    { "id": "ev-1", "title": "Muhurtham", "date": "28 December 2026", "startTime": "8:24 AM", "endTime": "10:48 AM", "venueName": "Sri Murugan Kalyana Mandapam", "googleMapsUrl": "https://maps.google.com/?q=Sri+Murugan+Kalyana+Mandapam" },
+    { "id": "ev-2", "title": "Reception", "date": "28 December 2026", "startTime": "6:00 PM", "endTime": "10:00 PM", "venueName": "Grand Ballroom, Hotel Savera", "googleMapsUrl": "https://maps.google.com/?q=Hotel+Savera+Chennai" }
   ],
   "gallery": { "images": [
     "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=500", 

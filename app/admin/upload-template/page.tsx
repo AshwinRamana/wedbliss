@@ -2,8 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Upload, Play, Save, Trash2, Code, CheckCircle, XCircle, Eye, FileUp, AlertTriangle } from "lucide-react";
-import { upsertTemplate, getInvitationBySubdomain, updateInvitation, createInvitation } from "@/lib/db";
-import { supabase } from "@/lib/supabase";
+import { upsertTemplate } from "@/lib/db";
 // @ts-expect-error - missing declaration file
 import Handlebars from "handlebars/dist/handlebars";
 // ─────────────────────────────────────────────────────────────────────────────
@@ -267,70 +266,37 @@ export default function UploadTemplatePage() {
         setIsDemoPushing(true);
         setDemoStatus({ type: null, msg: "" });
 
-        // 1. Upsert template as draft
-        const { error: tplErr } = await upsertTemplate({
-            id: templateId,
-            name: templateName || templateId,
-            tier,
-            description: templateDesc,
-            is_live: false,
-            is_hero: false,
-            html_content: parsedHtml,
-            css_content: parsedCss,
-            js_content: parsedJs || null,
-            demo_url: null,
-            thumbnail_url: thumbnailUrl || null,
-        });
-
-        if (tplErr) {
-            setIsDemoPushing(false);
-            setDemoStatus({ type: "error", msg: `Template save failed: ${tplErr}` });
-            return;
-        }
-
-        // 2. Find or auto-create the elegant demo invitation
-        let elegantInvite = await getInvitationBySubdomain("elegant");
-        if (!elegantInvite) {
-            // First time setup — create the demo slot automatically
-            const { data: { user } } = await supabase.auth.getUser();
-            const { data: created, error: createErr } = await createInvitation({
-                user_email: user?.email || "admin@wedbliss.co",
-                plan: "premium",
-                template_id: templateId,
-                subdomain: "elegant",
-                domain_status: "active",
-                data: { ...parsedData, metadata: { plan: "premium", template_id: templateId, createdAt: new Date().toISOString() } } as never,
-                order_id: null,
-                cloudfront_id: null,
+        try {
+            const res = await fetch("/api/admin/push-demo", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    templateId,
+                    templateName: templateName || templateId,
+                    tier,
+                    templateDesc,
+                    htmlContent: parsedHtml,
+                    cssContent: parsedCss,
+                    jsContent: parsedJs || null,
+                    thumbnailUrl: thumbnailUrl || null,
+                    mockData: parsedData,
+                }),
             });
-            if (createErr || !created) {
-                setIsDemoPushing(false);
-                setDemoStatus({ type: "error", msg: `Failed to create demo invitation: ${createErr}` });
+
+            const json = await res.json();
+
+            if (!res.ok || !json.ok) {
+                setDemoStatus({ type: "error", msg: json.error || "Push to Demo failed." });
                 return;
             }
-            elegantInvite = created;
+
+            setDemoStatus({ type: "success", msg: "✓ Live on elegant.wedbliss.co — open the link to preview!" });
+            window.open("https://elegant.wedbliss.co", "_blank");
+        } catch (e: unknown) {
+            setDemoStatus({ type: "error", msg: e instanceof Error ? e.message : "Network error." });
+        } finally {
+            setIsDemoPushing(false);
         }
-
-        // 3. Update elegant invitation — point at this template + inject mock data
-        const demoData = {
-            ...parsedData,
-            metadata: { plan: "premium", template_id: templateId, createdAt: new Date().toISOString() },
-        };
-        const { error: invErr } = await updateInvitation(elegantInvite.id, {
-            template_id: templateId,
-            data: demoData as never,
-        });
-
-        setIsDemoPushing(false);
-
-        if (invErr) {
-            setDemoStatus({ type: "error", msg: `Failed to update demo invitation: ${invErr}` });
-            return;
-        }
-
-        setDemoStatus({ type: "success", msg: "✓ Live on elegant.wedbliss.co — open the link to preview!" });
-        // Open the demo URL in a new tab
-        window.open("https://elegant.wedbliss.co", "_blank");
     };
 
     // ── Save Handler (Draft or Live) ──

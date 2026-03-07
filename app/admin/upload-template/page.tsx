@@ -267,7 +267,9 @@ export default function UploadTemplatePage() {
         setDemoStatus({ type: null, msg: "" });
 
         try {
-            const apiBase = process.env.NEXT_PUBLIC_API_URL || 'https://api.wedbliss.co';
+            // Always hit the live Express API — env var is baked at build time in static exports
+            // and may resolve to localhost in production builds.
+            const apiBase = 'https://api.wedbliss.co';
             const res = await fetch(`${apiBase}/api/admin/push-demo`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -284,10 +286,16 @@ export default function UploadTemplatePage() {
                 }),
             });
 
-            const json = await res.json();
+            // Safely read body — server may return HTML on errors
+            const text = await res.text();
+            let json: Record<string, unknown> = {};
+            try { json = JSON.parse(text); } catch {
+                setDemoStatus({ type: "error", msg: `Server returned non-JSON (status ${res.status}): ${text.slice(0, 120)}` });
+                return;
+            }
 
             if (!res.ok || !json.ok) {
-                setDemoStatus({ type: "error", msg: json.error || "Push to Demo failed." });
+                setDemoStatus({ type: "error", msg: (json.error as string) || "Push to Demo failed." });
                 return;
             }
 

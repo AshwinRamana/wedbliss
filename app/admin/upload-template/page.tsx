@@ -179,7 +179,7 @@ export default function UploadTemplatePage() {
         setValidation(result);
 
         if (!templateId) {
-            setTemplateId("tm-custom-pasted");
+            setTemplateId("tm-pasted-" + Date.now());
         }
         setViewMode("review");
     };

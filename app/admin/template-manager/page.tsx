@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { getTemplates, upsertTemplate, deleteTemplate } from "@/lib/db";
 import type { DbTemplate } from "@/lib/db";
 import { TemplateSVG } from "@/components/marketing/Templates";
+import Link from "next/link";
 
 // Supabase is the single source of truth — no hardcoded array.
 type MergedTemplate = {
@@ -248,6 +249,9 @@ export default function TemplateManagerPage() {
                                     </div>
                                 ) : (
                                     <div className="flex gap-2 flex-shrink-0">
+                                        <Link href={`/admin/template-manager/edit?id=${t.id}`} className="px-3 py-1.5 text-xs font-bold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-colors border border-indigo-200 flex items-center gap-1">
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg> Edit Code
+                                        </Link>
                                         <button onClick={() => openEdit(t)} className="px-3 py-1.5 text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors border border-slate-200">Edit Config</button>
                                         <button onClick={() => handleDelete(t.id)} className="px-3 py-1.5 text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors border border-red-100">Delete</button>
                                     </div>

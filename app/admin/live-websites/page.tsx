@@ -41,6 +41,7 @@ export default function LiveWebsitesPage() {
                                 <th className="p-4 font-bold border-b border-slate-200">Domain</th>
                                 <th className="p-4 font-bold border-b border-slate-200">Template / Plan</th>
                                 <th className="p-4 font-bold border-b border-slate-200">Created At</th>
+                                <th className="p-4 font-bold border-b border-slate-200 text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="text-sm">
@@ -48,7 +49,7 @@ export default function LiveWebsitesPage() {
                                 <tr><td colSpan={4} className="p-8 text-center text-slate-400">Loading invitations…</td></tr>
                             ) : invitations.length === 0 ? (
                                 <tr>
-                                    <td colSpan={4} className="p-12 text-center text-slate-400">
+                                    <td colSpan={5} className="p-12 text-center text-slate-400">
                                         No invitations found.
                                     </td>
                                 </tr>
@@ -77,6 +78,11 @@ export default function LiveWebsitesPage() {
                                     </td>
                                     <td className="p-4 text-xs text-slate-500">
                                         {new Date(inv.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                                    </td>
+                                    <td className="p-4 text-right">
+                                        <a href={`/admin/live-websites/edit?id=${inv.id}`} className="inline-flex items-center px-3 py-1.5 text-xs font-bold text-slate-600 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors shadow-sm">
+                                            Edit Data
+                                        </a>
                                     </td>
                                 </tr>
                             ))}

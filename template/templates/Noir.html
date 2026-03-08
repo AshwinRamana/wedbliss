@@ -1,0 +1,2173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>{{couple.groom.firstName}} &amp; {{couple.bride.firstName}} — Wedding</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cormorant:ital,wght@0,300;0,400;1,300&family=Great+Vibes&family=Cinzel:wght@400;500;600&family=IM+Fell+English:ital@0;1&display=swap"
+        rel="stylesheet" />
+
+    <!--
+  ╔══════════════════════════════════════════════════════════════╗
+  ║  FLORAL IMAGES — Pierre-Joseph Redouté (1759–1840)          ║
+  ║  Public domain botanical illustrations from Wikimedia        ║
+  ║  Commons. Redouté's roses are the gold standard for luxury  ║
+  ║  wedding stationery — used by Vera Wang, Cartier, and       ║
+  ║  royal invitation houses to this day.                        ║
+  ║                                                              ║
+  ║  Sources:                                                     ║
+  ║  1. "Les Roses" (1817–1824) — Redouté's masterwork          ║
+  ║  2. "Choix des plus belles fleurs" (1827)                   ║
+  ║  All works pre-1900 → Public Domain worldwide               ║
+  ║  Served from upload.wikimedia.org (permanent CDN)           ║
+  ╚══════════════════════════════════════════════════════════════╝
+
+  IMAGE URLS USED:
+  ┌─ COVER LEFT ────────────────────────────────────────────────
+  │  Redouté - Rosa gallica flore giganteo (brighter crop)
+  │  upload.wikimedia.org/wikipedia/commons/thumb/
+  │  4/4e/Redoute_-_Rosa_gallica_flore_giganteo_-_brighter.jpg/
+  │  800px-Redoute_-_Rosa_gallica_flore_giganteo_-_brighter.jpg
+  │
+  ├─ COVER RIGHT ───────────────────────────────────────────────
+  │  Redouté - Rosa centifolia foliacea  
+  │  upload.wikimedia.org/wikipedia/commons/thumb/
+  │  f/fb/Redoute_-_Rosa_centifolia_foliacea.jpg/
+  │  600px-Redoute_-_Rosa_centifolia_foliacea.jpg
+  │
+  ├─ HERO PANEL ────────────────────────────────────────────────
+  │  Redouté - Rosa gallica pontiana (full stem)
+  │  upload.wikimedia.org/wikipedia/commons/thumb/
+  │  8/84/Redoute_-_Rosa_gallica_pontiana.jpg/
+  │  700px-Redoute_-_Rosa_gallica_pontiana.jpg
+  │
+  ├─ INVITATION DIVIDER ────────────────────────────────────────
+  │  Redouté - Rosa centifolia foliacea (small accent)
+  │
+  ├─ EVENT CARDS (accent) ──────────────────────────────────────
+  │  Redouté - Rosa gallica regalis
+  │  upload.wikimedia.org/wikipedia/commons/thumb/
+  │  5/55/Redoute_-_Rosa_gallica_regalis.jpg/
+  │  400px-Redoute_-_Rosa_gallica_regalis.jpg
+  │
+  └─ FOOTER CORNERS ────────────────────────────────────────────
+     Redouté Rosa gallica flore giganteo (mirrored)
+-->
+
+    <style>
+        /* ══════════════════════════════════════════
+   DESIGN TOKENS
+══════════════════════════════════════════ */
+        :root {
+            --night: #07050F;
+            --deep: #0B0816;
+            --velvet: #100C1E;
+            --plum: #18102C;
+            --wine: #861838;
+            --blush: #E8A0BA;
+            --gold: #C09030;
+            --gold2: #DEB84A;
+            --gold3: #F0D878;
+            --cream: #F8F0E0;
+            --ivory: #F2E8CC;
+            --silver: #BCB4CC;
+            --fs: 'Cormorant Garamond', Georgia, serif;
+            --fd: 'Cormorant', Georgia, serif;
+            --fsc: 'Great Vibes', cursive;
+            --fc: 'Cinzel', serif;
+            --ff: 'IM Fell English', Georgia, serif;
+        }
+
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background: var(--night);
+            color: var(--cream);
+            font-family: var(--fs);
+            font-weight: 300;
+            overflow-x: hidden;
+        }
+
+        /* Grain overlay */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='.028'/%3E%3C/svg%3E");
+            mix-blend-mode: overlay;
+        }
+
+        /* ─────── SHARED UTILITY ─────── */
+        .lbl {
+            font-family: var(--fc);
+            font-size: clamp(7px, .8vw, 9px);
+            letter-spacing: 8px;
+            text-transform: uppercase;
+            color: var(--gold2);
+            display: block;
+        }
+
+        .script {
+            font-family: var(--fsc);
+            color: var(--gold2);
+        }
+
+        .display {
+            font-family: var(--fd);
+            font-weight: 300;
+            line-height: .92;
+            letter-spacing: -1px;
+            color: var(--cream);
+        }
+
+        .body-t {
+            font-family: var(--fs);
+            font-style: italic;
+            color: var(--silver);
+            line-height: 1.95;
+        }
+
+        .rule {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), var(--gold2), var(--gold), transparent);
+        }
+
+        /* ─────── SCROLL REVEAL ─────── */
+        .rv {
+            opacity: 0;
+            transform: translateY(44px) scale(.98);
+            filter: blur(5px);
+            transition: opacity 1.4s cubic-bezier(.16, 1, .3, 1), transform 1.4s cubic-bezier(.16, 1, .3, 1), filter 1s;
+        }
+
+        .rvl {
+            opacity: 0;
+            transform: translateX(-48px);
+            transition: opacity 1.4s cubic-bezier(.16, 1, .3, 1), transform 1.4s cubic-bezier(.16, 1, .3, 1);
+        }
+
+        .rvr {
+            opacity: 0;
+            transform: translateX(48px);
+            transition: opacity 1.4s cubic-bezier(.16, 1, .3, 1), transform 1.4s cubic-bezier(.16, 1, .3, 1);
+        }
+
+        .rv.on,
+        .rvl.on,
+        .rvr.on {
+            opacity: 1;
+            transform: none;
+            filter: none;
+        }
+
+        .d1 {
+            transition-delay: .05s
+        }
+
+        .d2 {
+            transition-delay: .15s
+        }
+
+        .d3 {
+            transition-delay: .25s
+        }
+
+        .d4 {
+            transition-delay: .35s
+        }
+
+        .d5 {
+            transition-delay: .45s
+        }
+
+        .d6 {
+            transition-delay: .55s
+        }
+
+        /* ══════════════════════════════════════════
+   REDOUTÉ FLORAL IMAGE TREATMENT
+   
+   These are real 19th-century botanical engravings.
+   CSS filter stack:
+   1. sepia(40%)         — remove modern white balance
+   2. hue-rotate(302deg) — shift yellows→reds, blues→purples
+   3. saturate(1.6)      — deepen the hues
+   4. brightness(.72)    — darken for velvet bg
+   5. contrast(1.2)      — punch up detail
+   6. drop-shadow        — bloom & glow around illustration
+   
+   Result: looks like a hand-painted crimson/gold
+   botanical plate printed on dark vellum — exactly
+   the aesthetic of Victorian luxury wedding invites.
+══════════════════════════════════════════ */
+
+        .rf-img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 25%;
+            filter: sepia(40%) hue-rotate(302deg) saturate(1.6) brightness(.72) contrast(1.2) drop-shadow(0 0 28px rgba(192, 144, 48, .22));
+            transition: filter .9s ease, transform .9s ease;
+            image-rendering: auto;
+        }
+
+        /* Left panel — slightly bluer, deeper shadows */
+        .rf-img.lt {
+            filter: sepia(45%) hue-rotate(298deg) saturate(1.5) brightness(.68) contrast(1.22) drop-shadow(0 0 22px rgba(88, 15, 38, .3));
+            object-position: center 18%;
+        }
+
+        /* Right panel — warmer amber tones */
+        .rf-img.rt {
+            filter: sepia(35%) hue-rotate(308deg) saturate(1.7) brightness(.74) contrast(1.15) drop-shadow(0 0 22px rgba(192, 144, 48, .25));
+            object-position: center 30%;
+        }
+
+        /* Hero panel — rich deep tone */
+        .rf-img.hero {
+            filter: sepia(42%) hue-rotate(300deg) saturate(1.65) brightness(.70) contrast(1.2) drop-shadow(0 0 40px rgba(88, 15, 38, .25));
+            object-position: center 20%;
+        }
+
+        /* Small accent (cards, footer) — lighter, more translucent */
+        .rf-img.accent {
+            filter: sepia(38%) hue-rotate(305deg) saturate(1.4) brightness(.78) contrast(1.1);
+            object-position: center 15%;
+        }
+
+        /* Hover brightening */
+        .rf-panel:hover .rf-img {
+            filter: sepia(25%) hue-rotate(302deg) saturate(1.8) brightness(.82) contrast(1.1);
+        }
+
+        /* Error fallback — CSS gradient if image 404s */
+        .rf-wrap {
+            background: radial-gradient(ellipse at 40% 30%, rgba(88, 15, 38, .5), transparent 70%),
+                radial-gradient(ellipse at 70% 70%, rgba(10, 56, 40, .4), transparent 65%), var(--deep);
+        }
+
+        /* ══════════════════════════════════════════
+   COVER
+══════════════════════════════════════════ */
+        #cover {
+            position: fixed;
+            inset: 0;
+            z-index: 800;
+            display: grid;
+            grid-template-columns: 1fr minmax(320px, 520px) 1fr;
+            grid-template-rows: 1fr;
+            overflow: hidden;
+            clip-path: inset(0 0 0 0);
+            transition: clip-path 2.8s cubic-bezier(.77, 0, .175, 1);
+        }
+
+        @media(max-width:680px) {
+            #cover {
+                grid-template-columns: 0 1fr 0;
+            }
+        }
+
+        #cover.away {
+            clip-path: inset(100% 0 0 0);
+        }
+
+        #cover.gone {
+            display: none;
+        }
+
+        /* dark base under everything */
+        #cover::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            background: linear-gradient(155deg, #050310 0%, #0B0816 40%, #100C1E 70%, #07050F 100%);
+        }
+
+        /* Left floral panel */
+        .cv-fl {
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .cv-fl .rf-wrap {
+            position: absolute;
+            inset: 0;
+        }
+
+        .cv-fl .rf-img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* fade toward centre */
+        .cv-fl.cv-left::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            background: linear-gradient(90deg, rgba(7, 5, 15, .6) 0%, rgba(7, 5, 15, .0) 25%, rgba(7, 5, 15, .9) 100%);
+        }
+
+        .cv-fl.cv-right::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            background: linear-gradient(270deg, rgba(7, 5, 15, .6) 0%, rgba(7, 5, 15, .0) 25%, rgba(7, 5, 15, .9) 100%);
+        }
+
+        /* top+bottom fade for both */
+        .cv-fl::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: 3;
+            background: linear-gradient(180deg, rgba(7, 5, 15, .7) 0%, transparent 20%, transparent 80%, rgba(7, 5, 15, .7) 100%);
+        }
+
+        /* Centre column */
+        .cv-mid {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: clamp(50px, 7vh, 90px) clamp(28px, 5vw, 56px);
+        }
+
+        /* Cover ornamental frame */
+        .cv-frame {
+            position: absolute;
+            inset: 0;
+            z-index: 20;
+            pointer-events: none;
+            border: 1px solid rgba(192, 144, 48, .2);
+        }
+
+        .cv-frame::before {
+            content: '';
+            position: absolute;
+            inset: 9px;
+            border: 1px solid rgba(192, 144, 48, .08);
+        }
+
+        /* Corner ornaments */
+        .cv-cc {
+            position: absolute;
+            width: 52px;
+            height: 52px;
+            z-index: 21;
+            pointer-events: none;
+        }
+
+        .cc1 {
+            top: 18px;
+            left: 18px
+        }
+
+        .cc2 {
+            top: 18px;
+            right: 18px;
+            transform: scaleX(-1)
+        }
+
+        .cc3 {
+            bottom: 18px;
+            left: 18px;
+            transform: scaleY(-1)
+        }
+
+        .cc4 {
+            bottom: 18px;
+            right: 18px;
+            transform: scale(-1, -1)
+        }
+
+        /* Cover text */
+        .cv-text {
+            text-align: center;
+            position: relative;
+            z-index: 22;
+        }
+
+        .cv-pre {
+            font-family: var(--fc);
+            font-size: clamp(7px, 1vw, 9px);
+            letter-spacing: 9px;
+            text-transform: uppercase;
+            color: var(--gold2);
+            display: block;
+            margin-bottom: 14px;
+            opacity: 0;
+            animation: fu 1.4s ease .4s forwards;
+        }
+
+        .cv-script {
+            font-family: var(--fsc);
+            font-size: clamp(24px, 4vw, 42px);
+            color: var(--blush);
+            display: block;
+            line-height: 1.1;
+            margin-bottom: 10px;
+            opacity: 0;
+            animation: fu 1.5s ease .7s forwards;
+        }
+
+        .cv-names {
+            font-family: var(--fd);
+            font-weight: 300;
+            font-size: clamp(48px, 10vw, 104px);
+            line-height: .88;
+            letter-spacing: -2px;
+            color: var(--cream);
+            display: block;
+            opacity: 0;
+            animation: fu 1.7s ease 1s forwards;
+        }
+
+        .cv-amp {
+            font-family: var(--fsc);
+            font-size: .52em;
+            color: var(--gold2);
+            display: block;
+            margin: 4px 0;
+            letter-spacing: 0;
+        }
+
+        .cv-rule {
+            width: 0;
+            height: 1px;
+            margin: 22px auto;
+            background: linear-gradient(90deg, transparent, var(--gold), var(--gold2), var(--gold), transparent);
+            animation: ew 1.4s ease 2s forwards;
+        }
+
+        .cv-date {
+            font-family: var(--fc);
+            font-size: clamp(7.5px, 1.1vw, 10px);
+            letter-spacing: 7px;
+            color: var(--gold3);
+            text-transform: uppercase;
+            opacity: 0;
+            animation: fu 1.4s ease 2.1s forwards;
+        }
+
+        .cv-verse {
+            font-family: var(--ff);
+            font-style: italic;
+            font-size: clamp(13px, 1.4vw, 16px);
+            color: var(--silver);
+            line-height: 1.85;
+            margin-top: 14px;
+            max-width: 380px;
+            opacity: 0;
+            animation: fu 1.4s ease 2.3s forwards;
+        }
+
+        .cv-btn {
+            display: inline-block;
+            margin-top: 38px;
+            padding: 15px 56px;
+            font-family: var(--fc);
+            font-size: clamp(7.5px, .95vw, 9.5px);
+            letter-spacing: 7px;
+            text-transform: uppercase;
+            color: var(--night);
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold2) 48%, var(--gold) 100%);
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: transform .3s, box-shadow .4s;
+            opacity: 0;
+            animation: fu 1.4s ease 2.5s forwards;
+        }
+
+        .cv-btn::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, var(--gold3), #fffde0, var(--gold3));
+            opacity: 0;
+            transition: opacity .4s;
+        }
+
+        .cv-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 14px 55px rgba(192, 144, 48, .6);
+        }
+
+        .cv-btn:hover::after {
+            opacity: 1;
+        }
+
+        .cv-btn span {
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes fu {
+            from {
+                opacity: 0;
+                transform: translateY(26px);
+                filter: blur(6px)
+            }
+
+            to {
+                opacity: 1;
+                transform: none;
+                filter: none
+            }
+        }
+
+        @keyframes ew {
+            from {
+                width: 0
+            }
+
+            to {
+                width: 200px
+            }
+        }
+
+        /* ══════════════════════════════════════════
+   MAIN CONTENT
+══════════════════════════════════════════ */
+        #invite {
+            opacity: 0;
+            transition: opacity 2s ease;
+        }
+
+        #invite.on {
+            opacity: 1;
+        }
+
+        /* ─────── HERO ─────── */
+        #hero {
+            min-height: 100svh;
+            display: grid;
+            grid-template-columns: 1fr;
+            background: linear-gradient(158deg, #07050F 0%, #0B0816 45%, #100C1E 80%, #07050F 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        @media(min-width:900px) {
+            #hero {
+                grid-template-columns: 52% 48%;
+            }
+        }
+
+        .hero-l {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: clamp(70px, 10vw, 130px) clamp(24px, 6%, 80px) clamp(60px, 8vw, 100px) clamp(24px, 8%, 120px);
+            position: relative;
+            z-index: 5;
+            order: 2;
+        }
+
+        @media(min-width:900px) {
+            .hero-l {
+                order: 1;
+            }
+        }
+
+        @media(max-width:768px) {
+            .hero-l {
+                text-align: center;
+                align-items: center;
+            }
+        }
+
+        .hero-script {
+            font-size: clamp(26px, 3.8vw, 48px);
+            line-height: 1.1;
+            margin: 10px 0 4px;
+            display: block;
+        }
+
+        .hero-names {
+            font-size: clamp(46px, 8.5vw, 108px);
+            margin-bottom: 26px;
+        }
+
+        .hero-names .ha {
+            display: block;
+            font-family: var(--fsc);
+            font-size: .5em;
+            color: var(--gold2);
+            letter-spacing: 0;
+            margin: 3px 0;
+            font-weight: 300;
+        }
+
+        .hero-rule-wrap {
+            width: 0;
+            transition: width 1.8s ease .4s;
+        }
+
+        .hero-rule-wrap.on {
+            width: clamp(100px, 12vw, 155px);
+        }
+
+        .hr-line {
+            height: 1px;
+            background: linear-gradient(90deg, var(--gold), var(--gold2), var(--gold));
+            width: 100%;
+            margin-bottom: 26px;
+        }
+
+        .hero-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .hero-meta span {
+            font-family: var(--fc);
+            font-size: clamp(7.5px, .95vw, 9.5px);
+            letter-spacing: 5px;
+            color: var(--gold3);
+            text-transform: uppercase;
+        }
+
+        /* Hero right — Redouté panel */
+        .hero-r {
+            position: relative;
+            overflow: hidden;
+            min-height: 55svh;
+            order: 1;
+        }
+
+        @media(min-width:900px) {
+            .hero-r {
+                min-height: 100svh;
+                order: 2;
+            }
+        }
+
+        .hero-rf {
+            position: absolute;
+            inset: 0;
+        }
+
+        .hero-rf img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .hero-r:hover .hero-rf img {
+            filter: sepia(28%) hue-rotate(300deg) saturate(1.85) brightness(.8) contrast(1.1);
+            transform: scale(1.025);
+        }
+
+        /* Gradient overlays — critical for text legibility */
+        .hero-ov-l {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: clamp(80px, 14vw, 180px);
+            height: 100%;
+            z-index: 3;
+            background: linear-gradient(90deg, var(--deep), transparent);
+        }
+
+        .hero-ov-t {
+            position: absolute;
+            top: 0;
+            inset-inline: 0;
+            height: clamp(80px, 14vh, 150px);
+            z-index: 3;
+            background: linear-gradient(180deg, var(--night), transparent);
+        }
+
+        .hero-ov-b {
+            position: absolute;
+            bottom: 0;
+            inset-inline: 0;
+            height: clamp(80px, 14vh, 150px);
+            z-index: 3;
+            background: linear-gradient(0, var(--night), transparent);
+        }
+
+        /* Vertical gold divider line (desktop only) */
+        .hero-sep {
+            display: none;
+            position: absolute;
+            top: 8%;
+            bottom: 8%;
+            left: 0;
+            width: 1px;
+            z-index: 10;
+            background: linear-gradient(180deg, transparent, rgba(192, 144, 48, .55), rgba(222, 184, 74, .8), rgba(192, 144, 48, .55), transparent);
+        }
+
+        @media(min-width:900px) {
+            .hero-sep {
+                display: block;
+            }
+        }
+
+        /* Date badge */
+        .hero-badge {
+            position: absolute;
+            z-index: 15;
+            text-align: center;
+            padding: 16px 30px;
+            background: rgba(7, 5, 15, .82);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(192, 144, 48, .26);
+            bottom: 40px;
+            right: 40px;
+        }
+
+        @media(max-width:900px) {
+            .hero-badge {
+                bottom: 20px;
+                right: 50%;
+                transform: translateX(50%);
+                white-space: nowrap;
+            }
+        }
+
+        .hb-pre {
+            font-family: var(--fc);
+            font-size: 7px;
+            letter-spacing: 5px;
+            color: var(--gold2);
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .hb-date {
+            font-family: var(--fd);
+            font-weight: 300;
+            font-size: clamp(17px, 2.2vw, 26px);
+            color: var(--cream);
+            letter-spacing: 2px;
+            display: block;
+        }
+
+        .hb-venue {
+            font-family: var(--ff);
+            font-style: italic;
+            font-size: 11px;
+            color: var(--silver);
+            margin-top: 2px;
+            display: block;
+        }
+
+        /* ─────── INVITATION TEXT ─────── */
+        #invtext {
+            padding: clamp(72px, 8vw, 120px) 0;
+            background: radial-gradient(ellipse 80% 60% at 18% 50%, rgba(10, 56, 40, .15) 0%, transparent 60%),
+                radial-gradient(ellipse 70% 55% at 82% 50%, rgba(88, 15, 38, .15) 0%, transparent 60%),
+                linear-gradient(175deg, #0B0816, #100C1E 50%, #0B0816);
+        }
+
+        .inv-inner {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 0 clamp(20px, 7%, 110px);
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 56px;
+        }
+
+        @media(min-width:900px) {
+            .inv-inner {
+                grid-template-columns: 1fr 1px 1fr;
+                gap: 0;
+            }
+        }
+
+        .inv-div {
+            display: none;
+            background: linear-gradient(180deg, transparent, rgba(192, 144, 48, .4), rgba(222, 184, 74, .65), rgba(192, 144, 48, .4), transparent);
+        }
+
+        @media(min-width:900px) {
+            .inv-div {
+                display: block;
+            }
+        }
+
+        .inv-col {}
+
+        @media(min-width:900px) {
+            .inv-col:first-child {
+                padding-right: 9%
+            }
+
+            .inv-col:last-child {
+                padding-left: 9%
+            }
+        }
+
+        .inv-verse {
+            font-family: var(--ff);
+            font-style: italic;
+            font-size: clamp(16px, 1.85vw, 24px);
+            color: var(--cream);
+            line-height: 1.85;
+            margin-top: 18px;
+        }
+
+        .inv-formal {
+            font-family: var(--fs);
+            font-size: clamp(14px, 1.35vw, 17px);
+            color: var(--silver);
+            line-height: 2.3;
+            margin-top: 18px;
+        }
+
+        .gname {
+            font-family: var(--fsc);
+            font-size: clamp(30px, 3.4vw, 48px);
+            color: var(--gold2);
+            display: block;
+            line-height: 1.1;
+            margin: 5px 0;
+        }
+
+        .weds-txt {
+            font-family: var(--fsc);
+            font-size: clamp(22px, 2.6vw, 38px);
+            color: var(--gold);
+            display: block;
+            text-align: center;
+            margin: 8px 0;
+        }
+
+        /* Floral divider — small Redouté sprig centred between cols */
+        .inv-floral-div {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 8px 0;
+        }
+
+        .inv-floral-div .rfd {
+            width: clamp(60px, 8vw, 90px);
+            height: clamp(80px, 11vw, 120px);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .inv-floral-div .rfd img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 22%;
+            filter: sepia(38%) hue-rotate(305deg) saturate(1.3) brightness(.7) contrast(1.1);
+            opacity: .48;
+        }
+
+        /* ─────── EVENTS ─────── */
+        #events {
+            padding: clamp(72px, 7vw, 100px) 0;
+            background: #07050F;
+            border-top: 1px solid rgba(192, 144, 48, .1);
+        }
+
+        .ev-inner {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 0 clamp(20px, 7%, 110px);
+        }
+
+        .ev-hd {
+            margin-bottom: clamp(36px, 4vw, 56px);
+        }
+
+        .ev-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 3px;
+        }
+
+        @media(min-width:560px) {
+            .ev-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media(min-width:1100px) {
+            .ev-grid {
+                grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+            }
+        }
+
+        .evc {
+            padding: clamp(30px, 4vw, 50px) clamp(20px, 3vw, 42px) clamp(26px, 3.5vw, 42px);
+            background: linear-gradient(150deg, rgba(16, 12, 30, .98), rgba(11, 8, 22, .99));
+            border: 1px solid rgba(192, 144, 48, .1);
+            position: relative;
+            overflow: hidden;
+            transition: transform .5s ease, border-color .5s ease;
+        }
+
+        .evc::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+        }
+
+        .evc.c0::before {
+            background: linear-gradient(90deg, #268A62, transparent);
+        }
+
+        .evc.c1::before {
+            background: linear-gradient(90deg, #861838, transparent);
+        }
+
+        .evc.c2::before {
+            background: linear-gradient(90deg, var(--gold2), transparent);
+        }
+
+        .evc:hover {
+            transform: translateY(-5px);
+            border-color: rgba(192, 144, 48, .28);
+        }
+
+        /* Redouté corner accent on each event card */
+        .ev-floral-corner {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 110px;
+            height: 130px;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .ev-floral-corner img {
+            position: absolute;
+            bottom: -16px;
+            right: -16px;
+            width: 145px;
+            height: 175px;
+            object-fit: cover;
+            object-position: center 15%;
+            filter: sepia(40%) hue-rotate(306deg) saturate(1.3) brightness(.78) contrast(1.05);
+            opacity: .16;
+            transform: rotate(12deg);
+            transition: opacity .5s, transform .5s;
+        }
+
+        .evc:hover .ev-floral-corner img {
+            opacity: .28;
+            transform: rotate(9deg) scale(1.06);
+        }
+
+        .ev-icon {
+            width: 42px;
+            height: 42px;
+            margin-bottom: 26px;
+            border: 1px solid rgba(192, 144, 48, .22);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ev-tag {
+            font-family: var(--fc);
+            font-size: 7.5px;
+            letter-spacing: 6px;
+            color: var(--gold2);
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 9px;
+        }
+
+        .ev-name {
+            font-family: var(--fd);
+            font-weight: 300;
+            font-size: clamp(21px, 2.5vw, 30px);
+            color: var(--cream);
+            line-height: 1.05;
+            margin-bottom: 18px;
+        }
+
+        .ev-info {
+            font-family: var(--fs);
+            font-size: 14px;
+            color: var(--silver);
+            line-height: 2.15;
+        }
+
+        .ev-info strong {
+            color: var(--cream);
+            font-weight: 400;
+            font-size: 15px;
+            display: block;
+            margin-top: 3px;
+        }
+
+        .ev-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            margin-top: 26px;
+            padding: 10px 24px;
+            font-family: var(--fc);
+            font-size: 7.5px;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: var(--gold2);
+            border: 1px solid rgba(192, 144, 48, .25);
+            background: transparent;
+            cursor: pointer;
+            transition: all .4s;
+        }
+
+        .ev-btn:hover {
+            background: var(--gold2);
+            color: var(--night);
+        }
+
+        /* ─────── COUNTDOWN ─────── */
+        #countdown {
+            padding: clamp(60px, 6vw, 88px) 0;
+            background: radial-gradient(ellipse 60% 80% at 50% 50%, rgba(24, 16, 44, .85), transparent 70%), #07050F;
+            border-top: 1px solid rgba(192, 144, 48, .1);
+            border-bottom: 1px solid rgba(192, 144, 48, .1);
+        }
+
+        .cd-inner {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 0 clamp(20px, 7%, 110px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 48px;
+        }
+
+        @media(min-width:768px) {
+            .cd-inner {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+        }
+
+        .cd-units {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .cd-cell {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: clamp(12px, 2vw, 22px) clamp(11px, 2.5vw, 24px);
+            background: rgba(16, 12, 30, .9);
+            border: 1px solid rgba(192, 144, 48, .14);
+            min-width: clamp(58px, 7vw, 82px);
+        }
+
+        .cd-n {
+            font-family: var(--fd);
+            font-weight: 300;
+            font-size: clamp(26px, 4.5vw, 56px);
+            color: var(--cream);
+            line-height: 1;
+            transition: transform .2s;
+        }
+
+        .cd-n.pop {
+            transform: scaleY(.84);
+        }
+
+        .cd-l {
+            font-family: var(--fc);
+            font-size: 6px;
+            letter-spacing: 4px;
+            color: var(--gold2);
+            text-transform: uppercase;
+            margin-top: 5px;
+        }
+
+        .cd-dot {
+            font-family: var(--fd);
+            font-size: 34px;
+            color: var(--gold);
+            opacity: .4;
+            padding-bottom: 12px;
+        }
+
+        /* ─────── GALLERY ─────── */
+        #gallery {
+            padding: clamp(72px, 7vw, 100px) 0;
+            background: #07050F;
+            border-top: 1px solid rgba(192, 144, 48, .1);
+        }
+
+        .gal-inner {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 0 clamp(20px, 7%, 110px);
+        }
+
+        .gal-hd {
+            margin-bottom: clamp(36px, 4vw, 56px);
+            text-align: center;
+        }
+
+        .gal-grid {
+            display: grid;
+            gap: 3px;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        @media(min-width:860px) {
+            .gal-grid {
+                grid-template-columns: 1.4fr 1fr 1fr;
+                grid-template-rows: auto auto;
+            }
+
+            .gi0 {
+                grid-row: span 2
+            }
+        }
+
+        .gi {
+            overflow: hidden;
+            position: relative;
+            background: var(--plum);
+            aspect-ratio: 3/4;
+        }
+
+        .gi0 {
+            aspect-ratio: auto;
+            min-height: 280px;
+        }
+
+        .gi img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: sepia(12%) contrast(1.05) saturate(.88) brightness(.88);
+            transition: filter .7s, transform .7s;
+        }
+
+        .gi:hover img {
+            filter: sepia(5%) contrast(1.03) saturate(1) brightness(.96);
+            transform: scale(1.04);
+        }
+
+        .gi::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 55%, rgba(7, 5, 15, .65) 100%);
+            pointer-events: none;
+        }
+
+        /* ─────── VIDEO ─────── */
+        #video-sec {
+            padding: clamp(72px, 7vw, 100px) 0;
+            background: linear-gradient(158deg, #0B0816, #18102C 50%, #0B0816);
+            border-top: 1px solid rgba(192, 144, 48, .1);
+        }
+
+        .vid-inner {
+            max-width: 920px;
+            margin: 0 auto;
+            padding: 0 clamp(20px, 7%, 80px);
+        }
+
+        .vid-hd {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .vid-frame {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border: 1px solid rgba(192, 144, 48, .2);
+        }
+
+        .vid-frame iframe {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        /* ─────── NOTES ─────── */
+        #notes {
+            padding: clamp(72px, 7vw, 100px) 0;
+            background: linear-gradient(158deg, #0B0816, #18102C 50%, #0B0816);
+        }
+
+        .notes-inner {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 0 clamp(20px, 7%, 110px);
+        }
+
+        .notes-hd {
+            text-align: center;
+            margin-bottom: clamp(40px, 5vw, 60px);
+        }
+
+        /* Redouté divider between heading and cards */
+        .notes-floral-div {
+            display: flex;
+            justify-content: center;
+            margin: 18px 0 0;
+        }
+
+        .nfd-img {
+            width: clamp(70px, 9vw, 110px);
+            height: clamp(90px, 12vw, 145px);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .nfd-img img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 18%;
+            filter: sepia(40%) hue-rotate(305deg) saturate(1.3) brightness(.7) contrast(1.08);
+            opacity: .42;
+        }
+
+        .notes-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 3px;
+        }
+
+        @media(min-width:860px) {
+            .notes-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .note {
+            padding: clamp(30px, 4vw, 50px) clamp(20px, 4vw, 48px);
+            background: linear-gradient(148deg, rgba(16, 12, 30, .7), rgba(24, 16, 44, .6));
+            border: 1px solid rgba(192, 144, 48, .09);
+            position: relative;
+            overflow: hidden;
+            transition: border-color .5s;
+        }
+
+        .note:hover {
+            border-color: rgba(192, 144, 48, .24);
+        }
+
+        .note::before {
+            content: '\201C';
+            font-family: var(--fd);
+            font-size: 160px;
+            font-weight: 300;
+            color: var(--gold);
+            opacity: .07;
+            position: absolute;
+            top: -20px;
+            left: 18px;
+            line-height: 1;
+            pointer-events: none;
+        }
+
+        .note-who {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 22px;
+        }
+
+        .note-av {
+            width: 42px;
+            height: 42px;
+            flex-shrink: 0;
+            border: 1px solid rgba(192, 144, 48, .28);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--fd);
+            font-size: 18px;
+            color: var(--gold2);
+        }
+
+        .note-name {
+            font-family: var(--fc);
+            font-size: 7.5px;
+            letter-spacing: 5px;
+            color: var(--cream);
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .note-role {
+            font-family: var(--fs);
+            font-style: italic;
+            font-size: 12px;
+            color: var(--silver);
+        }
+
+        .note-txt {
+            font-family: var(--ff);
+            font-style: italic;
+            font-size: clamp(14px, 1.4vw, 17px);
+            color: var(--blush);
+            line-height: 1.95;
+        }
+
+        /* ─────── VENUE ─────── */
+        #venue {
+            padding: clamp(72px, 7vw, 100px) 0;
+            background: #07050F;
+            border-top: 1px solid rgba(192, 144, 48, .1);
+        }
+
+        .venue-inner {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 0 clamp(20px, 7%, 110px);
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: clamp(36px, 5vw, 64px);
+        }
+
+        @media(min-width:900px) {
+            .venue-inner {
+                grid-template-columns: 1fr 1fr;
+                align-items: start;
+            }
+        }
+
+        .venue-map {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(148deg, #100C1E, #0B0816);
+            border: 1px solid rgba(192, 144, 48, .14);
+            aspect-ratio: 4/3;
+            transition: border-color .5s;
+        }
+
+        @media(min-width:900px) {
+            .venue-map {
+                aspect-ratio: auto;
+                height: 430px;
+            }
+        }
+
+        .venue-map:hover {
+            border-color: rgba(192, 144, 48, .32);
+        }
+
+        /* Grid lines on map area */
+        .vm-grid {
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient(rgba(192, 144, 48, .04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(192, 144, 48, .04) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        /* Redouté watermark behind map placeholder */
+        .vm-floral {
+            position: absolute;
+            right: -5%;
+            bottom: -5%;
+            width: 65%;
+            height: 80%;
+            overflow: hidden;
+            opacity: .09;
+            pointer-events: none;
+        }
+
+        .vm-floral img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 20%;
+            filter: sepia(40%) hue-rotate(305deg) saturate(1.3) brightness(.75);
+        }
+
+        .vm-ph {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            color: rgba(192, 144, 48, .30);
+            height: 100%;
+            justify-content: center;
+        }
+
+        .vm-ph svg {
+            width: 34px;
+            height: 34px;
+        }
+
+        .vm-ph span {
+            font-family: var(--fc);
+            font-size: 7.5px;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+        }
+
+        .venue-dets {
+            display: flex;
+            flex-direction: column;
+            gap: clamp(22px, 3vw, 36px);
+        }
+
+        .v-item {
+            padding-left: 20px;
+            border-left: 2px solid rgba(192, 144, 48, .28);
+            transition: border-color .4s;
+        }
+
+        .v-item:hover {
+            border-color: rgba(222, 184, 74, .7);
+        }
+
+        .v-tag {
+            font-family: var(--fc);
+            font-size: 7.5px;
+            letter-spacing: 5px;
+            color: var(--gold2);
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .v-name {
+            font-family: var(--fd);
+            font-weight: 300;
+            font-size: clamp(17px, 2.2vw, 28px);
+            color: var(--cream);
+            line-height: 1.05;
+            margin-bottom: 8px;
+        }
+
+        .v-addr {
+            font-family: var(--fs);
+            font-size: 14px;
+            color: var(--silver);
+            line-height: 2.2;
+        }
+
+        /* ─────── FOOTER ─────── */
+        footer {
+            padding: clamp(50px, 5vw, 68px) 0 clamp(40px, 4vw, 52px);
+            background: #07050F;
+            border-top: 1px solid rgba(192, 144, 48, .12);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Footer Redouté corner florals */
+        .ft-fl {
+            position: absolute;
+            bottom: -10px;
+            width: clamp(110px, 12vw, 175px);
+            height: clamp(90px, 10vw, 155px);
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .ft-fl.fl-l {
+            left: -8px;
+        }
+
+        .ft-fl.fl-r {
+            right: -8px;
+            transform: scaleX(-1);
+        }
+
+        .ft-fl .rf-wrap {
+            position: absolute;
+            inset: 0;
+        }
+
+        .ft-fl img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 25%;
+            filter: sepia(42%) hue-rotate(305deg) saturate(1.35) brightness(.7) contrast(1.1);
+            opacity: .30;
+        }
+
+        .ft-inner {
+            position: relative;
+            z-index: 2;
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 0 clamp(20px, 7%, 110px);
+        }
+
+        .ft-names {
+            font-family: var(--fsc);
+            font-size: clamp(28px, 4vw, 50px);
+            color: var(--gold2);
+            display: block;
+            margin-bottom: 9px;
+        }
+
+        .ft-date {
+            font-family: var(--fc);
+            font-size: clamp(7px, .9vw, 9px);
+            letter-spacing: 7px;
+            color: var(--gold);
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 24px;
+        }
+
+        .ft-body {
+            font-family: var(--fs);
+            font-style: italic;
+            font-size: 13px;
+            color: rgba(188, 180, 204, .40);
+            line-height: 1.9;
+        }
+
+        /* ─────── PARTICLES CANVAS ─────── */
+        #dust {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* ══════════════════════════════════════════
+   MOBILE-SPECIFIC OVERRIDES
+══════════════════════════════════════════ */
+        @media(max-width:680px) {
+            .cv-verse {
+                display: none;
+            }
+
+            .cv-script {
+                font-size: 22px;
+            }
+
+            .cv-names {
+                font-size: 52px;
+            }
+        }
+
+        @media(max-width:480px) {
+            .cd-units {
+                gap: 2px;
+            }
+
+            .cd-cell {
+                min-width: 52px;
+                padding: 10px 12px;
+            }
+
+            .cd-dot {
+                font-size: 26px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="dust"></canvas>
+
+    <!-- ════════════════════════════════════════
+     COVER
+     
+     Floral images: Pierre-Joseph Redouté (1759-1840)
+     "Les Roses" botanical engravings — Public Domain
+     Served from Wikimedia Commons permanent CDN
+     (upload.wikimedia.org)
+════════════════════════════════════════ -->
+    <div id="cover">
+        <!-- LEFT PANEL: Rosa gallica flore giganteo (bright crop) -->
+        <div class="cv-fl cv-left rf-panel">
+            <div class="rf-wrap">
+                <img class="rf-img lt"
+                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Redoute_-_Rosa_gallica_flore_giganteo_-_brighter.jpg/700px-Redoute_-_Rosa_gallica_flore_giganteo_-_brighter.jpg"
+                    alt="Redouté Rosa gallica botanical illustration" loading="eager"
+                    onerror="this.style.opacity='0'" />
+            </div>
+        </div>
+
+        <!-- CENTRE: Text -->
+        <div class="cv-mid">
+            <div class="cv-text">
+                <span class="cv-pre">You are cordially invited</span>
+                <span class="cv-script">The Wedding of</span>
+                <span class="cv-names">
+                    {{couple.groom.firstName}}<span class="cv-amp">&amp;</span>{{couple.bride.firstName}}
+                </span>
+                <div class="cv-rule"></div>
+                <span class="cv-date">{{events.0.dayOfWeek}} · {{events.0.dateLong}} · {{city}}</span>
+                <p class="cv-verse">{{tagline}}</p>
+                <button class="cv-btn" id="openBtn"><span>Open Invitation</span></button>
+            </div>
+        </div>
+
+        <!-- RIGHT PANEL: Rosa centifolia foliacea -->
+        <div class="cv-fl cv-right rf-panel">
+            <div class="rf-wrap">
+                <img class="rf-img rt"
+                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Redoute_-_Rosa_centifolia_foliacea.jpg/600px-Redoute_-_Rosa_centifolia_foliacea.jpg"
+                    alt="Redouté Rosa centifolia botanical illustration" loading="eager"
+                    onerror="this.style.opacity='0'" />
+            </div>
+        </div>
+
+        <!-- Corner ornaments -->
+        <svg class="cv-cc cc1" viewBox="0 0 52 52" fill="none">
+            <path d="M4,48L4,4L48,4" stroke="#C09030" stroke-width="1.2" opacity=".7" />
+            <circle cx="48" cy="4" r="2.5" fill="#C09030" opacity=".55" />
+            <circle cx="4" cy="48" r="2.5" fill="#C09030" opacity=".55" />
+            <circle cx="4" cy="4" r="1.8" fill="#C09030" opacity=".8" />
+        </svg>
+        <svg class="cv-cc cc2" viewBox="0 0 52 52" fill="none">
+            <path d="M4,48L4,4L48,4" stroke="#C09030" stroke-width="1.2" opacity=".7" />
+            <circle cx="48" cy="4" r="2.5" fill="#C09030" opacity=".55" />
+            <circle cx="4" cy="48" r="2.5" fill="#C09030" opacity=".55" />
+            <circle cx="4" cy="4" r="1.8" fill="#C09030" opacity=".8" />
+        </svg>
+        <svg class="cv-cc cc3" viewBox="0 0 52 52" fill="none">
+            <path d="M4,48L4,4L48,4" stroke="#C09030" stroke-width="1.2" opacity=".7" />
+            <circle cx="48" cy="4" r="2.5" fill="#C09030" opacity=".55" />
+            <circle cx="4" cy="48" r="2.5" fill="#C09030" opacity=".55" />
+            <circle cx="4" cy="4" r="1.8" fill="#C09030" opacity=".8" />
+        </svg>
+        <svg class="cv-cc cc4" viewBox="0 0 52 52" fill="none">
+            <path d="M4,48L4,4L48,4" stroke="#C09030" stroke-width="1.2" opacity=".7" />
+            <circle cx="48" cy="4" r="2.5" fill="#C09030" opacity=".55" />
+            <circle cx="4" cy="48" r="2.5" fill="#C09030" opacity=".55" />
+            <circle cx="4" cy="4" r="1.8" fill="#C09030" opacity=".8" />
+        </svg>
+        <div class="cv-frame"></div>
+    </div><!-- /#cover -->
+
+
+    <!-- ════════════════════════════════════════
+     MAIN INVITE CONTENT
+════════════════════════════════════════ -->
+    <div id="invite">
+
+        <!-- ─────── HERO ─────── -->
+        <section id="hero">
+            <!-- LEFT: Text -->
+            <div class="hero-l">
+                <div class="rv d1">
+                    <span class="lbl">A Sacred Union</span>
+                    <span class="script hero-script">With Joy &amp; Love</span>
+                </div>
+                <h1 class="display hero-names rv d3">
+                    {{couple.groom.firstName}}<span class="ha">&amp;</span>{{couple.bride.firstName}}
+                </h1>
+                <div class="hero-rule-wrap rv d4">
+                    <div class="hr-line"></div>
+                </div>
+                <p class="body-t rv d4" style="font-size:clamp(14px,1.3vw,16px);max-width:420px;margin-bottom:24px;">
+                    Two souls, bound by love and graced by family — joyfully inviting you to witness their beginning.
+                </p>
+                <div class="hero-meta rv d5">
+                    <span>{{events.0.dayOfWeek}} · {{events.0.dateLong}}</span>
+                    <span>{{events.0.venue}} · {{city}}</span>
+                </div>
+            </div>
+
+            <!-- RIGHT: Redouté Rosa gallica pontiana -->
+            <div class="hero-r rf-panel">
+                <div class="hero-rf rf-wrap">
+                    <!--
+        Redouté — Rosa gallica pontiana from "Les Roses" (1817)
+        Public domain. Wikimedia Commons permanent CDN.
+        CSS filter stack shifts to crimson/gold for dark velvet theme.
+      -->
+                    <img class="rf-img hero"
+                        src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Redoute_-_Rosa_gallica_pontiana.jpg/700px-Redoute_-_Rosa_gallica_pontiana.jpg"
+                        alt="Redouté Rosa gallica pontiana botanical illustration" loading="lazy"
+                        onerror="this.closest('.hero-rf').style.opacity='0'" />
+                </div>
+                <div class="hero-ov-l"></div>
+                <div class="hero-ov-t"></div>
+                <div class="hero-ov-b"></div>
+                <div class="hero-sep"></div>
+                <div class="hero-badge">
+                    <span class="hb-pre">Wedding Day</span>
+                    <span class="hb-date">{{events.0.dateShort}}</span>
+                    <span class="hb-venue">{{events.0.venue}}</span>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ─────── INVITATION TEXT ─────── -->
+        <section id="invtext">
+            <div class="inv-inner">
+                <div class="inv-col rvl d2">
+                    <span class="lbl rv d1">Together in Joy</span>
+                    <p class="inv-verse rv d2">
+                        With hearts full of gratitude and joy,<br>
+                        the families of {{couple.groom.firstName}}<br>
+                        and {{couple.bride.firstName}}<br>
+                        joyfully request the honour of your presence.
+                    </p>
+                    <p class="inv-formal rv d3">
+                        {{couple.groom.fatherName}}<br>{{couple.groom.motherName}}
+                        <span class="weds-txt">invite you to the wedding of their son</span>
+                        <span class="gname">{{couple.groom.fullName}}</span>
+                    </p>
+                </div>
+
+                <div class="inv-div"></div>
+
+                <div class="inv-col rvr d3">
+                    <div class="rule rv d1" style="width:100%;opacity:.25;margin-bottom:22px;"></div>
+                    <p class="inv-formal rv d2">
+                        {{couple.bride.fatherName}}<br>{{couple.bride.motherName}}
+                        <span class="weds-txt">invite you to the wedding of their daughter</span>
+                        <span class="gname">{{couple.bride.fullName}}</span>
+                    </p>
+                    <p class="body-t rv d3" style="font-size:clamp(14px,1.3vw,16px);margin-top:18px;">
+                        The wedding will be solemnised on
+                        <strong style="color:var(--cream);font-style:normal;">{{events.0.dayOfWeek}}</strong>,
+                        the {{events.0.dateLong}}.
+                    </p>
+
+                    <!-- Small Redouté sprig as decorative accent -->
+                    <div class="inv-floral-div rv d5">
+                        <div class="rfd">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Redoute_-_Rosa_centifolia_foliacea.jpg/300px-Redoute_-_Rosa_centifolia_foliacea.jpg"
+                                alt="" aria-hidden="true" loading="lazy" onerror="this.style.opacity='0'" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ─────── EVENTS ─────── -->
+        <section id="events">
+            <div class="ev-inner">
+                <div class="ev-hd rv">
+                    <span class="lbl">The Celebrations</span>
+                    <h2 class="display" style="font-size:clamp(36px,5vw,68px);margin-top:12px;">
+                        Join Us For<br>Every Moment
+                    </h2>
+                </div>
+                <div class="ev-grid">
+                    {{#each events}}
+                    <div class="evc c{{@index}} rv" style="transition-delay: calc({{@index}} * 0.1s + 0.05s);">
+                        <div class="ev-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(192,144,48,.82)"
+                                stroke-width="1.3" stroke-linecap="round">
+                                <path
+                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                            </svg>
+                        </div>
+
+                        <!-- Redouté corner accent — Rosa gallica regalis -->
+                        <div class="ev-floral-corner">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Redoute_-_Rosa_gallica_regalis.jpg/400px-Redoute_-_Rosa_gallica_regalis.jpg"
+                                alt="" aria-hidden="true" loading="lazy" onerror="this.style.opacity='0'" />
+                        </div>
+
+                        <span class="ev-tag">{{dayOfWeek}} · {{dateLong}}</span>
+                        <h3 class="ev-name">{{name}}</h3>
+                        <div class="ev-info">
+                            <span>{{startTime12}} — {{endTime12}}</span>
+                            <strong>{{venue}}</strong>
+                            <span style="margin-top:8px;display:block;">{{address}}</span>
+                        </div>
+                        <button class="ev-btn"
+                            onclick="handleCalendar('{{name}}','{{dateLong}}','{{startTime12}}','{{endTime12}}','{{venue}}','{{../couple.groom.firstName}} & {{../couple.bride.firstName}}')">
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round">
+                                <rect x="3" y="4" width="18" height="18" rx="2" />
+                                <line x1="16" y1="2" x2="16" y2="6" />
+                                <line x1="8" y1="2" x2="8" y2="6" />
+                                <line x1="3" y1="10" x2="21" y2="10" />
+                            </svg>
+                            Add to Calendar
+                        </button>
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ─────── COUNTDOWN ─────── -->
+        <section id="countdown">
+            <div class="cd-inner">
+                <div class="rvl d1">
+                    <span class="lbl">Counting Down</span>
+                    <div class="display" style="font-size:clamp(28px,4vw,52px);margin-top:10px;">
+                        The Days Until<br>
+                        <span class="script" style="font-size:1.15em;">Forever Begins</span>
+                    </div>
+                </div>
+                <div class="cd-units rvr d2">
+                    <div class="cd-cell">
+                        <div class="cd-n" id="cdD">00</div>
+                        <div class="cd-l">Days</div>
+                    </div>
+                    <div class="cd-dot">·</div>
+                    <div class="cd-cell">
+                        <div class="cd-n" id="cdH">00</div>
+                        <div class="cd-l">Hours</div>
+                    </div>
+                    <div class="cd-dot">·</div>
+                    <div class="cd-cell">
+                        <div class="cd-n" id="cdM">00</div>
+                        <div class="cd-l">Min</div>
+                    </div>
+                    <div class="cd-dot">·</div>
+                    <div class="cd-cell">
+                        <div class="cd-n" id="cdS">00</div>
+                        <div class="cd-l">Sec</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ─────── GALLERY (conditional) ─────── -->
+        {{#if gallery.images}}
+        <section id="gallery">
+            <div class="gal-inner">
+                <div class="gal-hd rv">
+                    <span class="lbl">Our Story in Frames</span>
+                    <div class="display" style="font-size:clamp(36px,5vw,68px);margin-top:12px;">
+                        Moments That<br>Led Us Here
+                    </div>
+                </div>
+                <div class="gal-grid">
+                    {{#each gallery.images}}
+                    <div class="gi{{#if @first}} gi0{{/if}} rv"
+                        style="transition-delay: calc({{@index}} * 0.1s + 0.05s);">
+                        <img src="{{this}}" alt="Wedding photo" loading="lazy" />
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
+        </section>
+        {{/if}}
+
+
+        <!-- ─────── VIDEO (conditional) ─────── -->
+        {{#if media.videoUrl}}
+        <section id="video-sec">
+            <div class="vid-inner">
+                <div class="vid-hd rv">
+                    <span class="lbl">Hear From Us</span>
+                    <div class="display" style="font-size:clamp(34px,5vw,68px);margin-top:11px;">
+                        A Message<br>
+                        <span class="script" style="font-size:.85em;">From Our Hearts</span>
+                    </div>
+                </div>
+                <div class="vid-frame rv d2">
+                    <iframe src="{{media.videoUrl}}" allowfullscreen allow="autoplay; fullscreen"></iframe>
+                </div>
+            </div>
+        </section>
+        {{/if}}
+
+
+        <!-- ─────── NOTES (conditional) ─────── -->
+        {{#if couple.groom.notes}}
+        <section id="notes">
+            <div class="notes-inner">
+                <div class="notes-hd rv">
+                    <span class="lbl">From the Heart</span>
+                    <div class="display" style="font-size:clamp(34px,5vw,68px);margin-top:11px;">
+                        Words We've<br>Been Saving
+                    </div>
+                    <!-- Redouté botanical accent as section divider -->
+                    <div class="notes-floral-div rv d2">
+                        <div class="nfd-img">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Redoute_-_Rosa_gallica_flore_giganteo_-_brighter.jpg/400px-Redoute_-_Rosa_gallica_flore_giganteo_-_brighter.jpg"
+                                alt="" aria-hidden="true" loading="lazy" onerror="this.style.opacity='0'" />
+                        </div>
+                    </div>
+                </div>
+                <div class="notes-grid">
+                    {{#if couple.groom.notes}}
+                    <div class="note rvl d2">
+                        <div class="note-who">
+                            <div class="note-av" style="background:rgba(88,15,38,.4);">{{couple.groom.initial}}</div>
+                            <div>
+                                <span class="note-name">{{couple.groom.fullName}}</span>
+                                <span class="note-role">The Groom · Son of {{couple.groom.fatherName}}</span>
+                            </div>
+                        </div>
+                        <p class="note-txt">{{couple.groom.notes}}</p>
+                    </div>
+                    {{/if}}
+                    {{#if couple.bride.notes}}
+                    <div class="note rvr d3">
+                        <div class="note-who">
+                            <div class="note-av" style="background:rgba(88,24,128,.4);">{{couple.bride.initial}}</div>
+                            <div>
+                                <span class="note-name">{{couple.bride.fullName}}</span>
+                                <span class="note-role">The Bride · Daughter of {{couple.bride.fatherName}}</span>
+                            </div>
+                        </div>
+                        <p class="note-txt">{{couple.bride.notes}}</p>
+                    </div>
+                    {{/if}}
+                </div>
+            </div>
+        </section>
+        {{/if}}
+
+
+        <!-- ─────── VENUE ─────── -->
+        <section id="venue">
+            <div class="venue-inner">
+                <div class="rvl d1">
+                    <div class="venue-map">
+                        <div class="vm-grid"></div>
+                        <!-- Redouté watermark inside map panel -->
+                        <div class="vm-floral">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Redoute_-_Rosa_gallica_pontiana.jpg/500px-Redoute_-_Rosa_gallica_pontiana.jpg"
+                                alt="" aria-hidden="true" loading="lazy" onerror="this.style.opacity='0'" />
+                        </div>
+                        <div class="vm-ph">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.1"
+                                stroke-linecap="round">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                                <circle cx="12" cy="10" r="3" />
+                            </svg>
+                            <span>Venue Map</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="venue-dets rvr d2">
+                    <div>
+                        <span class="lbl">Where to Find Us</span>
+                        <div class="display" style="font-size:clamp(28px,4vw,52px);margin:12px 0 14px;">The Venues</div>
+                        <p class="body-t" style="font-size:clamp(14px,1.25vw,16px);max-width:440px;">
+                            Every location chosen to create an atmosphere of warmth, joy and beauty —
+                            worthy of a once-in-a-lifetime celebration.
+                        </p>
+                    </div>
+                    {{#each events}}
+                    <div class="v-item rv" style="transition-delay: calc({{@index}} * 0.1s + 0.25s);">
+                        <span class="v-tag">{{name}} · {{dayOfWeek}}, {{dateLong}}</span>
+                        <div class="v-name">{{venue}}</div>
+                        <div class="v-addr">{{address}}</div>
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ─────── FOOTER ─────── -->
+        <footer>
+            <!-- Redouté Rosa gallica corner florals -->
+            <div class="ft-fl fl-l">
+                <div class="rf-wrap">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Redoute_-_Rosa_gallica_regalis.jpg/350px-Redoute_-_Rosa_gallica_regalis.jpg"
+                        alt="" aria-hidden="true" loading="lazy" onerror="this.style.opacity='0'" />
+                </div>
+            </div>
+            <div class="ft-fl fl-r">
+                <div class="rf-wrap">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Redoute_-_Rosa_gallica_regalis.jpg/350px-Redoute_-_Rosa_gallica_regalis.jpg"
+                        alt="" aria-hidden="true" loading="lazy" onerror="this.style.opacity='0'" />
+                </div>
+            </div>
+
+            <div class="ft-inner">
+                <span class="ft-names">{{couple.groom.firstName}} &amp; {{couple.bride.firstName}}</span>
+                <span class="ft-date">{{events.0.dateShort}} · {{city}}</span>
+                <p class="ft-body">
+                    "Love is not just a feeling — it is a choice, made every day, for the rest of forever."<br>
+                    Crafted with love · Wedbliss Studio · 2026
+                </p>
+            </div>
+        </footer>
+
+    </div><!-- /#invite -->
+
+
+    <!-- ════════════════════════════════════════
+     JAVASCRIPT
+════════════════════════════════════════ -->
+    <script>
+        'use strict';
+
+        /* ── Cover open ── */
+        document.getElementById('openBtn').addEventListener('click', function () {
+            var c = document.getElementById('cover'), inv = document.getElementById('invite');
+            c.classList.add('away');
+            setTimeout(function () { c.classList.add('gone'); }, 2900);
+            setTimeout(function () {
+                inv.classList.add('on');
+                document.body.style.overflow = '';
+                window.scrollTo(0, 0);
+                startReveal();
+            }, 700);
+        });
+        document.body.style.overflow = 'hidden';
+
+        /* ── Gold dust particles ── */
+        (function () {
+            var cv = document.getElementById('dust');
+            var cx = cv.getContext('2d');
+            var W, H, pts = [];
+            function resize() { W = cv.width = innerWidth; H = cv.height = innerHeight; }
+            resize(); window.addEventListener('resize', resize);
+            var G = ['rgba(192,144,48,', 'rgba(222,184,74,', 'rgba(240,216,120,'];
+            for (var i = 0; i < 110; i++) {
+                pts.push({
+                    x: Math.random() * 4000, y: Math.random() * 3000,
+                    vx: (Math.random() - .5) * .22, vy: -(Math.random() * .18 + .04),
+                    r: Math.random() * 1.7 + .4, a: Math.random() * .52 + .1,
+                    c: G[~~(Math.random() * 3)], rot: Math.random() * Math.PI * 2,
+                    rv: (Math.random() - .5) * .018, s: Math.random() < .38
+                });
+            }
+            function draw() {
+                cx.clearRect(0, 0, W, H);
+                var sy = window.scrollY;
+                pts.forEach(function (p) {
+                    p.x += p.vx; p.y += p.vy; p.rot += p.rv;
+                    if (p.y < -20) p.y = H + sy + 20;
+                    if (p.x < -20) p.x = W + 20; if (p.x > W + 20) p.x = -20;
+                    var ry = p.y - sy; if (ry < -30 || ry > H + 30) return;
+                    cx.save(); cx.translate(p.x, ry); cx.rotate(p.rot);
+                    cx.globalAlpha = p.a * (0.5 + 0.5 * Math.sin(Date.now() * .0005 + p.x));
+                    if (p.s) {
+                        cx.beginPath(); cx.moveTo(0, -p.r * 2.2); cx.lineTo(p.r * 1.2, 0);
+                        cx.lineTo(0, p.r * 2.2); cx.lineTo(-p.r * 1.2, 0); cx.closePath();
+                        cx.fillStyle = p.c + '.7)'; cx.fill();
+                    } else {
+                        cx.beginPath(); cx.arc(0, 0, p.r, 0, Math.PI * 2);
+                        cx.fillStyle = p.c + p.a + ')'; cx.fill();
+                    }
+                    cx.restore();
+                });
+                requestAnimationFrame(draw);
+            }
+            draw();
+        })();
+
+        /* ── Scroll reveal ── */
+        function startReveal() {
+            var obs = new IntersectionObserver(function (entries) {
+                entries.forEach(function (e) {
+                    if (e.isIntersecting) {
+                        e.target.classList.add('on');
+                        e.target.querySelectorAll('.hero-rule-wrap').forEach(function (r) {
+                            setTimeout(function () { r.classList.add('on'); }, 200);
+                        });
+                    }
+                });
+            }, { threshold: .1 });
+            document.querySelectorAll('.rv,.rvl,.rvr').forEach(function (el) { obs.observe(el); });
+            // Trigger hero rule directly after open
+            setTimeout(function () {
+                document.querySelectorAll('.hero-rule-wrap').forEach(function (r) { r.classList.add('on'); });
+            }, 900);
+        }
+
+        /* ── Add to Calendar ── */
+        function handleCalendar(title, dateStr, startTime, endTime, venue, couple) {
+            var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            var name = title + ' - ' + couple;
+            var dt = new Date(dateStr + ' ' + (startTime || '09:00 AM'));
+            if (isNaN(dt)) dt = new Date();
+            var si = dt.toISOString().replace(/-|:|\.\d+/g, '');
+            var ei = new Date(dt.getTime() + 2 * 3600000).toISOString().replace(/-|:|\.\d+/g, '');
+            if (isIOS) {
+                var ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'BEGIN:VEVENT',
+                    'DTSTART:' + si, 'DTEND:' + ei, 'SUMMARY:' + name,
+                    'DESCRIPTION:' + name + ' at ' + venue, 'LOCATION:' + venue,
+                    'END:VEVENT', 'END:VCALENDAR'].join('\n');
+                var b = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+                var a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'event.ics';
+                document.body.appendChild(a); a.click(); document.body.removeChild(a);
+            } else {
+                window.open('https://calendar.google.com/calendar/render?action=TEMPLATE&text=' +
+                    encodeURIComponent(name) + '&dates=' + si + '/' + ei +
+                    '&location=' + encodeURIComponent(venue), '_blank');
+            }
+        }
+
+        /* ── Countdown ── */
+        (function () {
+            var target = new Date('{{events.0.isoDate}}T{{events.0.startTime24}}:00').getTime();
+            function pad(n) { return String(n).padStart(2, '0'); }
+            function tick() {
+                var t = target - Date.now();
+                if (t <= 0) { ['cdD', 'cdH', 'cdM', 'cdS'].forEach(function (id) { var e = document.getElementById(id); if (e) e.textContent = '00'; }); return; }
+                var d = ~~(t / 86400000), h = ~~(t % 86400000 / 3600000), m = ~~(t % 3600000 / 60000), s = ~~(t % 60000 / 1000);
+                [['cdD', d], ['cdH', h], ['cdM', m], ['cdS', s]].forEach(function (pair) {
+                    var el = document.getElementById(pair[0]);
+                    if (!el) return;
+                    var nv = pad(pair[1]);
+                    if (el.textContent !== nv) {
+                        el.classList.add('pop');
+                        setTimeout(function () { el.textContent = nv; el.classList.remove('pop'); }, 190);
+                    }
+                });
+            }
+            tick(); setInterval(tick, 1000);
+        })();
+    </script>
+</body>
+
+</html>

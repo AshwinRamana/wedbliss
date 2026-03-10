@@ -1769,11 +1769,13 @@
         (function () {
             var ds = '{{events.0.date}}'.trim();
             var ts = '{{events.0.startTime}}'.trim();
-            var dString = ds;
-            var match = ds.match(/(\d+)\s+([a-zA-Z]+)\s+(\d+)/);
+            var cleanDate = ds.replace(/(st|nd|rd|th)/ig, '');
+            var dString = cleanDate;
+            var match = cleanDate.match(/(\d+)\s+([a-zA-Z]+)\s+(\d+)/);
             if (match) dString = match[2] + ' ' + match[1] + ', ' + match[3];
             if (ts) dString += ' ' + ts;
             var target = new Date(dString).getTime();
+            if (isNaN(target)) target = new Date(cleanDate + ' ' + ts).getTime();
             if (isNaN(target)) return;
             function pad(n) { return String(n).padStart(2, '0') }
             function tick() {

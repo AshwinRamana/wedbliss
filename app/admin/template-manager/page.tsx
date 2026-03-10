@@ -36,7 +36,7 @@ export default function TemplateManagerPage() {
     const [loading, setLoading] = useState(true);
 
     const [editingId, setEditingId] = useState<string | null>(null);
-    const [form, setForm] = useState({ href: "", thumbnailUrl: "", isLive: false, isHero: false });
+    const [form, setForm] = useState({ href: "", thumbnailUrl: "", isLive: false, isHero: false, name: "" });
     const [saveMsg, setSaveMsg] = useState<{ id: string; msg: string } | null>(null);
     const [savingId, setSavingId] = useState<string | null>(null);
 
@@ -57,7 +57,7 @@ export default function TemplateManagerPage() {
 
     const openEdit = (t: MergedTemplate) => {
         setEditingId(t.id);
-        setForm({ href: t.href ?? "", thumbnailUrl: t.thumbnailUrl ?? "", isLive: t.isLive, isHero: t.isHero });
+        setForm({ href: t.href ?? "", thumbnailUrl: t.thumbnailUrl ?? "", isLive: t.isLive, isHero: t.isHero, name: t.name });
     };
 
     const saveEdit = async (id: string) => {
@@ -66,7 +66,7 @@ export default function TemplateManagerPage() {
         if (!existing) return;
         const { error } = await upsertTemplate({
             id,
-            name: existing.name,
+            name: form.name,
             tier: existing.tier as "basic" | "premium",
             description: existing.desc,
             is_live: form.isLive,
@@ -79,7 +79,7 @@ export default function TemplateManagerPage() {
             setSaveMsg({ id, msg: "✗ " + error });
         } else {
             setTemplates(prev => prev.map(t => t.id === id
-                ? { ...t, isLive: form.isLive, isHero: form.isHero, href: form.href || null, thumbnailUrl: form.thumbnailUrl || null }
+                ? { ...t, name: form.name, isLive: form.isLive, isHero: form.isHero, href: form.href || null, thumbnailUrl: form.thumbnailUrl || null }
                 : t
             ));
             setEditingId(null);
@@ -222,6 +222,10 @@ export default function TemplateManagerPage() {
                                 {/* Edit form or Edit button */}
                                 {editingId === t.id ? (
                                     <div className="flex flex-col gap-2 w-72 flex-shrink-0 bg-slate-50 p-3 rounded-xl border border-slate-200 shadow-inner">
+                                        <input className="border border-slate-200 rounded-lg px-3 py-1.5 text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                                            placeholder="Display Name"
+                                            value={form.name}
+                                            onChange={e => setForm(p => ({ ...p, name: e.target.value }))} />
                                         <input className="border border-slate-200 rounded-lg px-3 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-emerald-400"
                                             placeholder="Thumbnail URL (https://...)"
                                             value={form.thumbnailUrl}

@@ -1,6 +1,6 @@
 import Nav from "@/components/marketing/Nav";
 import Footer from "@/components/marketing/Footer";
-import Link from "next/link";
+
 
 export default function RefundPolicy() {
     return (
@@ -28,7 +28,11 @@ export default function RefundPolicy() {
 
                         <div className="mt-12 p-6 bg-slate-50 rounded-2xl border border-slate-200 text-center">
                             <p className="font-bold text-slate-700 mb-2">Need help with a payment?</p>
-                            <Link href="/#contact" className="text-emerald-600 hover:text-emerald-700 font-bold">Contact Support Team →</Link>
+                            <p className="text-sm text-slate-600 mb-2">Contact our Support Team directly:</p>
+                            <div className="flex flex-col gap-1 items-center justify-center">
+                                <a href="mailto:info@wedbliss.co" className="text-emerald-600 hover:text-emerald-700 font-bold">Email: info@wedbliss.co</a>
+                                <a href="tel:+918122357677" className="text-emerald-600 hover:text-emerald-700 font-bold">Phone: +91 81223 57677</a>
+                            </div>
                         </div>
                     </div>
                 </div>

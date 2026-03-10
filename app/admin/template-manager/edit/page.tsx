@@ -23,14 +23,11 @@ function EditTemplateCodeContent() {
     const [saveMsg, setSaveMsg] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
     useEffect(() => {
-        if (!id) {
-            setError("No template ID provided.");
-            setLoading(false);
-            return;
-        }
+        if (!id) return;
 
         const fetchTpl = async () => {
             setLoading(true);
+            setError(null);
             const { data, error: fetchErr } = await supabase
                 .from('templates')
                 .select('*')

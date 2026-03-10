@@ -18,14 +18,11 @@ function EditAdminInvitationContent() {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        if (!id) {
-            setError("No invitation ID provided.");
-            setLoading(false);
-            return;
-        }
+        if (!id) return;
 
         const fetchInv = async () => {
             setLoading(true);
+            setError(null);
             const { data, error: fetchErr } = await supabase
                 .from('invitations')
                 .select('*')

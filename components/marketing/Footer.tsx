@@ -37,10 +37,11 @@ export default function Footer() {
                 <div className="footer-col">
                     <h4>Support</h4>
                     <ul>
-                        <li><a href="#">Help Center</a></li>
-                        <li><a href="mailto:support@wedbliss.co">WhatsApp Support</a></li>
+                        <li><a href="mailto:info@wedbliss.co">Email: info@wedbliss.co</a></li>
+                        <li><a href="tel:+918122357677">Phone: +91 81223 57677</a></li>
                         <li><Link href="/privacy">Privacy Policy</Link></li>
                         <li><Link href="/terms">Terms of Service</Link></li>
+                        <li><Link href="/refunds">Refund Policy</Link></li>
                     </ul>
                 </div>
             </div>

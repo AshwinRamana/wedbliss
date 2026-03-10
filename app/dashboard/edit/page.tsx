@@ -21,8 +21,11 @@ function EditUserInvitationContent() {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
+        if (!id) return;
+
         const fetchInv = async () => {
             setLoading(true);
+            setError(null);
             const { data: sessionData } = await supabase.auth.getSession();
             const user = sessionData.session?.user;
 

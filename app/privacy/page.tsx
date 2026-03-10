@@ -25,7 +25,7 @@ export default function PrivacyPolicy() {
                         <h3 className="font-bold text-slate-800 text-xl mt-8 mb-4">3. Data Retention</h3>
                         <p>Your beautiful digital invitations will remain hosted and active on our servers for up to 12 months after the Wedding date, depending on your chosen &apos;Basic&apos; or &apos;Premium&apos; tier. Following the expiration term, specific Media files (Video Invites, Music) may be securely redacted.</p>
 
-                        <p className="mt-8 italic text-sm">For comprehensive inquiries concerning our data operations, please contact us at support@wedbliss.co</p>
+                        <p className="mt-8 italic text-sm">For comprehensive inquiries concerning our data operations, please contact us at <strong>info@wedbliss.co</strong> or call us at <strong>+91 81223 57677</strong>.</p>
                     </div>
                 </div>
             </main>

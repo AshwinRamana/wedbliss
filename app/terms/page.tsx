@@ -24,6 +24,14 @@ export default function TermsAndConditions() {
 
                         <h3 className="font-bold text-slate-800 text-xl mt-8 mb-4">3. Availability</h3>
                         <p>We strive for 99.9% uptime for your live invitations. However, WedBliss is not liable for temporary hosting outages caused by upstream provider failures.</p>
+
+                        <h3 className="font-bold text-slate-800 text-xl mt-8 mb-4">4. Contact Information</h3>
+                        <p>If you have any questions, inquiries, or grievances, please contact us at:</p>
+                        <ul className="list-disc pl-5 mt-2 space-y-1">
+                            <li><strong>Email:</strong> info@wedbliss.co</li>
+                            <li><strong>Phone:</strong> +91 81223 57677</li>
+                            <li><strong>Operating Address:</strong> India</li>
+                        </ul>
                     </div>
                 </div>
             </main>

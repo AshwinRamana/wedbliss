@@ -55,7 +55,7 @@ export default function EditInvitationForm({ invitationId, initialData, onSave, 
     // ── S3 Upload Handlers ──
     const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files?.length) return;
-        if (photos.length >= 4) { alert("Maximum 4 photos allowed."); return; }
+        if (photos.length >= 3) { alert("Maximum 3 portrait photos allowed."); return; }
 
         const file = e.target.files[0];
         if (file.size > 5 * 1024 * 1024) { alert("File must be less than 5MB"); return; }
@@ -214,7 +214,7 @@ export default function EditInvitationForm({ invitationId, initialData, onSave, 
                 <div className="space-y-8">
                     {/* Photos */}
                     <div>
-                        <div className="flex items-center gap-3 mb-4"><div className="w-10 h-10 rounded-xl bg-violet-100 text-violet-600 flex items-center justify-center"><ImageIcon className="w-5 h-5" /></div><div><h4 className="font-bold text-slate-800">Pre-Wedding Photos</h4><p className="text-xs text-slate-500">Upload up to 4 high-quality photos</p></div></div>
+                        <div className="flex items-center gap-3 mb-4"><div className="w-10 h-10 rounded-xl bg-violet-100 text-violet-600 flex items-center justify-center"><ImageIcon className="w-5 h-5" /></div><div><h4 className="font-bold text-slate-800">Pre-Wedding Photos</h4><p className="text-xs text-slate-500">Upload up to 3 high-quality portrait photos</p></div></div>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                             {photos.map((url, i) => (
                                 <div key={i} className="aspect-[4/5] rounded-xl overflow-hidden bg-slate-100 relative group border border-slate-200">
@@ -223,7 +223,7 @@ export default function EditInvitationForm({ invitationId, initialData, onSave, 
                                     <button type="button" onClick={() => setPhotos(photos.filter((_, idx) => idx !== i))} className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-white hover:text-red-400"><Trash2 className="w-8 h-8" /></button>
                                 </div>
                             ))}
-                            {photos.length < 4 && (
+                            {photos.length < 3 && (
                                 <label className={`aspect-[4/5] rounded-xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center cursor-pointer hover:bg-slate-50 transition-colors ${uploading ? 'opacity-50 pointer-events-none' : ''}`}>
                                     <input type="file" accept="image/*" onChange={handlePhotoUpload} className="hidden" disabled={uploading} />
                                     {uploading ? <Loader2 className="w-6 h-6 animate-spin text-slate-400" /> : <><Plus className="w-6 h-6 text-slate-400 mb-2" /><span className="text-xs font-bold text-slate-500">Add Photo</span></>}

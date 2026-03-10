@@ -1379,12 +1379,14 @@
         .gallery-grid {
             margin-top: 50px;
             display: grid;
-            gap: 12px
+            gap: 12px;
+            max-width: 70%;
+            margin-inline: auto;
         }
 
         .gallery-grid:has(img:nth-child(1):last-child) {
             grid-template-columns: 1fr;
-            max-width: 680px;
+            max-width: 480px;
             margin-inline: auto
         }
 
@@ -1400,6 +1402,17 @@
             grid-column: 1 / -1;
             width: calc(50% - 6px);
             margin-inline: auto;
+        }
+
+        @media (max-width: 640px) {
+            .gallery-grid {
+                grid-template-columns: 1fr !important;
+                max-width: 85% !important;
+            }
+
+            .gallery-grid:has(img:nth-child(3):last-child) img:nth-child(3) {
+                width: 100% !important
+            }
         }
 
         .gallery-grid img {

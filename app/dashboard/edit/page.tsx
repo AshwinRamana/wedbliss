@@ -21,7 +21,11 @@ function EditUserInvitationContent() {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        if (!id) {
+        // Fallback to native URLSearchParams to bypass Next.js static export hydration issues
+        const rawParams = new URLSearchParams(window.location.search);
+        const resolvedId = id || rawParams.get("id");
+
+        if (!resolvedId) {
             // Give Next.js router a moment to hydrate the query params
             const timer = setTimeout(() => {
                 setError("No invitation ID provided in the URL.");
@@ -44,7 +48,7 @@ function EditUserInvitationContent() {
             const { data, error: fetchErr } = await supabase
                 .from('invitations')
                 .select('*')
-                .eq('id', id)
+                .eq('id', resolvedId)
                 .single();
 
             if (fetchErr || !data) {

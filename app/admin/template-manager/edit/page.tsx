@@ -23,7 +23,10 @@ function EditTemplateCodeContent() {
     const [saveMsg, setSaveMsg] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
     useEffect(() => {
-        if (!id) {
+        const rawParams = new URLSearchParams(window.location.search);
+        const resolvedId = id || rawParams.get("id");
+
+        if (!resolvedId) {
             // Give Next.js router a moment to hydrate the query params
             const timer = setTimeout(() => {
                 setError("No template ID provided in the URL.");
@@ -38,7 +41,7 @@ function EditTemplateCodeContent() {
             const { data, error: fetchErr } = await supabase
                 .from('templates')
                 .select('*')
-                .eq('id', id)
+                .eq('id', resolvedId)
                 .single();
 
             if (fetchErr || !data) {
@@ -55,6 +58,9 @@ function EditTemplateCodeContent() {
     }, [id]);
 
     const handleSave = async () => {
+        const rawParams = new URLSearchParams(window.location.search);
+        const resolvedId = id || rawParams.get("id");
+
         if (!confirm("Are you sure? Saving this will INSTANTLY update all live websites currently using this template.")) return;
         setSaving(true);
         setSaveMsg(null);
@@ -68,7 +74,7 @@ function EditTemplateCodeContent() {
                     js_content: jsContent,
                     updated_at: new Date().toISOString()
                 })
-                .eq('id', id);
+                .eq('id', resolvedId);
 
             if (updErr) throw updErr;
 

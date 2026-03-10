@@ -1578,6 +1578,8 @@
         <section id="countdown">
             <div class="inner cd-lay">
                 <div class="sv d1">
+                    <!-- Hidden date for standardized countdown parsing -->
+                    <span class="wb-event-date hidden">{{events.0.date}}</span>
                     <span class="lbl">Counting Down</span>
                     <h2 class="disp" style="font-size:clamp(26px,4.5vw,52px);margin-top:10px">The Days Until<br><span
                             style="font-family:var(--sc);color:var(--gold2);font-size:1.1em">Forever Begins</span></h2>
@@ -1767,35 +1769,38 @@
             }
         }
         (function () {
-            var ds = '{{events.0.date}}'.trim();
-            var ts = '{{events.0.startTime}}'.trim();
-            // Remove ordinals like 1st, 2nd, 3rd, 4th
-            var cleanDate = ds.replace(/(\d+)(st|nd|rd|th)/i, '$1');
-            var dString = cleanDate;
-            // Match "28 December" or "28 December 2026"
-            // Group 1: Day, Group 2: Month, Group 3: Optional Year
-            var match = cleanDate.match(/(\d+)\s+([a-zA-Z]+)(?:\s+(\d+))?/);
-            if (match) {
-                var day = match[1];
-                var month = match[2];
-                var year = match[3] || new Date().getFullYear();
-                dString = month + ' ' + day + ', ' + year;
+            var dateEl = document.querySelector('.wb-event-date');
+            if (dateEl) {
+                var rawDate = dateEl.textContent.trim();
+                var target = (function (s) {
+                    s = s.replace(/(\d+)(st|nd|rd|th)/i, '$1');
+                    var d = new Date(s);
+                    if (!isNaN(d.getTime())) return d;
+                    var m = s.match(/^(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})$/);
+                    if (m) return new Date(m[2] + ' ' + m[1] + ', ' + m[3]);
+                    return new Date(NaN);
+                })(rawDate);
+                if (!isNaN(target.getTime())) {
+                    function pad(n) { return String(n).padStart(2, '0') }
+                    function tick() {
+                        var diff = target - new Date();
+                        if (diff <= 0) {
+                            ['cdD', 'cdH', 'cdM', 'cdS'].forEach(function (id) {
+                                var el = document.getElementById(id);
+                                if (el) el.textContent = '00';
+                            });
+                            return;
+                        }
+                        var d = ~~(diff / 86400000), h = ~~(diff % 86400000 / 3600000), m = ~~(diff % 3600000 / 60000), s = ~~(diff % 60000 / 1000);
+                        [['cdD', d], ['cdH', h], ['cdM', m], ['cdS', s]].forEach(function (pair) {
+                            var el = document.getElementById(pair[0]); if (!el) return;
+                            var nv = pad(pair[1]);
+                            if (el.textContent !== nv) { el.classList.add('pop'); setTimeout(function () { el.textContent = nv; el.classList.remove('pop') }, 180); }
+                        });
+                    }
+                    tick(); setInterval(tick, 1000);
+                }
             }
-            if (ts) dString += ' ' + ts;
-            var target = new Date(dString).getTime();
-            if (isNaN(target)) target = new Date(cleanDate + ' ' + ts).getTime();
-            if (isNaN(target)) return;
-            function pad(n) { return String(n).padStart(2, '0') }
-            function tick() {
-                var t = target - Date.now(); if (t <= 0) return;
-                var d = ~~(t / 86400000), h = ~~(t % 86400000 / 3600000), m = ~~(t % 3600000 / 60000), s = ~~(t % 60000 / 1000);
-                [['cdD', d], ['cdH', h], ['cdM', m], ['cdS', s]].forEach(function (pair) {
-                    var el = document.getElementById(pair[0]); if (!el) return;
-                    var nv = pad(pair[1]);
-                    if (el.textContent !== nv) { el.classList.add('pop'); setTimeout(function () { el.textContent = nv; el.classList.remove('pop') }, 180); }
-                });
-            }
-            tick(); setInterval(tick, 1000);
         })();
     </script>
 </body>

@@ -1769,10 +1769,18 @@
         (function () {
             var ds = '{{events.0.date}}'.trim();
             var ts = '{{events.0.startTime}}'.trim();
-            var cleanDate = ds.replace(/(st|nd|rd|th)/ig, '');
+            // Remove ordinals like 1st, 2nd, 3rd, 4th
+            var cleanDate = ds.replace(/(\d+)(st|nd|rd|th)/i, '$1');
             var dString = cleanDate;
-            var match = cleanDate.match(/(\d+)\s+([a-zA-Z]+)\s+(\d+)/);
-            if (match) dString = match[2] + ' ' + match[1] + ', ' + match[3];
+            // Match "28 December" or "28 December 2026"
+            // Group 1: Day, Group 2: Month, Group 3: Optional Year
+            var match = cleanDate.match(/(\d+)\s+([a-zA-Z]+)(?:\s+(\d+))?/);
+            if (match) {
+                var day = match[1];
+                var month = match[2];
+                var year = match[3] || new Date().getFullYear();
+                dString = month + ' ' + day + ', ' + year;
+            }
             if (ts) dString += ' ' + ts;
             var target = new Date(dString).getTime();
             if (isNaN(target)) target = new Date(cleanDate + ' ' + ts).getTime();

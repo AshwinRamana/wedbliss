@@ -1341,31 +1341,7 @@
             height: 100%
         }
 
-        /* ── MOON ── */
-        .countdown-moon {
-            position: absolute;
-            bottom: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: clamp(160px, 26vw, 280px);
-            height: clamp(160px, 26vw, 280px);
-            z-index: 1;
-            pointer-events: none;
-            opacity: 0;
-            animation: moonRise 2.4s cubic-bezier(0.16, 1, 0.3, 1) .4s forwards;
-        }
 
-        @keyframes moonRise {
-            from {
-                transform: translateX(-50%) translateY(50px);
-                opacity: 0
-            }
-
-            to {
-                transform: translateX(-50%) translateY(0);
-                opacity: 1
-            }
-        }
 
         /* ══════════════════════════════════════════════════
    GALLERY
@@ -2142,71 +2118,7 @@
         <section id="countdown">
             <div class="countdown-nebula-bg"></div>
 
-            <!-- Moon rising behind the timer -->
-            <div class="countdown-moon">
-                <svg viewBox="0 0 280 280" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <!-- main moon surface gradient: lit from upper-left -->
-                        <radialGradient id="moon-body" cx="38%" cy="32%" r="62%">
-                            <stop offset="0%" stop-color="#f0e8d0" />
-                            <stop offset="35%" stop-color="#d4c48a" />
-                            <stop offset="70%" stop-color="#a0885a" />
-                            <stop offset="100%" stop-color="#5a3e20" />
-                        </radialGradient>
-                        <!-- terminator shadow (crescent darkening) -->
-                        <radialGradient id="moon-shadow" cx="78%" cy="55%" r="58%">
-                            <stop offset="0%" stop-color="rgba(2,4,8,0.82)" />
-                            <stop offset="55%" stop-color="rgba(2,4,8,0.45)" />
-                            <stop offset="100%" stop-color="rgba(2,4,8,0)" />
-                        </radialGradient>
-                        <!-- soft outer glow / atmosphere -->
-                        <radialGradient id="moon-glow" cx="50%" cy="50%" r="50%">
-                            <stop offset="72%" stop-color="rgba(201,168,76,0)" />
-                            <stop offset="88%" stop-color="rgba(201,168,76,0.12)" />
-                            <stop offset="100%" stop-color="rgba(201,168,76,0)" />
-                        </radialGradient>
-                        <!-- bottom fade so it blends into section bg -->
-                        <linearGradient id="moon-bottom-fade" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="60%" stop-color="rgba(0,0,0,0)" />
-                            <stop offset="100%" stop-color="rgba(2,4,8,1)" />
-                        </linearGradient>
-                        <clipPath id="moon-clip">
-                            <circle cx="140" cy="140" r="112" />
-                        </clipPath>
-                    </defs>
 
-                    <!-- atmosphere halo -->
-                    <circle cx="140" cy="140" r="126" fill="url(#moon-glow)" />
-
-                    <!-- moon body -->
-                    <circle cx="140" cy="140" r="112" fill="url(#moon-body)" />
-
-                    <!-- craters — subtle, clipped to sphere -->
-                    <g clip-path="url(#moon-clip)" opacity="0.55">
-                        <!-- large mare region top-left -->
-                        <ellipse cx="100" cy="108" rx="28" ry="22" fill="rgba(80,60,30,0.35)" />
-                        <!-- medium crater centre-right -->
-                        <circle cx="168" cy="130" r="14" fill="rgba(60,44,20,0.28)" />
-                        <!-- small craters -->
-                        <circle cx="118" cy="160" r="7" fill="rgba(70,52,24,0.32)" />
-                        <circle cx="152" cy="170" r="5" fill="rgba(70,52,24,0.28)" />
-                        <circle cx="88" cy="148" r="9" fill="rgba(80,60,28,0.25)" />
-                        <circle cx="172" cy="100" r="6" fill="rgba(60,44,20,0.22)" />
-                        <!-- crater rim highlights -->
-                        <circle cx="116" cy="157" r="7" fill="none" stroke="rgba(220,200,160,0.18)"
-                            stroke-width="1.5" />
-                        <circle cx="150" cy="168" r="5" fill="none" stroke="rgba(220,200,160,0.15)" stroke-width="1" />
-                        <circle cx="166" cy="128" r="14" fill="none" stroke="rgba(220,200,160,0.12)"
-                            stroke-width="1.5" />
-                    </g>
-
-                    <!-- terminator / night-side shadow -->
-                    <circle cx="140" cy="140" r="112" fill="url(#moon-shadow)" />
-
-                    <!-- bottom-of-section fade blend -->
-                    <rect x="0" y="0" width="280" height="280" fill="url(#moon-bottom-fade)" />
-                </svg>
-            </div>
             <div class="countdown-orbit">
                 <svg viewBox="0 0 1400 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
                     <ellipse cx="700" cy="250" rx="600" ry="150" fill="none" stroke="rgba(201,168,76,0.04)"

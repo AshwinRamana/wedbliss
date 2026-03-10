@@ -1767,7 +1767,14 @@
             }
         }
         (function () {
-            var target = new Date('{{events.0.date}} {{events.0.startTime}}').getTime();
+            var ds = '{{events.0.date}}'.trim();
+            var ts = '{{events.0.startTime}}'.trim();
+            var dString = ds;
+            var match = ds.match(/(\d+)\s+([a-zA-Z]+)\s+(\d+)/);
+            if (match) dString = match[2] + ' ' + match[1] + ', ' + match[3];
+            if (ts) dString += ' ' + ts;
+            var target = new Date(dString).getTime();
+            if (isNaN(target)) return;
             function pad(n) { return String(n).padStart(2, '0') }
             function tick() {
                 var t = target - Date.now(); if (t <= 0) return;

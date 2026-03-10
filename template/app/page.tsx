@@ -60,6 +60,9 @@ export default function Home() {
   const compiledHtml = (() => {
     if (!inviteData?.templateHtml) return null;
     try {
+      Handlebars.registerHelper("add", function (a, b) {
+        return parseInt(a as string, 10) + parseInt(b as string, 10);
+      });
       const template = Handlebars.compile(inviteData.templateHtml);
       return template(inviteData);
     } catch (e) {

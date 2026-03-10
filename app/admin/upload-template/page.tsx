@@ -89,6 +89,9 @@ function validateHandlebars(html: string): ValidationResult {
 
     // Try to compile
     try {
+        Handlebars.registerHelper("add", function (a: string | number, b: string | number) {
+            return parseInt(a as string, 10) + parseInt(b as string, 10);
+        });
         Handlebars.compile(html);
     } catch (e: unknown) {
         errors.push(`Handlebars compile error: ${e instanceof Error ? e.message : String(e)}`);
@@ -225,6 +228,9 @@ export default function UploadTemplatePage() {
     useEffect(() => {
         if (!parsedHtml) { setCompiledLiveHtml(""); return; }
         try {
+            Handlebars.registerHelper("add", function (a: string | number, b: string | number) {
+                return parseInt(a as string, 10) + parseInt(b as string, 10);
+            });
             const template = Handlebars.compile(parsedHtml);
             let parsedData = {};
             try {

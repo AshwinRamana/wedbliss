@@ -65,6 +65,9 @@ export default function TemplateCreatorPage() {
             return;
         }
         try {
+            Handlebars.registerHelper("add", function (a: string | number, b: string | number) {
+                return parseInt(a as string, 10) + parseInt(b as string, 10);
+            });
             const template = Handlebars.compile(generatedHtml);
             const resolvedHtml = template(dummyData);
             setCompiledLiveHtml(`<style>${generatedCss}</style>${resolvedHtml}`);

@@ -23,7 +23,14 @@ function EditTemplateCodeContent() {
     const [saveMsg, setSaveMsg] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
     useEffect(() => {
-        if (!id) return;
+        if (!id) {
+            // Give Next.js router a moment to hydrate the query params
+            const timer = setTimeout(() => {
+                setError("No template ID provided in the URL.");
+                setLoading(false);
+            }, 1000);
+            return () => clearTimeout(timer);
+        }
 
         const fetchTpl = async () => {
             setLoading(true);

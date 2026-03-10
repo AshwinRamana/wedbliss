@@ -18,7 +18,14 @@ function EditAdminInvitationContent() {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        if (!id) return;
+        if (!id) {
+            // Give Next.js router a moment to hydrate the query params
+            const timer = setTimeout(() => {
+                setError("No invitation ID provided in the URL.");
+                setLoading(false);
+            }, 1000);
+            return () => clearTimeout(timer);
+        }
 
         const fetchInv = async () => {
             setLoading(true);

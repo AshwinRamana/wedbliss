@@ -226,27 +226,27 @@ router.post('/push-demo', async (req, res) => {
 
         if (!templateId || !htmlContent) return res.status(400).json({ error: 'Missing content' });
 
+        // 1. Upsert template as draft - provide defaults for demo mode
+        await adminSupabase.from('templates').upsert({
+            id: templateId, 
+            name: templateName || templateId, // Default to ID if name missing
+            tier: 'premium',
+            description: 'Quick Demo',
+            html_content: htmlContent, 
+            css_content: cssContent || null, 
+            js_content: jsContent || null,
+            thumbnail_url: thumbnailUrl || null, 
+            is_live: false, 
+            is_hero: false
+        }, { onConflict: 'id' });
+
+        // 2. Provision/Update Domain Invitation
         const subdomain = 'elegant';
         const { fullDomain, provisioning } = await provisionTemplateDomain(adminSupabase, {
             subdomain, templateId, mockData,
             distributionId: process.env.TEMPLATE_CF_DISTRIBUTION_ID,
             cfDomain: process.env.TEMPLATE_CF_DOMAIN
         });
-
-        // Upsert template as draft - provide defaults for demo mode
-        await adminSupabase.from('templates').upsert({
-            id: templateId, 
-            name: templateId, // Default to ID if name missing
-            tier: 'premium',
-            description: 'Quick Demo',
-            html_content: htmlContent, 
-            css_content: cssContent || null, 
-            js_content: jsContent || null,
-            demo_url: `https://${fullDomain}`, 
-            thumbnail_url: thumbnailUrl || null, 
-            is_live: false, 
-            is_hero: false
-        }, { onConflict: 'id' });
 
         res.json({ ok: true, message: `Demo updated on ${fullDomain}`, demoUrl: `https://${fullDomain}`, provisioning });
     } catch (err) {

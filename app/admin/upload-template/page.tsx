@@ -298,6 +298,9 @@ export default function UploadTemplatePage() {
             return;
         }
 
+        const freshDemoId = "tm-demo-" + Date.now();
+        setTemplateId(freshDemoId);
+
         setIsDemoPushing(true);
         setDemoStatus({ type: null, msg: "" });
 
@@ -310,7 +313,7 @@ export default function UploadTemplatePage() {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    templateId,
+                    templateId: freshDemoId,
                     templateName: templateName || templateId,
                     tier,
                     templateDesc,

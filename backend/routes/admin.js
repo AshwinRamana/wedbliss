@@ -157,135 +157,126 @@ router.delete('/users/:uid', async (req, res) => {
     }
 });
 
-// ── POST /api/admin/push-demo — Update/Create demo invitation ──────────────
-// Uses service role to bypass RLS — allows any subdomain to be a demo.
+// ── Helper: Provision Template Domain ─────────────────────────────────────
+async function provisionTemplateDomain(adminSupabase, { 
+    subdomain, templateId, mockData, distributionId, cfDomain 
+}) {
+    const fullDomain = `${subdomain}.wedbliss.co`;
+    const demoData = {
+        ...(mockData || {}),
+        metadata: { plan: 'premium', template_id: templateId, createdAt: new Date().toISOString() },
+    };
+
+    let provisioning = { cloudfront: null, dns: null };
+    
+    // 1. CloudFront Alias
+    if (process.env.AWS_ACCESS_KEY_ID && distributionId) {
+        try {
+            const aws = getAwsService();
+            provisioning.cloudfront = await aws.addCloudFrontAlias(fullDomain);
+        } catch (e) { provisioning.cloudfront = { error: e.message }; }
+    }
+
+    // 2. Cloudflare DNS
+    if (process.env.CLOUDFLARE_API_TOKEN && cfDomain) {
+        try {
+            const cloudflare = require('../services/cloudflare');
+            provisioning.dns = await cloudflare.createSubdomainRecord(subdomain, cfDomain);
+        } catch (e) { provisioning.dns = { error: e.message }; }
+    }
+
+    // 3. Upsert Invitation
+    const { data: existing } = await adminSupabase
+        .from('invitations')
+        .select('id')
+        .eq('subdomain', subdomain)
+        .limit(1)
+        .maybeSingle();
+
+    if (existing) {
+        await adminSupabase.from('invitations').update({ 
+            template_id: templateId, data: demoData, domain_status: 'active', updated_at: new Date().toISOString()
+        }).eq('id', existing.id);
+    } else {
+        await adminSupabase.from('invitations').insert({
+            user_email: 'demo@wedbliss.co', plan: 'premium', template_id: templateId,
+            subdomain, domain_status: 'active', data: demoData, cloudfront_id: distributionId || null
+        });
+    }
+
+    return { fullDomain, provisioning };
+}
+
+// ── POST /api/admin/push-demo — Update elegant demo ───────────────────────
 router.post('/push-demo', async (req, res) => {
     try {
         const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-        if (!serviceRoleKey) {
-            return res.status(500).json({ error: 'SUPABASE_SERVICE_ROLE_KEY is not configured on the server.' });
-        }
+        const adminSupabase = createClient(supabaseUrl, serviceRoleKey || '');
+        const { templateId, htmlContent, cssContent, jsContent, thumbnailUrl, mockData } = req.body;
 
-        const adminSupabase = createClient(supabaseUrl, serviceRoleKey, {
-            auth: { autoRefreshToken: false, persistSession: false }
+        if (!templateId || !htmlContent) return res.status(400).json({ error: 'Missing content' });
+
+        const subdomain = 'elegant';
+        const { fullDomain, provisioning } = await provisionTemplateDomain(adminSupabase, {
+            subdomain, templateId, mockData,
+            distributionId: process.env.TEMPLATE_CF_DISTRIBUTION_ID,
+            cfDomain: process.env.TEMPLATE_CF_DOMAIN
         });
 
-        const {
-            templateId, templateName, tier, templateDesc,
-            htmlContent, cssContent, jsContent, thumbnailUrl, mockData,
-            subdomain = 'elegant' // Default to elegant if not provided
+        // Upsert template as draft
+        await adminSupabase.from('templates').upsert({
+            id: templateId, html_content: htmlContent, css_content: cssContent, js_content: jsContent,
+            demo_url: `https://${fullDomain}`, thumbnail_url: thumbnailUrl, is_live: false, is_hero: false
+        }, { onConflict: 'id' });
+
+        res.json({ ok: true, message: `Demo updated on ${fullDomain}`, demoUrl: `https://${fullDomain}`, provisioning });
+    } catch (err) {
+        console.error('[push-demo] Error:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// ── POST /api/admin/push-live — Provision custom domain & set Live ────────
+router.post('/push-live', async (req, res) => {
+    try {
+        const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+        const adminSupabase = createClient(supabaseUrl, serviceRoleKey || '');
+        const { 
+            templateId, templateName, tier, templateDesc, 
+            htmlContent, cssContent, jsContent, thumbnailUrl, mockData, subdomain 
         } = req.body;
 
-        if (!templateId || !htmlContent) {
-            return res.status(400).json({ error: 'templateId and htmlContent are required' });
+        if (!templateId || !htmlContent || !subdomain) {
+            return res.status(400).json({ error: 'templateId, htmlContent and subdomain are required' });
         }
 
-        const fullDomain = `${subdomain}.wedbliss.co`;
-
-        // 1. Upsert template as draft
-        const { error: tplErr } = await adminSupabase
-            .from('templates')
-            .upsert({
-                id: templateId,
-                name: templateName || templateId,
-                tier: tier || 'premium',
-                description: templateDesc || '',
-                is_live: false,
-                is_hero: false,
-                html_content: htmlContent,
-                css_content: cssContent || null,
-                js_content: jsContent || null,
-                demo_url: `https://${fullDomain}`,
-                thumbnail_url: thumbnailUrl || null,
-            }, { onConflict: 'id' });
-
-        if (tplErr) {
-            console.error('[push-demo] Template upsert failed:', tplErr.message);
-            return res.status(500).json({ error: `Template save failed: ${tplErr.message}` });
-        }
-
-        // 2. Build demo data payload
-        const demoData = {
-            ...(mockData || {}),
-            metadata: { plan: 'premium', template_id: templateId, createdAt: new Date().toISOString() },
-        };
-
-        // 3. Automated Provisioning (CloudFront + Cloudflare)
-        // We only do this if it's a new or specified subdomain that might need it
-        let provisioningResults = { cloudfront: null, dns: null };
-        
-        try {
-            // Step 3a: CloudFront Alias
-            if (process.env.AWS_ACCESS_KEY_ID && process.env.TEMPLATE_CF_DISTRIBUTION_ID) {
-                const aws = getAwsService();
-                provisioningResults.cloudfront = await aws.addCloudFrontAlias(fullDomain);
-            }
-
-            // Step 3b: Cloudflare DNS
-            if (process.env.CLOUDFLARE_API_TOKEN && process.env.TEMPLATE_CF_DOMAIN) {
-                const cloudflare = require('../services/cloudflare');
-                provisioningResults.dns = await cloudflare.createSubdomainRecord(subdomain, process.env.TEMPLATE_CF_DOMAIN);
-            }
-        } catch (provErr) {
-            console.error('[push-demo] Provisioning error (non-fatal):', provErr.message);
-            // We don't fail the whole demo update if DNS/CF fails (maybe it already exists)
-            provisioningResults.error = provErr.message;
-        }
-
-        // 4. Find or Create the invitation record for this demo subdomain
-        const { data: existing } = await adminSupabase
-            .from('invitations')
-            .select('id')
-            .eq('subdomain', subdomain)
-            .limit(1)
-            .maybeSingle();
-
-        if (existing) {
-            const { error: updErr } = await adminSupabase
-                .from('invitations')
-                .update({ 
-                    template_id: templateId, 
-                    data: demoData,
-                    domain_status: 'active',
-                    updated_at: new Date().toISOString()
-                })
-                .eq('id', existing.id);
-
-            if (updErr) {
-                console.error('[push-demo] Invitation update failed:', updErr.message);
-                return res.status(500).json({ error: `Invitation update failed: ${updErr.message}` });
-            }
-        } else {
-            // Create the new demo slot
-            const { error: insErr } = await adminSupabase
-                .from('invitations')
-                .insert({
-                    user_email: 'demo@wedbliss.co',
-                    plan: 'premium',
-                    template_id: templateId,
-                    subdomain: subdomain,
-                    domain_status: 'active',
-                    data: demoData,
-                    order_id: null,
-                    cloudfront_id: process.env.TEMPLATE_CF_DISTRIBUTION_ID || null,
-                });
-
-            if (insErr) {
-                console.error('[push-demo] Invitation insert failed:', insErr.message);
-                return res.status(500).json({ error: `Invitation create failed: ${insErr.message}` });
-            }
-        }
-
-        res.status(200).json({
-            ok: true,
-            message: `Demo pushed to ${fullDomain} successfully`,
-            demoUrl: `https://${fullDomain}`,
-            provisioning: provisioningResults,
-            templateId,
+        const { fullDomain, provisioning } = await provisionTemplateDomain(adminSupabase, {
+            subdomain, templateId, mockData,
+            distributionId: process.env.TEMPLATE_CF_DISTRIBUTION_ID,
+            cfDomain: process.env.TEMPLATE_CF_DOMAIN
         });
+
+        // Upsert template as LIVE
+        const { error: tplErr } = await adminSupabase.from('templates').upsert({
+            id: templateId,
+            name: templateName || templateId,
+            tier: tier || 'premium',
+            description: templateDesc || '',
+            is_live: true,
+            is_hero: false,
+            html_content: htmlContent,
+            css_content: cssContent || null,
+            js_content: jsContent || null,
+            demo_url: `https://${fullDomain}`,
+            thumbnail_url: thumbnailUrl || null,
+        }, { onConflict: 'id' });
+
+        if (tplErr) throw tplErr;
+
+        res.json({ ok: true, message: `Template is now LIVE on ${fullDomain}`, liveUrl: `https://${fullDomain}`, provisioning });
     } catch (err) {
-        console.error('[push-demo] Unhandled error:', err);
-        res.status(500).json({ error: 'Internal server error' });
+        console.error('[push-live] Error:', err);
+        res.status(500).json({ error: err.message });
     }
 });
 

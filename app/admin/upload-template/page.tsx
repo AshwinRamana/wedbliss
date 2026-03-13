@@ -163,19 +163,19 @@ export default function UploadTemplatePage() {
 
     const [pastedHtmlInput, setPastedHtmlInput] = useState("");
 
-    // ── Demo Subdomain State ──
-    const [demoSubdomain, setDemoSubdomain] = useState("elegant");
+    // ── Live Subdomain State ──
+    const [liveSubdomain, setLiveSubdomain] = useState("");
     const [isCheckingDomain, setIsCheckingDomain] = useState(false);
     const [domainAvailable, setDomainAvailable] = useState<boolean | null>(null);
 
     const checkSubdomainAvailability = async () => {
-        if (!demoSubdomain || demoSubdomain.length < 3) return;
+        if (!liveSubdomain || liveSubdomain.length < 3) return;
         setIsCheckingDomain(true);
         setDomainAvailable(null);
         try {
             // Reusing existing domain check API
             const apiBase = 'https://api.wedbliss.co';
-            const res = await fetch(`${apiBase}/api/domains/check?subdomain=${demoSubdomain}`);
+            const res = await fetch(`${apiBase}/api/domains/check?subdomain=${liveSubdomain}`);
             const json = await res.json();
             setDomainAvailable(json.available);
         } catch (e) {
@@ -276,7 +276,7 @@ export default function UploadTemplatePage() {
     }, [parsedHtml, parsedCss, sampleDataJson]);
 
     // ── Push to Demo Handler ──
-    // Saves template as draft + points {subdomain}.wedbliss.co at it with mock data
+    // Saves template as draft + points elegant.wedbliss.co at it with mock data
     const handlePushToDemo = async () => {
         if (!templateId || !parsedHtml) {
             alert("Template ID and HTML content are required. Parse your HTML first.");
@@ -294,7 +294,7 @@ export default function UploadTemplatePage() {
         setIsDemoPushing(true);
         setDemoStatus({ type: null, msg: "" });
 
-        const fullDomain = `${demoSubdomain}.wedbliss.co`;
+        const fullDomain = `elegant.wedbliss.co`;
 
         try {
             // Always hit the live Express API
@@ -312,7 +312,8 @@ export default function UploadTemplatePage() {
                     jsContent: parsedJs || null,
                     thumbnailUrl: thumbnailUrl || null,
                     mockData: parsedData,
-                    subdomain: demoSubdomain,
+                    // Subdomain is locked to elegant in backend helper now, but we'll be explicit
+                    subdomain: "elegant",
                 }),
             });
 
@@ -328,7 +329,7 @@ export default function UploadTemplatePage() {
                 return;
             }
 
-            setDemoStatus({ type: "success", msg: `✓ Live on ${fullDomain} — open the link to preview!` });
+            setDemoStatus({ type: "success", msg: `✓ Demo updated on ${fullDomain}` });
             window.open(`https://${fullDomain}`, "_blank");
         } catch (e: unknown) {
             setDemoStatus({ type: "error", msg: e instanceof Error ? e.message : "Network error." });
@@ -337,7 +338,7 @@ export default function UploadTemplatePage() {
         }
     };
 
-    // ── Save Handler (Draft or Live) ──
+    // ── Save Handler (Draft or Push Live) ──
     const handleSave = async (pushLive: boolean) => {
         if (!templateId || !templateName) {
             alert("Template ID and Display Name are required.");
@@ -345,6 +346,10 @@ export default function UploadTemplatePage() {
         }
         if (!parsedHtml) {
             alert("No template content. Please upload an HTML file first.");
+            return;
+        }
+        if (pushLive && (!liveSubdomain || liveSubdomain.length < 3)) {
+            alert("Live subdomain is required for Push Live.");
             return;
         }
         if (pushLive && validation && !validation.valid) {
@@ -355,12 +360,39 @@ export default function UploadTemplatePage() {
         setIsSaving(true);
         setSaveStatus({ type: null, msg: "" });
 
+        if (pushLive) {
+            try {
+                const apiBase = 'https://api.wedbliss.co';
+                const res = await fetch(`${apiBase}/api/admin/push-live`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        templateId, templateName, tier, templateDesc,
+                        htmlContent: parsedHtml, cssContent: parsedCss, jsContent: parsedJs || null,
+                        thumbnailUrl: thumbnailUrl || null, mockData: JSON.parse(sampleDataJson),
+                        subdomain: liveSubdomain
+                    }),
+                });
+                const json = await res.json();
+                if (!res.ok || !json.ok) throw new Error(json.error || "Push Live failed");
+
+                setSaveStatus({ type: "success", msg: `✓ Template is LIVE on ${liveSubdomain}.wedbliss.co!` });
+                window.open(`https://${liveSubdomain}.wedbliss.co`, "_blank");
+            } catch (e: any) {
+                setSaveStatus({ type: "error", msg: `Push Live Error: ${e.message}` });
+            } finally {
+                setIsSaving(false);
+            }
+            return;
+        }
+
+        // Just regular draft save
         const { error } = await upsertTemplate({
             id: templateId,
             name: templateName,
             tier,
             description: templateDesc,
-            is_live: pushLive,
+            is_live: false,
             is_hero: false,
             html_content: parsedHtml,
             css_content: parsedCss,
@@ -373,7 +405,7 @@ export default function UploadTemplatePage() {
         if (error) {
             setSaveStatus({ type: "error", msg: `Database Error: ${error}` });
         } else {
-            setSaveStatus({ type: "success", msg: pushLive ? "✓ Template is LIVE on the website!" : "✓ Saved as Draft (not visible to users yet)" });
+            setSaveStatus({ type: "success", msg: "✓ Saved as Draft (not visible to users yet)" });
         }
     };
 
@@ -433,9 +465,9 @@ export default function UploadTemplatePage() {
                         {demoStatus.msg}
                     </div>
                     {demoStatus.type === "success" && (
-                        <a href={`https://${demoSubdomain}.wedbliss.co`} target="_blank" rel="noopener noreferrer"
+                        <a href={`https://elegant.wedbliss.co`} target="_blank" rel="noopener noreferrer"
                             className="underline underline-offset-2 text-violet-600 hover:text-violet-800 font-bold text-xs tracking-widest uppercase">
-                            Open → {demoSubdomain}.wedbliss.co
+                            Open → elegant.wedbliss.co
                         </a>
                     )}
                 </div>
@@ -534,25 +566,25 @@ export default function UploadTemplatePage() {
                                 <input value={templateName} onChange={e => setTemplateName(e.target.value)} placeholder="Display Name" className="flex-1 text-sm border border-slate-200 rounded-lg px-3 py-2 outline-none focus:border-indigo-500 font-medium" />
                             </div>
                             
-                            {/* Demo Subdomain Section */}
+                            {/* Live Subdomain Section */}
                             <div className="flex flex-col gap-1.5 pt-1 border-t border-slate-100">
-                                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Demo Subdomain</label>
+                                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Live Subdomain</label>
                                 <div className="flex gap-2">
                                     <div className="relative flex-1">
                                         <input 
-                                            value={demoSubdomain} 
+                                            value={liveSubdomain} 
                                             onChange={e => {
-                                                setDemoSubdomain(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''));
+                                                setLiveSubdomain(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''));
                                                 setDomainAvailable(null);
                                             }} 
-                                            placeholder="elegant" 
+                                            placeholder="noir" 
                                             className={`w-full text-sm border ${domainAvailable === true ? 'border-emerald-200 bg-emerald-50' : domainAvailable === false ? 'border-red-200 bg-red-50' : 'border-slate-200'} rounded-lg pl-3 pr-24 py-2 outline-none focus:border-indigo-500 font-mono`} 
                                         />
                                         <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-slate-400">.wedbliss.co</span>
                                     </div>
                                     <button 
                                         onClick={checkSubdomainAvailability}
-                                        disabled={isCheckingDomain || demoSubdomain.length < 3}
+                                        disabled={isCheckingDomain || liveSubdomain.length < 3}
                                         className="px-3 py-2 bg-slate-100 hover:bg-slate-200 disabled:opacity-50 text-slate-700 text-xs font-bold rounded-lg transition-colors border border-slate-200"
                                     >
                                         {isCheckingDomain ? "⏳" : "Check"}

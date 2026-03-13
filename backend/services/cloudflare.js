@@ -18,7 +18,7 @@ const cfApi = axios.create({
 });
 
 /**
- * Create a CNAME record for a subdomain.
+ * Create or Update a CNAME record for a subdomain.
  * @param {string} subdomain - e.g. "priya-karthik"
  * @param {string} target - e.g. "dhtsr80g2t15g.cloudfront.net"
  */
@@ -27,21 +27,43 @@ async function createSubdomainRecord(subdomain, target) {
         throw new Error('Cloudflare credentials not configured');
     }
 
+    const fullName = `${subdomain}.wedbliss.co`;
+
     try {
-        console.log(`[cloudflare] Creating CNAME for ${subdomain}.wedbliss.co -> ${target}`);
-        
-        const response = await cfApi.post(`/zones/${CLOUDFLARE_ZONE_ID}/dns_records`, {
-            type: 'CNAME',
-            name: subdomain, // Cloudflare allows just the prefix or the full name
-            content: target,
-            ttl: 1, // 1 = automatic
-            proxied: true // Enabling proxying for Cloudflare value-add (SSL, etc.)
+        console.log(`[cloudflare] Provisioning CNAME for ${fullName} -> ${target}`);
+
+        // 1. Check if record already exists
+        const listRes = await cfApi.get(`/zones/${CLOUDFLARE_ZONE_ID}/dns_records`, {
+            params: { name: fullName, type: 'CNAME' }
         });
 
-        return response.data.result;
+        const existingRecord = listRes.data.result[0];
+
+        if (existingRecord) {
+            console.log(`[cloudflare] Record exists (ID: ${existingRecord.id}), updating...`);
+            const updateRes = await cfApi.put(`/zones/${CLOUDFLARE_ZONE_ID}/dns_records/${existingRecord.id}`, {
+                type: 'CNAME',
+                name: fullName,
+                content: target,
+                ttl: 1,
+                proxied: false // Setting to false by default for CloudFront consistency unless proxied SSL is managed
+            });
+            return updateRes.data.result;
+        } else {
+            console.log(`[cloudflare] Record not found, creating new...`);
+            const createRes = await cfApi.post(`/zones/${CLOUDFLARE_ZONE_ID}/dns_records`, {
+                type: 'CNAME',
+                name: fullName,
+                content: target,
+                ttl: 1,
+                proxied: false
+            });
+            return createRes.data.result;
+        }
     } catch (error) {
-        console.error('[cloudflare] Error creating DNS record:', error.response?.data || error.message);
-        throw new Error(`DNS record creation failed: ${JSON.stringify(error.response?.data?.errors || error.message)}`);
+        const errorData = error.response?.data || error.message;
+        console.error('[cloudflare] Error provisioning DNS record:', errorData);
+        throw new Error(`DNS provisioning failed: ${JSON.stringify(error.response?.data?.errors || error.message)}`);
     }
 }
 

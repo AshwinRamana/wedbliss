@@ -485,7 +485,7 @@ export default function UploadTemplatePage() {
     );
 
     return (
-        <div className="flex flex-col gap-6 h-[calc(100vh-80px)]">
+        <div className="flex flex-col gap-6 h-[calc(100vh-80px)] overflow-y-auto pb-10 pr-2">
             {/* Header */}
             <div className="flex justify-between items-end flex-shrink-0">
                 <div>

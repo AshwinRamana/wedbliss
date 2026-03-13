@@ -158,6 +158,9 @@ export default function UploadTemplatePage() {
     // ── JSON Sample Data (also used as Demo mock data) ──
     const [sampleDataJson, setSampleDataJson] = useState(INITIAL_SAMPLE_DATA);
 
+    // ── Workflow Mode ──
+    const [workflowMode, setWorkflowMode] = useState<"choose" | "demo" | "live">("choose");
+
     // ── View Mode ──  
     const [viewMode, setViewMode] = useState<"upload" | "review">("upload");
 
@@ -204,7 +207,7 @@ export default function UploadTemplatePage() {
         setValidation(result);
 
         if (!templateId) {
-            setTemplateId("tm-pasted-" + Date.now());
+            setTemplateId(workflowMode === "demo" ? "tm-demo-" + Date.now() : "tm-pasted-" + Date.now());
         }
         setViewMode("review");
     };
@@ -236,7 +239,7 @@ export default function UploadTemplatePage() {
             // Auto-fill ID from filename
             if (!templateId) {
                 const slug = file.name.replace(/\.(html|htm)$/, "").replace(/[^a-z0-9-]/gi, "-").toLowerCase();
-                setTemplateId(`tm-${slug}`);
+                setTemplateId(workflowMode === "demo" ? `tm-demo-${Date.now()}` : `tm-${slug}`);
             }
 
             // Switch to review mode
@@ -414,7 +417,7 @@ export default function UploadTemplatePage() {
         if (!confirm("Clear everything and start over?")) return;
         setFileName(""); setParsedHtml(""); setParsedCss(""); setParsedJs("");
         setValidation(null); setCompiledLiveHtml(""); setViewMode("upload");
-        setSaveStatus({ type: null, msg: "" });
+        setSaveStatus({ type: null, msg: "" }); setWorkflowMode("choose");
         setPastedHtmlInput("");
     };
 
@@ -435,22 +438,27 @@ export default function UploadTemplatePage() {
                     </button>
                     {viewMode === "review" && (
                         <>
-                            <button
-                                onClick={handlePushToDemo}
-                                disabled={isDemoPushing || !parsedHtml || !templateId}
-                                title="Save as draft + preview on elegant.wedbliss.co with mock data"
-                                className="flex items-center gap-2 px-5 py-2 bg-violet-600 hover:bg-violet-700 disabled:opacity-50 text-white font-bold rounded-lg transition-colors shadow-lg shadow-violet-600/20"
-                            >
-                                {isDemoPushing
-                                    ? <span className="animate-pulse">Deploying...</span>
-                                    : <><Play className="w-4 h-4" /> Push to Demo</>}
-                            </button>
-                            <button onClick={() => handleSave(false)} disabled={isSaving} className="flex items-center gap-2 px-5 py-2 bg-slate-700 hover:bg-slate-800 disabled:opacity-50 text-white font-bold rounded-lg transition-colors shadow-sm">
-                                {isSaving ? <span className="animate-pulse">Saving...</span> : <><Save className="w-4 h-4" /> Save as Draft</>}
-                            </button>
-                            <button onClick={() => handleSave(true)} disabled={isSaving || (validation !== null && !validation.valid)} className="flex items-center gap-2 px-5 py-2 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-bold rounded-lg transition-colors shadow-lg shadow-emerald-600/20">
-                                {isSaving ? <span className="animate-pulse">Pushing...</span> : <><Eye className="w-4 h-4" /> Push Live</>}
-                            </button>
+                            {workflowMode === "demo" ? (
+                                <button
+                                    onClick={handlePushToDemo}
+                                    disabled={isDemoPushing || !parsedHtml || !templateId}
+                                    title="Quick preview on elegant.wedbliss.co"
+                                    className="flex items-center gap-2 px-6 py-2 bg-violet-600 hover:bg-violet-700 disabled:opacity-50 text-white font-bold rounded-lg transition-colors shadow-lg shadow-violet-600/20"
+                                >
+                                    {isDemoPushing
+                                        ? <span className="animate-pulse">Deploying...</span>
+                                        : <><Play className="w-4 h-4" /> Push to Demo</>}
+                                </button>
+                            ) : (
+                                <>
+                                    <button onClick={() => handleSave(false)} disabled={isSaving} className="flex items-center gap-2 px-5 py-2 bg-slate-700 hover:bg-slate-800 disabled:opacity-50 text-white font-bold rounded-lg transition-colors shadow-sm">
+                                        {isSaving ? <span className="animate-pulse">Saving...</span> : <><Save className="w-4 h-4" /> Save as Draft</>}
+                                    </button>
+                                    <button onClick={() => handleSave(true)} disabled={isSaving || (validation !== null && !validation.valid)} className="flex items-center gap-2 px-5 py-2 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-bold rounded-lg transition-colors shadow-lg shadow-emerald-600/20">
+                                        {isSaving ? <span className="animate-pulse">Pushing...</span> : <><Eye className="w-4 h-4" /> Push Live</>}
+                                    </button>
+                                </>
+                            )}
                         </>
                     )}
                 </div>
@@ -481,16 +489,66 @@ export default function UploadTemplatePage() {
                 </div>
             )}
 
+            {/* ═══ CHOOSE MODE ═══ */}
+            {workflowMode === "choose" && (
+                <div className="flex-1 flex flex-col items-center justify-center py-10">
+                    <div className="max-w-4xl w-full grid grid-cols-1 md:grid-cols-2 gap-8 px-6">
+                        {/* Demo Mode Card */}
+                        <button 
+                            onClick={() => setWorkflowMode("demo")}
+                            className="group flex flex-col items-center p-8 bg-white border-2 border-slate-200 hover:border-violet-500 rounded-3xl transition-all hover:shadow-2xl hover:shadow-violet-500/10 text-center"
+                        >
+                            <div className="w-16 h-16 rounded-2xl bg-violet-50 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                                <Play className="w-8 h-8 text-violet-600" />
+                            </div>
+                            <h2 className="text-xl font-bold text-slate-900 mb-2">Push to Demo</h2>
+                            <p className="text-sm text-slate-500 leading-relaxed">
+                                Quick preview on <b>elegant.wedbliss.co</b>.<br/> 
+                                No metadata required. Perfect for testing tags.
+                            </p>
+                            <div className="mt-8 px-6 py-2 bg-violet-600 text-white font-bold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
+                                Select Demo
+                            </div>
+                        </button>
+
+                        {/* Live Mode Card */}
+                        <button 
+                            onClick={() => setWorkflowMode("live")}
+                            className="group flex flex-col items-center p-8 bg-white border-2 border-slate-200 hover:border-emerald-500 rounded-3xl transition-all hover:shadow-2xl hover:shadow-emerald-500/10 text-center"
+                        >
+                            <div className="w-16 h-16 rounded-2xl bg-emerald-50 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                                <Eye className="w-8 h-8 text-emerald-600" />
+                            </div>
+                            <h2 className="text-xl font-bold text-slate-900 mb-2">Push to Live</h2>
+                            <p className="text-sm text-slate-500 leading-relaxed">
+                                Deploy a permanent template.<br/>
+                                Requires ID, metadata, and custom subdomain.
+                            </p>
+                            <div className="mt-8 px-6 py-2 bg-emerald-600 text-white font-bold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
+                                Select Live Path
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            )}
+
             {/* ═══ UPLOAD MODE ═══ */}
-            {viewMode === "upload" && (
-                <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch justify-center min-h-0 py-6">
+            {workflowMode !== "choose" && viewMode === "upload" && (
+                <div className="flex-1 flex flex-col gap-6 min-h-0">
+                    <button 
+                        onClick={() => setWorkflowMode("choose")}
+                        className="self-start text-xs font-bold text-slate-400 hover:text-indigo-600 flex items-center gap-1"
+                    >
+                        ← Back to Mode Selection
+                    </button>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch justify-center flex-1 py-2">
 
                     {/* Left box: File Upload */}
                     <div className="flex flex-col items-center justify-center text-center bg-white rounded-3xl border border-slate-200 border-dashed p-10 hover:border-indigo-400 hover:bg-indigo-50/30 transition-colors">
                         <div className="w-20 h-20 rounded-full bg-indigo-50 flex items-center justify-center mb-6">
                             <FileUp className="w-8 h-8 text-indigo-500" />
                         </div>
-                        <h2 className="text-xl font-bold text-slate-800 mb-2">Upload HTML File</h2>
+                        <h2 className="text-xl font-bold text-slate-800 mb-2">Upload {workflowMode === "demo" ? "Demo" : "Live"} HTML File</h2>
                         <p className="text-sm text-slate-500 max-w-xs mb-8">Upload a single <code className="bg-slate-100 px-1 rounded text-xs font-mono">.html</code> file. We auto-split CSS/JS.</p>
                         <label className="cursor-pointer">
                             <input type="file" accept=".html,.htm" onChange={handleFileUpload} className="hidden" />
@@ -524,8 +582,15 @@ export default function UploadTemplatePage() {
             )}
 
             {/* ═══ REVIEW MODE ═══ */}
-            {viewMode === "review" && (
-                <div className="grid grid-cols-12 gap-6 flex-1 min-h-0">
+            {workflowMode !== "choose" && viewMode === "review" && (
+                <div className="grid grid-cols-12 gap-6 flex-1 min-h-0 relative">
+                    {/* Floating Back Button */}
+                    <button 
+                        onClick={() => { setViewMode("upload"); if (confirm("Go back and change mode?")) setWorkflowMode("choose"); }}
+                        className="absolute -top-10 left-0 text-xs font-bold text-slate-400 hover:text-indigo-600 flex items-center gap-1"
+                    >
+                        ← Back to Upload
+                    </button>
 
                     {/* Left: Validation + Metadata + Code */}
                     <div className="col-span-12 lg:col-span-5 flex flex-col gap-4 min-h-0">
@@ -552,57 +617,69 @@ export default function UploadTemplatePage() {
                             </div>
                         )}
 
-                        {/* Metadata */}
-                        <div className="bg-white border border-slate-200 rounded-xl p-4 flex flex-col gap-3 flex-shrink-0">
-                            <div className="flex justify-between items-center">
-                                <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Template Metadata</label>
-                                <select value={tier} onChange={(e) => setTier(e.target.value as "basic" | "premium")} className="text-xs border border-slate-200 rounded p-1 font-medium bg-slate-50 outline-none">
-                                    <option value="basic">Basic Tier</option>
-                                    <option value="premium">Premium Tier</option>
-                                </select>
-                            </div>
-                            <div className="flex gap-2">
-                                <input value={templateId} onChange={e => setTemplateId(e.target.value)} placeholder="Template ID (e.g., tm-gold-scroll)" className="flex-1 text-sm border border-slate-200 rounded-lg px-3 py-2 outline-none focus:border-indigo-500 font-medium" />
-                                <input value={templateName} onChange={e => setTemplateName(e.target.value)} placeholder="Display Name" className="flex-1 text-sm border border-slate-200 rounded-lg px-3 py-2 outline-none focus:border-indigo-500 font-medium" />
-                            </div>
-                            
-                            {/* Live Subdomain Section */}
-                            <div className="flex flex-col gap-1.5 pt-1 border-t border-slate-100">
-                                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Live Subdomain</label>
-                                <div className="flex gap-2">
-                                    <div className="relative flex-1">
-                                        <input 
-                                            value={liveSubdomain} 
-                                            onChange={e => {
-                                                setLiveSubdomain(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''));
-                                                setDomainAvailable(null);
-                                            }} 
-                                            placeholder="noir" 
-                                            className={`w-full text-sm border ${domainAvailable === true ? 'border-emerald-200 bg-emerald-50' : domainAvailable === false ? 'border-red-200 bg-red-50' : 'border-slate-200'} rounded-lg pl-3 pr-24 py-2 outline-none focus:border-indigo-500 font-mono`} 
-                                        />
-                                        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-slate-400">.wedbliss.co</span>
-                                    </div>
-                                    <button 
-                                        onClick={checkSubdomainAvailability}
-                                        disabled={isCheckingDomain || liveSubdomain.length < 3}
-                                        className="px-3 py-2 bg-slate-100 hover:bg-slate-200 disabled:opacity-50 text-slate-700 text-xs font-bold rounded-lg transition-colors border border-slate-200"
-                                    >
-                                        {isCheckingDomain ? "⏳" : "Check"}
-                                    </button>
+                        {/* Metadata - ONLY in LIVE mode */}
+                        {workflowMode === "live" ? (
+                            <div className="bg-white border border-slate-200 rounded-xl p-4 flex flex-col gap-3 flex-shrink-0 animate-in fade-in slide-in-from-left-4 duration-500">
+                                <div className="flex justify-between items-center">
+                                    <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Template Metadata</label>
+                                    <select value={tier} onChange={(e) => setTier(e.target.value as "basic" | "premium")} className="text-xs border border-slate-200 rounded p-1 font-medium bg-slate-50 outline-none">
+                                        <option value="basic">Basic Tier</option>
+                                        <option value="premium">Premium Tier</option>
+                                    </select>
                                 </div>
-                                {domainAvailable === false && <p className="text-[10px] text-red-500 font-bold ml-1">Already taken — will overwrite if pushed.</p>}
-                                {domainAvailable === true && <p className="text-[10px] text-emerald-600 font-bold ml-1">Available!</p>}
-                            </div>
+                                <div className="flex gap-2">
+                                    <input value={templateId} onChange={e => setTemplateId(e.target.value)} placeholder="Template ID (e.g., tm-gold-scroll)" className="flex-1 text-sm border border-slate-200 rounded-lg px-3 py-2 outline-none focus:border-indigo-500 font-medium" />
+                                    <input value={templateName} onChange={e => setTemplateName(e.target.value)} placeholder="Display Name" className="flex-1 text-sm border border-slate-200 rounded-lg px-3 py-2 outline-none focus:border-indigo-500 font-medium" />
+                                </div>
+                                
+                                {/* Live Subdomain Section */}
+                                <div className="flex flex-col gap-1.5 pt-1 border-t border-slate-100">
+                                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Live Subdomain</label>
+                                    <div className="flex gap-2">
+                                        <div className="relative flex-1">
+                                            <input 
+                                                value={liveSubdomain} 
+                                                onChange={e => {
+                                                    setLiveSubdomain(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''));
+                                                    setDomainAvailable(null);
+                                                }} 
+                                                placeholder="noir" 
+                                                className={`w-full text-sm border ${domainAvailable === true ? 'border-emerald-200 bg-emerald-50' : domainAvailable === false ? 'border-red-200 bg-red-50' : 'border-slate-200'} rounded-lg pl-3 pr-24 py-2 outline-none focus:border-indigo-500 font-mono`} 
+                                            />
+                                            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-slate-400">.wedbliss.co</span>
+                                        </div>
+                                        <button 
+                                            onClick={checkSubdomainAvailability}
+                                            disabled={isCheckingDomain || liveSubdomain.length < 3}
+                                            className="px-3 py-2 bg-slate-100 hover:bg-slate-200 disabled:opacity-50 text-slate-700 text-xs font-bold rounded-lg transition-colors border border-slate-200"
+                                        >
+                                            {isCheckingDomain ? "⏳" : "Check"}
+                                        </button>
+                                    </div>
+                                    {domainAvailable === false && <p className="text-[10px] text-red-500 font-bold ml-1">Already taken — will overwrite if pushed.</p>}
+                                    {domainAvailable === true && <p className="text-[10px] text-emerald-600 font-bold ml-1">Available!</p>}
+                                </div>
 
-                            <input value={templateDesc} onChange={e => setTemplateDesc(e.target.value)} placeholder="Theme Description..." className="w-full text-sm border border-slate-200 rounded-lg px-3 py-2 outline-none focus:border-indigo-500" />
-                            <input value={thumbnailUrl} onChange={e => setThumbnailUrl(e.target.value)} placeholder="Thumbnail URL (optional)" className="w-full text-sm border border-slate-200 rounded-lg px-3 py-2 outline-none focus:border-indigo-500 text-slate-500" />
-                            <div className="flex items-center gap-4 text-xs text-slate-500">
-                                <span className="font-mono bg-slate-100 px-2 py-1 rounded">{fileName}</span>
-                                <span>HTML: {parsedHtml.length} chars</span>
-                                <span>CSS: {parsedCss.length} chars</span>
-                                {parsedJs && <span>JS: {parsedJs.length} chars</span>}
+                                <input value={templateDesc} onChange={e => setTemplateDesc(e.target.value)} placeholder="Theme Description..." className="w-full text-sm border border-slate-200 rounded-lg px-3 py-2 outline-none focus:border-indigo-500" />
+                                <input value={thumbnailUrl} onChange={e => setThumbnailUrl(e.target.value)} placeholder="Thumbnail URL (optional)" className="w-full text-sm border border-slate-200 rounded-lg px-3 py-2 outline-none focus:border-indigo-500 text-slate-500" />
+                                <div className="flex items-center gap-4 text-xs text-slate-500">
+                                    <span className="font-mono bg-slate-100 px-2 py-1 rounded">{fileName}</span>
+                                    <span>HTML: {parsedHtml.length} chars</span>
+                                    <span>CSS: {parsedCss.length} chars</span>
+                                    {parsedJs && <span>JS: {parsedJs.length} chars</span>}
+                                </div>
                             </div>
-                        </div>
+                        ) : (
+                            <div className="bg-violet-50/50 border border-violet-100 rounded-xl p-4 flex flex-col gap-1 flex-shrink-0 animate-in fade-in slide-in-from-left-4 duration-500">
+                                <label className="text-[10px] font-bold text-violet-400 uppercase tracking-widest">Demo Target</label>
+                                <div className="flex items-center gap-2 text-violet-700">
+                                    <Play className="w-4 h-4" />
+                                    <span className="font-bold text-sm">elegant.wedbliss.co</span>
+                                    <span className="text-[10px] bg-violet-200 text-violet-700 px-2 py-0.5 rounded-full font-bold ml-auto uppercase tracking-tighter">Fixed for Preview</span>
+                                </div>
+                                <p className="text-[10px] text-violet-400 mt-1 italic">Quick deployment path. Metadata is skipped.</p>
+                            </div>
+                        )}
 
                         {/* Code Viewer */}
                         <div className="flex-1 flex flex-col min-h-0 bg-slate-900 rounded-xl overflow-hidden shadow-inner border border-slate-800">

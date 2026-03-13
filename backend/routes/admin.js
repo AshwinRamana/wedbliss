@@ -170,19 +170,29 @@ async function provisionTemplateDomain(adminSupabase, {
     let provisioning = { cloudfront: null, dns: null };
     
     // 1. CloudFront Alias
+    console.log(`[provision] Step 1: CloudFront. Distribution: ${distributionId}, AWS_KEY: ${process.env.AWS_ACCESS_KEY_ID ? 'SET' : 'MISSING'}`);
     if (process.env.AWS_ACCESS_KEY_ID && distributionId) {
         try {
             const aws = getAwsService();
             provisioning.cloudfront = await aws.addCloudFrontAlias(fullDomain);
-        } catch (e) { provisioning.cloudfront = { error: e.message }; }
+            console.log(`[provision] CloudFront result:`, provisioning.cloudfront);
+        } catch (e) { 
+            console.error(`[provision] CloudFront error:`, e.message);
+            provisioning.cloudfront = { error: e.message }; 
+        }
     }
 
     // 2. Cloudflare DNS
+    console.log(`[provision] Step 2: Cloudflare. CF_DOMAIN: ${cfDomain}, CF_TOKEN: ${process.env.CLOUDFLARE_API_TOKEN ? 'SET' : 'MISSING'}`);
     if (process.env.CLOUDFLARE_API_TOKEN && cfDomain) {
         try {
             const cloudflare = require('../services/cloudflare');
             provisioning.dns = await cloudflare.createSubdomainRecord(subdomain, cfDomain);
-        } catch (e) { provisioning.dns = { error: e.message }; }
+            console.log(`[provision] Cloudflare result:`, provisioning.dns);
+        } catch (e) { 
+            console.error(`[provision] Cloudflare error:`, e.message);
+            provisioning.dns = { error: e.message }; 
+        }
     }
 
     // 3. Upsert Invitation
@@ -223,10 +233,19 @@ router.post('/push-demo', async (req, res) => {
             cfDomain: process.env.TEMPLATE_CF_DOMAIN
         });
 
-        // Upsert template as draft
+        // Upsert template as draft - provide defaults for demo mode
         await adminSupabase.from('templates').upsert({
-            id: templateId, html_content: htmlContent, css_content: cssContent, js_content: jsContent,
-            demo_url: `https://${fullDomain}`, thumbnail_url: thumbnailUrl, is_live: false, is_hero: false
+            id: templateId, 
+            name: templateId, // Default to ID if name missing
+            tier: 'premium',
+            description: 'Quick Demo',
+            html_content: htmlContent, 
+            css_content: cssContent || null, 
+            js_content: jsContent || null,
+            demo_url: `https://${fullDomain}`, 
+            thumbnail_url: thumbnailUrl || null, 
+            is_live: false, 
+            is_hero: false
         }, { onConflict: 'id' });
 
         res.json({ ok: true, message: `Demo updated on ${fullDomain}`, demoUrl: `https://${fullDomain}`, provisioning });

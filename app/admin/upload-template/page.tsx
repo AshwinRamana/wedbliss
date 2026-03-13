@@ -161,6 +161,10 @@ export default function UploadTemplatePage() {
     // ── Workflow Mode ──
     const [workflowMode, setWorkflowMode] = useState<"choose" | "demo" | "live">("choose");
 
+    useEffect(() => {
+        console.log("Template Upload: Workflow Mode System v2.1 Active");
+    }, []);
+
     // ── View Mode ──  
     const [viewMode, setViewMode] = useState<"upload" | "review">("upload");
 
@@ -577,6 +581,7 @@ export default function UploadTemplatePage() {
                             className="flex-1 w-full bg-slate-50 border border-slate-200 rounded-xl p-4 text-xs font-mono text-slate-600 outline-none focus:border-indigo-400 resize-none shadow-inner"
                             spellCheck={false}
                         />
+                    </div>
                     </div>
                 </div>
             )}

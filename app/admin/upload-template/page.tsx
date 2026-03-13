@@ -163,6 +163,28 @@ export default function UploadTemplatePage() {
 
     const [pastedHtmlInput, setPastedHtmlInput] = useState("");
 
+    // ── Demo Subdomain State ──
+    const [demoSubdomain, setDemoSubdomain] = useState("elegant");
+    const [isCheckingDomain, setIsCheckingDomain] = useState(false);
+    const [domainAvailable, setDomainAvailable] = useState<boolean | null>(null);
+
+    const checkSubdomainAvailability = async () => {
+        if (!demoSubdomain || demoSubdomain.length < 3) return;
+        setIsCheckingDomain(true);
+        setDomainAvailable(null);
+        try {
+            // Reusing existing domain check API
+            const apiBase = 'https://api.wedbliss.co';
+            const res = await fetch(`${apiBase}/api/domains/check?subdomain=${demoSubdomain}`);
+            const json = await res.json();
+            setDomainAvailable(json.available);
+        } catch (e) {
+            console.error("Domain check failed:", e);
+        } finally {
+            setIsCheckingDomain(false);
+        }
+    };
+
     // ── Paste HTML Handler ──
     const handlePasteHtml = () => {
         if (!pastedHtmlInput.trim()) {
@@ -254,7 +276,7 @@ export default function UploadTemplatePage() {
     }, [parsedHtml, parsedCss, sampleDataJson]);
 
     // ── Push to Demo Handler ──
-    // Saves template as draft + points elegant.wedbliss.co at it with mock data
+    // Saves template as draft + points {subdomain}.wedbliss.co at it with mock data
     const handlePushToDemo = async () => {
         if (!templateId || !parsedHtml) {
             alert("Template ID and HTML content are required. Parse your HTML first.");
@@ -272,9 +294,10 @@ export default function UploadTemplatePage() {
         setIsDemoPushing(true);
         setDemoStatus({ type: null, msg: "" });
 
+        const fullDomain = `${demoSubdomain}.wedbliss.co`;
+
         try {
-            // Always hit the live Express API — env var is baked at build time in static exports
-            // and may resolve to localhost in production builds.
+            // Always hit the live Express API
             const apiBase = 'https://api.wedbliss.co';
             const res = await fetch(`${apiBase}/api/admin/push-demo`, {
                 method: "POST",
@@ -289,10 +312,10 @@ export default function UploadTemplatePage() {
                     jsContent: parsedJs || null,
                     thumbnailUrl: thumbnailUrl || null,
                     mockData: parsedData,
+                    subdomain: demoSubdomain,
                 }),
             });
 
-            // Safely read body — server may return HTML on errors
             const text = await res.text();
             let json: Record<string, unknown> = {};
             try { json = JSON.parse(text); } catch {
@@ -305,8 +328,8 @@ export default function UploadTemplatePage() {
                 return;
             }
 
-            setDemoStatus({ type: "success", msg: "✓ Live on elegant.wedbliss.co — open the link to preview!" });
-            window.open("https://elegant.wedbliss.co", "_blank");
+            setDemoStatus({ type: "success", msg: `✓ Live on ${fullDomain} — open the link to preview!` });
+            window.open(`https://${fullDomain}`, "_blank");
         } catch (e: unknown) {
             setDemoStatus({ type: "error", msg: e instanceof Error ? e.message : "Network error." });
         } finally {
@@ -410,9 +433,9 @@ export default function UploadTemplatePage() {
                         {demoStatus.msg}
                     </div>
                     {demoStatus.type === "success" && (
-                        <a href="https://elegant.wedbliss.co" target="_blank" rel="noopener noreferrer"
+                        <a href={`https://${demoSubdomain}.wedbliss.co`} target="_blank" rel="noopener noreferrer"
                             className="underline underline-offset-2 text-violet-600 hover:text-violet-800 font-bold text-xs tracking-widest uppercase">
-                            Open → elegant.wedbliss.co
+                            Open → {demoSubdomain}.wedbliss.co
                         </a>
                     )}
                 </div>
@@ -510,6 +533,35 @@ export default function UploadTemplatePage() {
                                 <input value={templateId} onChange={e => setTemplateId(e.target.value)} placeholder="Template ID (e.g., tm-gold-scroll)" className="flex-1 text-sm border border-slate-200 rounded-lg px-3 py-2 outline-none focus:border-indigo-500 font-medium" />
                                 <input value={templateName} onChange={e => setTemplateName(e.target.value)} placeholder="Display Name" className="flex-1 text-sm border border-slate-200 rounded-lg px-3 py-2 outline-none focus:border-indigo-500 font-medium" />
                             </div>
+                            
+                            {/* Demo Subdomain Section */}
+                            <div className="flex flex-col gap-1.5 pt-1 border-t border-slate-100">
+                                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Demo Subdomain</label>
+                                <div className="flex gap-2">
+                                    <div className="relative flex-1">
+                                        <input 
+                                            value={demoSubdomain} 
+                                            onChange={e => {
+                                                setDemoSubdomain(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''));
+                                                setDomainAvailable(null);
+                                            }} 
+                                            placeholder="elegant" 
+                                            className={`w-full text-sm border ${domainAvailable === true ? 'border-emerald-200 bg-emerald-50' : domainAvailable === false ? 'border-red-200 bg-red-50' : 'border-slate-200'} rounded-lg pl-3 pr-24 py-2 outline-none focus:border-indigo-500 font-mono`} 
+                                        />
+                                        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-slate-400">.wedbliss.co</span>
+                                    </div>
+                                    <button 
+                                        onClick={checkSubdomainAvailability}
+                                        disabled={isCheckingDomain || demoSubdomain.length < 3}
+                                        className="px-3 py-2 bg-slate-100 hover:bg-slate-200 disabled:opacity-50 text-slate-700 text-xs font-bold rounded-lg transition-colors border border-slate-200"
+                                    >
+                                        {isCheckingDomain ? "⏳" : "Check"}
+                                    </button>
+                                </div>
+                                {domainAvailable === false && <p className="text-[10px] text-red-500 font-bold ml-1">Already taken — will overwrite if pushed.</p>}
+                                {domainAvailable === true && <p className="text-[10px] text-emerald-600 font-bold ml-1">Available!</p>}
+                            </div>
+
                             <input value={templateDesc} onChange={e => setTemplateDesc(e.target.value)} placeholder="Theme Description..." className="w-full text-sm border border-slate-200 rounded-lg px-3 py-2 outline-none focus:border-indigo-500" />
                             <input value={thumbnailUrl} onChange={e => setThumbnailUrl(e.target.value)} placeholder="Thumbnail URL (optional)" className="w-full text-sm border border-slate-200 rounded-lg px-3 py-2 outline-none focus:border-indigo-500 text-slate-500" />
                             <div className="flex items-center gap-4 text-xs text-slate-500">

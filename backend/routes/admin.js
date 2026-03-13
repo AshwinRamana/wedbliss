@@ -157,8 +157,8 @@ router.delete('/users/:uid', async (req, res) => {
     }
 });
 
-// ── POST /api/admin/push-demo — Update elegant demo invitation ──────────────
-// Uses service role to bypass RLS — works regardless of invitation owner.
+// ── POST /api/admin/push-demo — Update/Create demo invitation ──────────────
+// Uses service role to bypass RLS — allows any subdomain to be a demo.
 router.post('/push-demo', async (req, res) => {
     try {
         const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -172,12 +172,15 @@ router.post('/push-demo', async (req, res) => {
 
         const {
             templateId, templateName, tier, templateDesc,
-            htmlContent, cssContent, jsContent, thumbnailUrl, mockData
+            htmlContent, cssContent, jsContent, thumbnailUrl, mockData,
+            subdomain = 'elegant' // Default to elegant if not provided
         } = req.body;
 
         if (!templateId || !htmlContent) {
             return res.status(400).json({ error: 'templateId and htmlContent are required' });
         }
+
+        const fullDomain = `${subdomain}.wedbliss.co`;
 
         // 1. Upsert template as draft
         const { error: tplErr } = await adminSupabase
@@ -192,7 +195,7 @@ router.post('/push-demo', async (req, res) => {
                 html_content: htmlContent,
                 css_content: cssContent || null,
                 js_content: jsContent || null,
-                demo_url: null,
+                demo_url: `https://${fullDomain}`,
                 thumbnail_url: thumbnailUrl || null,
             }, { onConflict: 'id' });
 
@@ -207,18 +210,45 @@ router.post('/push-demo', async (req, res) => {
             metadata: { plan: 'premium', template_id: templateId, createdAt: new Date().toISOString() },
         };
 
-        // 3. Find existing elegant invitation (any owner — bypasses RLS)
+        // 3. Automated Provisioning (CloudFront + Cloudflare)
+        // We only do this if it's a new or specified subdomain that might need it
+        let provisioningResults = { cloudfront: null, dns: null };
+        
+        try {
+            // Step 3a: CloudFront Alias
+            if (process.env.AWS_ACCESS_KEY_ID && process.env.TEMPLATE_CF_DISTRIBUTION_ID) {
+                const aws = getAwsService();
+                provisioningResults.cloudfront = await aws.addCloudFrontAlias(fullDomain);
+            }
+
+            // Step 3b: Cloudflare DNS
+            if (process.env.CLOUDFLARE_API_TOKEN && process.env.TEMPLATE_CF_DOMAIN) {
+                const cloudflare = require('../services/cloudflare');
+                provisioningResults.dns = await cloudflare.createSubdomainRecord(subdomain, process.env.TEMPLATE_CF_DOMAIN);
+            }
+        } catch (provErr) {
+            console.error('[push-demo] Provisioning error (non-fatal):', provErr.message);
+            // We don't fail the whole demo update if DNS/CF fails (maybe it already exists)
+            provisioningResults.error = provErr.message;
+        }
+
+        // 4. Find or Create the invitation record for this demo subdomain
         const { data: existing } = await adminSupabase
             .from('invitations')
             .select('id')
-            .eq('subdomain', 'elegant')
+            .eq('subdomain', subdomain)
             .limit(1)
             .maybeSingle();
 
         if (existing) {
             const { error: updErr } = await adminSupabase
                 .from('invitations')
-                .update({ template_id: templateId, data: demoData })
+                .update({ 
+                    template_id: templateId, 
+                    data: demoData,
+                    domain_status: 'active',
+                    updated_at: new Date().toISOString()
+                })
                 .eq('id', existing.id);
 
             if (updErr) {
@@ -226,18 +256,18 @@ router.post('/push-demo', async (req, res) => {
                 return res.status(500).json({ error: `Invitation update failed: ${updErr.message}` });
             }
         } else {
-            // First time: create the demo slot
+            // Create the new demo slot
             const { error: insErr } = await adminSupabase
                 .from('invitations')
                 .insert({
                     user_email: 'demo@wedbliss.co',
                     plan: 'premium',
                     template_id: templateId,
-                    subdomain: 'elegant',
+                    subdomain: subdomain,
                     domain_status: 'active',
                     data: demoData,
                     order_id: null,
-                    cloudfront_id: null,
+                    cloudfront_id: process.env.TEMPLATE_CF_DISTRIBUTION_ID || null,
                 });
 
             if (insErr) {
@@ -248,8 +278,9 @@ router.post('/push-demo', async (req, res) => {
 
         res.status(200).json({
             ok: true,
-            message: 'Demo updated successfully',
-            demoUrl: 'https://elegant.wedbliss.co',
+            message: `Demo pushed to ${fullDomain} successfully`,
+            demoUrl: `https://${fullDomain}`,
+            provisioning: provisioningResults,
             templateId,
         });
     } catch (err) {

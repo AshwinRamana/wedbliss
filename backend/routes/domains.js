@@ -95,6 +95,19 @@ router.post('/provision', async (req, res) => {
             const aws = getAwsService();
             const result = await aws.addCloudFrontAlias(fullDomain);
 
+            let dnsResult = null;
+            // Step 2: Create Cloudflare DNS Record
+            if (process.env.CLOUDFLARE_API_TOKEN && process.env.TEMPLATE_CF_DOMAIN) {
+                try {
+                    const cloudflare = require('../services/cloudflare');
+                    dnsResult = await cloudflare.createSubdomainRecord(subdomain, process.env.TEMPLATE_CF_DOMAIN);
+                } catch (cfErr) {
+                    console.error('[domains] Cloudflare DNS error:', cfErr);
+                    // We don't fail the whole process if DNS fails but CF alias worked, 
+                    // though usually both are needed.
+                }
+            }
+
             await supabase
                 .from('invitations')
                 .update({
@@ -104,7 +117,12 @@ router.post('/provision', async (req, res) => {
                 })
                 .eq('id', invitation_id);
 
-            res.status(200).json({ success: true, domain: fullDomain, cloudfront: result });
+            res.status(200).json({ 
+                success: true, 
+                domain: fullDomain, 
+                cloudfront: result,
+                dns: dnsResult 
+            });
         } catch (awsErr) {
             console.error('[domains] CloudFront error:', awsErr);
 

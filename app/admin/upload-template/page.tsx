@@ -385,8 +385,8 @@ export default function UploadTemplatePage() {
 
                 setSaveStatus({ type: "success", msg: `✓ Template is LIVE on ${liveSubdomain}.wedbliss.co!` });
                 window.open(`https://${liveSubdomain}.wedbliss.co`, "_blank");
-            } catch (e: any) {
-                setSaveStatus({ type: "error", msg: `Push Live Error: ${e.message}` });
+            } catch (e: unknown) {
+                setSaveStatus({ type: "error", msg: `Push Live Error: ${e instanceof Error ? e.message : String(e)}` });
             } finally {
                 setIsSaving(false);
             }

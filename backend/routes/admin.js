@@ -298,12 +298,23 @@ router.post('/push-live', async (req, res) => {
             cfDomain: process.env.TEMPLATE_CF_DOMAIN
         });
 
-        // 3. Update the template's demo_url now that we have the fullDomain
+        // 3. Update the template's demo_url
         await adminSupabase.from('templates').update({
             demo_url: `https://${fullDomain}`
         }).eq('id', templateId);
 
-        res.json({ ok: true, message: `Template is now LIVE on ${fullDomain}`, liveUrl: `https://${fullDomain}`, provisioning });
+        // 4. Check for provisioning errors to report back
+        const hasErrors = provisioning.cloudfront?.error || provisioning.dns?.error;
+        const statusMsg = hasErrors 
+            ? `Template saved, but provisioning had issues. It may not be reachable yet.`
+            : `Template is LIVE on ${fullDomain}! Please allow 5-10 minutes for global propagation.`;
+
+        res.json({ 
+            ok: !hasErrors, 
+            message: statusMsg, 
+            liveUrl: `https://${fullDomain}`, 
+            provisioning 
+        });
     } catch (err) {
         console.error('[push-live] Error:', err);
         res.status(500).json({ error: err.message });

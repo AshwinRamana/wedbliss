@@ -384,10 +384,25 @@ export default function UploadTemplatePage() {
                     }),
                 });
                 const json = await res.json();
-                if (!res.ok || !json.ok) throw new Error(json.error || "Push Live failed");
+                
+                if (!res.ok) throw new Error(json.error || "Push Live failed");
 
-                setSaveStatus({ type: "success", msg: `✓ Template is LIVE on ${liveSubdomain}.wedbliss.co!` });
-                window.open(`https://${liveSubdomain}.wedbliss.co`, "_blank");
+                // Even if json.ok is false, we might have partial success (template saved, DNS failed)
+                if (json.ok) {
+                    setSaveStatus({ type: "success", msg: json.message || `✓ Template is LIVE on ${liveSubdomain}.wedbliss.co!` });
+                    setTimeout(() => {
+                        window.open(`https://${liveSubdomain}.wedbliss.co`, "_blank");
+                    }, 500);
+                } else {
+                    // Provisioning errors
+                    const cfErr = json.provisioning?.cloudfront?.error;
+                    const dnsErr = json.provisioning?.dns?.error;
+                    let detailMsg = json.message || "Push partially failed.";
+                    if (cfErr) detailMsg += ` (AWS: ${cfErr})`;
+                    if (dnsErr) detailMsg += ` (DNS: ${dnsErr})`;
+                    
+                    setSaveStatus({ type: "error", msg: detailMsg });
+                }
             } catch (e: unknown) {
                 setSaveStatus({ type: "error", msg: `Push Live Error: ${e instanceof Error ? e.message : String(e)}` });
             } finally {

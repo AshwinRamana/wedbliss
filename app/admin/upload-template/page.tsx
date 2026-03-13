@@ -428,6 +428,62 @@ export default function UploadTemplatePage() {
         setPastedHtmlInput("");
     };
 
+    const renderMetadataForm = (isLive: boolean) => (
+        <div className="bg-white border border-slate-200 rounded-xl p-4 flex flex-col gap-3 flex-shrink-0 animate-in fade-in slide-in-from-left-4 duration-500 shadow-sm">
+            <div className="flex justify-between items-center">
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Template Metadata</label>
+                <select value={tier} onChange={(e) => setTier(e.target.value as "basic" | "premium")} className="text-xs border border-slate-200 rounded p-1 font-medium bg-slate-50 outline-none">
+                    <option value="basic">Basic Tier</option>
+                    <option value="premium">Premium Tier</option>
+                </select>
+            </div>
+            <div className="flex gap-2">
+                <input value={templateId} onChange={e => setTemplateId(e.target.value)} placeholder="Template ID (e.g., tm-gold-scroll)" className="flex-1 text-sm border border-slate-200 rounded-lg px-3 py-2 outline-none focus:border-indigo-500 font-medium" />
+                <input value={templateName} onChange={e => setTemplateName(e.target.value)} placeholder="Display Name" className="flex-1 text-sm border border-slate-200 rounded-lg px-3 py-2 outline-none focus:border-indigo-500 font-medium" />
+            </div>
+
+            {/* Live Subdomain Section */}
+            <div className="flex flex-col gap-1.5 pt-1 border-t border-slate-100">
+                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Live Subdomain</label>
+                <div className="flex gap-2">
+                    <div className="relative flex-1">
+                        <input
+                            value={liveSubdomain}
+                            onChange={e => {
+                                setLiveSubdomain(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''));
+                                setDomainAvailable(null);
+                            }}
+                            placeholder="noir"
+                            className={`w-full text-sm border ${domainAvailable === true ? 'border-emerald-200 bg-emerald-50' : domainAvailable === false ? 'border-red-200 bg-red-50' : 'border-slate-200'} rounded-lg pl-3 pr-24 py-2 outline-none focus:border-indigo-500 font-mono`}
+                        />
+                        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-slate-400">.wedbliss.co</span>
+                    </div>
+                    <button
+                        onClick={checkSubdomainAvailability}
+                        disabled={isCheckingDomain || liveSubdomain.length < 3}
+                        className="px-3 py-2 bg-slate-100 hover:bg-slate-200 disabled:opacity-50 text-slate-700 text-xs font-bold rounded-lg transition-colors border border-slate-200"
+                    >
+                        {isCheckingDomain ? "⏳" : "Check"}
+                    </button>
+                </div>
+                {domainAvailable === false && <p className="text-[10px] text-red-500 font-bold ml-1">Already taken — will overwrite if pushed.</p>}
+                {domainAvailable === true && <p className="text-[10px] text-emerald-600 font-bold ml-1">Available!</p>}
+            </div>
+
+            <input value={templateDesc} onChange={e => setTemplateDesc(e.target.value)} placeholder="Theme Description..." className="w-full text-sm border border-slate-200 rounded-lg px-3 py-2 outline-none focus:border-indigo-500" />
+            <input value={thumbnailUrl} onChange={e => setThumbnailUrl(e.target.value)} placeholder="Thumbnail URL (optional)" className="w-full text-sm border border-slate-200 rounded-lg px-3 py-2 outline-none focus:border-indigo-500 text-slate-500" />
+            
+            {parsedHtml && (
+                <div className="flex items-center gap-4 text-xs text-slate-500 border-t border-slate-100 pt-3">
+                    <span className="font-mono bg-slate-100 px-2 py-1 rounded">{fileName}</span>
+                    <span>HTML: {parsedHtml.length} chars</span>
+                    <span>CSS: {parsedCss.length} chars</span>
+                    {parsedJs && <span>JS: {parsedJs.length} chars</span>}
+                </div>
+            )}
+        </div>
+    );
+
     return (
         <div className="flex flex-col gap-6 h-[calc(100vh-80px)]">
             {/* Header */}
@@ -586,6 +642,15 @@ export default function UploadTemplatePage() {
                         />
                     </div>
                     </div>
+
+                    {workflowMode === "live" && (
+                        <div className="mt-8 animate-in fade-in slide-in-from-top-4 duration-700">
+                            <div className="max-w-4xl mx-auto">
+                                <h3 className="text-xs font-bold text-slate-400 uppercase tracking-[0.2em] mb-4 text-center">Step 2: Enter Metadata & Domain</h3>
+                                {renderMetadataForm(true)}
+                            </div>
+                        </div>
+                    )}
                 </div>
             )}
 
@@ -625,59 +690,8 @@ export default function UploadTemplatePage() {
                             </div>
                         )}
 
-                        {/* Metadata - ONLY in LIVE mode */}
-                        {workflowMode === "live" ? (
-                            <div className="bg-white border border-slate-200 rounded-xl p-4 flex flex-col gap-3 flex-shrink-0 animate-in fade-in slide-in-from-left-4 duration-500">
-                                <div className="flex justify-between items-center">
-                                    <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Template Metadata</label>
-                                    <select value={tier} onChange={(e) => setTier(e.target.value as "basic" | "premium")} className="text-xs border border-slate-200 rounded p-1 font-medium bg-slate-50 outline-none">
-                                        <option value="basic">Basic Tier</option>
-                                        <option value="premium">Premium Tier</option>
-                                    </select>
-                                </div>
-                                <div className="flex gap-2">
-                                    <input value={templateId} onChange={e => setTemplateId(e.target.value)} placeholder="Template ID (e.g., tm-gold-scroll)" className="flex-1 text-sm border border-slate-200 rounded-lg px-3 py-2 outline-none focus:border-indigo-500 font-medium" />
-                                    <input value={templateName} onChange={e => setTemplateName(e.target.value)} placeholder="Display Name" className="flex-1 text-sm border border-slate-200 rounded-lg px-3 py-2 outline-none focus:border-indigo-500 font-medium" />
-                                </div>
-                                
-                                {/* Live Subdomain Section */}
-                                <div className="flex flex-col gap-1.5 pt-1 border-t border-slate-100">
-                                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Live Subdomain</label>
-                                    <div className="flex gap-2">
-                                        <div className="relative flex-1">
-                                            <input 
-                                                value={liveSubdomain} 
-                                                onChange={e => {
-                                                    setLiveSubdomain(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''));
-                                                    setDomainAvailable(null);
-                                                }} 
-                                                placeholder="noir" 
-                                                className={`w-full text-sm border ${domainAvailable === true ? 'border-emerald-200 bg-emerald-50' : domainAvailable === false ? 'border-red-200 bg-red-50' : 'border-slate-200'} rounded-lg pl-3 pr-24 py-2 outline-none focus:border-indigo-500 font-mono`} 
-                                            />
-                                            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-slate-400">.wedbliss.co</span>
-                                        </div>
-                                        <button 
-                                            onClick={checkSubdomainAvailability}
-                                            disabled={isCheckingDomain || liveSubdomain.length < 3}
-                                            className="px-3 py-2 bg-slate-100 hover:bg-slate-200 disabled:opacity-50 text-slate-700 text-xs font-bold rounded-lg transition-colors border border-slate-200"
-                                        >
-                                            {isCheckingDomain ? "⏳" : "Check"}
-                                        </button>
-                                    </div>
-                                    {domainAvailable === false && <p className="text-[10px] text-red-500 font-bold ml-1">Already taken — will overwrite if pushed.</p>}
-                                    {domainAvailable === true && <p className="text-[10px] text-emerald-600 font-bold ml-1">Available!</p>}
-                                </div>
-
-                                <input value={templateDesc} onChange={e => setTemplateDesc(e.target.value)} placeholder="Theme Description..." className="w-full text-sm border border-slate-200 rounded-lg px-3 py-2 outline-none focus:border-indigo-500" />
-                                <input value={thumbnailUrl} onChange={e => setThumbnailUrl(e.target.value)} placeholder="Thumbnail URL (optional)" className="w-full text-sm border border-slate-200 rounded-lg px-3 py-2 outline-none focus:border-indigo-500 text-slate-500" />
-                                <div className="flex items-center gap-4 text-xs text-slate-500">
-                                    <span className="font-mono bg-slate-100 px-2 py-1 rounded">{fileName}</span>
-                                    <span>HTML: {parsedHtml.length} chars</span>
-                                    <span>CSS: {parsedCss.length} chars</span>
-                                    {parsedJs && <span>JS: {parsedJs.length} chars</span>}
-                                </div>
-                            </div>
-                        ) : (
+                        {/* Metadata / Demo Box */}
+                        {workflowMode === "live" ? renderMetadataForm(true) : (
                             <div className="bg-violet-50/50 border border-violet-100 rounded-xl p-4 flex flex-col gap-1 flex-shrink-0 animate-in fade-in slide-in-from-left-4 duration-500">
                                 <label className="text-[10px] font-bold text-violet-400 uppercase tracking-widest">Demo Target</label>
                                 <div className="flex items-center gap-2 text-violet-700">

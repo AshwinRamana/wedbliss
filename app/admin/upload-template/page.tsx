@@ -492,6 +492,7 @@ export default function UploadTemplatePage() {
                     <h1 className="text-2xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
                         <Upload className="w-6 h-6 text-indigo-600" />
                         Template Upload & Validate
+                        <span className="text-[10px] bg-indigo-50 text-indigo-400 px-2 py-0.5 rounded border border-indigo-100 font-mono ml-2">v2.3</span>
                     </h1>
                     <p className="text-slate-500 mt-1">Upload a .html template file → Auto-validate → Preview → Push to website.</p>
                 </div>

@@ -25,9 +25,12 @@ export default function Home() {
 
       // Fetch from Supabase
       let data = await getInvitationData(subdomain);
+      console.log("[WedBliss Template] Fetched Data Object Keys:", data ? Object.keys(data) : 'null');
+      console.log("[WedBliss Template] Template HTML present:", !!data?.templateHtml);
 
       // Fallback to static dummy data if not found
       if (!data) {
+        console.warn("[WedBliss Template] Invitation NOT FOUND for subdomain:", subdomain);
         data = {
           metadata: { plan: "basic", template_id: "tm-mallipoo", createdAt: new Date().toISOString() },
           couple: {
@@ -58,15 +61,19 @@ export default function Home() {
 
   // Compile the Handlebars template if available
   const compiledHtml = (() => {
-    if (!inviteData?.templateHtml) return null;
+    if (!inviteData?.templateHtml) {
+      console.log("[WedBliss Template] No templateHtml found in inviteData. Falling back to React rendering.");
+      return null;
+    }
     try {
+      console.log("[WedBliss Template] Compiling Handlebars. Template length:", inviteData.templateHtml.length);
       Handlebars.registerHelper("add", function (a, b) {
         return parseInt(a as string, 10) + parseInt(b as string, 10);
       });
       const template = Handlebars.compile(inviteData.templateHtml);
       return template(inviteData);
     } catch (e) {
-      console.error("Handlebars compilation failed:", e);
+      console.error("[WedBliss Template] Handlebars compilation failed:", e);
       return null;
     }
   })();

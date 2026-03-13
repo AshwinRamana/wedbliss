@@ -269,13 +269,10 @@ router.post('/push-live', async (req, res) => {
             return res.status(400).json({ error: 'templateId, htmlContent and subdomain are required' });
         }
 
-        const { fullDomain, provisioning } = await provisionTemplateDomain(adminSupabase, {
-            subdomain, templateId, mockData,
-            distributionId: process.env.TEMPLATE_CF_DISTRIBUTION_ID,
-            cfDomain: process.env.TEMPLATE_CF_DOMAIN
-        });
+        console.log(`[push-live] Starting push for template: ${templateId}, subdomain: ${subdomain}`);
+        console.log(`[push-live] Content lengths - HTML: ${htmlContent.length}, CSS: ${cssContent?.length || 0}, JS: ${jsContent?.length || 0}`);
 
-        // Upsert template as LIVE
+        // 1. Upsert template as LIVE first so it exists before the invitation references it
         const { error: tplErr } = await adminSupabase.from('templates').upsert({
             id: templateId,
             name: templateName || templateId,
@@ -286,11 +283,25 @@ router.post('/push-live', async (req, res) => {
             html_content: htmlContent,
             css_content: cssContent || null,
             js_content: jsContent || null,
-            demo_url: `https://${fullDomain}`,
             thumbnail_url: thumbnailUrl || null,
         }, { onConflict: 'id' });
 
-        if (tplErr) throw tplErr;
+        if (tplErr) {
+            console.error('[push-live] Template upsert error:', tplErr);
+            throw tplErr;
+        }
+
+        // 2. Provision/Update Domain Invitation
+        const { fullDomain, provisioning } = await provisionTemplateDomain(adminSupabase, {
+            subdomain, templateId, mockData,
+            distributionId: process.env.TEMPLATE_CF_DISTRIBUTION_ID,
+            cfDomain: process.env.TEMPLATE_CF_DOMAIN
+        });
+
+        // 3. Update the template's demo_url now that we have the fullDomain
+        await adminSupabase.from('templates').update({
+            demo_url: `https://${fullDomain}`
+        }).eq('id', templateId);
 
         res.json({ ok: true, message: `Template is now LIVE on ${fullDomain}`, liveUrl: `https://${fullDomain}`, provisioning });
     } catch (err) {

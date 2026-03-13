@@ -222,7 +222,7 @@ router.post('/push-demo', async (req, res) => {
     try {
         const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
         const adminSupabase = createClient(supabaseUrl, serviceRoleKey || '');
-        const { templateId, htmlContent, cssContent, jsContent, thumbnailUrl, mockData } = req.body;
+        const { templateId, templateName, htmlContent, cssContent, jsContent, thumbnailUrl, mockData } = req.body;
 
         if (!templateId || !htmlContent) return res.status(400).json({ error: 'Missing content' });
 

@@ -428,7 +428,7 @@ export default function UploadTemplatePage() {
         setPastedHtmlInput("");
     };
 
-    const renderMetadataForm = (isLive: boolean) => (
+    const renderMetadataForm = () => (
         <div className="bg-white border border-slate-200 rounded-xl p-4 flex flex-col gap-3 flex-shrink-0 animate-in fade-in slide-in-from-left-4 duration-500 shadow-sm">
             <div className="flex justify-between items-center">
                 <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Template Metadata</label>
@@ -647,7 +647,7 @@ export default function UploadTemplatePage() {
                         <div className="mt-8 animate-in fade-in slide-in-from-top-4 duration-700">
                             <div className="max-w-4xl mx-auto">
                                 <h3 className="text-xs font-bold text-slate-400 uppercase tracking-[0.2em] mb-4 text-center">Step 2: Enter Metadata & Domain</h3>
-                                {renderMetadataForm(true)}
+                                {renderMetadataForm()}
                             </div>
                         </div>
                     )}
@@ -691,7 +691,7 @@ export default function UploadTemplatePage() {
                         )}
 
                         {/* Metadata / Demo Box */}
-                        {workflowMode === "live" ? renderMetadataForm(true) : (
+                        {workflowMode === "live" ? renderMetadataForm() : (
                             <div className="bg-violet-50/50 border border-violet-100 rounded-xl p-4 flex flex-col gap-1 flex-shrink-0 animate-in fade-in slide-in-from-left-4 duration-500">
                                 <label className="text-[10px] font-bold text-violet-400 uppercase tracking-widest">Demo Target</label>
                                 <div className="flex items-center gap-2 text-violet-700">

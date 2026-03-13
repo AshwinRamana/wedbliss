@@ -429,7 +429,7 @@ export default function UploadTemplatePage() {
     };
 
     const renderMetadataForm = () => (
-        <div className="bg-white border border-slate-200 rounded-xl p-4 flex flex-col gap-3 flex-shrink-0 animate-in fade-in slide-in-from-left-4 duration-500 shadow-sm">
+        <div id="metadata-form-live" className="bg-white border-2 border-indigo-100 rounded-xl p-4 flex flex-col gap-3 flex-shrink-0 shadow-md">
             <div className="flex justify-between items-center">
                 <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Template Metadata</label>
                 <select value={tier} onChange={(e) => setTier(e.target.value as "basic" | "premium")} className="text-xs border border-slate-200 rounded p-1 font-medium bg-slate-50 outline-none">
@@ -667,6 +667,9 @@ export default function UploadTemplatePage() {
 
                     {/* Left: Validation + Metadata + Code */}
                     <div className="col-span-12 lg:col-span-5 flex flex-col gap-4 min-h-0">
+                        
+                        {/* Metadata Form FIRST in Live Mode */}
+                        {workflowMode === "live" && renderMetadataForm()}
 
                         {/* Validation Card */}
                         {validation && (
@@ -690,9 +693,9 @@ export default function UploadTemplatePage() {
                             </div>
                         )}
 
-                        {/* Metadata / Demo Box */}
-                        {workflowMode === "live" ? renderMetadataForm() : (
-                            <div className="bg-violet-50/50 border border-violet-100 rounded-xl p-4 flex flex-col gap-1 flex-shrink-0 animate-in fade-in slide-in-from-left-4 duration-500">
+                        {/* Demo Mode Info Box */}
+                        {workflowMode === "demo" && (
+                            <div className="bg-violet-50/50 border border-violet-100 rounded-xl p-4 flex flex-col gap-1 flex-shrink-0">
                                 <label className="text-[10px] font-bold text-violet-400 uppercase tracking-widest">Demo Target</label>
                                 <div className="flex items-center gap-2 text-violet-700">
                                     <Play className="w-4 h-4" />

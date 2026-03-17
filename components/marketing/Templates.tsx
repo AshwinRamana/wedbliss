@@ -260,7 +260,7 @@ export default function Templates() {
                 {templates.map((t) => {
                     const isComingSoon = !t.isLive;
                     return (
-                        <div className={`template-card group relative snap-center shrink-0 w-[85vw] sm:w-auto bg-white border border-slate-100 rounded-[32px] overflow-hidden shadow-xl transition-all duration-700 hover:-translate-y-2 hover:shadow-2xl hover:border-emerald-200 ${isComingSoon ? 'grayscale opacity-70' : ''}`} key={t.id}>
+                        <div className={`template-card group relative snap-center shrink-0 w-[64vw] sm:w-auto bg-white border border-slate-100 rounded-[32px] overflow-hidden shadow-xl transition-all duration-700 hover:-translate-y-2 hover:shadow-2xl hover:border-emerald-200 ${isComingSoon ? 'grayscale opacity-70' : ''}`} key={t.id}>
                             <div className="template-preview relative overflow-hidden bg-slate-50" style={{ aspectRatio: '1/1.75' }}>
                                 {/* Image / SVG */}
                                 {t.thumbnailUrl ? (

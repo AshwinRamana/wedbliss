@@ -21,7 +21,7 @@ interface RazorpayError {
         source: string;
         step: string;
         reason: string;
-        metadata: any;
+        metadata: Record<string, unknown>;
     };
 }
 

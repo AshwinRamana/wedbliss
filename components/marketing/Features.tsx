@@ -3,8 +3,8 @@
 
 const FEATURES = [
     {
-        title: "Live Countdown",
-        sub: "Real-time ticker to the muhurtham",
+        title: "Build The Anticipation",
+        sub: "A real-time ticker to your big moment",
         bg: "linear-gradient(135deg, #f43f5e, #f97316)",
         icon: (
             <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -14,8 +14,8 @@ const FEATURES = [
         ),
     },
     {
-        title: "Custom Domain",
-        sub: "Your own link like siva-hema.wedbliss.co",
+        title: "A Link That's Yours",
+        sub: "Personalized URLs like siva-hema.wedbliss.co",
         bg: "linear-gradient(135deg, #8b5cf6, #7c3aed)",
         icon: (
             <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -27,8 +27,8 @@ const FEATURES = [
         ),
     },
     {
-        title: "Video Invite",
-        sub: "A personal message from the couple",
+        title: "Personal Welcome",
+        sub: "Share your journey with an intimate video",
         bg: "linear-gradient(135deg, #0ea5e9, #06b6d4)",
         icon: (
             <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -38,8 +38,8 @@ const FEATURES = [
         ),
     },
     {
-        title: "Interactive Maps",
-        sub: "Venue directions, one tap away",
+        title: "Guide Your Loved Ones",
+        sub: "Seamless venue navigation via Google Maps",
         bg: "linear-gradient(135deg, #10b981, #14b8a6)",
         icon: (
             <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -49,17 +49,15 @@ const FEATURES = [
         ),
     },
     {
-        title: "Calendar Save",
-        sub: "Google Calendar & iCal export",
+        title: "Sync The Moment",
+        sub: "Add to calendar with one tap",
         bg: "linear-gradient(135deg, #f59e0b, #eab308)",
         icon: (
             <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                {/* Calendar border + header bar */}
                 <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
                 <line x1="16" y1="2" x2="16" y2="6" />
                 <line x1="8" y1="2" x2="8" y2="6" />
                 <line x1="3" y1="10" x2="21" y2="10" />
-                {/* Date dots using circles (most reliable SVG method) */}
                 <circle cx="8" cy="15" r="1" fill="white" stroke="none" />
                 <circle cx="12" cy="15" r="1" fill="white" stroke="none" />
                 <circle cx="16" cy="15" r="1" fill="white" stroke="none" />
@@ -69,8 +67,8 @@ const FEATURES = [
         ),
     },
     {
-        title: "Live Event Photos",
-        sub: "Guests upload, everyone sees instantly",
+        title: "Unseen Moments",
+        sub: "Every guest photo, captured in one gallery",
         bg: "linear-gradient(135deg, #ec4899, #f43f5e)",
         icon: (
             <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -86,9 +84,9 @@ export default function Features() {
         <section className="features-section" id="features">
             <div className="features-inner">
                 <div className="features-header">
-                    <div className="eyebrow">Platform Features</div>
-                    <h2 className="sec-title">Everything your wedding invite needs</h2>
-                    <p className="sec-desc">From live countdowns to personalized domains — every feature is thoughtfully crafted to make your special day unforgettable.</p>
+                    <div className="eyebrow">Designed for Connection</div>
+                    <h2 className="sec-title">What Makes WedBliss Special</h2>
+                    <p className="sec-desc">A suite of thoughtful touches designed to make your guests feel involved and your planning feel effortless.</p>
                 </div>
 
                 <div className="features-grid">

@@ -4,44 +4,43 @@ export default function Pricing() {
     return (
         <section className="pricing" id="pricing">
             <div className="section-header">
-                <div className="eyebrow">Simple Pricing</div>
-                <h2 className="sec-title">Choose Your Plan</h2>
-                <p className="sec-desc">One-time payment. No monthly fees. Active for up to 12 months.</p>
+                <div className="eyebrow">Your Celebration, Your Way</div>
+                <h2 className="sec-title">Simple, Transparent Pricing</h2>
+                <p className="sec-desc">A one-time investment for a lifetime of memories. No subscriptions, just joy.</p>
             </div>
             <div className="pricing-grid">
                 <div className="price-card">
-                    <div className="price-name">Basic</div>
+                    <div className="price-name">Intimate</div>
                     <div className="price-amt"><span>₹</span>999</div>
-                    <p className="price-sub">Perfect for simple celebrations</p>
+                    <p className="price-sub">Perfect for simple, elegant celebrations</p>
                     <ul className="price-ul">
-                        <li>Choose from 2 Basic Templates</li>
-                        <li>2 Events (Engagement + Wedding)</li>
-                        <li>Live Event Photos (Guest Uploads)</li>
-                        <li>Basic Family Section</li>
-                        <li>WhatsApp Share</li>
-                        <li>6 Months Active</li>
-                        <li className="opacity-50 line-through">No Live Countdown</li>
-                        <li className="opacity-50 line-through">No Music or Video Invite</li>
-                        <li className="opacity-50 line-through">No Add to Calendar</li>
+                        <li>Choose from 2 Classic Templates</li>
+                        <li>Essential Events (Wedding + Reception)</li>
+                        <li>Guest Photo Gallery (Unlimited Uploads)</li>
+                        <li>Digital RSVP & Guest List</li>
+                        <li>Instant WhatsApp Sharing</li>
+                        <li>6 Months Active Link</li>
+                        <li className="opacity-50 line-through">Background Music & Video</li>
+                        <li className="opacity-50 line-through">Muhurtham Countdown</li>
                     </ul>
-                    <Link href="/checkout/templates?plan=basic" className="price-btn"><span>Choose Basic →</span></Link>
+                    <Link href="/checkout/templates?plan=basic" className="price-btn"><span>Start Intimate Plan →</span></Link>
                 </div>
                 <div className="price-card featured">
-                    <div className="price-badge">Most Popular</div>
-                    <div className="price-name">Premium</div>
+                    <div className="price-badge">Recommended</div>
+                    <div className="price-name">Grand</div>
                     <div className="price-amt"><span>₹</span>1,999</div>
-                    <p className="price-sub">Everything for a grand wedding</p>
+                    <p className="price-sub">The complete digital experience for your big day</p>
                     <ul className="price-ul">
-                        <li>Any Template + Post-Live Editing</li>
-                        <li>All Events (Unlimited)</li>
-                        <li>Live Event Photos (Guest Uploads)</li>
-                        <li>Full Family + Video Invite</li>
-                        <li>Premium Background Music</li>
-                        <li>Live Countdown &amp; Calendar Save</li>
-                        <li>WhatsApp Share + vCard</li>
-                        <li>12 Months Active</li>
+                        <li>Access to <strong>All</strong> Templates</li>
+                        <li>Unlimited Events (Sangeet, Mehendi, etc.)</li>
+                        <li>Guest Photo Gallery (Unlimited Uploads)</li>
+                        <li>Immersive Background Music</li>
+                        <li>Personal Video Invitation</li>
+                        <li>Muhurtham Countdown & Calendar Sync</li>
+                        <li>Priority WhatsApp Support</li>
+                        <li>12 Months Active Link</li>
                     </ul>
-                    <Link href="/checkout/templates?plan=premium" className="price-btn"><span>Choose Premium →</span></Link>
+                    <Link href="/checkout/templates?plan=premium" className="price-btn"><span>Start Grand Plan →</span></Link>
                 </div>
             </div>
         </section>

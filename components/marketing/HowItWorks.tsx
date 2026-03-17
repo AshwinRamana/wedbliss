@@ -2,41 +2,41 @@ export default function HowItWorks() {
     return (
         <section className="how" id="how">
             <div className="section-header">
-                <div className="eyebrow">Simple Process</div>
-                <h2 className="sec-title">How It Works</h2>
-                <p className="sec-desc">Your invitation goes live in 10 minutes. No design skills needed.</p>
+                <div className="eyebrow">Your Path To Live</div>
+                <h2 className="sec-title">How To Create Your Invitation</h2>
+                <p className="sec-desc">Bringing your invitation to life is a simple, guided experience. No tech skills required — just your love story.</p>
             </div>
             <div className="steps">
                 <div className="step fade-in">
                     <div className="step-num">1</div>
                     <div className="step-content">
-                        <h3>Choose Your Plan</h3>
-                        <p>Select Basic (₹999) or Premium (₹1,499). Both include all essential wedding and event details.</p>
-                        <div className="step-tags"><div className="tag">₹999 Basic</div><div className="tag">₹1,499 Premium</div></div>
+                        <h3>Select Your Celebration</h3>
+                        <p>Choose between our Intimate and Grand plans based on the scale of your wedding festivities.</p>
+                        <div className="step-tags"><div className="tag">Detailed Tiers</div><div className="tag">Transparent Pricing</div></div>
                     </div>
                 </div>
                 <div className="step fade-in">
                     <div className="step-num">2</div>
                     <div className="step-content">
-                        <h3>Select Your Template</h3>
-                        <p>Browse exquisitely designed templates — from classic elegance to modern minimalism.</p>
-                        <div className="step-tags"><div className="tag">6+ Templates</div><div className="tag">Premium Designs</div><div className="tag">Instant Previews</div></div>
+                        <h3>Choose Your Aesthetic</h3>
+                        <p>Browse our collection of hand-crafted templates. From traditional Mandapam styles to modern glassmorphism.</p>
+                        <div className="step-tags"><div className="tag">6+ Designer Templates</div><div className="tag">Live Previews</div></div>
                     </div>
                 </div>
                 <div className="step fade-in">
                     <div className="step-num">3</div>
                     <div className="step-content">
-                        <h3>Check Domain &amp; Fill Details</h3>
-                        <p>Choose yournames.wedbliss.co, verify instantly, then fill in your wedding details.</p>
-                        <div className="step-tags"><div className="tag">Instant Check</div><div className="tag">Guided Form</div><div className="tag">Bilingual</div></div>
+                        <h3>Personalize Your Story</h3>
+                        <p>Secure your unique URL and fill in your details. We guide you through every ceremony and tradition.</p>
+                        <div className="step-tags"><div className="tag">Custom URLs</div><div className="tag">Guided Editor</div></div>
                     </div>
                 </div>
                 <div className="step fade-in">
                     <div className="step-num">4</div>
                     <div className="step-content">
-                        <h3>Pay &amp; Go Live</h3>
-                        <p>Secure payment via UPI or card. Your invitation goes live in 10 minutes!</p>
-                        <div className="step-tags"><div className="tag">UPI / Card</div><div className="tag">10 Min Activation</div><div className="tag">Instant Link</div></div>
+                        <h3>Share The Joy</h3>
+                        <p>After a secure UPI or Card payment, your invitation goes live globally in just 10 minutes.</p>
+                        <div className="step-tags"><div className="tag">UPI / Card / Global</div><div className="tag">10 Min Activation</div></div>
                     </div>
                 </div>
             </div>

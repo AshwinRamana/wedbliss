@@ -271,12 +271,12 @@ export default function Hero() {
 
             <div className="hero-content">
                 <div className="hero-left">
-                    <div className="hero-badge"><span className="sparkle">✨</span> Digital Wedding Invitations</div>
-                    <h1 className="hero-h1">Create stunning <span className="grad">wedding</span> invitations in minutes</h1>
-                    <p className="hero-sub">Interactive, elegant, and beautifully crafted. Live countdowns, music, maps, and WhatsApp sharing. Starting at just ₹999.</p>
+                    <div className="hero-badge"><span className="sparkle">✨</span> Modern Invitations for Modern Couples</div>
+                    <h1 className="hero-h1">Announce your <span className="grad">forever</span> with elegance</h1>
+                    <p className="hero-sub">Your love story deserves more than a text message. Create an interactive experience that builds anticipation for your path to the Mandapam. Live in 10 minutes, cherished for a lifetime.</p>
                     <div className="hero-cta">
-                        <a href="#pricing" className="btn-h primary"><span>Create Your Invitation</span></a>
-                        <a href="#templates" className="btn-h secondary">View Templates</a>
+                        <a href="#pricing" className="btn-h primary"><span>Begin Your Story</span></a>
+                        <a href="#templates" className="btn-h secondary">Explore Designs</a>
                     </div>
                     <div className="hero-stats">
                         <div><div className="stat-num">500+</div><div className="stat-lbl">Couples Celebrated</div></div>

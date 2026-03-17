@@ -124,17 +124,17 @@ export default function Nav() {
                 </div>
             </div>
 
-            <nav id="nav">
-                <div className="nav-inner">
-                    <a href="/" className="logo" aria-label="WedBliss home">
+            <nav id="nav" className="flex items-center">
+                <div className="nav-inner w-full flex items-center justify-between">
+                    <a href="/" className="logo shrink-0" aria-label="WedBliss home">
                         <Image
                             src="/Harizontal.png"
                             alt="WedBliss"
-                            width={160}
-                            height={44}
+                            width={140}
+                            height={38}
                             priority
                             className="object-contain"
-                            style={{ maxHeight: "44px", width: "auto" }}
+                            style={{ maxHeight: "38px", width: "auto" }}
                         />
                     </a>
                     <ul className="nav-links">
@@ -163,10 +163,16 @@ export default function Nav() {
 
                     {/* Hamburger button */}
                     <button
-                        className="menu-toggle"
+                        className="menu-toggle flex items-center justify-center"
                         aria-label="Open menu"
                         onClick={() => setMenuOpen(true)}
-                    >☰</button>
+                    >
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect y="4" width="24" height="2" rx="1" fill="currentColor"/>
+                            <rect y="11" width="24" height="2" rx="1" fill="currentColor"/>
+                            <rect y="18" width="24" height="2" rx="1" fill="currentColor"/>
+                        </svg>
+                    </button>
                 </div>
             </nav>
         </>

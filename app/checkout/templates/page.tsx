@@ -99,72 +99,87 @@ function TemplateSelectionContent() {
                     </p>
                 </div>
 
-                {/* 2-column on mobile, 3-col on lg */}
-                <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 max-w-3xl mx-auto">
-                    {availableTemplates.map((tmpl) => {
-                        const isComingSoon = !tmpl.isLive;
-                        const isSelected = selectedId === tmpl.id;
-                        return (
-                            <div
-                                key={tmpl.id}
-                                onClick={() => { if (!isComingSoon) setSelectedId(tmpl.id); }}
-                                className={`group relative bg-white/60 backdrop-blur-md border rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl flex flex-col transition-all duration-300 ${isComingSoon
-                                    ? "border-slate-200/40 opacity-60 cursor-not-allowed"
-                                    : isSelected
-                                        ? "border-emerald-500 ring-2 ring-emerald-400/70 shadow-emerald-200/60 scale-[1.02]"
-                                        : "border-slate-200/60 shadow-slate-200/50 hover:-translate-y-2 hover:shadow-2xl hover:border-emerald-500/30"
-                                    }`}>
-                                {/* Template Thumbnail — exact 1:1.75 ratio */}
-                                <div className="w-full bg-slate-900 relative overflow-hidden flex items-center justify-center" style={{ aspectRatio: '1/1.75' }}>
-                                    {tmpl.thumbnailUrl ? (
-                                        /* eslint-disable-next-line @next/next/no-img-element */
-                                        <img src={tmpl.thumbnailUrl!} alt={tmpl.name} className="w-full h-full object-cover" />
-                                    ) : (
-                                        <TemplateSVG id={tmpl.id} />
-                                    )}
-                                    {tmpl.tier === "premium" && (
-                                        <div className="absolute top-2 right-2 sm:top-4 sm:right-4 px-2 py-0.5 sm:px-3 sm:py-1 bg-black/60 backdrop-blur-md rounded-full text-white text-[10px] sm:text-xs font-bold border border-white/20 shadow-lg">
-                                            Premium
-                                        </div>
-                                    )}
-                                    {/* Coming Soon overlay */}
-                                    {isComingSoon && (
-                                        <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                                            <span className="px-3 py-1 bg-white/10 backdrop-blur-sm border border-white/30 rounded-full text-white text-[10px] sm:text-xs font-bold tracking-widest uppercase">
-                                                Coming Soon
-                                            </span>
-                                        </div>
-                                    )}
-                                    {/* Live demo link — visible on hover (desktop) */}
-                                    {!isComingSoon && tmpl.href && (
-                                        <a href={tmpl.href!} target="_blank" rel="noopener noreferrer"
-                                            className="absolute bottom-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-emerald-800/80 backdrop-blur-sm rounded-full text-white text-[10px] sm:text-xs font-bold border border-emerald-400/30 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                                            View Demo →
-                                        </a>
-                                    )}
-                                </div>
+                {/* Main Content Area */}
+                <div className="relative">
+                    {/* Responsive Grid/Carousel: Snap-scroll on mobile, Grid on desktop */}
+                    <div className="flex sm:grid flex-nowrap sm:flex-wrap overflow-x-auto sm:overflow-x-visible snap-x snap-mandatory gap-5 sm:gap-6 pb-8 sm:pb-0 px-4 sm:px-0 -mx-4 sm:mx-0 scrollbar-hide">
+                        {availableTemplates.map((tmpl) => {
+                            const isComingSoon = !tmpl.isLive;
+                            const isSelected = selectedId === tmpl.id;
+                            return (
+                                <div
+                                    key={tmpl.id}
+                                    onClick={() => { if (!isComingSoon) setSelectedId(tmpl.id); }}
+                                    className={`group relative snap-center shrink-0 w-[85vw] sm:w-auto sm:flex-1 min-w-[280px] bg-white border rounded-[32px] overflow-hidden shadow-2xl transition-all duration-500 ${isComingSoon
+                                        ? "opacity-50 cursor-not-allowed grayscale"
+                                        : isSelected
+                                            ? "border-emerald-500 ring-4 ring-emerald-500/20 scale-[1.03] z-20"
+                                            : "border-slate-100 hover:border-emerald-200 hover:-translate-y-2"
+                                        }`}>
+                                    
+                                    {/* Portrait Art Piece (1:1.75) */}
+                                    <div className="w-full relative bg-slate-50 overflow-hidden" style={{ aspectRatio: '1/1.75' }}>
+                                        {tmpl.thumbnailUrl ? (
+                                            /* eslint-disable-next-line @next/next/no-img-element */
+                                            <img src={tmpl.thumbnailUrl!} alt={tmpl.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                                        ) : (
+                                            <div className="w-full h-full flex items-center justify-center bg-emerald-50/30">
+                                                <TemplateSVG id={tmpl.id} />
+                                            </div>
+                                        )}
 
-                                <div className="p-3 sm:p-6 flex flex-col flex-1 justify-between gap-2 sm:gap-4">
-                                    <div>
-                                        <h3 className="font-serif text-base sm:text-xl font-bold text-slate-800 leading-tight">{tmpl.name}</h3>
-                                        <p className="text-xs text-slate-500 mt-0.5 capitalize hidden sm:block">{tmpl.tier} Tier · {isPremium ? "Animated & Musical" : "Standard Layout"}</p>
-                                    </div>
-                                    {isComingSoon ? (
-                                        <div className="w-full py-2 sm:py-3 text-center bg-slate-100 text-slate-400 font-bold rounded-xl text-xs sm:text-sm cursor-not-allowed select-none border border-slate-200">
-                                            Coming Soon
+                                        {/* Status Badge */}
+                                        <div className="absolute top-5 left-5 z-20">
+                                            {tmpl.tier === "premium" && (
+                                                <div className="px-3 py-1 bg-black/40 backdrop-blur-md rounded-full text-white text-[10px] font-bold border border-white/20">
+                                                    Premium Design
+                                                </div>
+                                            )}
                                         </div>
-                                    ) : (
-                                        <Link
-                                            href={user ? `/checkout/form?plan=${plan}&template=${tmpl.id}` : `/checkout/auth?plan=${plan}&template=${tmpl.id}`}
-                                            className="w-full block py-2.5 sm:py-3 text-center bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-bold rounded-xl transition-colors text-xs sm:text-sm shadow-sm shadow-emerald-200"
-                                        >
-                                            Select & Continue
-                                        </Link>
-                                    )}
+
+                                        {/* Premium Glass Info Overlay */}
+                                        <div className="absolute inset-x-3 bottom-3 z-30">
+                                            <div className="p-5 rounded-[24px] bg-white/60 backdrop-blur-xl border border-white/40 shadow-2xl flex flex-col gap-4">
+                                                <div className="flex items-center justify-between">
+                                                    <div>
+                                                        <h3 className="font-serif text-xl font-black text-slate-800 leading-tight">{tmpl.name}</h3>
+                                                        <p className="text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-wider">{tmpl.tier} Collection</p>
+                                                    </div>
+                                                    {!isComingSoon && tmpl.href && (
+                                                        <a href={tmpl.href} target="_blank" rel="noopener noreferrer" className="p-2 bg-slate-800/10 hover:bg-slate-800/20 rounded-full transition-colors">
+                                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-slate-800"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /><polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" /></svg>
+                                                        </a>
+                                                    )}
+                                                </div>
+
+                                                {isComingSoon ? (
+                                                    <div className="w-full py-3 text-center bg-slate-100 text-slate-400 font-bold rounded-xl text-xs sm:text-sm cursor-not-allowed border border-slate-200">
+                                                        Arriving Soon
+                                                    </div>
+                                                ) : (
+                                                    <Link
+                                                        href={user ? `/checkout/form?plan=${plan}&template=${tmpl.id}` : `/checkout/auth?plan=${plan}&template=${tmpl.id}`}
+                                                        className={`w-full py-3.5 text-center font-black rounded-2xl transition-all text-sm shadow-xl ${
+                                                            isSelected 
+                                                            ? "bg-emerald-600 text-white shadow-emerald-200 scale-100" 
+                                                            : "bg-white text-emerald-800 hover:bg-emerald-50 border border-emerald-100"
+                                                        }`}
+                                                    >
+                                                        {isSelected ? "Confirm Selection →" : "Select Template"}
+                                                    </Link>
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        {/* Selection Indicators */}
+                                        {isSelected && (
+                                            <div className="absolute inset-0 border-[6px] border-emerald-500/30 rounded-[32px] pointer-events-none z-10" />
+                                        )}
+                                    </div>
                                 </div>
-                            </div>
-                        );
-                    })}
+                            );
+                        })}
+                    </div>
                 </div>
 
                 {!isPremium && (

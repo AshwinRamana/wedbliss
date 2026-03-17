@@ -329,37 +329,39 @@ export default function Hero() {
                                     <div className="carousel-card active bg-slate-100/10 animate-pulse border border-slate-200/10 rounded-xl" style={{ height: "214px" }} />
                                 </div>
                             ) : (
-                                heroTemplates.slice(0, 4).map((t, idx) => {
-                                    const total = Math.min(4, heroTemplates.length);
-                                    let diff = idx - currentIdx;
-                                    if (diff > total / 2) diff -= total;
-                                    if (diff < -total / 2) diff += total;
+                                heroTemplates.slice(0, 5).map((t, i) => {
+                                    const diff = i - currentIdx;
+                                    const absDiff = Math.abs(diff);
+                                    const isActive = i === currentIdx;
 
-                                    let translateX = 0, translateZ = 0, rotateY = 0, opacity = 1, zIndex = 10;
-                                    const isActive = diff === 0;
-
-                                    if (isActive) {
-                                        translateX = 0; translateZ = 0; rotateY = 0; opacity = 1; zIndex = 10;
-                                    } else if (diff === 1 || diff === -3) {
-                                        translateX = 65; translateZ = -60; rotateY = -12; opacity = 0.8; zIndex = 5;
-                                    } else if (diff === -1 || diff === 3) {
-                                        translateX = -65; translateZ = -60; rotateY = 12; opacity = 0.8; zIndex = 5;
-                                    } else {
-                                        translateX = 0; translateZ = -140; rotateY = 0; opacity = 0; zIndex = 1;
-                                    }
+                                    // Premium 3D depth logic
+                                    const zIndex = 100 - absDiff;
+                                    const translateX = diff * 45; // Spread out more for depth
+                                    const translateZ = absDiff * -150; // Push inactive slides deep into Z-space
+                                    const rotateY = diff * -18; // Elegant rotation
+                                    const opacity = Math.max(0.3, 1 - absDiff * 0.35); // Sharper fade
+                                    const scale = isActive ? 1.05 : 0.88; // Active slide pops forward
+                                    const blur = absDiff > 0 ? `blur(${absDiff * 0.8}px)` : 'none'; // Background blur
 
                                     return (
                                         <div
                                             key={t.id}
                                             className="carousel-slide"
                                             style={{
-                                                transform: `translateX(${translateX}%) translateZ(${translateZ}px) rotateY(${rotateY}deg)`,
-                                                opacity,
+                                                transform: `translateX(${translateX}px) translateZ(${translateZ}px) rotateY(${rotateY}deg) scale(${scale})`,
                                                 zIndex,
+                                                opacity,
+                                                filter: blur
+                                            }}
+                                            onClick={() => {
+                                                if (!isActive) {
+                                                    setCurrentIdx(i);
+                                                    if (autoTimerRef.current) clearInterval(autoTimerRef.current);
+                                                }
                                             }}
                                         >
-                                            <div className={`carousel-card ${isActive ? 'active' : ''} relative overflow-hidden bg-slate-100`}>
-                                                <div className="w-full h-full absolute inset-0 z-0 bg-slate-100">
+                                            <div className={`carousel-card ${isActive ? 'active' : ''} relative overflow-hidden bg-slate-200`}>
+                                                <div className="w-full h-full absolute inset-0 z-0 bg-slate-200">
                                                     {t.thumbnail_url ? (
                                                         /* eslint-disable-next-line @next/next/no-img-element */
                                                         <img src={t.thumbnail_url} alt={t.name} className="w-full h-full object-cover" />
@@ -367,14 +369,14 @@ export default function Hero() {
                                                         <TemplateSVG id={t.id} />
                                                     )}
                                                 </div>
-                                                <div className="hc-overlay z-20 relative">
+                                                <div className="hc-overlay z-20 relative px-4 flex flex-col items-center justify-center">
                                                     {liveUrls[t.id] ? (
                                                         <a href={liveUrls[t.id]!} target="_blank" rel="noopener noreferrer" className="hc-btn">View Demo →</a>
                                                     ) : (
                                                         <button className="hc-btn" style={{ opacity: 0.6, cursor: 'not-allowed' }}>Coming Soon</button>
                                                     )}
                                                 </div>
-                                                {/* Name label on mobile carousel card */}
+                                                {/* Name label on mobile carousel card - Glass style */}
                                                 <div className="hc-label z-10">
                                                     <strong>{t.name}</strong>
                                                     <span>{t.tier === "premium" ? "Premium" : "Basic"}</span>
@@ -386,20 +388,20 @@ export default function Hero() {
                             )}
                         </div>{/* end #heroCarousel */}
 
-                        {/* Dot indicators */}
+                        {/* Premium Dots - Bar Style */}
                         {heroTemplates.length > 1 && (
                             <div className="carousel-dots">
-                                {heroTemplates.slice(0, Math.min(4, heroTemplates.length)).map((_, i) => (
+                                {heroTemplates.slice(0, Math.min(5, heroTemplates.length)).map((_, i) => (
                                     <span
                                         key={i}
                                         className={`carousel-dot${i === currentIdx ? ' active' : ''}`}
                                         onClick={() => {
                                             setCurrentIdx(i);
                                             if (autoTimerRef.current) clearInterval(autoTimerRef.current);
-                                            const total = Math.min(4, heroTemplates.length);
+                                            const total = Math.min(5, heroTemplates.length);
                                             autoTimerRef.current = setInterval(() => {
                                                 setCurrentIdx((prev: number) => (prev + 1) % total);
-                                            }, 3500);
+                                            }, 4000);
                                         }}
                                     />
                                 ))}

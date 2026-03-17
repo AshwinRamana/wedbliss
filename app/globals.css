@@ -120,6 +120,7 @@ body {
 }
 
 /* ─── NAVIGATION — Apple 3D Glass Tear ─── */
+/* Main Navigation — Desktop & Base */
 nav {
   position: fixed;
   top: 14px;
@@ -159,29 +160,13 @@ nav.scrolled {
     0 0 0 0.5px rgba(255, 255, 255, 0.7);
 }
 
+/* Base Navigation Mobile Logic */
 @media(max-width:860px) {
-  nav {
-    top: 0 !important;
-    left: 0 !important;
-    transform: none !important;
-    width: 100% !important;
-    border-radius: 0 !important;
-    background: rgba(255, 255, 255, 0.75) !important;
-    backdrop-filter: blur(28px) saturate(190%) !important;
-    -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
-    border: none !important;
-    border-bottom: 1px solid rgba(4, 120, 87, 0.08) !important;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04) !important;
-  }
-  
-  nav::before, nav::after {
-    display: none !important;
-  }
-
-  .nav-inner {
-    padding: 10px 18px !important;
-  }
+  .nav-links, .nav-auth { display: none !important; }
+  .menu-toggle { display: block !important; }
 }
+
+/* End Navigation */
 
 nav::before {
   content: '';
@@ -444,24 +429,10 @@ nav::after {
   color: var(--slate-light);
 }
 
+/* Base mobile navigation */
 @media(max-width:860px) {
-
-  .nav-links,
-  .nav-auth {
-    display: none;
-  }
-
-  .menu-toggle {
-    display: block;
-  }
-}
-
-@media(max-width:500px) {
-  nav {
-    top: 10px;
-    width: calc(100% - 24px);
-    border-radius: 16px;
-  }
+  .nav-links, .nav-auth { display: none !important; }
+  .menu-toggle { display: block !important; }
 }
 
 /* ─── HERO ─── */
@@ -645,50 +616,7 @@ nav::after {
 }
 
 /* Kolam + Hero mobile adjustments */
-@media(max-width:860px) {
-  .hero-kolam {
-    width: 350px;
-    height: 350px;
-  }
-
-  .hero-kolam-left {
-    left: -230px;
-  }
-
-  .hero-kolam-right {
-    right: -230px;
-  }
-
-  .hero {
-    padding: 100px 24px 60px;
-  }
-}
-
-@media(max-width:600px) {
-
-  .td2,
-  .td4,
-  .td6,
-  .td8,
-  .td10 {
-    display: none;
-  }
-
-  .hero-kolam-left,
-  .hero-kolam-right {
-    display: none;
-  }
-
-  .hero-kolam-center {
-    width: 280px;
-    height: 280px;
-    opacity: 0.06;
-  }
-
-  .hero {
-    padding: 90px 16px 50px;
-  }
-}
+/* Removing scattered redundant media query blocks */
 
 /* ─── HERO CONTENT ─── */
 .hero-content {
@@ -979,43 +907,8 @@ nav::after {
 }
 
 @media(max-width:1060px) {
-  .hero {
-    overflow-x: hidden;
-    /* Added to prevent carousel projection overflow */
-  }
-
   .hero-content {
-    grid-template-columns: 1fr;
-    gap: 40px;
-  }
-
-  .hero-right {
-    max-width: 420px;
-    margin: 0 auto;
-    width: 100%;
-  }
-
-  .hero-cards {
-    transform: rotate(0);
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-@media(max-width:480px) {
-  .hero {
-    padding: 110px 20px 60px;
-  }
-
-  .hero-stats {
-    gap: 20px;
-  }
-
-  .hero-h1 {
-    font-size: clamp(28px, 8vw, 44px);
-  }
-
-  .hero-right {
-    max-width: 320px;
+    gap: 30px;
   }
 }
 
@@ -1835,111 +1728,79 @@ footer {
    All breakpoints: 480px (phone), 600px (large phone), 860px (tablet)
    ══════════════════════════════════════════════════════════ */
 
-/* ─── NAV — mobile polish ─── */
+/* ─── NAV — Unified Premium Mobile Header ─── */
 @media(max-width:860px) {
+  nav {
+    top: 0 !important;
+    left: 0 !important;
+    transform: none !important;
+    width: 100% !important;
+    border-radius: 0 !important;
+    background: rgba(255, 255, 255, 0.78) !important;
+    backdrop-filter: blur(24px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+    border: none !important;
+    border-bottom: 1.5px solid rgba(4, 120, 87, 0.08) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03) !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  nav::before, nav::after {
+    display: none !important;
+  }
+
   .nav-inner {
-    padding: 10px 16px;
+    padding: 8px 16px !important;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 
-  .logo-text {
-    font-size: 22px;
-  }
-
-  .logo-mark {
-    width: 34px;
-    height: 34px;
-  }
+  .logo-text { font-size: 20px; }
+  .logo-mark { width: 32px; height: 32px; }
 
   .menu-toggle {
     font-size: 20px;
-    padding: 6px 8px;
-    border-radius: 8px;
-    background: rgba(4, 120, 87, 0.06);
-    transition: background .2s;
+    padding: 8px;
+    border-radius: 10px;
+    background: rgba(4, 120, 87, 0.05);
+    transition: all 0.2s;
+    color: var(--emerald);
   }
 
   .menu-toggle:active {
     background: rgba(4, 120, 87, 0.12);
-  }
-}
-
-/* Mobile menu animation driven by React inline transform style - see Nav.tsx */
-
-@media(max-width:480px) {
-  .mobile-menu {
-    gap: 24px;
+    transform: scale(0.95);
   }
 
-  .mobile-menu a {
-    font-size: 24px;
-  }
-
-  .mobile-menu .btn-cta-mobile {
-    font-size: 15px !important;
-    padding: 13px 28px !important;
-    border-radius: 10px !important;
-  }
-}
-
-/* Logo strip inside mobile menu */
-.mobile-menu-logo {
-  font-family: 'Italiana', serif;
-  font-size: 36px;
-  background: linear-gradient(135deg, var(--emerald-dark), var(--emerald), var(--gold));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin-bottom: 8px;
-}
-
-.mobile-menu-tagline {
-  font-size: 12px;
-  color: var(--slate-light);
-  font-weight: 600;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  margin-bottom: 12px;
-}
-
-/* ─── HERO — mobile layout ─── */
-@media(max-width:860px) {
+  /* Cleanup Hero for Mobile integration */
   .hero {
-    padding: 100px 24px 60px;
+    padding: 84px 24px 60px !important;
     min-height: auto;
     align-items: flex-start;
   }
 
   .hero-content {
     grid-template-columns: 1fr;
-    gap: 36px;
+    gap: 32px;
   }
 
-  .hero-left {
-    text-align: left;
-  }
-
-  .hero-badge {
-    font-size: 11px;
-    padding: 6px 13px;
-  }
-
-  .hero-sub {
-    font-size: 15px;
-    max-width: 100%;
-  }
+  .hero-left { text-align: left; }
+  .hero-badge { font-size: 10px; padding: 5px 12px; }
+  .hero-sub { font-size: 14px; max-width: 100%; }
 
   .hero-cta {
     flex-direction: column;
-    align-items: center;
-    /* Center align the mobile CTA per request */
-    gap: 14px;
+    align-items: stretch;
+    gap: 12px;
   }
 
   /* Primary hero CTA — full width pill */
   .btn-h.primary {
     justify-content: center;
     padding: 14px 20px;
-    /* Reduced padding for mobile */
     font-size: 14.5px;
     border-radius: 12px;
   }
@@ -1971,10 +1832,8 @@ footer {
     max-width: 100%;
     width: 100%;
     min-width: 0;
-    /* CRITICAL: Prevents 300vw grid blowout from carousel */
     order: -1;
     margin-bottom: 0;
-    /* grid gap handles spacing */
     animation: none;
     position: relative;
   }
@@ -1991,7 +1850,6 @@ footer {
     align-items: center;
     gap: 16px;
     width: 100%;
-    /* 72vw * 1.75 / 2  — keeps wrapper exactly as tall as one portrait card */
     height: 72vw;
     min-height: 320px;
     max-height: 460px;
@@ -2019,7 +1877,6 @@ footer {
     margin-left: -27vw;
     aspect-ratio: 1 / 1.75;
     height: auto;
-    /* half of 54vw * 1.75 = 47.25vw */
     margin-top: -47.25vw;
     transition: transform 0.7s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.7s ease, filter 0.7s ease;
     will-change: transform, opacity, z-index;
@@ -2083,14 +1940,6 @@ footer {
   }
 
   @media(max-width:480px) {
-    .hero {
-      padding: 100px 16px 40px;
-    }
-
-    .hero-left {
-      text-align: center;
-    }
-
     .hero-h1 {
       font-size: clamp(28px, 8vw, 36px);
       line-height: 1.15;
@@ -2121,7 +1970,6 @@ footer {
     }
   }
 }
-
 
 /* Carousel dot indicator - Premium Bar Style */
 .carousel-dots {

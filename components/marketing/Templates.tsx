@@ -256,57 +256,55 @@ export default function Templates() {
                 <h2 className="sec-title">Choose Your Template</h2>
                 <p className="sec-desc">Every template is designed with elegance and attention to detail. Hover to preview.</p>
             </div>
-            <div className="templates-grid">
-                {templates.map((t) => (
-                    <div className="template-card" key={t.id}>
-                        <div className="template-preview">
-                            {/* Hover overlay */}
-                            <div className="tprev-overlay">
-                                {t.isLive && t.href ? (
-                                    <a href={t.href} target="_blank" rel="noopener noreferrer" className="tprev-btn">
-                                        View Demo →
-                                    </a>
+            <div className="templates-grid scrollbar-hide">
+                {templates.map((t) => {
+                    const isComingSoon = !t.isLive;
+                    return (
+                        <div className={`template-card group relative snap-center shrink-0 w-[85vw] sm:w-auto bg-white border border-slate-100 rounded-[32px] overflow-hidden shadow-xl transition-all duration-700 hover:-translate-y-2 hover:shadow-2xl hover:border-emerald-200 ${isComingSoon ? 'grayscale opacity-70' : ''}`} key={t.id}>
+                            <div className="template-preview relative overflow-hidden bg-slate-50" style={{ aspectRatio: '1/1.75' }}>
+                                {/* Image / SVG */}
+                                {t.thumbnailUrl ? (
+                                    /* eslint-disable-next-line @next/next/no-img-element */
+                                    <img src={t.thumbnailUrl} alt={t.name} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" />
                                 ) : (
-                                    <button className="tprev-btn" style={{ opacity: 0.6, cursor: "not-allowed" }}>
-                                        Coming Soon
-                                    </button>
+                                    <div className="w-full h-full flex items-center justify-center bg-emerald-50/20">
+                                        <TemplateSVG id={t.id} />
+                                    </div>
                                 )}
-                            </div>
 
-                            {/* If admin set a thumbnail_url, show the real image; else fall back to SVG */}
-                            {t.thumbnailUrl ? (
-                                /* eslint-disable-next-line @next/next/no-img-element */
-                                <img src={t.thumbnailUrl} alt={t.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                            ) : (
-                                <TemplateSVG id={t.id} />
-                            )}
-                        </div>
-                        <div className="t-info">
-                            <div className="t-name" style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                                <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                                    {t.name}
-                                    <span style={{
-                                        fontSize: "10px",
-                                        background: t.tier === "premium" ? "#fef3c7" : "#f1f5f9",
-                                        color: t.tier === "premium" ? "#92400e" : "#475569",
-                                        padding: "2px 6px", borderRadius: "4px", fontWeight: 700,
-                                        textTransform: "uppercase"
-                                    }}>{t.tier}</span>
+                                {/* Premium Glass Overlay Tray */}
+                                <div className="absolute inset-x-3 bottom-3 z-20">
+                                    <div className="p-5 rounded-[24px] bg-white/60 backdrop-blur-xl border border-white/40 shadow-2xl flex flex-col gap-4">
+                                        <div className="flex items-center justify-between">
+                                            <div>
+                                                <h3 className="font-serif text-xl font-black text-slate-800 leading-tight">{t.name}</h3>
+                                                <div className="flex items-center gap-2 mt-1">
+                                                    <span className={`text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full ${t.tier === 'premium' ? 'bg-amber-100 text-amber-800 border border-amber-200' : 'bg-slate-100 text-slate-600 border border-slate-200'}`}>
+                                                        {t.tier}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            {t.isLive && t.href && (
+                                                <a href={t.href} target="_blank" rel="noopener noreferrer" className="p-2.5 bg-slate-800/5 hover:bg-slate-800/10 rounded-full transition-colors text-slate-800">
+                                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /><polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" /></svg>
+                                                </a>
+                                            )}
+                                        </div>
+
+                                        <a 
+                                            href="/#pricing" 
+                                            className="w-full py-2.5 text-center bg-slate-900 hover:bg-black text-white text-[11px] font-black rounded-xl transition-all shadow-lg"
+                                        >
+                                            {isComingSoon ? "Coming Soon" : "Get This Template →"}
+                                        </a>
+                                    </div>
                                 </div>
-                                {t.isLive && (
-                                    <span style={{
-                                        fontSize: "10px", background: "#d1fae5", color: "#065f46",
-                                        padding: "2px 8px", borderRadius: "999px", fontWeight: 700,
-                                        letterSpacing: "0.05em", textTransform: "uppercase"
-                                    }}>Live Demo</span>
-                                )}
                             </div>
-                            <p className="t-desc">{t.desc}</p>
                         </div>
-                    </div>
-                ))}
+                    );
+                })}
             </div>
-            <div className="scroll-hint">swipe to explore</div>
+            <div className="scroll-hint">swipe to explore designs</div>
         </section>
     );
 }

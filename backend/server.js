@@ -7,6 +7,7 @@ const invitationRoutes = require('./routes/invitations');
 const domainRoutes = require('./routes/domains');
 const adminRoutes = require('./routes/admin');
 const uploadRoutes = require('./routes/upload');
+const paymentRoutes = require('./routes/payment');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -22,6 +23,7 @@ app.use('/api/invitations', invitationRoutes);
 app.use('/api/domains', domainRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/upload', uploadRoutes);
+app.use('/api/payment', paymentRoutes);
 
 // Health check
 app.get('/health', (req, res) => {

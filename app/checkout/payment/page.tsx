@@ -1,11 +1,29 @@
 "use client";
 
 import { useSearchParams, useRouter } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useState } from "react";
 import Nav from "@/components/marketing/Nav";
 import Footer from "@/components/marketing/Footer";
 import { TemplateSVG } from "@/components/marketing/Templates";
 import Script from "next/script";
+import Image from "next/image";
+
+interface RazorpayResponse {
+    razorpay_order_id: string;
+    razorpay_payment_id: string;
+    razorpay_signature: string;
+}
+
+interface RazorpayError {
+    error: {
+        description: string;
+        code: string;
+        source: string;
+        step: string;
+        reason: string;
+        metadata: any;
+    };
+}
 
 function PaymentContent() {
     const searchParams = useSearchParams();
@@ -37,14 +55,14 @@ function PaymentContent() {
 
             // 2. Initialize Razorpay Checkout
             const options = {
-                key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "rzp_test_SSI2d05Jgq5kXc", // Client-side key id
+                key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "rzp_test_SSI2d05Jgq5kXc", 
                 amount: order.amount,
                 currency: order.currency,
                 name: "WedBliss",
                 description: `Payment for ${planName}`,
                 image: "/logo.png",
                 order_id: order.id,
-                handler: async function (response: any) {
+                handler: async function (response: RazorpayResponse) {
                     // 3. Verify on backend
                     const verifyRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000"}/api/payment/verify`, {
                         method: "POST",
@@ -58,14 +76,13 @@ function PaymentContent() {
 
                     const verifyData = await verifyRes.json();
                     if (verifyRes.ok) {
-                        // Success!
                         router.push("/dashboard?payment=success");
                     } else {
                         throw new Error(verifyData.message || "Payment verification failed");
                     }
                 },
                 prefill: {
-                    name: "", // Will be filled from auth in production
+                    name: "", 
                     email: "",
                     contact: ""
                 },
@@ -74,19 +91,20 @@ function PaymentContent() {
                     templateId: templateId
                 },
                 theme: {
-                    color: "#047857" // Emerald Green
+                    color: "#047857" 
                 }
             };
 
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const rzp = new (window as any).Razorpay(options);
-            rzp.on('payment.failed', function (response: any) {
+            rzp.on('payment.failed', function (response: RazorpayError) {
                 setError(response.error.description);
                 setLoading(false);
             });
             rzp.open();
 
-        } catch (err: any) {
-            setError(err.message);
+        } catch (err: unknown) {
+            setError(err instanceof Error ? err.message : "An unexpected error occurred");
             setLoading(false);
         }
     };
@@ -167,7 +185,7 @@ function PaymentContent() {
                         </button>
 
                         <div className="flex items-center justify-center gap-4 py-2">
-                             <img src="https://cdn.razorpay.com/static/assets/logo/payment_method.svg" alt="Razorpay Support" className="h-4 opacity-70" />
+                             <Image src="https://cdn.razorpay.com/static/assets/logo/payment_method.svg" alt="Razorpay Support" width={200} height={20} className="opacity-70 object-contain h-4 w-auto" />
                         </div>
                     </div>
                 </div>

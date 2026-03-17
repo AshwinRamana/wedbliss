@@ -86,9 +86,14 @@ function PaymentContent() {
 
                     const verifyData = await verifyRes.json();
                     if (verifyRes.ok) {
-                        router.push("/dashboard?payment=success");
+                        router.push(`/checkout/success?order_id=${response.razorpay_order_id}`);
                     } else {
-                        throw new Error(verifyData.message || "Payment verification failed");
+                        router.push("/checkout/failure");
+                    }
+                },
+                modal: {
+                    ondismiss: function() {
+                        router.push("/checkout/failure");
                     }
                 },
                 prefill: {
@@ -108,8 +113,8 @@ function PaymentContent() {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const rzp = new (window as any).Razorpay(options);
             rzp.on('payment.failed', function (response: RazorpayError) {
-                setError(response.error.description);
-                setLoading(false);
+                console.error("Payment failed", response.error);
+                router.push("/checkout/failure");
             });
             rzp.open();
 

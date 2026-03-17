@@ -10,7 +10,7 @@ export default function Pricing() {
             </div>
             <div className="pricing-grid">
                 <div className="price-card">
-                    <div className="price-name">Intimate</div>
+                    <div className="price-name">Basic</div>
                     <div className="price-amt"><span>₹</span>999</div>
                     <p className="price-sub">Perfect for simple, elegant celebrations</p>
                     <ul className="price-ul">
@@ -23,11 +23,11 @@ export default function Pricing() {
                         <li className="opacity-50 line-through">Background Music & Video</li>
                         <li className="opacity-50 line-through">Muhurtham Countdown</li>
                     </ul>
-                    <Link href="/checkout/templates?plan=basic" className="price-btn"><span>Start Intimate Plan →</span></Link>
+                    <Link href="/checkout/templates?plan=basic" className="price-btn"><span>Choose Basic →</span></Link>
                 </div>
                 <div className="price-card featured">
                     <div className="price-badge">Recommended</div>
-                    <div className="price-name">Grand</div>
+                    <div className="price-name">Premium</div>
                     <div className="price-amt"><span>₹</span>1,999</div>
                     <p className="price-sub">The complete digital experience for your big day</p>
                     <ul className="price-ul">
@@ -40,7 +40,7 @@ export default function Pricing() {
                         <li>Priority WhatsApp Support</li>
                         <li>12 Months Active Link</li>
                     </ul>
-                    <Link href="/checkout/templates?plan=premium" className="price-btn"><span>Start Grand Plan →</span></Link>
+                    <Link href="/checkout/templates?plan=premium" className="price-btn"><span>Choose Premium →</span></Link>
                 </div>
             </div>
         </section>

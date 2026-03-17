@@ -326,7 +326,7 @@ export default function Hero() {
                         <div id="heroCarousel">
                             {heroTemplates.length === 0 ? (
                                 <div className="carousel-slide">
-                                    <div className="carousel-card active bg-slate-100/10 animate-pulse border border-slate-200/10 rounded-xl" style={{ height: "214px" }} />
+                                    <div className="carousel-card active bg-slate-100/10 animate-pulse border border-slate-200/10 rounded-xl" style={{ height: "278px" }} />
                                 </div>
                             ) : (
                                 heroTemplates.slice(0, 5).map((t, i) => {

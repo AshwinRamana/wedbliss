@@ -819,8 +819,8 @@ nav::after {
   gap: 12px;
   transform: rotate(-2deg);
   align-items: end;
-  max-width: 280px;
-  /* Reduced further from 320px */
+  max-width: 364px;
+  /* Increased 30% from 280px */
   margin: 0 auto;
 }
 
@@ -1164,15 +1164,21 @@ nav::after {
 }
 
 .templates-grid {
-  /* Reduced from 820px to shrink card size significantly */
-  max-width: 700px;
+  /* Increased to accommodate 4 columns at a comfortable size */
+  max-width: 1000px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
 }
 
-@media(max-width:1024px) {
+@media(max-width:1100px) {
+  .templates-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media(max-width:850px) {
   .templates-grid {
     grid-template-columns: repeat(2, 1fr);
   }

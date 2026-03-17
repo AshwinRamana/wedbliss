@@ -315,11 +315,99 @@ function CheckoutFormContent() {
                                                 <div className="grid grid-cols-2 gap-4">
                                                     <div className="flex flex-col gap-2">
                                                         <label className="text-xs font-bold text-slate-700 uppercase">From Time *</label>
-                                                        <input type="time" required className={inputClass} value={event.startTime} onChange={e => handleEventChange(index, "startTime", e.target.value)} />
+                                                        <div className="flex gap-2">
+                                                            <select 
+                                                                className="flex-1 px-3 py-3 bg-slate-100 border-2 border-slate-300 rounded-xl focus:border-emerald-500 text-sm font-bold"
+                                                                value={event.startTime ? (parseInt(event.startTime.split(':')[0]) % 12 || 12).toString().padStart(2, '0') : "09"}
+                                                                onChange={(e) => {
+                                                                    const parts = event.startTime.split(':');
+                                                                    const currentH = parseInt(parts[0] || "09");
+                                                                    const isPm = currentH >= 12;
+                                                                    let newH = parseInt(e.target.value);
+                                                                    if (isPm && newH < 12) newH += 12;
+                                                                    if (!isPm && newH === 12) newH = 0;
+                                                                    handleEventChange(index, "startTime", `${newH.toString().padStart(2, '0')}:${parts[1] || "00"}`);
+                                                                }}
+                                                            >
+                                                                {Array.from({length: 12}, (_, i) => i + 1).map(h => (
+                                                                    <option key={h} value={h.toString().padStart(2, '0')}>{h.toString().padStart(2, '0')}</option>
+                                                                ))}
+                                                            </select>
+                                                            <select 
+                                                                className="flex-1 px-3 py-3 bg-slate-100 border-2 border-slate-300 rounded-xl focus:border-emerald-500 text-sm font-bold"
+                                                                value={event.startTime ? event.startTime.split(':')[1] : "00"}
+                                                                onChange={(e) => {
+                                                                    const parts = event.startTime.split(':');
+                                                                    handleEventChange(index, "startTime", `${parts[0] || "09"}:${e.target.value}`);
+                                                                }}
+                                                            >
+                                                                {["00", "05", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55"].map(m => (
+                                                                    <option key={m} value={m}>{m}</option>
+                                                                ))}
+                                                            </select>
+                                                            <select 
+                                                                className="px-3 py-3 bg-white border-2 border-emerald-500 rounded-xl text-emerald-700 text-xs font-black uppercase"
+                                                                value={event.startTime && parseInt(event.startTime.split(':')[0]) >= 12 ? "PM" : "AM"}
+                                                                onChange={(e) => {
+                                                                    const parts = event.startTime.split(':');
+                                                                    let h = parseInt(parts[0] || "09");
+                                                                    if (e.target.value === "PM" && h < 12) h += 12;
+                                                                    if (e.target.value === "AM" && h >= 12) h -= 12;
+                                                                    handleEventChange(index, "startTime", `${h.toString().padStart(2, '0')}:${parts[1] || "00"}`);
+                                                                }}
+                                                            >
+                                                                <option value="AM">AM</option>
+                                                                <option value="PM">PM</option>
+                                                            </select>
+                                                        </div>
                                                     </div>
                                                     <div className="flex flex-col gap-2">
                                                         <label className="text-xs font-bold text-slate-700 uppercase">To Time *</label>
-                                                        <input type="time" required className={inputClass} value={event.endTime} onChange={e => handleEventChange(index, "endTime", e.target.value)} />
+                                                        <div className="flex gap-2">
+                                                            <select 
+                                                                className="flex-1 px-3 py-3 bg-slate-100 border-2 border-slate-300 rounded-xl focus:border-emerald-500 text-sm font-bold"
+                                                                value={event.endTime ? (parseInt(event.endTime.split(':')[0]) % 12 || 12).toString().padStart(2, '0') : "11"}
+                                                                onChange={(e) => {
+                                                                    const parts = event.endTime.split(':');
+                                                                    const currentH = parseInt(parts[0] || "11");
+                                                                    const isPm = currentH >= 12;
+                                                                    let newH = parseInt(e.target.value);
+                                                                    if (isPm && newH < 12) newH += 12;
+                                                                    if (!isPm && newH === 12) newH = 0;
+                                                                    handleEventChange(index, "endTime", `${newH.toString().padStart(2, '0')}:${parts[1] || "00"}`);
+                                                                }}
+                                                            >
+                                                                {Array.from({length: 12}, (_, i) => i + 1).map(h => (
+                                                                    <option key={h} value={h.toString().padStart(2, '0')}>{h.toString().padStart(2, '0')}</option>
+                                                                ))}
+                                                            </select>
+                                                            <select 
+                                                                className="flex-1 px-3 py-3 bg-slate-100 border-2 border-slate-300 rounded-xl focus:border-emerald-500 text-sm font-bold"
+                                                                value={event.endTime ? event.endTime.split(':')[1] : "00"}
+                                                                onChange={(e) => {
+                                                                    const parts = event.endTime.split(':');
+                                                                    handleEventChange(index, "endTime", `${parts[0] || "11"}:${e.target.value}`);
+                                                                }}
+                                                            >
+                                                                {["00", "05", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55"].map(m => (
+                                                                    <option key={m} value={m}>{m}</option>
+                                                                ))}
+                                                            </select>
+                                                            <select 
+                                                                className="px-3 py-3 bg-white border-2 border-emerald-500 rounded-xl text-emerald-700 text-xs font-black uppercase"
+                                                                value={event.endTime && parseInt(event.endTime.split(':')[0]) >= 12 ? "PM" : "AM"}
+                                                                onChange={(e) => {
+                                                                    const parts = event.endTime.split(':');
+                                                                    let h = parseInt(parts[0] || "11");
+                                                                    if (e.target.value === "PM" && h < 12) h += 12;
+                                                                    if (e.target.value === "AM" && h >= 12) h -= 12;
+                                                                    handleEventChange(index, "endTime", `${h.toString().padStart(2, '0')}:${parts[1] || "00"}`);
+                                                                }}
+                                                            >
+                                                                <option value="AM">AM</option>
+                                                                <option value="PM">PM</option>
+                                                            </select>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div className="flex flex-col gap-2 md:col-span-2">

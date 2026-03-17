@@ -76,7 +76,7 @@ router.post('/send-otp', async (req, res) => {
 });
 
 router.post('/verify-otp', async (req, res) => {
-    const { email, otp, name, phone } = req.body;
+    const { email, otp, name, phone, dob } = req.body;
 
     if (!email || !otp) {
         return res.status(400).json({ error: 'Email and OTP are required' });
@@ -114,6 +114,7 @@ router.post('/verify-otp', async (req, res) => {
                 data: {
                     name: name || '',
                     phone: phone || '',
+                    dob: dob || '',
                 }
             }
         });
@@ -126,7 +127,7 @@ router.post('/verify-otp', async (req, res) => {
         // and establish a real Supabase session cookie in the browser.
         res.status(200).json({
             message: 'OTP verified successfully',
-            user: { email, name, phone },
+            user: { email, name, phone, dob },
             sessionPassword: dummyPassword
         });
     } catch (error) {

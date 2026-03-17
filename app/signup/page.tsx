@@ -23,6 +23,21 @@ export default function SignupPage() {
 
     const handleSendOTP = async (e: React.FormEvent) => {
         e.preventDefault();
+        
+        // Validation: Must be at least 18 years old
+        const birthDate = new Date(formData.dob);
+        const today = new Date();
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const m = today.getMonth() - birthDate.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+
+        if (age < 18) {
+            setError("You must be at least 18 years old to sign up.");
+            return;
+        }
+
         if (formData.name && formData.email && formData.phone && formData.dob) {
             setLoading(true);
             setError("");
@@ -58,7 +73,8 @@ export default function SignupPage() {
                     email: formData.email,
                     otp: finalOtp,
                     name: formData.name,
-                    phone: formData.phone
+                    phone: formData.phone,
+                    dob: formData.dob
                 })
             });
             const data = await res.json();

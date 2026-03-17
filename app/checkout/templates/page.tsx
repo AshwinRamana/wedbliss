@@ -99,23 +99,21 @@ function TemplateSelectionContent() {
                     </p>
                 </div>
 
-                {/* Main Content Area */}
-                <div className="relative">
-                    {/* Responsive Grid/Carousel: Snap-scroll on mobile, Grid on desktop */}
-                    <div className="flex sm:grid flex-nowrap sm:flex-wrap overflow-x-auto sm:overflow-x-visible snap-x snap-mandatory gap-5 sm:gap-6 pb-8 sm:pb-0 px-4 sm:px-0 -mx-4 sm:mx-0 scrollbar-hide">
-                        {availableTemplates.map((tmpl) => {
-                            const isComingSoon = !tmpl.isLive;
-                            const isSelected = selectedId === tmpl.id;
-                            return (
-                                <div
-                                    key={tmpl.id}
-                                    onClick={() => { if (!isComingSoon) setSelectedId(tmpl.id); }}
-                                    className={`group relative snap-center shrink-0 w-[85vw] sm:w-auto sm:flex-1 min-w-[280px] bg-white border rounded-[32px] overflow-hidden shadow-2xl transition-all duration-500 ${isComingSoon
-                                        ? "opacity-50 cursor-not-allowed grayscale"
-                                        : isSelected
-                                            ? "border-emerald-500 ring-4 ring-emerald-500/20 scale-[1.03] z-20"
-                                            : "border-slate-100 hover:border-emerald-200 hover:-translate-y-2"
-                                        }`}>
+                {/* Responsive Grid: Matches marketing density */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 pb-8">
+                    {availableTemplates.map((tmpl) => {
+                        const isComingSoon = !tmpl.isLive;
+                        const isSelected = selectedId === tmpl.id;
+                        return (
+                            <div
+                                key={tmpl.id}
+                                onClick={() => { if (!isComingSoon) setSelectedId(tmpl.id); }}
+                                className={`group relative bg-white border rounded-[32px] overflow-hidden shadow-2xl transition-all duration-500 w-full ${isComingSoon
+                                    ? "opacity-50 cursor-not-allowed grayscale"
+                                    : isSelected
+                                        ? "border-emerald-500 ring-4 ring-emerald-500/20 scale-[1.03] z-20"
+                                        : "border-slate-100 hover:border-emerald-200 hover:-translate-y-2"
+                                    }`}>
                                     
                                     {/* Portrait Art Piece (1:1.75) */}
                                     <div className="w-full relative bg-slate-50 overflow-hidden" style={{ aspectRatio: '1/1.75' }}>
@@ -180,17 +178,16 @@ function TemplateSelectionContent() {
                             );
                         })}
                     </div>
-                </div>
 
-                {!isPremium && (
-                    <div className="mt-12 text-center">
-                        <div className="inline-block p-5 sm:p-6 bg-white/50 backdrop-blur border border-amber-200 rounded-3xl max-w-xl mx-auto shadow-xl shadow-amber-900/5">
-                            <h3 className="font-serif text-lg font-bold text-slate-800 mb-2">Want more options?</h3>
-                            <p className="text-sm text-slate-600 mb-4">Upgrade to Premium to unlock Custom Colors, Video Invites, Music selection, and beautiful animated templates.</p>
-                            <Link href="/#pricing" className="text-sm font-bold text-amber-600 hover:text-amber-700">← Change Plan to Premium</Link>
+                    {!isPremium && (
+                        <div className="mt-12 text-center animate-in fade-in slide-in-from-bottom-4 duration-1000">
+                            <div className="inline-block p-5 sm:p-6 bg-white/50 backdrop-blur border border-amber-200 rounded-3xl max-w-xl mx-auto shadow-xl shadow-amber-900/5">
+                                <h3 className="font-serif text-lg font-bold text-slate-800 mb-2">Want more options?</h3>
+                                <p className="text-sm text-slate-600 mb-4">Upgrade to Premium to unlock Custom Colors, Video Invites, Music selection, and beautiful animated templates.</p>
+                                <Link href="/#pricing" className="text-sm font-bold text-amber-600 hover:text-amber-700 block mt-2">← Change Plan to Premium</Link>
+                            </div>
                         </div>
-                    </div>
-                )}
+                    )}
             </main>
 
             <Footer />

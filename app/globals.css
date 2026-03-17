@@ -1255,11 +1255,12 @@ nav::after {
 @media(max-width:768px) {
   .templates-grid {
     grid-template-columns: 1fr !important;
-    /* Force 1-col */
     gap: 24px;
-    max-width: 280px;
-    /* Slightly larger to look better on phones */
+    /* full width with breathing room — no artificial 280px cap */
+    max-width: 100%;
+    padding: 0 20px;
     margin: 0 auto;
+    box-sizing: border-box;
   }
 }
 
@@ -1952,13 +1953,15 @@ footer {
 
   /* Show the mobile carousel wrapper */
   .hero-cards-wrapper {
-    display: block !important;
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
     width: 100%;
-    height: 100vw;
-    /* Use full width as basis for height */
-    min-height: 440px;
-    /* Increased to avoid overflow */
-    max-height: 600px;
+    /* 72vw * 1.75 / 2  — keeps wrapper exactly as tall as one portrait card */
+    height: 72vw;
+    min-height: 320px;
+    max-height: 460px;
     position: relative;
     touch-action: pan-y;
   }
@@ -1966,8 +1969,8 @@ footer {
   /* 3D Stack track; deeply stylized modern container */
   #heroCarousel {
     width: 100%;
-    height: 100%;
-    min-height: 380px;
+    flex: 1;
+    min-height: 0;
     position: relative;
     overflow: visible;
     perspective: 1200px;
@@ -1979,13 +1982,12 @@ footer {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 48vw;
-    /* Reduced from 60vw */
-    margin-left: -24vw;
+    width: 52vw;
+    margin-left: -26vw;
     aspect-ratio: 1 / 1.75;
     height: auto;
-    margin-top: -42vw;
-    /* half of 48vw * 1.75 = 42vw */
+    /* half of 52vw * 1.75 = 45.5vw */
+    margin-top: -45.5vw;
     transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.6s ease;
     will-change: transform, opacity, z-index;
   }
@@ -2061,33 +2063,66 @@ footer {
       gap: 20px;
     }
 
+    /* On small screens: wrap is portrait-card height at 68vw width */
     .hero-cards-wrapper {
-      height: 60vw;
-      min-height: 220px;
+      height: 68vw;
+      min-height: 300px;
+      max-height: 420px;
     }
 
+    /* 68vw card — margin-top = 68vw * 1.75 / 2 = 59.5vw */
     .carousel-slide {
-      width: 76vw;
-      margin-left: -38vw;
-      margin-top: -28.5vw;
-      /* half of 76vw * 3/4 */
+      width: 68vw;
+      margin-left: -34vw;
+      margin-top: -59.5vw;
     }
   }
 }
 
+
+/* Carousel dot indicator */
+.carousel-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 4px 0;
+  flex-shrink: 0;
+}
+
+.carousel-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(212, 175, 55, 0.3);
+  border: 1.5px solid rgba(212, 175, 55, 0.5);
+  transition: all 0.35s ease;
+  cursor: pointer;
+}
+
+.carousel-dot.active {
+  background: var(--gold);
+  border-color: var(--gold);
+  transform: scale(1.25);
+  box-shadow: 0 0 8px rgba(212, 175, 55, 0.55);
+}
 
 /* Always-visible "View Demo" label on mobile (no hover on touch) */
 @media(hover:none) {
   .hc-btn {
     opacity: 1;
     transform: scale(1);
-    background: rgba(255, 255, 255, 0.9);
-    font-size: 10px;
-    padding: 7px 12px;
+    background: linear-gradient(135deg, var(--emerald), var(--emerald-light));
+    color: white;
+    font-size: 12px;
+    font-weight: 800;
+    padding: 9px 18px;
+    border-radius: 22px;
+    box-shadow: 0 4px 16px rgba(4, 120, 87, 0.38);
   }
 
   .hc-overlay {
-    background: rgba(0, 0, 0, 0.18);
+    background: rgba(0, 0, 0, 0.22);
   }
 
   .tprev-btn {

@@ -30,6 +30,9 @@ function TemplateSelectionContent() {
     const [user, setUser] = useState<User | null>(null);
     const [allTemplates, setAllTemplates] = useState<TemplateItem[]>([]);
 
+    // Tap-to-select state — gives instant tactile feedback on touch devices
+    const [selectedId, setSelectedId] = useState<string | null>(null);
+
     useEffect(() => {
         const init = async () => {
             // Fetch session
@@ -82,28 +85,35 @@ function TemplateSelectionContent() {
             <Nav />
 
             <main className="flex-1 w-full max-w-6xl mx-auto px-4 pt-28 pb-16 relative z-10">
-                <div className="text-center mb-12">
+                <div className="text-center mb-10">
                     <div className="inline-block px-4 py-1.5 rounded-full bg-emerald-100/50 border border-emerald-200 text-emerald-800 text-xs font-bold uppercase tracking-widest mb-4">
                         Step 1 of 4
                     </div>
-                    <h1 className="font-serif text-4xl md:text-5xl font-black text-slate-800 mb-4">
+                    <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-black text-slate-800 mb-3">
                         Choose Your Template
                     </h1>
-                    <p className="text-slate-500 max-w-2xl mx-auto">
+                    <p className="text-slate-500 max-w-2xl mx-auto text-sm sm:text-base">
                         {isPremium
                             ? "You selected the Premium plan. You have unrestricted access to all our exquisite templates."
                             : "You selected the Basic plan. Here are the beautiful templates included in your package."}
                     </p>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-3xl mx-auto">
+                {/* 2-column on mobile, 3-col on lg */}
+                <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 max-w-3xl mx-auto">
                     {availableTemplates.map((tmpl) => {
                         const isComingSoon = !tmpl.isLive;
+                        const isSelected = selectedId === tmpl.id;
                         return (
-                            <div key={tmpl.id} className={`group relative bg-white/60 backdrop-blur-md border rounded-3xl overflow-hidden shadow-xl flex flex-col transition-all ${isComingSoon
-                                ? "border-slate-200/40 opacity-60 cursor-not-allowed"
-                                : "border-slate-200/60 shadow-slate-200/50 hover:-translate-y-2 hover:shadow-2xl hover:border-emerald-500/30"
-                                }`}>
+                            <div
+                                key={tmpl.id}
+                                onClick={() => { if (!isComingSoon) setSelectedId(tmpl.id); }}
+                                className={`group relative bg-white/60 backdrop-blur-md border rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl flex flex-col transition-all duration-300 ${isComingSoon
+                                    ? "border-slate-200/40 opacity-60 cursor-not-allowed"
+                                    : isSelected
+                                        ? "border-emerald-500 ring-2 ring-emerald-400/70 shadow-emerald-200/60 scale-[1.02]"
+                                        : "border-slate-200/60 shadow-slate-200/50 hover:-translate-y-2 hover:shadow-2xl hover:border-emerald-500/30"
+                                    }`}>
                                 {/* Template Thumbnail — exact 1:1.75 ratio */}
                                 <div className="w-full bg-slate-900 relative overflow-hidden flex items-center justify-center" style={{ aspectRatio: '1/1.75' }}>
                                     {tmpl.thumbnailUrl ? (
@@ -113,40 +123,40 @@ function TemplateSelectionContent() {
                                         <TemplateSVG id={tmpl.id} />
                                     )}
                                     {tmpl.tier === "premium" && (
-                                        <div className="absolute top-4 right-4 px-3 py-1 bg-black/60 backdrop-blur-md rounded-full text-white text-xs font-bold border border-white/20 shadow-lg">
+                                        <div className="absolute top-2 right-2 sm:top-4 sm:right-4 px-2 py-0.5 sm:px-3 sm:py-1 bg-black/60 backdrop-blur-md rounded-full text-white text-[10px] sm:text-xs font-bold border border-white/20 shadow-lg">
                                             Premium
                                         </div>
                                     )}
                                     {/* Coming Soon overlay */}
                                     {isComingSoon && (
                                         <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                                            <span className="px-4 py-1.5 bg-white/10 backdrop-blur-sm border border-white/30 rounded-full text-white text-xs font-bold tracking-widest uppercase">
+                                            <span className="px-3 py-1 bg-white/10 backdrop-blur-sm border border-white/30 rounded-full text-white text-[10px] sm:text-xs font-bold tracking-widest uppercase">
                                                 Coming Soon
                                             </span>
                                         </div>
                                     )}
-                                    {/* Live demo link */}
+                                    {/* Live demo link — visible on hover (desktop) */}
                                     {!isComingSoon && tmpl.href && (
                                         <a href={tmpl.href!} target="_blank" rel="noopener noreferrer"
-                                            className="absolute bottom-4 left-1/2 -translate-x-1/2 px-4 py-1.5 bg-emerald-800/80 backdrop-blur-sm rounded-full text-white text-xs font-bold border border-emerald-400/30 opacity-0 group-hover:opacity-100 transition-opacity">
-                                            View Live Demo →
+                                            className="absolute bottom-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-emerald-800/80 backdrop-blur-sm rounded-full text-white text-[10px] sm:text-xs font-bold border border-emerald-400/30 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                                            View Demo →
                                         </a>
                                     )}
                                 </div>
 
-                                <div className="p-6 flex flex-col flex-1 justify-between gap-4">
+                                <div className="p-3 sm:p-6 flex flex-col flex-1 justify-between gap-2 sm:gap-4">
                                     <div>
-                                        <h3 className="font-serif text-xl font-bold text-slate-800">{tmpl.name}</h3>
-                                        <p className="text-sm text-slate-500 mt-1 capitalize">{tmpl.tier} Tier · {isPremium ? "Animated & Musical" : "Standard Layout"}</p>
+                                        <h3 className="font-serif text-base sm:text-xl font-bold text-slate-800 leading-tight">{tmpl.name}</h3>
+                                        <p className="text-xs text-slate-500 mt-0.5 capitalize hidden sm:block">{tmpl.tier} Tier · {isPremium ? "Animated & Musical" : "Standard Layout"}</p>
                                     </div>
                                     {isComingSoon ? (
-                                        <div className="w-full py-3 text-center bg-slate-100 text-slate-400 font-bold rounded-xl text-sm cursor-not-allowed select-none border border-slate-200">
+                                        <div className="w-full py-2 sm:py-3 text-center bg-slate-100 text-slate-400 font-bold rounded-xl text-xs sm:text-sm cursor-not-allowed select-none border border-slate-200">
                                             Coming Soon
                                         </div>
                                     ) : (
                                         <Link
                                             href={user ? `/checkout/form?plan=${plan}&template=${tmpl.id}` : `/checkout/auth?plan=${plan}&template=${tmpl.id}`}
-                                            className="w-full block py-3 text-center bg-slate-100 hover:bg-emerald-50 text-emerald-700 font-bold rounded-xl transition-colors border border-transparent hover:border-emerald-200"
+                                            className="w-full block py-2.5 sm:py-3 text-center bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-bold rounded-xl transition-colors text-xs sm:text-sm shadow-sm shadow-emerald-200"
                                         >
                                             Select & Continue
                                         </Link>
@@ -158,8 +168,8 @@ function TemplateSelectionContent() {
                 </div>
 
                 {!isPremium && (
-                    <div className="mt-16 text-center">
-                        <div className="inline-block p-6 bg-white/50 backdrop-blur border border-amber-200 rounded-3xl max-w-xl mx-auto shadow-xl shadow-amber-900/5">
+                    <div className="mt-12 text-center">
+                        <div className="inline-block p-5 sm:p-6 bg-white/50 backdrop-blur border border-amber-200 rounded-3xl max-w-xl mx-auto shadow-xl shadow-amber-900/5">
                             <h3 className="font-serif text-lg font-bold text-slate-800 mb-2">Want more options?</h3>
                             <p className="text-sm text-slate-600 mb-4">Upgrade to Premium to unlock Custom Colors, Video Invites, Music selection, and beautiful animated templates.</p>
                             <Link href="/#pricing" className="text-sm font-bold text-amber-600 hover:text-amber-700">← Change Plan to Premium</Link>

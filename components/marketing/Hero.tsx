@@ -374,12 +374,37 @@ export default function Hero() {
                                                         <button className="hc-btn" style={{ opacity: 0.6, cursor: 'not-allowed' }}>Coming Soon</button>
                                                     )}
                                                 </div>
+                                                {/* Name label on mobile carousel card */}
+                                                <div className="hc-label z-10">
+                                                    <strong>{t.name}</strong>
+                                                    <span>{t.tier === "premium" ? "Premium" : "Basic"}</span>
+                                                </div>
                                             </div>
                                         </div>
                                     );
                                 })
                             )}
                         </div>{/* end #heroCarousel */}
+
+                        {/* Dot indicators */}
+                        {heroTemplates.length > 1 && (
+                            <div className="carousel-dots">
+                                {heroTemplates.slice(0, Math.min(4, heroTemplates.length)).map((_, i) => (
+                                    <span
+                                        key={i}
+                                        className={`carousel-dot${i === currentIdx ? ' active' : ''}`}
+                                        onClick={() => {
+                                            setCurrentIdx(i);
+                                            if (autoTimerRef.current) clearInterval(autoTimerRef.current);
+                                            const total = Math.min(4, heroTemplates.length);
+                                            autoTimerRef.current = setInterval(() => {
+                                                setCurrentIdx((prev: number) => (prev + 1) % total);
+                                            }, 3500);
+                                        }}
+                                    />
+                                ))}
+                            </div>
+                        )}
                     </div>{/* end .hero-cards-wrapper */}
 
 

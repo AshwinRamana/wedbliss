@@ -336,9 +336,9 @@ export default function Hero() {
 
                                     // Premium 3D depth logic
                                     const zIndex = 100 - absDiff;
-                                    const translateX = diff * 45; // Spread out more for depth
-                                    const translateZ = absDiff * -150; // Push inactive slides deep into Z-space
-                                    const rotateY = diff * -18; // Elegant rotation
+                                    const translateX = diff * 85; // Wider spread to fill horizontal space
+                                    const translateZ = absDiff * -220; // Deeper Z-space for immersion
+                                    const rotateY = diff * -28; // Sharper rotation perspective
                                     const opacity = Math.max(0.3, 1 - absDiff * 0.35); // Sharper fade
                                     const scale = isActive ? 1.05 : 0.88; // Active slide pops forward
                                     const blur = absDiff > 0 ? `blur(${absDiff * 0.8}px)` : 'none'; // Background blur

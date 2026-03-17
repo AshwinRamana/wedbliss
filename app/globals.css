@@ -1843,15 +1843,15 @@ footer {
     display: none !important;
   }
 
-  /* Show the mobile carousel wrapper - 48vw height for 33% reduction */
+  /* Show the mobile carousel wrapper - 42vw height for tighter layout */
   .hero-cards-wrapper {
     display: flex !important;
     flex-direction: column;
     align-items: center;
     gap: 16px;
     width: 100%;
-    height: 48vw;
-    min-height: 220px;
+    height: 42vw;
+    min-height: 200px;
     max-height: 380px;
     position: relative;
     touch-action: pan-y;
@@ -1868,16 +1868,16 @@ footer {
     transform-style: preserve-3d;
   }
 
-  /* Each slide stacked absolutely in the center - 36vw wide (33% reduction) */
+  /* Each slide stacked absolutely in the center - 1:1.35 aspect ratio (shorter) */
   .carousel-slide {
     position: absolute;
     top: 50%;
     left: 50%;
     width: 36vw;
     margin-left: -18vw;
-    aspect-ratio: 1 / 1.75;
+    aspect-ratio: 1 / 1.35;
     height: auto;
-    margin-top: -31.5vw;
+    margin-top: -24.3vw;
     transition: transform 0.7s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.7s ease, filter 0.7s ease;
     will-change: transform, opacity, z-index;
   }
@@ -1955,18 +1955,18 @@ footer {
       gap: 20px;
     }
 
-    /* On small screens: wrap is portrait-card height at 45vw width */
+    /* On small screens: height scaled to 1.35 aspect */
     .hero-cards-wrapper {
-      height: 78.75vw;
-      min-height: 260px;
+      height: 60vw;
+      min-height: 220px;
       max-height: 380px;
     }
 
-    /* 45vw card — margin-top = 45vw * 1.75 / 2 = 39.37vw */
+    /* 45vw card — margin-top = 45vw * 1.35 / 2 = 30.3vw */
     .carousel-slide {
       width: 45vw;
       margin-left: -22.5vw;
-      margin-top: -39.37vw;
+      margin-top: -30.3vw;
     }
   }
 }

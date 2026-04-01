@@ -84,7 +84,7 @@ function PaymentContent() {
                         })
                     });
 
-                    const verifyData = await verifyRes.json();
+                    await verifyRes.json();
                     if (verifyRes.ok) {
                         router.push(`/checkout/success?order_id=${response.razorpay_order_id}`);
                     } else {

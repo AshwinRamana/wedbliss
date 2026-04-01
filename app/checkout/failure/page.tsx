@@ -29,7 +29,7 @@ function FailureContent() {
 
                     <h1 className="font-serif text-4xl sm:text-5xl font-black text-slate-900 mb-6 tracking-tight">Oops! Something went wrong.</h1>
                     <p className="text-slate-500 text-lg font-medium mb-12">
-                        We couldn't process your payment. This could be due to a network error or insufficient funds. Don't worry, your progress is saved!
+                        We couldn&apos;t process your payment. This could be due to a network error or insufficient funds. Don&apos;t worry, your progress is saved!
                     </p>
 
                     <div className="flex flex-col gap-4">

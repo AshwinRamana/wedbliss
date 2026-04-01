@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense } from "react";
 import Link from "next/link";
 import Nav from "@/components/marketing/Nav";
 import Footer from "@/components/marketing/Footer";
@@ -39,7 +39,7 @@ function SuccessContent() {
 
                     <h1 className="font-serif text-4xl sm:text-5xl font-black text-slate-900 mb-6 tracking-tight">Congratulations!</h1>
                     <p className="text-slate-500 text-lg font-medium mb-10">
-                        Your wedding website is now authorized and ready for the grand launch. We've sent the receipt to your email.
+                        Your wedding website is now authorized and ready for the grand launch. We&apos;ve sent the receipt to your email.
                     </p>
 
                     <div className="bg-slate-50/80 rounded-3xl p-6 mb-12 border border-slate-100 flex flex-col gap-3">

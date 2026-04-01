@@ -73,19 +73,44 @@ function PaymentContent() {
                 image: "/logo.png",
                 order_id: order.id,
                 handler: async function (response: RazorpayResponse) {
-                    // 3. Verify on backend
+                    // 3. Verify on backend (also pass invitation_id for server-side DB update)
+                    const invitationId = typeof window !== "undefined" ? sessionStorage.getItem("invitation_id") : null;
+                    const invitationSubdomain = typeof window !== "undefined" ? sessionStorage.getItem("invitation_subdomain") : null;
+
                     const verifyRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000"}/api/payment/verify`, {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({
                             razorpay_order_id: response.razorpay_order_id,
                             razorpay_payment_id: response.razorpay_payment_id,
-                            razorpay_signature: response.razorpay_signature
+                            razorpay_signature: response.razorpay_signature,
+                            invitation_id: invitationId,
+                            subdomain: invitationSubdomain
                         })
                     });
 
                     await verifyRes.json();
                     if (verifyRes.ok) {
+                        // Trigger domain provisioning now that payment is confirmed
+                        if (invitationId && invitationSubdomain) {
+                            try {
+                                await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000"}/api/domains/provision`, {
+                                    method: "POST",
+                                    headers: { "Content-Type": "application/json" },
+                                    body: JSON.stringify({
+                                        invitation_id: invitationId,
+                                        subdomain: invitationSubdomain
+                                    })
+                                });
+                                // Clear sessionStorage after successful provision
+                                sessionStorage.removeItem("invitation_id");
+                                sessionStorage.removeItem("invitation_subdomain");
+                            } catch (provisionErr) {
+                                // Non-fatal: provisioning can be retried from admin
+                                console.error("Domain provisioning error after payment:", provisionErr);
+                            }
+                        }
+
                         router.push(`/checkout/success?order_id=${response.razorpay_order_id}`);
                     } else {
                         router.push("/checkout/failure");

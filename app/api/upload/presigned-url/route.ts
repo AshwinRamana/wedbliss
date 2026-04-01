@@ -46,7 +46,9 @@ export async function GET(req: NextRequest) {
 
         // 3 minutes Expiry
         const signedUrl = await getSignedUrl(s3Client, command, { expiresIn: 180 });
-        const publicUrl = `https://${targetBucket}.s3.${awsConfig.region}.amazonaws.com/${objectKey}`;
+        // IMPORTANT: Use path-style URL (s3.region/bucket/key) NOT virtual-hosted style (bucket.s3.region)
+        // Virtual-hosted style breaks SSL for bucket names with dots like "wedbliss.images"
+        const publicUrl = `https://s3.${awsConfig.region}.amazonaws.com/${targetBucket}/${objectKey}`;
 
         return NextResponse.json({ signedUrl, publicUrl, objectKey });
     } catch (error: unknown) {

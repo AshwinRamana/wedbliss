@@ -9,7 +9,7 @@ import { User } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabase";
 import Loader from "@/components/ui/Loader";
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
 
 export default function Dashboard() {
     const router = useRouter();

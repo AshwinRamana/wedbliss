@@ -97,15 +97,18 @@ router.post('/provision', async (req, res) => {
 
             let dnsResult = null;
             // Step 2: Create Cloudflare DNS Record
-            if (process.env.CLOUDFLARE_API_TOKEN && process.env.TEMPLATE_CF_DOMAIN) {
+            const cfTarget = result.domainName || process.env.TEMPLATE_CF_DOMAIN;
+            if (process.env.CLOUDFLARE_API_TOKEN && cfTarget) {
                 try {
                     const cloudflare = require('../services/cloudflare');
-                    dnsResult = await cloudflare.createSubdomainRecord(subdomain, process.env.TEMPLATE_CF_DOMAIN);
+                    dnsResult = await cloudflare.createSubdomainRecord(subdomain, cfTarget);
                 } catch (cfErr) {
                     console.error('[domains] Cloudflare DNS error:', cfErr);
                     // We don't fail the whole process if DNS fails but CF alias worked, 
                     // though usually both are needed.
                 }
+            } else if (!cfTarget) {
+                console.warn('[domains] Skipping Cloudflare DNS: No target domain (TEMPLATE_CF_DOMAIN missing)');
             }
 
             await supabase

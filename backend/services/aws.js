@@ -12,14 +12,15 @@
 const {
     CloudFrontClient,
     GetDistributionConfigCommand,
-    UpdateDistributionCommand
+    UpdateDistributionCommand,
+    GetDistributionCommand
 } = require('@aws-sdk/client-cloudfront');
 
 const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
 
 const cfConfig = {
-    region: 'us-east-1',
+    region: process.env.AWS_REGION || 'us-east-1',
     credentials: {
         accessKeyId: process.env.AWS_ACCESS_KEY_ID,
         secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
@@ -27,7 +28,7 @@ const cfConfig = {
 };
 
 const s3Config = {
-    region: 'ap-south-2',
+    region: process.env.AWS_S3_REGION || process.env.AWS_REGION || 'ap-south-2',
     credentials: {
         accessKeyId: process.env.AWS_ACCESS_KEY_ID,
         secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
@@ -38,7 +39,7 @@ const client = new CloudFrontClient(cfConfig);
 const s3Client = new S3Client(s3Config);
 
 const DISTRIBUTION_ID = process.env.CLOUDFRONT_DISTRIBUTION_ID;
-const S3_BUCKET_NAME = process.env.AWS_S3_BUCKET_NAME || 'wedbliss-gallery';
+const S3_BUCKET_NAME = process.env.AWS_S3_BUCKET_NAME || 'wedbliss.images';
 
 /**
  * Add a CNAME alias to the CloudFront distribution.
@@ -61,7 +62,16 @@ async function addCloudFrontAlias(domain) {
     const currentAliases = config.Aliases?.Items || [];
     if (currentAliases.includes(domain)) {
         console.log(`[aws] Alias "${domain}" already exists on distribution ${DISTRIBUTION_ID}`);
-        return { distributionId: DISTRIBUTION_ID, domain, alreadyExists: true };
+        // Fetch distributions details to get the DomainName
+        const getDistCmd = new GetDistributionCommand({ Id: DISTRIBUTION_ID });
+        const distResult = await client.send(getDistCmd);
+        
+        return { 
+            distributionId: DISTRIBUTION_ID, 
+            domain, 
+            alreadyExists: true,
+            domainName: distResult.Distribution?.DomainName // Correctly fetch for DNS provisioning
+        };
     }
 
     // Step 3: Add the new alias
@@ -77,10 +87,15 @@ async function addCloudFrontAlias(domain) {
         DistributionConfig: config
     });
 
-    await client.send(updateCmd);
+    const updateResult = await client.send(updateCmd);
     console.log(`[aws] Successfully added alias "${domain}" to distribution ${DISTRIBUTION_ID}`);
 
-    return { distributionId: DISTRIBUTION_ID, domain, alreadyExists: false };
+    return { 
+        distributionId: DISTRIBUTION_ID, 
+        domain, 
+        alreadyExists: false,
+        domainName: updateResult.Distribution?.DomainName // Return the actual CF domain
+    };
 }
 
 /**
@@ -130,7 +145,6 @@ async function removeCloudFrontAlias(domain) {
  * @param {string} couplename - Folder name for the couple
  */
 async function generatePresignedUrl(fileName, fileType, couplename) {
-    // Override default bucket to user requested wedbliss.images
     const targetBucket = process.env.AWS_S3_BUCKET_NAME || 'wedbliss.images';
 
     // Sanitize file name and create unique object key
@@ -141,6 +155,8 @@ async function generatePresignedUrl(fileName, fileType, couplename) {
     const objectKey = `${folder}/${uniqueId}-${sanitizedName}`;
 
     try {
+        console.log(`[aws] Generating presigned URL for ${targetBucket}/${objectKey} (${fileType})`);
+        
         const command = new PutObjectCommand({
             Bucket: targetBucket,
             Key: objectKey,
@@ -150,7 +166,8 @@ async function generatePresignedUrl(fileName, fileType, couplename) {
         // URL expires in 3 minutes
         const signedUrl = await getSignedUrl(s3Client, command, { expiresIn: 180 });
 
-        // Construct the public URL using path-style to avoid SSL cert errors with dotted bucket names
+        // IMPORTANT: If bucket name has dots, MUST use path-style for SSL to work on S3 endpoints
+        // Use s3.region.amazonaws.com/bucket/key
         const publicUrl = `https://s3.${s3Config.region}.amazonaws.com/${targetBucket}/${objectKey}`;
 
         return { signedUrl, publicUrl, objectKey };

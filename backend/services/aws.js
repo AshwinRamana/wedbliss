@@ -32,7 +32,9 @@ const s3Config = {
     credentials: {
         accessKeyId: process.env.AWS_ACCESS_KEY_ID,
         secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
-    }
+    },
+    // CRITICAL: Required for bucket names with dots like "wedbliss.images"
+    forcePathStyle: true
 };
 
 const client = new CloudFrontClient(cfConfig);

@@ -3,11 +3,14 @@ import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 const awsConfig = {
-    region: process.env.AWS_REGION || "us-east-1",
+    region: process.env.AWS_S3_REGION || process.env.AWS_REGION || "us-east-1",
     credentials: {
         accessKeyId: process.env.AWS_ACCESS_KEY_ID || "",
         secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || ""
-    }
+    },
+    // CRITICAL: forcePathStyle required for bucket names containing dots (e.g. "wedbliss.images")
+    // Without this, signed URLs use virtual-hosted style which breaks SSL for dotted names
+    forcePathStyle: true
 };
 
 const s3Client = new S3Client(awsConfig);

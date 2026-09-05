@@ -127,20 +127,23 @@ export const FALLBACK_TEMPLATES: DbTemplate[] = [
 /** Fetch all templates from Supabase, ordered by creation date. */
 export async function getTemplates(): Promise<DbTemplate[]> {
     try {
+        // Omit html/css/js blobs — listing only. Full content via getTemplateById.
         const query = supabase
             .from('templates')
-            .select('*')
+            .select('id,name,tier,description,is_live,is_hero,demo_url,thumbnail_url,created_at')
             .order('created_at', { ascending: true });
 
-        // Supabase host can hang on dead DNS; don't block the catalog forever.
         const result = await Promise.race([
             query,
             new Promise<never>((_, reject) =>
-                setTimeout(() => reject(new Error('getTemplates timeout')), 4000)
+                setTimeout(() => reject(new Error('getTemplates timeout')), 12000)
             ),
         ]);
 
-        const { data, error } = result as { data: DbTemplate[] | null; error: { message: string } | null };
+        const { data, error } = result as {
+            data: DbTemplate[] | null;
+            error: { message: string } | null;
+        };
 
         if (error) {
             console.error('[db] getTemplates error:', error.message);
@@ -150,7 +153,12 @@ export async function getTemplates(): Promise<DbTemplate[]> {
             console.warn('[db] getTemplates empty — using fallback seed');
             return FALLBACK_TEMPLATES;
         }
-        return data as DbTemplate[];
+        return data.map((row) => ({
+            ...row,
+            html_content: row.html_content ?? null,
+            css_content: row.css_content ?? null,
+            js_content: row.js_content ?? null,
+        })) as DbTemplate[];
     } catch (err) {
         console.error('[db] getTemplates failed:', err);
         return FALLBACK_TEMPLATES;

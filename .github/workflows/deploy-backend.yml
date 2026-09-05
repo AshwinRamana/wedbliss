@@ -30,7 +30,17 @@ jobs:
             # Env lives on the server (~/wedbliss/.env.local). Do not overwrite
             # from CI — empty/missing GitHub secrets would wipe Gmail/Cloudflare/Razorpay.
             pm2 restart wedbliss-api --update-env || pm2 start server.js --name wedbliss-api
-            curl -sf http://127.0.0.1:4000/health
+            # Wait for Express to bind after restart (curl exit 7 = connection refused)
+            for i in 1 2 3 4 5 6 7 8 9 10; do
+              if curl -sf http://127.0.0.1:4000/health; then
+                echo ""
+                exit 0
+              fi
+              sleep 2
+            done
+            echo "Health check failed after restart"
+            pm2 logs wedbliss-api --lines 40 --nostream || true
+            exit 1
 
       - name: Send Email Notification
         if: always()

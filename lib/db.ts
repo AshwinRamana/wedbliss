@@ -36,18 +36,115 @@ export type DbOrder = {
 // Templates
 // ─────────────────────────────────────────────────────────────────────────────
 
+/** Seed used when Supabase is unreachable or the templates table is empty. */
+export const FALLBACK_TEMPLATES: DbTemplate[] = [
+    {
+        id: 'tm-mallipoo',
+        name: 'Malli Poo',
+        tier: 'basic',
+        description: 'Jasmine-inspired minimal design. Ivory and soft rose gold.',
+        is_live: true,
+        is_hero: true,
+        html_content: null,
+        css_content: null,
+        js_content: null,
+        demo_url: 'https://template.wedbliss.co',
+        thumbnail_url: null,
+        created_at: '2026-01-01T00:00:00.000Z',
+    },
+    {
+        id: 'tm-kovil',
+        name: 'Kovil Gopuram',
+        tier: 'basic',
+        description: 'Temple architecture with rising sun. Forest green & 24k gold.',
+        is_live: true,
+        is_hero: true,
+        html_content: null,
+        css_content: null,
+        js_content: null,
+        demo_url: null,
+        thumbnail_url: null,
+        created_at: '2026-01-01T00:00:01.000Z',
+    },
+    {
+        id: 'tm-tanjore',
+        name: 'Tanjore Gold',
+        tier: 'basic',
+        description: 'Classic crimson and gold with Tanjore art. Regal and traditional.',
+        is_live: true,
+        is_hero: true,
+        html_content: null,
+        css_content: null,
+        js_content: null,
+        demo_url: null,
+        thumbnail_url: null,
+        created_at: '2026-01-01T00:00:02.000Z',
+    },
+    {
+        id: 'tm-peacock',
+        name: 'Peacock Majesty',
+        tier: 'premium',
+        description: "Lord Muruga's peacock with Vel motif. Teal and gold.",
+        is_live: true,
+        is_hero: true,
+        html_content: null,
+        css_content: null,
+        js_content: null,
+        demo_url: null,
+        thumbnail_url: null,
+        created_at: '2026-01-01T00:00:03.000Z',
+    },
+    {
+        id: 'tm-vilakku',
+        name: 'Kuthu Vilakku',
+        tier: 'premium',
+        description: 'Traditional oil lamp with warm amber glow. Festive and bright.',
+        is_live: false,
+        is_hero: false,
+        html_content: null,
+        css_content: null,
+        js_content: null,
+        demo_url: null,
+        thumbnail_url: null,
+        created_at: '2026-01-01T00:00:04.000Z',
+    },
+    {
+        id: 'tm-kanjivaram',
+        name: 'Kanjivaram Silk',
+        tier: 'premium',
+        description: 'Silk saree weave patterns. Deep navy & zari gold borders.',
+        is_live: false,
+        is_hero: false,
+        html_content: null,
+        css_content: null,
+        js_content: null,
+        demo_url: null,
+        thumbnail_url: null,
+        created_at: '2026-01-01T00:00:05.000Z',
+    },
+];
+
 /** Fetch all templates from Supabase, ordered by creation date. */
 export async function getTemplates(): Promise<DbTemplate[]> {
-    const { data, error } = await supabase
-        .from('templates')
-        .select('*')
-        .order('created_at', { ascending: true });
+    try {
+        const { data, error } = await supabase
+            .from('templates')
+            .select('*')
+            .order('created_at', { ascending: true });
 
-    if (error) {
-        console.error('[db] getTemplates error:', error.message);
-        return [];
+        if (error) {
+            console.error('[db] getTemplates error:', error.message);
+            return FALLBACK_TEMPLATES;
+        }
+        if (!data || data.length === 0) {
+            console.warn('[db] getTemplates empty — using fallback seed');
+            return FALLBACK_TEMPLATES;
+        }
+        return data as DbTemplate[];
+    } catch (err) {
+        console.error('[db] getTemplates failed:', err);
+        return FALLBACK_TEMPLATES;
     }
-    return data as DbTemplate[];
 }
 
 /** Fetch a single template by ID. */

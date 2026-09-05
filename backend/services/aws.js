@@ -28,12 +28,12 @@ const cfConfig = {
 };
 
 const s3Config = {
-    region: process.env.AWS_S3_REGION || process.env.AWS_REGION || 'ap-south-2',
+    region: process.env.AWS_S3_REGION || process.env.AWS_REGION || 'ap-south-1',
     credentials: {
         accessKeyId: process.env.AWS_ACCESS_KEY_ID,
         secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
     },
-    // CRITICAL: Required for bucket names with dots like "wedbliss.images"
+    // forcePathStyle still OK; required if bucket names contain dots
     forcePathStyle: true
 };
 
@@ -41,7 +41,7 @@ const client = new CloudFrontClient(cfConfig);
 const s3Client = new S3Client(s3Config);
 
 const DISTRIBUTION_ID = process.env.CLOUDFRONT_DISTRIBUTION_ID;
-const S3_BUCKET_NAME = process.env.AWS_S3_BUCKET_NAME || 'wedbliss.images';
+const S3_BUCKET_NAME = process.env.AWS_S3_BUCKET_NAME || 'wedbliss-images';
 
 /**
  * Add a CNAME alias to the CloudFront distribution.
@@ -147,7 +147,7 @@ async function removeCloudFrontAlias(domain) {
  * @param {string} couplename - Folder name for the couple
  */
 async function generatePresignedUrl(fileName, fileType, couplename) {
-    const targetBucket = process.env.AWS_S3_BUCKET_NAME || 'wedbliss.images';
+    const targetBucket = process.env.AWS_S3_BUCKET_NAME || 'wedbliss-images';
 
     // Sanitize file name and create unique object key
     const uniqueId = Date.now() + '-' + Math.round(Math.random() * 1e9);

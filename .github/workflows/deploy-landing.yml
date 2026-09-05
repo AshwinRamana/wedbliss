@@ -46,7 +46,7 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Sync to S3
-        run: aws s3 sync out/ s3://www.wedbliss.co --delete
+        run: aws s3 sync out/ s3://wedbliss-www --delete
 
       - name: Invalidate CloudFront cache
         run: |

@@ -1,0 +1,226 @@
+{
+  "account_id": "097300397535",
+  "iam_user": "cursor_cli",
+  "iam_arn": "arn:aws:iam::097300397535:user/cursor_cli",
+  "region_s3": "ap-south-1",
+  "region_acm_cloudfront_cert": "us-east-1",
+  "status": "ready",
+  "buckets": {
+    "wedbliss-www": {
+      "region": "ap-south-1",
+      "status": "created",
+      "block_public_access": true,
+      "purpose": "landing static site"
+    },
+    "wedbliss-template": {
+      "region": "ap-south-1",
+      "status": "created",
+      "block_public_access": true,
+      "purpose": "invitation template engine"
+    },
+    "wedbliss-images": {
+      "region": "ap-south-1",
+      "status": "created",
+      "block_public_access": true,
+      "purpose": "uploads",
+      "cors": {
+        "AllowedMethods": [
+          "GET",
+          "PUT",
+          "HEAD",
+          "POST"
+        ],
+        "AllowedOrigins": [
+          "https://*.wedbliss.co",
+          "https://www.wedbliss.co",
+          "https://wedbliss.co",
+          "http://localhost:3000"
+        ]
+      }
+    }
+  },
+  "oac": {
+    "id": "E2H84D6HASB3F6",
+    "name": "wedbliss-s3-oac",
+    "shared": true
+  },
+  "acm": {
+    "arn": "arn:aws:acm:us-east-1:097300397535:certificate/bda98b64-e14c-4e22-8de6-ab4c1942bbac",
+    "status": "ISSUED",
+    "domains": [
+      "wedbliss.co",
+      "*.wedbliss.co"
+    ],
+    "error": null,
+    "validation": "DNS SUCCESS",
+    "updated_at": "2026-09-05T09:08:07.504506+00:00"
+  },
+  "cloudfront": {
+    "landing": {
+      "id": "E3TFB2K5BLL06D",
+      "domain": "d4cahxw8xi5tu.cloudfront.net",
+      "aliases_desired": [
+        "www.wedbliss.co",
+        "wedbliss.co"
+      ],
+      "aliases_attached": true,
+      "viewer_certificate": "arn:aws:acm:us-east-1:097300397535:certificate/bda98b64-e14c-4e22-8de6-ab4c1942bbac",
+      "price_class": "PriceClass_100",
+      "origin": "wedbliss-www.s3.ap-south-1.amazonaws.com",
+      "oac_id": "E2H84D6HASB3F6",
+      "custom_errors": "403/404 -> /index.html 200",
+      "comment": "wedbliss-landing www+apex",
+      "note": "Aliases attached via associate-alias (moved from old account \u2026402084)",
+      "aliases": [
+        "www.wedbliss.co",
+        "wedbliss.co"
+      ]
+    },
+    "template": {
+      "id": "E3Q8D2C6GIJ1MU",
+      "domain": "dddnvntigassu.cloudfront.net",
+      "aliases_desired": [
+        "template.wedbliss.co"
+      ],
+      "aliases_attached": true,
+      "viewer_certificate": "arn:aws:acm:us-east-1:097300397535:certificate/bda98b64-e14c-4e22-8de6-ab4c1942bbac",
+      "price_class": "PriceClass_100",
+      "origin": "wedbliss-template.s3.ap-south-1.amazonaws.com",
+      "oac_id": "E2H84D6HASB3F6",
+      "custom_errors": "403/404 -> /index.html 200",
+      "comment": "wedbliss-template SPA",
+      "note": "Aliases attached via associate-alias (moved from old account \u2026402084)",
+      "aliases": [
+        "template.wedbliss.co"
+      ]
+    }
+  },
+  "s3_bucket_policies": {
+    "wedbliss-www": "OAC GetObject for distribution E3TFB2K5BLL06D",
+    "wedbliss-template": "OAC GetObject for distribution E3Q8D2C6GIJ1MU"
+  },
+  "suggested_cloudflare_dns_cutover": [
+    {
+      "type": "CNAME",
+      "name": "www",
+      "content": "d4cahxw8xi5tu.cloudfront.net",
+      "proxied": false
+    },
+    {
+      "type": "CNAME",
+      "name": "@",
+      "content": "d4cahxw8xi5tu.cloudfront.net",
+      "proxied": false,
+      "note": "CNAME flattening"
+    },
+    {
+      "type": "CNAME",
+      "name": "template",
+      "content": "dddnvntigassu.cloudfront.net",
+      "proxied": false
+    },
+    {
+      "type": "A",
+      "name": "api",
+      "content": "3.111.30.189",
+      "proxied": true
+    }
+  ],
+  "ec2_env_update": {
+    "host": "3.111.30.189",
+    "status": "ok",
+    "files": [
+      "/home/ec2-user/wedbliss/.env.local",
+      "/home/ec2-user/wedbliss/backend/.env"
+    ],
+    "keys_set": [
+      "AWS_REGION=ap-south-1",
+      "AWS_S3_REGION=ap-south-1",
+      "AWS_S3_BUCKET_NAME=wedbliss-images",
+      "CLOUDFRONT_DISTRIBUTION_ID=E3Q8D2C6GIJ1MU",
+      "LANDING_CF_DISTRIBUTION_ID=E3TFB2K5BLL06D",
+      "TEMPLATE_CF_DISTRIBUTION_ID=E3Q8D2C6GIJ1MU",
+      "TEMPLATE_CF_DOMAIN=dddnvntigassu.cloudfront.net"
+    ],
+    "pm2": "wedbliss-api restarted with --update-env",
+    "health": {
+      "url": "http://127.0.0.1:4000/health",
+      "status": "ok"
+    }
+  },
+  "blockers": [],
+  "next_steps": [
+    "Point Cloudflare www/@/template DNS to the CloudFront domains (DNS-only / proxied:false recommended for CF custom domains)",
+    "Deploy static assets to wedbliss-www and wedbliss-template S3 buckets",
+    "Optional: remove temporary ACM ownership TXT records (_www, _, _template, _cf-challenge.*)"
+  ],
+  "provision_script": "scripts/provision-wedbliss-static-stack.sh",
+  "alias_move": {
+    "method": "cloudfront associate-alias",
+    "previous_account_suffix": "402084",
+    "previous_distributions_masked": [
+      "*******FJPLE5K",
+      "******MMOWING"
+    ]
+  },
+  "dns_cutover": {
+    "timestamp": "2026-09-05T09:11:02Z",
+    "provider": "cloudflare",
+    "zone": "wedbliss.co",
+    "proxied": false,
+    "notes": "Unset Cloudflare proxy (DNS only) for CF origins; apex CNAME flattened to landing CloudFront; api A unproxied for certbot/SSL simplicity",
+    "cloudfront_verified": {
+      "E3TFB2K5BLL06D": {
+        "domain": "d4cahxw8xi5tu.cloudfront.net",
+        "aliases": [
+          "www.wedbliss.co",
+          "wedbliss.co"
+        ],
+        "status": "InProgress"
+      },
+      "E3Q8D2C6GIJ1MU": {
+        "domain": "dddnvntigassu.cloudfront.net",
+        "aliases": [
+          "template.wedbliss.co"
+        ],
+        "status": "InProgress"
+      }
+    },
+    "records_applied": [
+      {
+        "name": "www.wedbliss.co",
+        "type": "CNAME",
+        "content": "d4cahxw8xi5tu.cloudfront.net",
+        "proxied": false,
+        "action": "updated"
+      },
+      {
+        "name": "wedbliss.co",
+        "type": "CNAME",
+        "content": "d4cahxw8xi5tu.cloudfront.net",
+        "proxied": false,
+        "action": "updated",
+        "note": "CNAME flattening to landing CF (was www.wedbliss.co)"
+      },
+      {
+        "name": "template.wedbliss.co",
+        "type": "CNAME",
+        "content": "dddnvntigassu.cloudfront.net",
+        "proxied": false,
+        "action": "updated"
+      },
+      {
+        "name": "api.wedbliss.co",
+        "type": "A",
+        "content": "3.111.30.189",
+        "proxied": false,
+        "action": "updated",
+        "previous": "98.130.135.5"
+      }
+    ],
+    "untouched": [
+      "MX smtp.google.com",
+      "TXT google-site-verification"
+    ]
+  }
+}

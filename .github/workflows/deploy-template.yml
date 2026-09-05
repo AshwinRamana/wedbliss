@@ -5,6 +5,8 @@ on:
     branches: [main]
     paths:
       - 'template/**'
+      - '.github/workflows/deploy-template.yml'
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -37,7 +39,7 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Sync to S3
-        run: aws s3 sync template/out/ s3://template.wedbliss.co --delete
+        run: aws s3 sync template/out/ s3://wedbliss-template --delete
 
       - name: Invalidate CloudFront cache
         run: |

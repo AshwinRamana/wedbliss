@@ -127,10 +127,20 @@ export const FALLBACK_TEMPLATES: DbTemplate[] = [
 /** Fetch all templates from Supabase, ordered by creation date. */
 export async function getTemplates(): Promise<DbTemplate[]> {
     try {
-        const { data, error } = await supabase
+        const query = supabase
             .from('templates')
             .select('*')
             .order('created_at', { ascending: true });
+
+        // Supabase host can hang on dead DNS; don't block the catalog forever.
+        const result = await Promise.race([
+            query,
+            new Promise<never>((_, reject) =>
+                setTimeout(() => reject(new Error('getTemplates timeout')), 4000)
+            ),
+        ]);
+
+        const { data, error } = result as { data: DbTemplate[] | null; error: { message: string } | null };
 
         if (error) {
             console.error('[db] getTemplates error:', error.message);

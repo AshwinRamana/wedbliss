@@ -37,7 +37,8 @@ insert into public.templates (id, name, tier, description, is_live, is_hero, dem
   ('tm-tanjore',    'Tanjore Gold',    'basic',   'Classic crimson and gold with Tanjore art. Regal and traditional.',    false, true,  null),
   ('tm-peacock',    'Peacock Majesty', 'premium', 'Lord Muruga''s peacock with Vel motif. Teal and gold.',               false, true,  null),
   ('tm-vilakku',    'Kuthu Vilakku',   'premium', 'Traditional oil lamp with warm amber glow. Festive and bright.',       false, false, null),
-  ('tm-kanjivaram', 'Kanjivaram Silk', 'premium', 'Silk saree weave patterns. Deep navy & zari gold borders.',           false, false, null)
+  ('tm-kanjivaram', 'Kanjivaram Silk', 'premium', 'Silk saree weave patterns. Deep navy & zari gold borders.',           false, false, null),
+  ('tm-thiruvizha', 'Thiruvizha',       'premium', 'Temple courtyard at night — brass light, sticky scroll beats, ceremonial timeline.', true, true, 'https://www.wedbliss.co/templates/thiruvizha.html')
 on conflict (id) do nothing;
 
 

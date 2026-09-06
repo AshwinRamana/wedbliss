@@ -173,6 +173,32 @@ export function TemplateSVG({ id }: { id: string }) {
                     <text x="80" y="217" textAnchor="middle" fontSize="6" fill="rgba(212,175,55,0.55)">Mumbai, India</text>
                 </svg>
             );
+        case "tm-thiruvizha":
+            return (
+                <svg width="100%" height="100%" viewBox="0 0 160 290" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+                    <defs>
+                        <radialGradient id="tvBg" cx="50%" cy="20%"><stop offset="0%" stopColor="#3a1520" /><stop offset="55%" stopColor="#12090c" /><stop offset="100%" stopColor="#080506" /></radialGradient>
+                        <radialGradient id="tvGlow" cx="50%" cy="35%"><stop offset="0%" stopColor="rgba(212,180,90,0.28)" /><stop offset="100%" stopColor="transparent" /></radialGradient>
+                    </defs>
+                    <rect width="160" height="290" fill="url(#tvBg)" />
+                    <ellipse cx="80" cy="70" rx="70" ry="55" fill="url(#tvGlow)" />
+                    <rect x="5" y="5" width="150" height="280" fill="none" stroke="#d4b45a" strokeWidth="1.2" rx="2" opacity="0.55" />
+                    {/* Lamp */}
+                    <ellipse cx="80" cy="78" rx="14" ry="4" fill="#b8960f" opacity="0.85" />
+                    <rect x="72" y="58" width="16" height="20" rx="3" fill="#c9a84a" opacity="0.9" />
+                    <ellipse cx="80" cy="58" rx="18" ry="5" fill="#d4b45a" />
+                    <ellipse cx="80" cy="48" rx="3" ry="7" fill="#fbbf24" />
+                    <ellipse cx="80" cy="42" rx="2" ry="4" fill="#fff7d6" opacity="0.9" />
+                    {/* Kolam hint */}
+                    <circle cx="80" cy="250" r="28" fill="none" stroke="rgba(244,235,216,0.22)" strokeWidth="0.8" />
+                    <circle cx="80" cy="250" r="16" fill="none" stroke="rgba(244,235,216,0.18)" strokeWidth="0.6" />
+                    <text x="80" y="112" textAnchor="middle" fontSize="6.5" fill="#e8d08a" letterSpacing="2.5">THIRUVIZHA</text>
+                    <text x="80" y="138" textAnchor="middle" fontSize="14" fill="#f6eedc" fontFamily="Georgia,serif" fontStyle="italic">Karthik &amp; Priya</text>
+                    <line x1="36" y1="148" x2="124" y2="148" stroke="#d4b45a" strokeWidth="0.5" opacity="0.45" />
+                    <text x="80" y="168" textAnchor="middle" fontSize="7" fill="rgba(240,230,212,0.85)">28 Feb 2026 · 8:24 AM</text>
+                    <text x="80" y="184" textAnchor="middle" fontSize="5.5" fill="rgba(181,160,138,0.95)">Sri Murugan Kalyana Mandapam</text>
+                </svg>
+            );
         default:
             return (
                 <svg width="100%" height="100%" viewBox="0 0 160 290" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">

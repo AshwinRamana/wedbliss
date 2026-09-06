@@ -122,6 +122,20 @@ export const FALLBACK_TEMPLATES: DbTemplate[] = [
         thumbnail_url: null,
         created_at: '2026-01-01T00:00:05.000Z',
     },
+    {
+        id: 'tm-thiruvizha',
+        name: 'Thiruvizha',
+        tier: 'premium',
+        description: 'Temple courtyard at night — brass light, sticky scroll beats, ceremonial timeline.',
+        is_live: true,
+        is_hero: true,
+        html_content: null,
+        css_content: null,
+        js_content: null,
+        demo_url: 'https://www.wedbliss.co/templates/thiruvizha.html',
+        thumbnail_url: 'https://www.wedbliss.co/templates/thumbs/thiruvizha.webp',
+        created_at: '2026-01-01T00:00:06.000Z',
+    },
 ];
 
 /** Fetch all templates from Supabase, ordered by creation date. */

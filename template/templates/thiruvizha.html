@@ -1,0 +1,1067 @@
+<!-- Thiruvizha scroll-engaged -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{{couple.groom.firstName}} &amp; {{couple.bride.firstName}} · Wedding Invitation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+:root {
+  --bg: #080506;
+  --panel: rgba(16, 9, 11, 0.55);
+  --brass: #d4b45a;
+  --brass-soft: #e8d08a;
+  --cream: #f6eedc;
+  --ink: #f0e6d4;
+  --muted: #b5a08a;
+  --line: rgba(212, 180, 90, 0.3);
+  --display: "Cormorant Garamond", Georgia, serif;
+  --sans: "Manrope", system-ui, sans-serif;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --scroll: 0;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal, .door, .cover-toran, .cover-cta, .lamp-glow, .kolam-breathe,
+  .hero-scene, .nameplate, .hero-meta, .motif-sticky, .progress-bar,
+  .event-rail::after, .scroll-cue { animation: none !important; transition: none !important; }
+  .reveal { opacity: 1 !important; transform: none !important; filter: none !important; }
+  .hero-scene, .nameplate, .hero-meta { opacity: 1 !important; transform: none !important; }
+  .motif-beat { height: auto !important; }
+  .motif-sticky { position: relative !important; height: auto !important; min-height: 50vh; }
+}
+body {
+  font-family: var(--display);
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+img { max-width: 100%; display: block; }
+a, button { -webkit-tap-highlight-color: transparent; font: inherit; }
+
+.atmosphere {
+  position: fixed; inset: 0; z-index: -2; pointer-events: none;
+  background:
+    radial-gradient(ellipse 95% 50% at 50% -6%, rgba(212,180,90,0.12), transparent 55%),
+    radial-gradient(ellipse 45% 40% at 0% 38%, rgba(122,36,52,0.34), transparent 62%),
+    radial-gradient(ellipse 44% 46% at 100% 72%, rgba(22,74,58,0.28), transparent 60%),
+    linear-gradient(180deg, #050304 0%, #11090c 45%, #0a100e 100%);
+}
+.grain {
+  position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px;
+}
+
+/* Scroll progress */
+.progress {
+  position: fixed; top: 0; left: 0; right: 0; height: 2px; z-index: 90;
+  background: rgba(212,180,90,0.12);
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+#invite.show ~ .progress,
+body.is-open .progress { opacity: 1; }
+.progress-bar {
+  height: 100%; width: 0%;
+  background: linear-gradient(90deg, var(--brass), var(--brass-soft));
+  box-shadow: 0 0 12px rgba(212,180,90,0.45);
+  transform-origin: left center;
+}
+
+/* Cover */
+#cover {
+  position: fixed; inset: 0; z-index: 100;
+  display: grid; place-items: center;
+}
+.door {
+  position: absolute; top: 0; bottom: 0; width: 50%;
+  overflow: hidden;
+  transition: transform 1.45s var(--ease);
+  background: linear-gradient(180deg, #4a1824 0%, #2a1016 48%, #123028 100%);
+}
+.door-left { left: 0; border-right: 1px solid var(--line); }
+.door-right { right: 0; border-left: 1px solid var(--line); }
+.door-face {
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(180deg, rgba(8,4,6,0.28), transparent 24%, transparent 76%, rgba(8,4,6,0.55)),
+    url("https://www.wedbliss.co/templates/motifs/web/temple-door.webp") center 52% / contain no-repeat;
+}
+.door-right .door-face { transform: scaleX(-1); }
+#cover.open .door-left { transform: translateX(-105%); }
+#cover.open .door-right { transform: translateX(105%); }
+#cover.open { pointer-events: none; }
+.cover-toran {
+  position: absolute; top: 0; left: 0; right: 0; z-index: 2;
+  height: clamp(96px, 15vw, 140px);
+  object-fit: cover; object-position: center 28%;
+  mix-blend-mode: screen; pointer-events: none;
+  -webkit-mask-image: linear-gradient(180deg, #000 42%, transparent);
+  mask-image: linear-gradient(180deg, #000 42%, transparent);
+  transition: transform 1.35s var(--ease), opacity 0.6s ease;
+}
+#cover.open .cover-toran { transform: translateY(-120%); opacity: 0; }
+.cover-cta {
+  position: relative; z-index: 3; text-align: center;
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+#cover.open .cover-cta { opacity: 0; transform: translateY(12px) scale(0.96); }
+.cover-cta .lamp {
+  width: 52px; margin: 0 auto 1.15rem;
+  filter: drop-shadow(0 12px 28px rgba(0,0,0,0.5));
+}
+.cover-cta p {
+  font-family: var(--sans); font-size: 0.72rem; font-weight: 600;
+  letter-spacing: 0.24em; text-transform: uppercase;
+  color: var(--brass-soft); margin-bottom: 1.35rem;
+}
+.cover-open {
+  appearance: none; cursor: pointer;
+  font-family: var(--sans); font-size: 0.8rem; font-weight: 600;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--cream);
+  background: rgba(122,36,52,0.62);
+  border: 1px solid rgba(212,180,90,0.5);
+  padding: 0.95rem 1.7rem; min-height: 50px;
+  transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+}
+.cover-open:hover { background: rgba(122,36,52,0.9); border-color: var(--brass); transform: translateY(-1px); }
+.cover-open:focus-visible { outline: 2px solid var(--brass); outline-offset: 3px; }
+
+#invite {
+  opacity: 0; visibility: hidden;
+  transition: opacity 0.7s ease 0.35s;
+}
+#invite.show { opacity: 1; visibility: visible; }
+
+.rail {
+  position: fixed; right: 1rem; top: 50%; transform: translateY(-50%);
+  z-index: 40; display: flex; flex-direction: column; gap: 0.7rem;
+  opacity: 0; transition: opacity 0.6s ease 1s;
+}
+#invite.show .rail { opacity: 1; }
+.rail a {
+  width: 7px; height: 7px; border-radius: 50%;
+  border: 1px solid rgba(212,180,90,0.5);
+  background: transparent; text-indent: -9999px; overflow: hidden;
+  transition: background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+}
+.rail a:hover, .rail a.active {
+  background: var(--brass); transform: scale(1.35);
+  box-shadow: 0 0 0 4px rgba(212,180,90,0.15);
+}
+@media (max-width: 760px) { .rail { display: none; } }
+
+.wrap { width: min(680px, 90vw); margin: 0 auto; padding-bottom: 4.5rem; }
+
+/* Hero */
+.hero {
+  min-height: 100svh;
+  display: grid; place-items: center;
+  text-align: center;
+  padding: 5.5rem 1.25rem 5rem;
+  position: relative; isolation: isolate; overflow: hidden;
+}
+.hero-scene {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  opacity: 0; transition: opacity 1.1s ease 0.2s;
+  will-change: transform;
+}
+#invite.show .hero-scene { opacity: 1; }
+.hero-toran {
+  position: absolute; top: 0; left: 0; right: 0;
+  height: clamp(88px, 13vw, 124px);
+  object-fit: cover; object-position: center 30%;
+  mix-blend-mode: screen; opacity: 0.78;
+  -webkit-mask-image: linear-gradient(180deg, #000 45%, transparent);
+  mask-image: linear-gradient(180deg, #000 45%, transparent);
+}
+.hero-pillar {
+  position: absolute; top: 10%; bottom: 0; width: min(26vw, 200px);
+  opacity: 0.3; mix-blend-mode: soft-light;
+  will-change: transform;
+}
+.hero-pillar-l {
+  left: -2%;
+  background: url("https://www.wedbliss.co/templates/motifs/web/temple-door.webp") left center / contain no-repeat;
+  -webkit-mask-image: linear-gradient(90deg, #000 12%, transparent 90%);
+  mask-image: linear-gradient(90deg, #000 12%, transparent 90%);
+}
+.hero-pillar-r {
+  right: -2%; transform: scaleX(-1);
+  background: url("https://www.wedbliss.co/templates/motifs/web/temple-door.webp") right center / contain no-repeat;
+  -webkit-mask-image: linear-gradient(90deg, #000 12%, transparent 90%);
+  mask-image: linear-gradient(90deg, #000 12%, transparent 90%);
+}
+.hero-glow {
+  position: absolute; left: 50%; top: 38%; transform: translate(-50%, -50%);
+  width: min(460px, 84vw); height: min(460px, 84vw);
+  background: radial-gradient(circle, rgba(212,180,90,0.16), transparent 68%);
+}
+.hero-floor {
+  position: absolute; left: 50%; bottom: 0; transform: translateX(-50%);
+  width: min(720px, 106vw); opacity: 0.52; mix-blend-mode: screen;
+  will-change: transform, opacity;
+  -webkit-mask-image: linear-gradient(180deg, transparent, #000 22%, #000 70%, transparent 96%);
+  mask-image: linear-gradient(180deg, transparent, #000 22%, #000 70%, transparent 96%);
+}
+.kolam-breathe { animation: kolamBreathe 8s ease-in-out infinite; }
+@keyframes kolamBreathe {
+  0%, 100% { opacity: 0.44; }
+  50% { opacity: 0.62; }
+}
+.hero::after {
+  content: "";
+  position: absolute; inset: auto 0 0; height: 34%;
+  background: linear-gradient(180deg, transparent, rgba(5,2,4,0.92));
+  z-index: 1; pointer-events: none;
+}
+.hero-inner {
+  position: relative; z-index: 3; max-width: 34rem;
+  will-change: transform, opacity;
+}
+.lamp-wrap {
+  position: relative; width: 48px; margin: 0 auto 1.15rem;
+  opacity: 0; transform: translateY(16px) scale(0.92);
+  transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
+}
+#invite.show .lamp-wrap { opacity: 1; transform: none; transition-delay: 0.45s; }
+.lamp-wrap img {
+  width: 100%; position: relative; z-index: 1;
+  filter: drop-shadow(0 12px 28px rgba(0,0,0,0.5));
+}
+.lamp-glow {
+  position: absolute; left: 50%; top: 14%; width: 52px; height: 52px; margin-left: -26px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,196,90,0.55), transparent 70%);
+  animation: flame 2.6s ease-in-out infinite;
+}
+@keyframes flame {
+  0%, 100% { opacity: 0.5; transform: scale(0.9); }
+  50% { opacity: 0.95; transform: scale(1.1); }
+}
+.nameplate {
+  opacity: 0; transform: translateY(22px);
+  transition: opacity 0.95s var(--ease), transform 0.95s var(--ease);
+}
+#invite.show .nameplate { opacity: 1; transform: none; transition-delay: 0.65s; }
+.nameplate h1 {
+  font-size: clamp(3rem, 11vw, 4.6rem);
+  font-weight: 600; line-height: 0.96; color: var(--cream);
+  letter-spacing: -0.015em;
+  text-shadow: 0 16px 36px rgba(0,0,0,0.4);
+}
+.nameplate h1 span {
+  display: block; font-style: italic; font-weight: 400;
+  font-size: 0.3em; color: var(--brass);
+  margin: 0.38rem 0 0.22rem; letter-spacing: 0.1em;
+}
+.hero-meta {
+  opacity: 0; transform: translateY(16px);
+  transition: opacity 0.85s var(--ease), transform 0.85s var(--ease);
+}
+#invite.show .hero-meta { opacity: 1; transform: none; transition-delay: 0.95s; }
+.hero-date {
+  margin-top: 1.3rem;
+  font-size: clamp(1.12rem, 2.6vw, 1.28rem);
+  font-weight: 500; color: var(--ink);
+}
+.hero-date em {
+  display: block; margin-top: 0.35rem;
+  font-family: var(--sans); font-style: normal; font-weight: 500;
+  font-size: 0.74rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--brass-soft);
+}
+.hero-venue {
+  margin-top: 0.55rem;
+  font-family: var(--sans); font-size: 0.9rem; color: var(--muted);
+}
+.scroll-cue {
+  position: absolute; left: 50%; bottom: 1.5rem; transform: translateX(-50%);
+  z-index: 4;
+  opacity: 0;
+  transition: opacity 0.8s ease 1.4s;
+  font-family: var(--sans); font-size: 0.64rem; font-weight: 500;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: rgba(232,208,138,0.55);
+  text-decoration: none;
+}
+#invite.show .scroll-cue { opacity: 1; }
+.scroll-cue::after {
+  content: "";
+  display: block; width: 1px; height: 32px; margin: 0.55rem auto 0;
+  background: linear-gradient(180deg, var(--brass), transparent);
+  animation: cuePulse 2s ease-in-out infinite;
+}
+@keyframes cuePulse {
+  0%, 100% { opacity: 0.35; transform: scaleY(0.85); }
+  50% { opacity: 1; transform: scaleY(1); }
+}
+
+/* Sticky motif interludes */
+.motif-beat {
+  position: relative;
+  height: 160vh;
+}
+.motif-sticky {
+  position: sticky; top: 0;
+  height: 100svh;
+  display: grid; place-items: center;
+  overflow: hidden;
+  text-align: center;
+  padding: 2rem 1.25rem;
+}
+.motif-sticky::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 55% at 50% 48%, rgba(212,180,90,0.1), transparent 68%);
+  pointer-events: none;
+}
+.motif-art {
+  position: relative; z-index: 1;
+  width: min(220px, 48vw);
+  filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5));
+  will-change: transform, opacity, filter;
+  transform: scale(0.82); opacity: 0.35;
+}
+.motif-copy {
+  position: relative; z-index: 1;
+  margin-top: 1.35rem;
+  max-width: 22rem;
+  opacity: 0; transform: translateY(18px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.motif-beat.is-active .motif-copy {
+  opacity: 1; transform: none;
+}
+.motif-copy p {
+  font-family: var(--sans); font-size: 0.7rem; font-weight: 600;
+  letter-spacing: 0.2em; text-transform: uppercase; color: var(--brass);
+  margin-bottom: 0.45rem;
+}
+.motif-copy h2 {
+  font-size: clamp(1.55rem, 4vw, 2rem);
+  font-weight: 600; color: var(--cream); line-height: 1.2;
+}
+.motif-beat[data-theme="gold"] .motif-sticky::before {
+  background: radial-gradient(ellipse 70% 55% at 50% 48%, rgba(212,180,90,0.14), transparent 68%);
+}
+.motif-beat[data-theme="music"] .motif-sticky::before {
+  background: radial-gradient(ellipse 70% 55% at 50% 48%, rgba(22,74,58,0.22), transparent 68%);
+}
+.motif-beat[data-theme="temple"] .motif-sticky::before {
+  background: radial-gradient(ellipse 70% 55% at 50% 48%, rgba(122,36,52,0.22), transparent 68%);
+}
+@media (max-width: 640px) {
+  .motif-beat { height: 135vh; }
+  .motif-art { width: min(180px, 52vw); }
+}
+
+/* Sections */
+section.block { padding: 4.5rem 0 0.25rem; }
+.divider {
+  display: flex; align-items: center; justify-content: center;
+  gap: 1rem; margin-bottom: 1.5rem;
+}
+.divider .bar {
+  width: min(56px, 14vw); height: 1px;
+  background: linear-gradient(90deg, transparent, var(--brass), transparent);
+  opacity: 0.65;
+}
+.divider img {
+  width: 40px;
+  filter: drop-shadow(0 8px 16px rgba(0,0,0,0.4));
+}
+.section-label {
+  text-align: center;
+  font-family: var(--sans); font-size: 0.7rem; font-weight: 600;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--brass); margin-bottom: 0.4rem;
+}
+.section-title {
+  text-align: center;
+  font-size: clamp(1.65rem, 3.8vw, 2.1rem);
+  font-weight: 600; color: var(--cream);
+  margin-bottom: 2rem; line-height: 1.2;
+}
+
+/* Family */
+.family-stage { position: relative; }
+.family-wm {
+  position: absolute; left: 50%; top: 45%; transform: translate(-50%, -50%);
+  width: min(220px, 52vw); opacity: 0.06; mix-blend-mode: screen; pointer-events: none;
+}
+.family {
+  position: relative; z-index: 1;
+  display: grid; grid-template-columns: 1fr auto 1fr;
+  gap: 1.25rem 1.35rem; align-items: stretch; text-align: center;
+}
+@media (max-width: 600px) {
+  .family { grid-template-columns: 1fr; gap: 1.5rem; }
+  .family-mark { order: -1; margin: 0 auto; }
+}
+.family-card {
+  padding: 1.6rem 1.15rem 1.7rem;
+  background: linear-gradient(180deg, rgba(122,36,52,0.14), rgba(8,4,6,0.25));
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid rgba(212,180,90,0.12);
+}
+.family-card .side {
+  font-family: var(--sans); font-size: 0.68rem; font-weight: 600;
+  letter-spacing: 0.16em; text-transform: uppercase; color: var(--brass);
+  margin-bottom: 0.5rem;
+}
+.family-card h2 {
+  font-size: clamp(1.55rem, 3.4vw, 1.9rem); font-weight: 600; color: var(--cream);
+}
+.family-card .parents {
+  margin-top: 0.85rem;
+  font-family: var(--sans); font-size: 0.9rem; color: var(--muted); line-height: 1.55;
+}
+.family-card .parents strong {
+  display: block; font-weight: 500; color: rgba(240,230,212,0.88); margin-bottom: 0.2rem;
+  font-size: 0.78rem; letter-spacing: 0.04em;
+}
+.family-mark {
+  width: 52px; align-self: center;
+  filter: drop-shadow(0 10px 22px rgba(0,0,0,0.45));
+}
+
+/* Events timeline */
+.event-rail {
+  position: relative;
+  display: grid; gap: 0;
+  padding-left: 0.15rem;
+}
+.event-rail::before {
+  content: "";
+  position: absolute; left: 5px; top: 0.55rem; bottom: 0.55rem;
+  width: 1px; background: rgba(212,180,90,0.18);
+}
+.event-rail::after {
+  content: "";
+  position: absolute; left: 5px; top: 0.55rem;
+  width: 1px; height: 0%;
+  background: linear-gradient(180deg, var(--brass), rgba(212,180,90,0.35));
+  box-shadow: 0 0 10px rgba(212,180,90,0.35);
+  transition: height 0.05s linear;
+}
+.event-beat {
+  position: relative;
+  padding: 0 0 2.35rem 2rem;
+  opacity: 0.45;
+  transform: translateX(12px);
+  transition: opacity 0.55s var(--ease), transform 0.55s var(--ease);
+}
+.event-beat:last-child { padding-bottom: 0.25rem; }
+.event-beat.on {
+  opacity: 1; transform: none;
+}
+.event-beat::before {
+  content: "";
+  position: absolute; left: 0; top: 0.45rem;
+  width: 11px; height: 11px; border-radius: 50%;
+  background: rgba(212,180,90,0.35);
+  border: 1px solid rgba(212,180,90,0.5);
+  z-index: 1;
+  transition: background 0.35s ease, box-shadow 0.35s ease, transform 0.35s ease;
+}
+.event-beat.on::before {
+  background: var(--brass);
+  box-shadow: 0 0 0 5px rgba(212,180,90,0.16), 0 0 18px rgba(212,180,90,0.35);
+  transform: scale(1.15);
+}
+.event-beat h3 {
+  font-size: clamp(1.45rem, 3.2vw, 1.75rem);
+  font-weight: 600; color: var(--cream); line-height: 1.15;
+}
+.event-beat .when {
+  margin-top: 0.55rem;
+  font-family: var(--sans); font-size: 0.92rem; color: var(--ink);
+}
+.event-beat .where {
+  margin-top: 0.25rem;
+  font-family: var(--sans); font-size: 0.9rem; color: var(--muted);
+}
+.event-actions {
+  display: flex; flex-wrap: wrap; gap: 0.75rem 1.2rem; margin-top: 1rem;
+}
+.event-actions a, .event-actions button {
+  appearance: none; cursor: pointer; border: 0; background: none; padding: 0;
+  font-family: var(--sans); font-size: 0.78rem; font-weight: 500;
+  letter-spacing: 0.05em; color: var(--brass-soft);
+  text-decoration: none; border-bottom: 1px solid rgba(212,180,90,0.4);
+  padding-bottom: 0.12rem;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+.event-actions a:hover, .event-actions button:hover { color: var(--cream); border-color: var(--brass); }
+
+.countdown {
+  margin-top: 2.5rem;
+  text-align: center;
+  padding: 1.85rem 1.15rem 1.75rem;
+  border: 1px solid rgba(212,180,90,0.22);
+  background:
+    radial-gradient(ellipse 70% 90% at 50% 40%, rgba(212,180,90,0.07), transparent 70%),
+    var(--panel);
+}
+.countdown .section-label { margin-bottom: 0.85rem; }
+.cd-grid {
+  display: flex; justify-content: center; gap: clamp(0.65rem, 2.8vw, 1.25rem);
+}
+.cd-box {
+  min-width: clamp(68px, 20vw, 92px);
+  padding: 0.95rem 0.5rem 0.8rem;
+  border: 1px solid rgba(212,180,90,0.28);
+  background: rgba(8,4,6,0.45);
+  transform: translateY(14px) scale(0.94); opacity: 0;
+  transition: transform 0.7s var(--ease), opacity 0.7s var(--ease);
+}
+.countdown.in .cd-box { transform: none; opacity: 1; }
+.countdown.in .cd-box:nth-child(2) { transition-delay: 0.1s; }
+.countdown.in .cd-box:nth-child(3) { transition-delay: 0.2s; }
+.cd-box strong {
+  display: block;
+  font-size: clamp(1.5rem, 4vw, 1.9rem);
+  font-weight: 600; color: var(--cream); line-height: 1;
+}
+.cd-box small {
+  display: block; margin-top: 0.4rem;
+  font-family: var(--sans); font-size: 0.64rem; font-weight: 600;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--brass);
+}
+
+/* Gallery */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+.gallery-grid img {
+  width: 100%; aspect-ratio: 4/5; object-fit: cover;
+  border: 1px solid rgba(212,180,90,0.22);
+  filter: saturate(0.94) contrast(1.04);
+  clip-path: inset(8% 8% 8% 8%);
+  transform: scale(1.06);
+  opacity: 0.35;
+  transition: clip-path 1s var(--ease), transform 1s var(--ease), opacity 0.8s ease, border-color 0.25s ease;
+}
+.gallery-grid img.in {
+  clip-path: inset(0 0 0 0);
+  transform: none;
+  opacity: 1;
+}
+.gallery-grid img:hover { border-color: var(--brass); }
+@media (min-width: 640px) {
+  .gallery-grid { grid-template-columns: 1.4fr 1fr; gap: 0.9rem; }
+  .gallery-grid img:first-child { aspect-ratio: 5/6; }
+}
+
+/* Video */
+.video-frame {
+  position: relative;
+  border: 1px solid rgba(212,180,90,0.25);
+  padding: 0.55rem;
+  background: rgba(8,4,6,0.5);
+  transform: perspective(900px) rotateX(4deg) scale(0.97);
+  opacity: 0.5;
+  transition: transform 0.9s var(--ease), opacity 0.9s ease;
+}
+.video-frame.in {
+  transform: none; opacity: 1;
+}
+.video-frame::before {
+  content: "";
+  position: absolute; left: 50%; top: -20px; transform: translateX(-50%);
+  width: 52px; height: 26px;
+  background: url("https://www.wedbliss.co/templates/motifs/web/thoranam.webp") center / contain no-repeat;
+  opacity: 0.65; mix-blend-mode: screen; pointer-events: none;
+}
+.video-embed {
+  position: relative; width: 100%; aspect-ratio: 16/9;
+  border: 0; background: #000;
+}
+
+/* Notes */
+.notes { display: grid; gap: 0.95rem; }
+@media (min-width: 640px) { .notes { grid-template-columns: 1fr 1fr; gap: 1.1rem; } }
+.note {
+  padding: 1.55rem 1.3rem 1.45rem;
+  background: linear-gradient(160deg, rgba(22,74,58,0.18), rgba(8,4,6,0.4));
+  border-top: 1px solid var(--line);
+  text-align: center;
+}
+.note p {
+  font-size: clamp(1.05rem, 2.4vw, 1.2rem);
+  font-style: italic; color: var(--cream); line-height: 1.5;
+}
+.note cite {
+  display: block; margin-top: 1rem;
+  font-family: var(--sans); font-style: normal; font-size: 0.7rem; font-weight: 600;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--brass);
+}
+
+.closing { text-align: center; padding: 4.25rem 0 1.5rem; }
+.closing img {
+  width: 80px; margin: 0 auto 1rem;
+  filter: drop-shadow(0 12px 26px rgba(0,0,0,0.45));
+}
+.closing .names { font-size: 1.4rem; font-weight: 600; color: var(--cream); }
+.closing .brand {
+  margin-top: 1.35rem;
+  font-family: var(--sans); font-size: 0.66rem; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--muted);
+}
+.closing .brand a { color: var(--brass-soft); text-decoration: none; }
+
+/* Reveals */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  filter: blur(5px);
+  transition:
+    opacity 0.9s var(--ease),
+    transform 0.9s var(--ease),
+    filter 0.9s var(--ease);
+}
+.reveal.from-left { transform: translateX(-28px); }
+.reveal.from-right { transform: translateX(28px); }
+.reveal.scale-in { transform: translateY(16px) scale(0.94); }
+.reveal.in {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+.reveal.d1 { transition-delay: 0.1s; }
+.reveal.d2 { transition-delay: 0.2s; }
+.reveal.d3 { transition-delay: 0.3s; }
+</style>
+</head>
+<body>
+<div class="atmosphere" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+<div class="progress" aria-hidden="true"><div class="progress-bar" id="progress-bar"></div></div>
+
+<div id="cover" role="dialog" aria-modal="true" aria-label="Open wedding invitation">
+  <img class="cover-toran" src="https://www.wedbliss.co/templates/motifs/web/thoranam.webp" alt="" />
+  <div class="door door-left" aria-hidden="true"><div class="door-face"></div></div>
+  <div class="door door-right" aria-hidden="true"><div class="door-face"></div></div>
+  <div class="cover-cta">
+    <img class="lamp" src="https://www.wedbliss.co/templates/motifs/web/vilakku.webp" alt="" />
+    <p>Wedding invitation</p>
+    <button type="button" class="cover-open" id="open-cover">Open</button>
+  </div>
+</div>
+
+<main id="invite">
+  <nav class="rail" aria-label="Sections">
+    <a href="#hero" class="active">Hero</a>
+    <a href="#family">Family</a>
+    <a href="#events">Events</a>
+    <a href="#gallery">Gallery</a>
+    <a href="#video">Video</a>
+    <a href="#notes">Notes</a>
+  </nav>
+
+  <header class="hero" id="hero">
+    <div class="hero-scene" id="hero-scene" aria-hidden="true">
+      <img class="hero-toran" src="https://www.wedbliss.co/templates/motifs/web/thoranam.webp" alt="" />
+      <div class="hero-pillar hero-pillar-l" id="pillar-l"></div>
+      <div class="hero-pillar hero-pillar-r" id="pillar-r"></div>
+      <div class="hero-glow"></div>
+      <img class="hero-floor kolam-breathe" id="hero-floor" src="https://www.wedbliss.co/templates/motifs/web/kolam-hero.webp" alt="" />
+    </div>
+    <div class="hero-inner" id="hero-inner">
+      <div class="lamp-wrap">
+        <span class="lamp-glow" aria-hidden="true"></span>
+        <img src="https://www.wedbliss.co/templates/motifs/web/vilakku.webp" alt="" />
+      </div>
+      <div class="nameplate">
+        <h1>{{couple.groom.firstName}} <span>&amp;</span> {{couple.bride.firstName}}</h1>
+      </div>
+      <div class="hero-meta">
+        {{#each events}}{{#if @first}}
+        <p class="hero-date">{{date}}<em>{{title}} · {{startTime}}</em></p>
+        <p class="hero-venue">{{venueName}}</p>
+        {{/if}}{{/each}}
+      </div>
+    </div>
+    <a class="scroll-cue" href="#family">Scroll</a>
+  </header>
+
+  <div class="wrap">
+    <section class="block" id="family">
+      <div class="divider reveal"><span class="bar"></span><img src="https://www.wedbliss.co/templates/motifs/web/thaali.webp" alt="" /><span class="bar"></span></div>
+      <p class="section-label reveal">Family</p>
+      <h2 class="section-title reveal d1">With their families</h2>
+      <div class="family-stage">
+        <img class="family-wm" src="https://www.wedbliss.co/templates/motifs/web/gopuram.webp" alt="" />
+        <div class="family">
+          <article class="family-card reveal from-left">
+            <p class="side">Bride</p>
+            <h2>{{couple.bride.firstName}}</h2>
+            <div class="parents">
+              <strong>Daughter of</strong>
+              {{couple.bride.fatherName}} &amp; {{couple.bride.motherName}}
+            </div>
+          </article>
+          <img class="family-mark reveal scale-in d1" src="https://www.wedbliss.co/templates/motifs/web/thaali.webp" alt="" />
+          <article class="family-card reveal from-right d1">
+            <p class="side">Groom</p>
+            <h2>{{couple.groom.firstName}}</h2>
+            <div class="parents">
+              <strong>Son of</strong>
+              {{couple.groom.fatherName}} &amp; {{couple.groom.motherName}}
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Sticky motif beat: lamp -->
+  <section class="motif-beat" data-theme="gold" data-motif="lamp" aria-label="Blessing">
+    <div class="motif-sticky">
+      <img class="motif-art" src="https://www.wedbliss.co/templates/motifs/web/vilakku.webp" alt="" />
+      <div class="motif-copy">
+        <p>Blessing</p>
+        <h2>Light for the journey</h2>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <section class="block" id="events">
+      <div class="divider reveal"><span class="bar"></span><img src="https://www.wedbliss.co/templates/motifs/web/nadaswaram.webp" alt="" /><span class="bar"></span></div>
+      <p class="section-label reveal">Events</p>
+      <h2 class="section-title reveal d1">The day</h2>
+
+      <div class="event-rail" id="event-rail">
+        {{#each events}}
+        <article class="event-beat" data-date="{{date}}" data-start="{{startTime}}">
+          <h3>{{title}}</h3>
+          <p class="when">{{date}} · {{startTime}} — {{endTime}}</p>
+          <p class="where">{{venueName}}</p>
+          <div class="event-actions">
+            {{#if googleMapsUrl}}
+            <a href="{{googleMapsUrl}}" target="_blank" rel="noopener">Map</a>
+            {{/if}}
+            <button type="button" data-cal="{{title}}|{{date}}|{{startTime}}|{{endTime}}|{{venueName}}">Calendar</button>
+          </div>
+        </article>
+        {{/each}}
+      </div>
+
+      <div class="countdown" id="countdown">
+        <p class="section-label">Until the day</p>
+        <div class="cd-grid" id="cd-timer">
+          <div class="cd-box"><strong id="cd-days">00</strong><small>Days</small></div>
+          <div class="cd-box"><strong id="cd-hours">00</strong><small>Hours</small></div>
+          <div class="cd-box"><strong id="cd-mins">00</strong><small>Mins</small></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Sticky motif beat: music -->
+  <section class="motif-beat" data-theme="music" data-motif="music" aria-label="Celebration">
+    <div class="motif-sticky">
+      <img class="motif-art" src="https://www.wedbliss.co/templates/motifs/web/nadaswaram.webp" alt="" />
+      <div class="motif-copy">
+        <p>Celebration</p>
+        <h2>Music for the hour</h2>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap">
+    {{#if gallery.images}}
+    <section class="block" id="gallery">
+      <div class="divider reveal"><span class="bar"></span><img src="https://www.wedbliss.co/templates/motifs/web/kolam.webp" alt="" style="width:58px;opacity:0.85" /><span class="bar"></span></div>
+      <p class="section-label reveal">Gallery</p>
+      <h2 class="section-title reveal d1">Moments</h2>
+      <div class="gallery-grid">
+        {{#each gallery.images}}
+        <img src="{{this}}" alt="Couple photo" loading="lazy" />
+        {{/each}}
+      </div>
+    </section>
+    {{/if}}
+
+    {{#if media.videoUrl}}
+    <section class="block" id="video">
+      <div class="divider reveal"><span class="bar"></span><img src="https://www.wedbliss.co/templates/motifs/web/mayil.webp" alt="" style="width:52px" /><span class="bar"></span></div>
+      <p class="section-label reveal">Video</p>
+      <h2 class="section-title reveal d1">From us</h2>
+      <div class="video-frame">
+        <iframe class="video-embed" src="{{media.videoUrl}}" title="Couple video" allowfullscreen loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+      </div>
+    </section>
+    {{/if}}
+  </div>
+
+  <!-- Sticky motif beat: temple -->
+  <section class="motif-beat" data-theme="temple" data-motif="temple" aria-label="Together">
+    <div class="motif-sticky">
+      <img class="motif-art" src="https://www.wedbliss.co/templates/motifs/web/mayil.webp" alt="" />
+      <div class="motif-copy">
+        <p>Together</p>
+        <h2>A word from us</h2>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <section class="block" id="notes">
+      <div class="divider reveal"><span class="bar"></span><img src="https://www.wedbliss.co/templates/motifs/web/thaali.webp" alt="" /><span class="bar"></span></div>
+      <p class="section-label reveal">Notes</p>
+      <h2 class="section-title reveal d1">From the couple</h2>
+      <div class="notes">
+        {{#if couple.bride.notes}}
+        <blockquote class="note reveal from-left">
+          <p>“{{couple.bride.notes}}”</p>
+          <cite>{{couple.bride.firstName}}</cite>
+        </blockquote>
+        {{/if}}
+        {{#if couple.groom.notes}}
+        <blockquote class="note reveal from-right d1">
+          <p>“{{couple.groom.notes}}”</p>
+          <cite>{{couple.groom.firstName}}</cite>
+        </blockquote>
+        {{/if}}
+      </div>
+    </section>
+
+    <footer class="closing">
+      <img class="reveal scale-in" src="https://www.wedbliss.co/templates/motifs/web/mayil.webp" alt="" />
+      <p class="names reveal d1">{{couple.groom.firstName}} &amp; {{couple.bride.firstName}}</p>
+      <p class="brand reveal d2">Wedbliss · <a href="https://wedbliss.co" target="_blank" rel="noopener">wedbliss.co</a></p>
+    </footer>
+  </div>
+</main>
+
+<script>
+(function () {
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var opened = false;
+
+  function parseDT(d, t) {
+    var months = {January:0,February:1,March:2,April:3,May:4,June:5,July:6,August:7,September:8,October:9,November:10,December:11};
+    var parts = d.replace(',','').split(/\s+/);
+    var day = parseInt(parts[0],10), month = months[parts[1]], year = parseInt(parts[2],10);
+    var tm = t.match(/(\d+):(\d+)\s*(AM|PM)/i);
+    var h = parseInt(tm[1],10), m = parseInt(tm[2],10), ap = tm[3].toUpperCase();
+    if (ap === 'PM' && h < 12) h += 12;
+    if (ap === 'AM' && h === 12) h = 0;
+    return new Date(year, month, day, h, m, 0);
+  }
+  function fmt(dt) {
+    function p(n){ return String(n).padStart(2,'0'); }
+    return dt.getUTCFullYear()+p(dt.getUTCMonth()+1)+p(dt.getUTCDate())+'T'+p(dt.getUTCHours())+p(dt.getUTCMinutes())+'00Z';
+  }
+  document.querySelectorAll('[data-cal]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var p = btn.getAttribute('data-cal').split('|');
+      var s = parseDT(p[1], p[2]), e = parseDT(p[1], p[3]);
+      var ics = ['BEGIN:VCALENDAR','VERSION:2.0','BEGIN:VEVENT','DTSTART:'+fmt(s),'DTEND:'+fmt(e),'SUMMARY:{{couple.groom.firstName}} & {{couple.bride.firstName}} — '+p[0],'LOCATION:'+p[4],'END:VEVENT','END:VCALENDAR'].join('\n');
+      var a = document.createElement('a');
+      a.href = 'data:text/calendar;charset=utf-8,'+encodeURIComponent(ics);
+      a.download = p[0].toLowerCase()+'.ics';
+      a.click();
+    });
+  });
+
+  function bindReveals() {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          e.target.classList.add('in');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.16, rootMargin: '0px 0px -10% 0px' });
+    document.querySelectorAll('.reveal, .gallery-grid img, .video-frame, .countdown').forEach(function (el) {
+      io.observe(el);
+    });
+  }
+
+  function startCountdown() {
+    var first = document.querySelector('.event-beat[data-date]');
+    if (!first) return;
+    var target = parseDT(first.getAttribute('data-date'), first.getAttribute('data-start') || '12:00 AM');
+    var daysEl = document.getElementById('cd-days');
+    var hoursEl = document.getElementById('cd-hours');
+    var minsEl = document.getElementById('cd-mins');
+    var animated = false;
+
+    function values() {
+      var diff = Math.max(0, target - new Date());
+      return {
+        days: Math.floor(diff / 86400000),
+        hours: Math.floor((diff % 86400000) / 3600000),
+        mins: Math.floor((diff % 3600000) / 60000)
+      };
+    }
+    function set(v) {
+      daysEl.textContent = String(v.days).padStart(2,'0');
+      hoursEl.textContent = String(v.hours).padStart(2,'0');
+      minsEl.textContent = String(v.mins).padStart(2,'0');
+    }
+    function animateTo(v) {
+      if (reduce || animated) { set(v); return; }
+      animated = true;
+      var start = performance.now();
+      var dur = 1100;
+      function frame(now) {
+        var t = Math.min(1, (now - start) / dur);
+        var e = 1 - Math.pow(1 - t, 3);
+        daysEl.textContent = String(Math.round(v.days * e)).padStart(2,'0');
+        hoursEl.textContent = String(Math.round(v.hours * e)).padStart(2,'0');
+        minsEl.textContent = String(Math.round(v.mins * e)).padStart(2,'0');
+        if (t < 1) requestAnimationFrame(frame);
+        else set(v);
+      }
+      requestAnimationFrame(frame);
+    }
+
+    var cd = document.getElementById('countdown');
+    var cdIo = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          animateTo(values());
+          cdIo.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.4 });
+    cdIo.observe(cd);
+    setInterval(function () { if (animated) set(values()); }, 30000);
+  }
+
+  function bindRail() {
+    var links = Array.prototype.slice.call(document.querySelectorAll('.rail a'));
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        links.forEach(function (a) {
+          a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id);
+        });
+      });
+    }, { threshold: 0.28 });
+    links.forEach(function (a) {
+      var el = document.getElementById(a.getAttribute('href').slice(1));
+      if (el) io.observe(el);
+    });
+  }
+
+  function clamp(n, a, b) { return Math.max(a, Math.min(b, n)); }
+
+  function onScroll() {
+    if (!opened) return;
+    var doc = document.documentElement;
+    var max = Math.max(1, doc.scrollHeight - window.innerHeight);
+    var p = window.scrollY / max;
+    document.getElementById('progress-bar').style.width = (p * 100) + '%';
+
+    // Hero parallax + fade
+    var hero = document.getElementById('hero');
+    var hr = hero.getBoundingClientRect();
+    var hp = clamp(1 - hr.bottom / (hr.height + window.innerHeight * 0.2), 0, 1);
+    if (!reduce) {
+      var y = window.scrollY;
+      var floor = document.getElementById('hero-floor');
+      var inner = document.getElementById('hero-inner');
+      var pl = document.getElementById('pillar-l');
+      var pr = document.getElementById('pillar-r');
+      if (floor) floor.style.transform = 'translateX(-50%) translateY(' + (y * 0.18) + 'px) scale(' + (1 + hp * 0.08) + ')';
+      if (inner) {
+        inner.style.transform = 'translateY(' + (y * 0.12) + 'px)';
+        inner.style.opacity = String(1 - hp * 1.15);
+      }
+      if (pl) pl.style.transform = 'translateX(' + (-y * 0.04) + 'px)';
+      if (pr) pr.style.transform = 'scaleX(-1) translateX(' + (-y * 0.04) + 'px)';
+      var cue = document.querySelector('.scroll-cue');
+      if (cue) cue.style.opacity = String(clamp(1 - y / 180, 0, 1));
+    }
+
+    // Motif sticky progress
+    document.querySelectorAll('.motif-beat').forEach(function (beat) {
+      var r = beat.getBoundingClientRect();
+      var total = beat.offsetHeight - window.innerHeight;
+      var prog = clamp(-r.top / Math.max(1, total), 0, 1);
+      var art = beat.querySelector('.motif-art');
+      beat.classList.toggle('is-active', prog > 0.12 && prog < 0.92);
+      if (art && !reduce) {
+        var scale = 0.78 + prog * 0.34;
+        var op = 0.25 + Math.sin(prog * Math.PI) * 0.75;
+        art.style.transform = 'scale(' + scale + ') translateY(' + ((0.5 - prog) * 40) + 'px)';
+        art.style.opacity = String(op);
+        art.style.filter = 'drop-shadow(0 20px 40px rgba(0,0,0,0.5)) brightness(' + (0.85 + prog * 0.3) + ')';
+      }
+    });
+
+    // Timeline fill + active beats
+    var rail = document.getElementById('event-rail');
+    if (rail) {
+      var rr = rail.getBoundingClientRect();
+      var start = window.innerHeight * 0.72;
+      var end = window.innerHeight * 0.28;
+      var fill = clamp((start - rr.top) / Math.max(1, rr.height + (start - end)), 0, 1);
+      rail.style.setProperty('--fill', (fill * 100) + '%');
+      rail.style.setProperty('height', rail.offsetHeight + 'px'); // noop stable
+      // use ::after height via inline style on a tracker element — set via CSS var
+      rail.style.setProperty('--rail-fill', (fill * 100) + '%');
+      var afterH = fill * 100;
+      // Directly style via attribute for ::after using CSS variable
+      document.documentElement.style.setProperty('--event-fill', afterH + '%');
+
+      rail.querySelectorAll('.event-beat').forEach(function (beat) {
+        var br = beat.getBoundingClientRect();
+        beat.classList.toggle('on', br.top < window.innerHeight * 0.68);
+      });
+    }
+  }
+
+  // Wire CSS var for timeline fill
+  var styleBoost = document.createElement('style');
+  styleBoost.textContent = '.event-rail::after{height:var(--event-fill,0%)}';
+  document.head.appendChild(styleBoost);
+
+  var ticking = false;
+  function requestScroll() {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(function () {
+      onScroll();
+      ticking = false;
+    });
+  }
+
+  document.getElementById('open-cover').addEventListener('click', function () {
+    var cover = document.getElementById('cover');
+    var invite = document.getElementById('invite');
+    cover.classList.add('open');
+    invite.classList.add('show');
+    document.body.classList.add('is-open');
+    opened = true;
+    bindReveals();
+    bindRail();
+    startCountdown();
+    onScroll();
+    window.addEventListener('scroll', requestScroll, { passive: true });
+    window.addEventListener('resize', requestScroll);
+    setTimeout(function () {
+      cover.style.display = 'none';
+    }, reduce ? 60 : 1600);
+  });
+})();
+</script>
+</body>
+</html>

@@ -22,18 +22,13 @@ export default function Hero() {
                 urlMap[t.id] = t.demo_url || null;
             });
             setLiveUrls(urlMap);
-            const heroes = dbTemplates.filter(t => t.is_hero);
+            const heroes = dbTemplates.filter(t => t.is_hero && t.is_live && !!t.demo_url);
 
-            // Sort: Live + Demo URL first, then Live, then Coming Soon
             heroes.sort((a, b) => {
-                const aReady = a.is_live && !!a.demo_url;
-                const bReady = b.is_live && !!b.demo_url;
-
-                if (aReady && !bReady) return -1;
-                if (!aReady && bReady) return 1;
-                if (a.is_live && !b.is_live) return -1;
-                if (!a.is_live && b.is_live) return 1;
-                return 0;
+                const aThumb = a.thumbnail_url ? 1 : 0;
+                const bThumb = b.thumbnail_url ? 1 : 0;
+                if (aThumb !== bThumb) return bThumb - aThumb;
+                return a.name.localeCompare(b.name);
             });
 
             setHeroTemplates(heroes);

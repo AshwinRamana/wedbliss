@@ -248,26 +248,25 @@ export default function Templates() {
         const fetchTemplates = async () => {
             const dbTemplates = await getTemplates();
 
-            const allTemplates = dbTemplates.map(db => ({
-                id: db.id,
-                name: db.name,
-                tier: (db.tier as "basic" | "premium") || "basic",
-                desc: db.description || "A beautifully crafted custom design.",
-                isLive: db.is_live,
-                href: db.demo_url ?? undefined,
-                thumbnailUrl: db.thumbnail_url ?? null,
-            }));
+            const allTemplates = dbTemplates
+                .filter(db => !db.id.startsWith("tm-demo-"))
+                .filter(db => db.is_live && !!db.demo_url)
+                .map(db => ({
+                    id: db.id,
+                    name: db.name,
+                    tier: (db.tier as "basic" | "premium") || "basic",
+                    desc: db.description || "A beautifully crafted custom design.",
+                    isLive: db.is_live,
+                    href: db.demo_url ?? undefined,
+                    thumbnailUrl: db.thumbnail_url ?? null,
+                }));
 
-            // Sort: Live + Demo URL first, then Live, then Coming Soon
+            // Ready demos first; prefer templates with thumbnails
             allTemplates.sort((a, b) => {
-                const aReady = a.isLive && !!a.href;
-                const bReady = b.isLive && !!b.href;
-
-                if (aReady && !bReady) return -1;
-                if (!aReady && bReady) return 1;
-                if (a.isLive && !b.isLive) return -1;
-                if (!a.isLive && b.isLive) return 1;
-                return 0;
+                const aThumb = a.thumbnailUrl ? 1 : 0;
+                const bThumb = b.thumbnailUrl ? 1 : 0;
+                if (aThumb !== bThumb) return bThumb - aThumb;
+                return a.name.localeCompare(b.name);
             });
 
             setTemplates(allTemplates);

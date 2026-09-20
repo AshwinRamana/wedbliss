@@ -3,8 +3,8 @@
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import Link from "next/link";
-import Nav from "@/components/marketing/Nav";
-import Footer from "@/components/marketing/Footer";
+
+
 
 function SuccessContent() {
     const searchParams = useSearchParams();
@@ -19,7 +19,7 @@ function SuccessContent() {
                 <div className="absolute bottom-[20%] left-[25%] w-5 h-5 bg-amber-400 rounded-full blur-[1px] animate-float"></div>
             </div>
 
-            <Nav />
+
 
             <main className="flex-1 w-full max-w-4xl mx-auto px-4 pt-40 pb-20 relative z-10 flex flex-col items-center">
                 <div className="w-full max-w-lg bg-white/50 backdrop-blur-3xl border border-white/60 rounded-[48px] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.12)] p-10 sm:p-14 text-center relative overflow-hidden">
@@ -81,7 +81,7 @@ function SuccessContent() {
                 </div>
             </main>
 
-            <Footer />
+
 
             <style jsx>{`
                 @keyframes float {

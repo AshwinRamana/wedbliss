@@ -1,13 +1,17 @@
-import type { Metadata } from "next";
-import { Playfair_Display, DM_Sans, Italiana } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Playfair_Display, DM_Sans, Italiana, Syne, Fraunces, Sora } from "next/font/google";
 import "./globals.css";
 import ClientBodyBypass from "@/components/ui/ClientBodyBypass";
 
 const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair" });
 const dmSans = DM_Sans({ subsets: ["latin"], variable: "--font-dm-sans" });
 const italiana = Italiana({ weight: "400", subsets: ["latin"], variable: "--font-italiana" });
+const syne = Syne({ subsets: ["latin"], variable: "--font-syne" });
+const fraunces = Fraunces({ subsets: ["latin"], variable: "--font-fraunces" });
+const sora = Sora({ subsets: ["latin"], variable: "--font-sora" });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://wedbliss.co"),
   title: "WedBliss | Elegant Digital Wedding Invitations & WhatsApp Invites",
   description: "Create stunning, interactive digital wedding invitations in minutes. Feature-rich with live countdowns, music, gift registries, and instant WhatsApp sharing. The modern way to announce your forever.",
   keywords: ["digital wedding invitation", "online wedding card", "whatsapp wedding invite", "indian wedding website", "muhurtham countdown", "interactive wedding card"],
@@ -34,12 +38,13 @@ export const metadata: Metadata = {
     description: "The modern way to announce your marriage. Interactive, elegant, and live in 10 minutes.",
     images: ["/og-image.png"],
   },
-  viewport: "width=device-width, initial-scale=1, maximum-scale=1",
   icons: {
-    icon: "/icon.png",
+    icon: "/brand/mark.svg",
     apple: "/apple-icon.png",
   },
 };
+
+export const viewport: Viewport = { width: "device-width", initialScale: 1 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
@@ -53,12 +58,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           `
         }} />
       </head>
-      <body className={`${playfair.variable} ${dmSans.variable} ${italiana.variable}`}>
-        {/* Cursor elements - Global application */}
-        <div className="cursor-dot" id="cursorDot"></div>
-        <div className="cursor-ring" id="cursorRing"></div>
-        <div className="mouse-follower" id="mouseFollower"><div className="follower-orb"></div></div>
-
+      <body className={`${playfair.variable} ${dmSans.variable} ${italiana.variable} ${syne.variable} ${fraunces.variable} ${sora.variable}`}>
         <ClientBodyBypass>
           {children}
         </ClientBodyBypass>

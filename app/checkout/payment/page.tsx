@@ -2,8 +2,8 @@
 
 import { useSearchParams, useRouter } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
-import Nav from "@/components/marketing/Nav";
-import Footer from "@/components/marketing/Footer";
+
+
 import { TemplateSVG } from "@/components/marketing/Templates";
 import { getTemplateById, DbTemplate } from "@/lib/db";
 import Script from "next/script";
@@ -65,7 +65,7 @@ function PaymentContent() {
 
             // 2. Initialize Razorpay Checkout
             const options = {
-                key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "rzp_test_SSI2d05Jgq5kXc", 
+                key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "rzp_test_SSI2d05Jgq5kXc",
                 amount: order.amount,
                 currency: order.currency,
                 name: "WedBliss",
@@ -122,7 +122,7 @@ function PaymentContent() {
                     }
                 },
                 prefill: {
-                    name: "", 
+                    name: "",
                     email: "",
                     contact: ""
                 },
@@ -131,7 +131,7 @@ function PaymentContent() {
                     templateId: templateId
                 },
                 theme: {
-                    color: "#047857" 
+                    color: "#632c40"
                 }
             };
 
@@ -158,7 +158,7 @@ function PaymentContent() {
             </div>
 
             <Script src="https://checkout.razorpay.com/v1/checkout.js" />
-            <Nav />
+
 
             <main className="flex-1 w-full max-w-5xl mx-auto px-4 pt-32 pb-20 relative z-10 flex flex-col items-center">
                 <div className="text-center mb-12 max-w-2xl mx-auto">
@@ -203,7 +203,7 @@ function PaymentContent() {
                             <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Order Summary</h4>
                             <div className="space-y-4">
                                 <div className="flex justify-between items-center text-sm">
-                                    <span className="font-semibold text-slate-500">{planName} (Lifetime Access)</span>
+                                    <span className="font-semibold text-slate-500">{planName}</span>
                                     <span className="font-black text-slate-800 underline decoration-emerald-500/30 underline-offset-4">₹{amount}.00</span>
                                 </div>
                                 <div className="flex justify-between items-center text-sm">
@@ -247,14 +247,14 @@ function PaymentContent() {
                                     ) : (
                                         <>
                                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="group-hover:translate-x-1 transition-transform"><rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>
-                                            Complete Order
+                                            Pay ₹{amount}
                                         </>
                                     )}
                                 </div>
                             </button>
 
                             <div className="flex flex-col items-center gap-4 py-4 border-t border-slate-100/50">
-                                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">We support all payment methods</span>
+                                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Pay securely with Razorpay</span>
                                 <div className="w-full flex justify-center transform scale-125">
                                     <Image src="https://cdn.razorpay.com/static/assets/logo/payment_method.svg" alt="Razorpay Support" width={320} height={40} className="opacity-90 object-contain h-6 w-auto grayscale contrast-[1.2] hover:grayscale-0 transition-all duration-700 cursor-pointer" />
                                 </div>
@@ -275,7 +275,7 @@ function PaymentContent() {
                 </div>
             </main>
 
-            <Footer />
+
 
             <style jsx>{`
                 @keyframes shake {

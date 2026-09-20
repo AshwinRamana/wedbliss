@@ -1,8 +1,8 @@
 "use client";
 
 import { useSearchParams, useRouter } from "next/navigation";
-import Nav from "@/components/marketing/Nav";
-import Footer from "@/components/marketing/Footer";
+
+
 import { useState, useEffect, Suspense, useCallback } from "react";
 import { supabase } from "@/lib/supabase";
 
@@ -200,7 +200,7 @@ function CheckoutFormContent() {
 
     return (
         <div className="min-h-screen flex flex-col justify-between" style={{ background: "linear-gradient(135deg, #fffbf5 0%, #fff8ed 55%, #fef3e2 100%)" }}>
-            <Nav />
+
 
             <main className="flex-1 w-full max-w-4xl mx-auto px-4 pt-28 pb-16 relative z-10">
                 <div className="text-center mb-10">
@@ -316,7 +316,7 @@ function CheckoutFormContent() {
                                                     <div className="flex flex-col gap-2">
                                                         <label className="text-xs font-bold text-slate-700 uppercase">From Time *</label>
                                                         <div className="flex gap-2">
-                                                            <select 
+                                                            <select
                                                                 className="flex-1 px-3 py-3 bg-slate-100 border-2 border-slate-300 rounded-xl focus:border-emerald-500 text-sm font-bold"
                                                                 value={event.startTime ? (parseInt(event.startTime.split(':')[0]) % 12 || 12).toString().padStart(2, '0') : "09"}
                                                                 onChange={(e) => {
@@ -333,7 +333,7 @@ function CheckoutFormContent() {
                                                                     <option key={h} value={h.toString().padStart(2, '0')}>{h.toString().padStart(2, '0')}</option>
                                                                 ))}
                                                             </select>
-                                                            <select 
+                                                            <select
                                                                 className="flex-1 px-3 py-3 bg-slate-100 border-2 border-slate-300 rounded-xl focus:border-emerald-500 text-sm font-bold"
                                                                 value={event.startTime ? event.startTime.split(':')[1] : "00"}
                                                                 onChange={(e) => {
@@ -345,7 +345,7 @@ function CheckoutFormContent() {
                                                                     <option key={m} value={m}>{m}</option>
                                                                 ))}
                                                             </select>
-                                                            <select 
+                                                            <select
                                                                 className="px-3 py-3 bg-white border-2 border-emerald-500 rounded-xl text-emerald-700 text-xs font-black uppercase"
                                                                 value={event.startTime && parseInt(event.startTime.split(':')[0]) >= 12 ? "PM" : "AM"}
                                                                 onChange={(e) => {
@@ -364,7 +364,7 @@ function CheckoutFormContent() {
                                                     <div className="flex flex-col gap-2">
                                                         <label className="text-xs font-bold text-slate-700 uppercase">To Time *</label>
                                                         <div className="flex gap-2">
-                                                            <select 
+                                                            <select
                                                                 className="flex-1 px-3 py-3 bg-slate-100 border-2 border-slate-300 rounded-xl focus:border-emerald-500 text-sm font-bold"
                                                                 value={event.endTime ? (parseInt(event.endTime.split(':')[0]) % 12 || 12).toString().padStart(2, '0') : "11"}
                                                                 onChange={(e) => {
@@ -381,7 +381,7 @@ function CheckoutFormContent() {
                                                                     <option key={h} value={h.toString().padStart(2, '0')}>{h.toString().padStart(2, '0')}</option>
                                                                 ))}
                                                             </select>
-                                                            <select 
+                                                            <select
                                                                 className="flex-1 px-3 py-3 bg-slate-100 border-2 border-slate-300 rounded-xl focus:border-emerald-500 text-sm font-bold"
                                                                 value={event.endTime ? event.endTime.split(':')[1] : "00"}
                                                                 onChange={(e) => {
@@ -393,7 +393,7 @@ function CheckoutFormContent() {
                                                                     <option key={m} value={m}>{m}</option>
                                                                 ))}
                                                             </select>
-                                                            <select 
+                                                            <select
                                                                 className="px-3 py-3 bg-white border-2 border-emerald-500 rounded-xl text-emerald-700 text-xs font-black uppercase"
                                                                 value={event.endTime && parseInt(event.endTime.split(':')[0]) >= 12 ? "PM" : "AM"}
                                                                 onChange={(e) => {
@@ -576,7 +576,7 @@ function CheckoutFormContent() {
                 </div>
             </main>
 
-            <Footer />
+
         </div>
     );
 }

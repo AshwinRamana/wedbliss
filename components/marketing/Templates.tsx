@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { getTemplates } from "@/lib/db";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -242,12 +242,12 @@ export default function Templates() {
         href?: string;
         thumbnailUrl: string | null;
     }>>([]);
+    const [active, setActive] = useState(0);
+    const railRef = useRef<HTMLDivElement>(null);
 
-    // Fetch all templates from Supabase — single source of truth
     useEffect(() => {
         const fetchTemplates = async () => {
             const dbTemplates = await getTemplates();
-
             const allTemplates = dbTemplates
                 .filter(db => !db.id.startsWith("tm-demo-"))
                 .filter(db => db.is_live && !!db.demo_url)
@@ -255,81 +255,114 @@ export default function Templates() {
                     id: db.id,
                     name: db.name,
                     tier: (db.tier as "basic" | "premium") || "basic",
-                    desc: db.description || "A beautifully crafted custom design.",
+                    desc: db.description || "A design with its own temperature of celebration.",
                     isLive: db.is_live,
                     href: db.demo_url ?? undefined,
                     thumbnailUrl: db.thumbnail_url ?? null,
                 }));
-
-            // Ready demos first; prefer templates with thumbnails
             allTemplates.sort((a, b) => {
                 const aThumb = a.thumbnailUrl ? 1 : 0;
                 const bThumb = b.thumbnailUrl ? 1 : 0;
                 if (aThumb !== bThumb) return bThumb - aThumb;
                 return a.name.localeCompare(b.name);
             });
-
             setTemplates(allTemplates);
         };
         fetchTemplates();
     }, []);
 
+    const go = useCallback((dir: number) => {
+        setActive((i) => {
+            if (!templates.length) return i;
+            return (i + dir + templates.length) % templates.length;
+        });
+    }, [templates.length]);
+
+    useEffect(() => {
+        const onKey = (e: KeyboardEvent) => {
+            const stage = document.getElementById("templates");
+            if (!stage) return;
+            const rect = stage.getBoundingClientRect();
+            const inView = rect.top < window.innerHeight * 0.7 && rect.bottom > window.innerHeight * 0.25;
+            if (!inView) return;
+            if (e.key === "ArrowRight") { e.preventDefault(); go(1); }
+            if (e.key === "ArrowLeft") { e.preventDefault(); go(-1); }
+        };
+        window.addEventListener("keydown", onKey);
+        return () => window.removeEventListener("keydown", onKey);
+    }, [go]);
+
+    const t = templates[active];
+
     return (
-        <section className="templates" id="templates">
-            <div className="section-header">
-                <div className="eyebrow">Beautiful Designs</div>
-                <h2 className="sec-title">Choose Your Template</h2>
-                <p className="sec-desc">Every template is designed with elegance and attention to detail. Hover to preview.</p>
+        <section className="p-section" id="templates">
+            <div className="p-templates-head">
+                <div>
+                    <p className="p-section-label p-reveal">Designs</p>
+                    <h2 className="p-section-title p-reveal p-d1">Try before you buy.</h2>
+                    <p className="p-section-copy p-reveal p-d2">
+                        Real live invites below — tap through them, then claim the one that feels like you.
+                    </p>
+                </div>
+                {templates.length > 1 && (
+                    <div className="p-stage-nav" aria-label="Browse designs">
+                        <button type="button" className="p-stage-arrow" onClick={() => go(-1)} aria-label="Previous design">←</button>
+                        <span className="p-stage-count">{active + 1} / {templates.length}</span>
+                        <button type="button" className="p-stage-arrow" onClick={() => go(1)} aria-label="Next design">→</button>
+                    </div>
+                )}
             </div>
-            <div className="templates-grid scrollbar-hide">
-                {templates.map((t) => {
-                    const isComingSoon = !t.isLive;
-                    return (
-                        <div className={`template-card group relative snap-center shrink-0 w-[64vw] sm:w-auto bg-white border border-slate-100 rounded-[32px] overflow-hidden shadow-xl transition-all duration-700 hover:-translate-y-2 hover:shadow-2xl hover:border-emerald-200 ${isComingSoon ? 'grayscale opacity-70' : ''}`} key={t.id}>
-                            <div className="template-preview relative overflow-hidden bg-slate-50" style={{ aspectRatio: '1/1.75' }}>
-                                {/* Image / SVG */}
+
+            <div className="p-portal-stage p-reveal p-d2">
+                {t ? (
+                    <>
+                        <div className="p-device">
+                            <div className="p-device-notch" aria-hidden="true" />
+                            <div className="p-portal-frame" key={t.id}>
                                 {t.thumbnailUrl ? (
                                     /* eslint-disable-next-line @next/next/no-img-element */
-                                    <img src={t.thumbnailUrl} alt={t.name} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" />
+                                    <img src={t.thumbnailUrl} alt={t.name} />
                                 ) : (
-                                    <div className="w-full h-full flex items-center justify-center bg-emerald-50/20">
+                                    <div className="p-portal-fallback">
                                         <TemplateSVG id={t.id} />
                                     </div>
                                 )}
-
-                                {/* Premium Glass Overlay Tray */}
-                                <div className="absolute inset-x-3 bottom-3 z-20">
-                                    <div className="p-5 rounded-[24px] bg-white/60 backdrop-blur-xl border border-white/40 shadow-2xl flex flex-col gap-4">
-                                        <div className="flex items-center justify-between">
-                                            <div>
-                                                <h3 className="font-serif text-xl font-black text-slate-800 leading-tight">{t.name}</h3>
-                                                <div className="flex items-center gap-2 mt-1">
-                                                    <span className={`text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full ${t.tier === 'premium' ? 'bg-amber-100 text-amber-800 border border-amber-200' : 'bg-slate-100 text-slate-600 border border-slate-200'}`}>
-                                                        {t.tier}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            {t.isLive && t.href && (
-                                                <a href={t.href} target="_blank" rel="noopener noreferrer" className="p-2.5 bg-slate-800/5 hover:bg-slate-800/10 rounded-full transition-colors text-slate-800">
-                                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /><polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" /></svg>
-                                                </a>
-                                            )}
-                                        </div>
-
-                                        <a 
-                                            href="/#pricing" 
-                                            className="w-full py-2.5 text-center bg-slate-900 hover:bg-black text-white text-[11px] font-black rounded-xl transition-all shadow-lg"
-                                        >
-                                            {isComingSoon ? "Coming Soon" : "Get This Template →"}
-                                        </a>
-                                    </div>
-                                </div>
                             </div>
                         </div>
-                    );
-                })}
+
+                        <div className="p-portal-meta">
+                            <p className="p-section-label">{t.tier}</p>
+                            <h3>{t.name}</h3>
+                            <p>{t.desc}</p>
+                            <div className="p-stage-actions">
+                                {t.href && (
+                                    <a href={t.href} target="_blank" rel="noopener noreferrer">
+                                        Open live preview
+                                    </a>
+                                )}
+                                <a href={`/checkout/templates?plan=${t.tier}`}>Use this design</a>
+                            </div>
+                        </div>
+
+                        <div className="p-portal-rail" role="tablist" aria-label="Invitation designs" ref={railRef}>
+                            {templates.map((item, i) => (
+                                <button
+                                    key={item.id}
+                                    type="button"
+                                    role="tab"
+                                    aria-selected={i === active}
+                                    className={`p-rail-dot${i === active ? " on" : ""}`}
+                                    onClick={() => setActive(i)}
+                                >
+                                    <span className="p-rail-name">{item.name}</span>
+                                </button>
+                            ))}
+                        </div>
+                    </>
+                ) : (
+                    <div className="p-portal-loading">Lighting the doorway…</div>
+                )}
             </div>
-            <div className="scroll-hint">swipe to explore designs</div>
         </section>
     );
 }

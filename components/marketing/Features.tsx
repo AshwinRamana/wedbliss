@@ -1,108 +1,20 @@
-// Feature icons as clean inline SVGs — no emojis, no Tailwind dynamic class purge risk
-// Using inline style for backgrounds to avoid Tailwind purging dynamic class strings
-
-const FEATURES = [
-    {
-        title: "Build The Anticipation",
-        sub: "A real-time ticker to your big moment",
-        bg: "linear-gradient(135deg, #f43f5e, #f97316)",
-        icon: (
-            <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="9" />
-                <polyline points="12 7 12 12 15.5 14" />
-            </svg>
-        ),
-    },
-    {
-        title: "A Link That's Yours",
-        sub: "Personalized URLs like siva-hema.wedbliss.co",
-        bg: "linear-gradient(135deg, #8b5cf6, #7c3aed)",
-        icon: (
-            <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="9" />
-                <path d="M12 3c-2.5 3-4 5.5-4 9s1.5 6 4 9" />
-                <path d="M12 3c2.5 3 4 5.5 4 9s-1.5 6-4 9" />
-                <line x1="3" y1="12" x2="21" y2="12" />
-            </svg>
-        ),
-    },
-    {
-        title: "Personal Welcome",
-        sub: "Share your journey with an intimate video",
-        bg: "linear-gradient(135deg, #0ea5e9, #06b6d4)",
-        icon: (
-            <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                <polygon points="23 7 16 12 23 17 23 7" />
-                <rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
-            </svg>
-        ),
-    },
-    {
-        title: "Guide Your Loved Ones",
-        sub: "Seamless venue navigation via Google Maps",
-        bg: "linear-gradient(135deg, #10b981, #14b8a6)",
-        icon: (
-            <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                <circle cx="12" cy="10" r="3" />
-            </svg>
-        ),
-    },
-    {
-        title: "Sync The Moment",
-        sub: "Add to calendar with one tap",
-        bg: "linear-gradient(135deg, #f59e0b, #eab308)",
-        icon: (
-            <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                <line x1="16" y1="2" x2="16" y2="6" />
-                <line x1="8" y1="2" x2="8" y2="6" />
-                <line x1="3" y1="10" x2="21" y2="10" />
-                <circle cx="8" cy="15" r="1" fill="white" stroke="none" />
-                <circle cx="12" cy="15" r="1" fill="white" stroke="none" />
-                <circle cx="16" cy="15" r="1" fill="white" stroke="none" />
-                <circle cx="8" cy="19" r="1" fill="white" stroke="none" />
-                <circle cx="12" cy="19" r="1" fill="white" stroke="none" />
-            </svg>
-        ),
-    },
-    {
-        title: "Unseen Moments",
-        sub: "Every guest photo, captured in one gallery",
-        bg: "linear-gradient(135deg, #ec4899, #f43f5e)",
-        icon: (
-            <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
-                <circle cx="12" cy="13" r="4" />
-            </svg>
-        ),
-    },
-];
-
 export default function Features() {
-    return (
-        <section className="features-section" id="features">
-            <div className="features-inner">
-                <div className="features-header">
-                    <div className="eyebrow">Designed for Connection</div>
-                    <h2 className="sec-title">What Makes WedBliss Special</h2>
-                    <p className="sec-desc">A suite of thoughtful touches designed to make your guests feel involved and your planning feel effortless.</p>
-                </div>
-
-                <div className="features-grid">
-                    {FEATURES.map((f, i) => (
-                        <div className="feature-card" key={i}>
-                            <div className="feat-icon-wrap" style={{ background: f.bg }}>
-                                {f.icon}
-                            </div>
-                            <div className="feat-body">
-                                <div className="feat-title">{f.title}</div>
-                                <div className="feat-sub">{f.sub}</div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </section>
-    );
+  return (
+    <section className="p-promise" id="promise">
+      <ul className="p-proof p-reveal">
+        <li>
+          <strong>WhatsApp-ready</strong>
+          <span>One link. Family opens it anywhere.</span>
+        </li>
+        <li>
+          <strong>Muhurtham countdown</strong>
+          <span>Maps, calendar, gallery, music.</span>
+        </li>
+        <li>
+          <strong>Pay once</strong>
+          <span>No subscription. Live the same day.</span>
+        </li>
+      </ul>
+    </section>
+  );
 }

@@ -16,11 +16,15 @@
     "handlebars": "^4.7.8",
     "lucide-react": "^0.575.0",
     "next": "14.2.35",
+    "playwright-core": "^1.63.0",
     "react": "^18",
     "react-confetti": "^6.4.0",
     "react-dom": "^18",
     "react-icons": "^5.5.0",
     "tailwind-merge": "^3.5.0"
+  },
+  "optionalDependencies": {
+    "@next/swc-darwin-arm64": "14.2.33"
   },
   "devDependencies": {
     "@types/node": "^20",

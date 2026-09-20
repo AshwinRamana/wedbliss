@@ -1,180 +1,127 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase";
 import Link from "next/link";
-import Image from "next/image";
+import { supabase } from "@/lib/supabase";
 import { User } from "@supabase/supabase-js";
 import { usePathname } from "next/navigation";
+import BrandMark from "./BrandMark";
+import "@/app/(marketing)/marketing.css";
+
+const LIGHT_PREFIXES = ["/checkout", "/dashboard", "/login", "/signup", "/privacy", "/terms", "/refunds"];
 
 export default function Nav() {
-    const [user, setUser] = useState<User | null>(null);
-    const [authLoading, setAuthLoading] = useState(true);
-    const [menuOpen, setMenuOpen] = useState(false);
-    const pathname = usePathname();
-    const isAdminRoute = pathname?.startsWith('/admin');
+  const [user, setUser] = useState<User | null>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const light = LIGHT_PREFIXES.some((p) => pathname === p || pathname.startsWith(`${p}/`));
 
-    // Close menu on route change
-    useEffect(() => {
-        setMenuOpen(false);
-    }, [pathname]);
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [pathname]);
 
-    // Lock body scroll when menu is open
-    useEffect(() => {
-        if (menuOpen) {
-            document.body.style.overflow = "hidden";
-        } else {
-            document.body.style.overflow = "";
-        }
-        return () => { document.body.style.overflow = ""; };
-    }, [menuOpen]);
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [menuOpen]);
 
-    useEffect(() => {
-        const fetchSession = async () => {
-            const { data } = await supabase.auth.getSession();
-            setUser(data.session?.user || null);
-            setAuthLoading(false);
-        };
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMenuOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
 
-        fetchSession();
+  useEffect(() => {
+    const fetchSession = async () => {
+      const { data } = await supabase.auth.getSession();
+      setUser(data.session?.user || null);
+    };
+    fetchSession();
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user || null);
+    });
+    return () => subscription.unsubscribe();
+  }, []);
 
-        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-            setUser(session?.user || null);
-        });
+  const links = light
+    ? [
+        { href: "/#templates", label: "Designs" },
+        { href: "/#pricing", label: "Pricing" },
+        { href: "/#contact", label: "Contact" },
+      ]
+    : [
+        { href: "#templates", label: "Designs" },
+        { href: "#pricing", label: "Pricing" },
+        { href: "#how", label: "How it works" },
+        { href: "#questions", label: "Questions" },
+        { href: "#contact", label: "Contact" },
+      ];
 
-        return () => subscription.unsubscribe();
-    }, []);
+  const cta = user ? (
+    <Link href="/dashboard" className="p-nav-cta" onClick={() => setMenuOpen(false)}>
+      Dashboard
+    </Link>
+  ) : (
+    <Link href="/checkout/templates?plan=premium" className="p-nav-cta" onClick={() => setMenuOpen(false)}>
+      Begin
+    </Link>
+  );
 
-    return (
-        <>
-            {/* Full-screen mobile menu overlay */}
-            {menuOpen && (
-                <div
-                    className="fixed inset-0 z-[9998] bg-black/40 backdrop-blur-sm"
-                    onClick={() => setMenuOpen(false)}
-                />
-            )}
+  return (
+    <>
+      <a href="#templates" className="p-skip">
+        Skip to designs
+      </a>
+      <nav className={`p-nav${light ? " light" : ""}`} id="portal-nav" aria-label="Primary">
+        <Link href="/" className="p-brand" aria-label="Wedbliss home">
+          <BrandMark className="p-brand-mark" />
+          <span>
+            wed<em>bliss</em>
+          </span>
+        </Link>
 
-            <div
-                className="mobile-menu"
-                id="mobileMenu"
-                style={{
-                    transform: menuOpen ? "translateX(0)" : "translateX(100%)",
-                    transition: "transform 0.3s cubic-bezier(0.4,0,0.2,1)"
-                }}
-            >
-                <button
-                    className="mobile-close"
-                    aria-label="Close menu"
-                    onClick={() => setMenuOpen(false)}
-                >✕</button>
-                {/* Brand inside menu */}
-                <div style={{ textAlign: "center", marginBottom: "8px" }}>
-                    <Image
-                        src="/Primary.png"
-                        alt="WedBliss"
-                        width={120}
-                        height={60}
-                        className="mx-auto object-contain"
-                        style={{ maxHeight: "60px", width: "auto" }}
-                    />
-                </div>
-                <a href="/#how" onClick={() => setMenuOpen(false)}>How It Works</a>
-                <a href="/#templates" onClick={() => setMenuOpen(false)}>Templates</a>
-                <a href="/#pricing" onClick={() => setMenuOpen(false)}>Pricing</a>
-                <a href="/#testimonials" onClick={() => setMenuOpen(false)}>Reviews</a>
-                <a href="/#contact" onClick={() => setMenuOpen(false)}>Contact</a>
+        <div className="p-nav-links">
+          {links.map((l) => (
+            <a key={l.href} href={l.href}>
+              {l.label}
+            </a>
+          ))}
+          {cta}
+        </div>
 
-                <div style={{ padding: "20px 0", display: "flex", flexDirection: "column", gap: "16px", width: "100%", maxWidth: "300px" }}>
-                    {authLoading ? (
-                        <div style={{ width: "100%", height: "48px", background: "rgba(0,0,0,0.05)", borderRadius: "12px", animation: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite" }} />
-                    ) : user ? (
-                        <Link href="/dashboard" onClick={() => setMenuOpen(false)} style={{
-                            border: "2px solid rgba(4,120,87,0.2)",
-                            color: "var(--emerald)", padding: "12px 0", borderRadius: "12px",
-                            textAlign: "center", fontWeight: 700, fontSize: "18px",
-                            display: "flex", alignItems: "center", justifyContent: "center", gap: "8px"
-                        }}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
-                            Profile
-                        </Link>
-                    ) : !isAdminRoute && (
-                        <>
-                            <Link href="/login" onClick={() => setMenuOpen(false)} style={{
-                                border: "2px solid rgba(4,120,87,0.2)",
-                                color: "var(--emerald)", padding: "12px 0", borderRadius: "12px",
-                                textAlign: "center", fontWeight: 700, fontSize: "18px"
-                            }}>Log In</Link>
-                            <Link href="/signup" onClick={() => setMenuOpen(false)} style={{
-                                background: "linear-gradient(135deg, var(--emerald), var(--emerald-light))",
-                                color: "white", padding: "14px 0", borderRadius: "12px",
-                                textAlign: "center", fontWeight: 700, fontSize: "18px",
-                                boxShadow: "0 8px 22px rgba(4,120,87,0.25)"
-                            }}>Sign Up</Link>
-                        </>
-                    )}
-                </div>
+        <button
+          type="button"
+          className="p-menu-btn"
+          aria-label={menuOpen ? "Close menu" : "Open menu"}
+          aria-expanded={menuOpen}
+          aria-controls="portal-drawer"
+          onClick={() => setMenuOpen((v) => !v)}
+        >
+          <span />
+        </button>
+      </nav>
 
-                {/* Trust badge */}
-                <div style={{
-                    fontSize: "11px", fontWeight: 700, color: "#94a3b8",
-                    letterSpacing: "0.5px", textAlign: "center", marginTop: "4px"
-                }}>
-                    500+ Couples · ₹999 · Go Live in 10 Min
-                </div>
-            </div>
-
-            <nav id="nav" className="flex items-center">
-                <div className="nav-inner w-full flex items-center justify-between">
-                    <a href="/" className="logo shrink-0" aria-label="WedBliss home">
-                        <Image
-                            src="/Harizontal.png"
-                            alt="WedBliss"
-                            width={140}
-                            height={38}
-                            priority
-                            className="object-contain"
-                            style={{ maxHeight: "38px", width: "auto" }}
-                        />
-                    </a>
-                    <ul className="nav-links">
-                        <li><a href="/#how">How It Works</a></li>
-                        <li><a href="/#templates">Templates</a></li>
-                        <li><a href="/#pricing">Pricing</a></li>
-                        <li><a href="/#testimonials">Reviews</a></li>
-                        <li><a href="/#contact">Contact</a></li>
-                    </ul>
-
-                    <div className="nav-auth">
-                        {authLoading ? (
-                            <div style={{ width: "80px", height: "40px", background: "rgba(0,0,0,0.05)", borderRadius: "12px", animation: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite" }} />
-                        ) : user ? (
-                            <Link href="/dashboard" className="nav-login" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
-                                Profile
-                            </Link>
-                        ) : !isAdminRoute && (
-                            <>
-                                <Link href="/login" className="nav-login">Log In</Link>
-                                <Link href="/signup" className="btn-nav"><span>Sign Up</span></Link>
-                            </>
-                        )}
-                    </div>
-
-                    {/* Hamburger button */}
-                    <button
-                        className="menu-toggle flex items-center justify-center"
-                        aria-label="Open menu"
-                        onClick={() => setMenuOpen(true)}
-                    >
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <rect y="4" width="24" height="2" rx="1" fill="currentColor"/>
-                            <rect y="11" width="24" height="2" rx="1" fill="currentColor"/>
-                            <rect y="18" width="24" height="2" rx="1" fill="currentColor"/>
-                        </svg>
-                    </button>
-                </div>
-            </nav>
-        </>
-    );
+      <div
+        id="portal-drawer"
+        className={`p-drawer ${menuOpen ? "open" : ""}${light ? " light" : ""}`}
+        aria-hidden={!menuOpen}
+      >
+        <button type="button" className="p-drawer-close" aria-label="Close menu" onClick={() => setMenuOpen(false)}>
+          ×
+        </button>
+        {links.map((l) => (
+          <a key={l.href} href={l.href} onClick={() => setMenuOpen(false)}>
+            {l.label}
+          </a>
+        ))}
+        {cta}
+      </div>
+    </>
+  );
 }

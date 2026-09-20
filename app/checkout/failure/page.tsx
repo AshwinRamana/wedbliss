@@ -2,13 +2,13 @@
 
 import Link from "next/link";
 import { Suspense } from "react";
-import Nav from "@/components/marketing/Nav";
-import Footer from "@/components/marketing/Footer";
+
+
 
 function FailureContent() {
     return (
         <div className="min-h-screen flex flex-col justify-between relative" style={{ background: "linear-gradient(135deg, #fffbf5 0%, #fff8ed 55%, #fef3e2 100%)" }}>
-            <Nav />
+
 
             <main className="flex-1 w-full max-w-4xl mx-auto px-4 pt-40 pb-20 relative z-10 flex flex-col items-center">
                 <div className="w-full max-w-lg bg-white/50 backdrop-blur-3xl border border-white/60 rounded-[48px] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.12)] p-10 sm:p-14 text-center relative overflow-hidden">
@@ -39,7 +39,7 @@ function FailureContent() {
                         >
                             Retry Secure Payment
                         </Link>
-                        <Link 
+                        <Link
                             href="/dashboard"
                             className="text-xs font-black text-slate-400 uppercase tracking-widest hover:text-slate-600 transition-colors"
                         >
@@ -54,7 +54,7 @@ function FailureContent() {
                 </div>
             </main>
 
-            <Footer />
+
         </div>
     );
 }

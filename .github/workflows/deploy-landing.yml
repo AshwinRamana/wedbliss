@@ -57,7 +57,7 @@ jobs:
             route="${route%/index.html}"
             aws s3 cp "$page" "s3://wedbliss-www/$route/" --content-type 'text/html; charset=utf-8' --cache-control 'public,max-age=0,must-revalidate'
             aws s3 cp "$page" "s3://wedbliss-www/$route" --content-type 'text/html; charset=utf-8' --cache-control 'public,max-age=0,must-revalidate'
-          done < <(find out -mindepth 3 -name index.html -print0)
+          done < <(find out -mindepth 2 -name index.html -print0)
 
       - name: Invalidate CloudFront cache
         run: |

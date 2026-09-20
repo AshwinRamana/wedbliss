@@ -48,6 +48,17 @@ jobs:
       - name: Sync to S3
         run: aws s3 sync out/ s3://wedbliss-www --delete
 
+      # The S3 REST origin does not resolve nested directory index pages.
+      - name: Publish direct route aliases
+        shell: bash
+        run: |
+          while IFS= read -r -d '' page; do
+            route="${page#out/}"
+            route="${route%/index.html}"
+            aws s3 cp "$page" "s3://wedbliss-www/$route/" --content-type 'text/html; charset=utf-8' --cache-control 'public,max-age=0,must-revalidate'
+            aws s3 cp "$page" "s3://wedbliss-www/$route" --content-type 'text/html; charset=utf-8' --cache-control 'public,max-age=0,must-revalidate'
+          done < <(find out -mindepth 3 -name index.html -print0)
+
       - name: Invalidate CloudFront cache
         run: |
           aws cloudfront create-invalidation \

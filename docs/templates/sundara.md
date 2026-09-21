@@ -7,6 +7,8 @@ A self-contained premium invitation with bespoke Chettinad courtyard artwork, wa
 - `template/templates/sundara.html` — uploadable Handlebars template. CSS, JavaScript, and the courtyard artwork are embedded; no third-party fonts or libraries.
 - `public/templates/sundara-preview.html` — rendered fictional invitation for review.
 - `scripts/fixtures/sundara-demo.json` — clearly separated example names, events, and notes.
+- `public/templates/sundara/demo-film.mp4` — a short silent sample film made from the generated artwork; shown in the public demo.
+- `scripts/prepare-sundara-release.cjs` — exports separate HTML/CSS/JS fields matching the live database format.
 - `public/templates/sundara/demo-couple.jpg` — AI-generated fictional couple for the demo only. Real invitations use the couple’s uploaded photos.
 - `public/templates/thumbs/sundara.png` — collection thumbnail.
 
@@ -34,4 +36,11 @@ Run `node scripts/test-sundara.cjs`. `CHROME_PATH`, `SUNDARA_PREVIEW_URL`, and `
 
 Validation covers 320/390/768/1440px layouts, long names, one to four gallery images, missing optional content, calendar end times and timezone, iOS ICS generation, keyboard focus, invalid URL/date handling, escaped user text, native video, and reduced motion. A separate visual review informed the second design pass: a shorter mobile opening, larger practical text, smaller event titles, and unobtrusive navigation.
 
-This is a new template on `codex/sundara-template`. It is not registered in the production template catalogue or deployed to the live site. To register it, use the existing admin template uploader with the HTML file, thumbnail, and a published preview URL. It requires no database schema change.
+Published on 21 September 2026 as `tm-sundara`, name **Sundara**, tier **premium**, in the existing Supabase `templates` table. The live engine uses Handlebars HTML with separate `css_content` and `js_content` fields; release preparation splits the self-contained source into those fields. No database schema change or new hosting service was required.
+
+Public preview: https://www.wedbliss.co/templates/sundara-preview.html
+Thumbnail: https://www.wedbliss.co/templates/thumbs/sundara.png
+
+The missing film in the original demo was caused by an empty `media` fixture. The fixture now contains a sample MP4; real invitations still display the section only when `media.videoUrl` is supplied. Film navigation and a visible play control are included. Published MP4 playback was checked both on the static public preview and through the deployed invitation renderer with isolated demo data. The live template is selectable from the catalogue; checkout data remains the source of customer-specific content.
+
+Source remains on `codex/sundara-template`; deployment uses the existing `wedbliss-www` S3 bucket/CloudFront distribution for preview media, and Supabase for the dynamic template. Only Sundara assets and its own catalogue record were published.

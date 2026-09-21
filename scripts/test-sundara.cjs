@@ -19,6 +19,8 @@ const output=process.env.SUNDARA_QA_DIR||'/tmp/sundara-qa';fs.mkdirSync(output,{
  const noOverflow=async()=>assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
  // 1. Responsive / visual verification at the full supported width range.
  for(const width of [320,390,768,1440]){await page.setViewportSize({width,height:900});await load();await noOverflow();assert.equal(await page.locator('.wb-event-card').count(),3);assert.equal(await page.locator('h1').count(),1);assert.equal(await page.locator('[data-cover-date]').textContent(),'23–24 February 2027');await page.screenshot({path:path.join(output,`hero-${width}.png`)});}
+ // The sample film is visible, decodable, and starts only after a guest action.
+ await page.locator('#film').scrollIntoViewIfNeeded();await page.getByRole('button',{name:'Play our film'}).click();await page.waitForFunction(()=>document.querySelector('video').currentTime>.25);assert.equal(await page.locator('video').evaluate(v=>v.paused),false);await page.locator('video').evaluate(v=>v.pause());
  // 2. Calendar must retain true event times, apostrophes, and overnight dates.
  fixture.events=[{...demo.events[0],title:"Family's welcome & dinner",date:'2027-02-23',startTime:'23:30',endTime:'01:30'}];
  await load();await page.evaluate(()=>{window.open=(url)=>{window.__calendar=url;return null}});await page.locator('.wb-btn-cal').click();

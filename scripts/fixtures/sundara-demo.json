@@ -1,13 +1,53 @@
 {
   "couple": {
-    "bride": {"firstName":"Ananya","fatherName":"R. Srinivasan","motherName":"Lakshmi Srinivasan","notes":"Of all the days we have imagined, this is the one we cannot wait to share with you. See you there, with all our love."},
-    "groom": {"firstName":"Arjun","fatherName":"S. Ramanathan","motherName":"Meera Ramanathan","notes":"Our favourite people, together in one place. Thank you for being part of the story that brings us here."}
+    "bride": {
+      "firstName": "Ananya",
+      "fatherName": "R. Srinivasan",
+      "motherName": "Lakshmi Srinivasan",
+      "notes": "Of all the days we have imagined, this is the one we cannot wait to share with you. See you there, with all our love."
+    },
+    "groom": {
+      "firstName": "Arjun",
+      "fatherName": "S. Ramanathan",
+      "motherName": "Meera Ramanathan",
+      "notes": "Our favourite people, together in one place. Thank you for being part of the story that brings us here."
+    }
   },
   "events": [
-    {"id":"welcome","title":"The welcome evening","date":"2027-02-23","startTime":"18:30","endTime":"21:30","venueName":"The Courtyard, Karaikudi","googleMapsUrl":"https://www.google.com/maps/search/?api=1&query=Karaikudi"},
-    {"id":"wedding","title":"The wedding","date":"2027-02-24","startTime":"07:30","endTime":"09:00","venueName":"The Courtyard, Karaikudi","googleMapsUrl":"https://www.google.com/maps/search/?api=1&query=Karaikudi"},
-    {"id":"reception","title":"Dinner & a little dancing","date":"2027-02-24","startTime":"19:00","endTime":"22:00","venueName":"The Garden, Karaikudi","googleMapsUrl":"https://www.google.com/maps/search/?api=1&query=Karaikudi"}
+    {
+      "id": "welcome",
+      "title": "The welcome evening",
+      "date": "2027-02-23",
+      "startTime": "18:30",
+      "endTime": "21:30",
+      "venueName": "The Courtyard, Karaikudi",
+      "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Karaikudi"
+    },
+    {
+      "id": "wedding",
+      "title": "The wedding",
+      "date": "2027-02-24",
+      "startTime": "07:30",
+      "endTime": "09:00",
+      "venueName": "The Courtyard, Karaikudi",
+      "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Karaikudi"
+    },
+    {
+      "id": "reception",
+      "title": "Dinner & a little dancing",
+      "date": "2027-02-24",
+      "startTime": "19:00",
+      "endTime": "22:00",
+      "venueName": "The Garden, Karaikudi",
+      "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Karaikudi"
+    }
   ],
-  "gallery":{"images":["/templates/sundara/demo-couple.jpg"]},
-  "media":{}
+  "gallery": {
+    "images": [
+      "/templates/sundara/demo-couple.jpg"
+    ]
+  },
+  "media": {
+    "videoUrl": "/templates/sundara/demo-film.mp4"
+  }
 }

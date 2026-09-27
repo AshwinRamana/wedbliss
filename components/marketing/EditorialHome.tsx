@@ -8,9 +8,9 @@ import { DbTemplate, FALLBACK_TEMPLATES, getTemplates } from "@/lib/db";
 import { supabase } from "@/lib/supabase";
 import BrandMark from "./BrandMark";
 
-const moods: Record<string, string> = { Blossom: "Soft, floral & romantic", Noir: "An evening in gold", Gravity: "Written in the stars", Thiruvizha: "Rooted in celebration" };
+const moods: Record<string, string> = { Blossom: "Soft, floral & romantic", Noir: "An evening in gold", Gravity: "Written in the stars", Thiruvizha: "Rooted in celebration", Sundara: "A sunlit courtyard celebration" };
 const filters = ["All designs", "Romantic", "Modern", "Traditional"];
-const categories: Record<string, string> = { Blossom: "Romantic", Noir: "Modern", Gravity: "Modern", Thiruvizha: "Traditional" };
+const categories: Record<string, string> = { Blossom: "Romantic", Noir: "Modern", Gravity: "Modern", Thiruvizha: "Traditional", Sundara: "Traditional" };
 function thumbnail(t: DbTemplate) {
   return ["Blossom", "Noir", "Gravity", "Thiruvizha"].includes(t.name) ? `/templates/thumbs/${t.name.toLowerCase()}.webp` : t.thumbnail_url || "";
 }

@@ -22,10 +22,9 @@ export default function AuthForm({signup=false}:{signup?:boolean}) {
  }
  async function verify(){setBusy(true);setError('');try{
   const data=await request('verify-otp',{email:details.email.trim(),otp,...(signup?{name:details.name.trim(),phone:details.phone.trim(),dob:details.dob}:{})});
-  if(!data.sessionPassword)throw new Error('We could not sign you in. Please request a new code.');
-  let established=false;
-  for(let attempt=0;attempt<3;attempt++){const result=await supabase.auth.signInWithPassword({email:details.email.trim(),password:data.sessionPassword});if(!result.error&&result.data.session){established=true;break;}if(attempt<2)await new Promise(r=>setTimeout(r,1000));}
-  if(!established)throw new Error('Your code was verified, but sign-in failed. Please log in again.');
+  if(!data.session?.access_token||!data.session?.refresh_token)throw new Error('We could not sign you in. Please request a new code.');
+  const {data: signedIn,error: sessionError}=await supabase.auth.setSession(data.session);
+  if(sessionError||!signedIn.session)throw new Error('Your code was verified, but this browser could not save your session. Please try again.');
   router.push(template?`/checkout/form${query}`:'/');router.refresh();
  }catch(e){setError(e instanceof Error?e.message:'Unable to verify. Please try again.')}finally{setBusy(false)}}
  return <main className="auth-page"><aside className="auth-story" aria-label="Your invitation starts here"><span className="auth-eyebrow">MADE FOR YOUR MOMENT</span><h2>A beautiful<br/>beginning.</h2><div className="auth-invitation" aria-hidden="true"><span>TOGETHER WITH OUR FAMILIES</span><p>Ananya<br/><i>&</i><br/>Arjun</p><span>THE WEDDING CELEBRATION</span><div>24 · 02 · 2027</div></div><p>Your people. Your story.<br/>One invitation to bring them together.</p></aside><section className="auth-panel"><span className="auth-eyebrow">{step==='otp'?'CHECK YOUR INBOX':signup?'YOUR WEDBLISS ACCOUNT':'WELCOME BACK'}</span><h1>{step==='otp'?'Enter your code':signup?'Start something beautiful.':'Your next chapter awaits.'}</h1><p className="auth-intro">{step==='otp'?<>We sent a 4-digit code to <strong>{details.email.trim()}</strong>.</>:signup?'Create an account to make your invitation.':'Log in with your email. No password needed.'}</p>

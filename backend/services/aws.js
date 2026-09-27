@@ -154,7 +154,7 @@ async function generatePresignedUrl(fileName, fileType, couplename) {
     const sanitizedName = fileName.replace(/[^a-zA-Z0-9.-]/g, '_');
     const folder = couplename ? couplename.replace(/[^a-zA-Z0-9-_]/g, '') : 'gallery';
 
-    const objectKey = `${folder}/${uniqueId}-${sanitizedName}`;
+    const objectKey = `media/${folder}/${uniqueId}-${sanitizedName}`;
 
     try {
         console.log(`[aws] Generating presigned URL for ${targetBucket}/${objectKey} (${fileType})`);
@@ -168,9 +168,9 @@ async function generatePresignedUrl(fileName, fileType, couplename) {
         // URL expires in 3 minutes
         const signedUrl = await getSignedUrl(s3Client, command, { expiresIn: 180 });
 
-        // IMPORTANT: If bucket name has dots, MUST use path-style for SSL to work on S3 endpoints
-        // Use s3.region.amazonaws.com/bucket/key
-        const publicUrl = `https://s3.${s3Config.region}.amazonaws.com/${targetBucket}/${objectKey}`;
+        // Guest URLs use CloudFront origin access control; the S3 bucket stays private.
+        const mediaOrigin = process.env.MEDIA_PUBLIC_ORIGIN || 'https://www.wedbliss.co';
+        const publicUrl = `${mediaOrigin.replace(/\/$/, '')}/${objectKey}`;
 
         return { signedUrl, publicUrl, objectKey };
     } catch (error) {

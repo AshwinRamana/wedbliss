@@ -31,7 +31,7 @@ function CheckoutFormContent() {
 
     // ── Events (add/remove) ──
     const [eventsList, setEventsList] = useState([
-        { id: "ev-1", title: "Wedding / Muhurtham", date: "", startTime: "", endTime: "", venueName: "", googleMapsUrl: "" },
+        { id: "ev-1", title: "Wedding / Muhurtham", date: "", startTime: "09:00", endTime: "11:00", venueName: "", googleMapsUrl: "" },
     ]);
 
     const handleEventChange = (index: number, field: string, value: string) => {
@@ -41,7 +41,7 @@ function CheckoutFormContent() {
     };
 
     const addEvent = () => {
-        setEventsList([...eventsList, { id: `ev-${Date.now()}`, title: "", date: "", startTime: "", endTime: "", venueName: "", googleMapsUrl: "" }]);
+        setEventsList([...eventsList, { id: `ev-${Date.now()}`, title: "", date: "", startTime: "09:00", endTime: "11:00", venueName: "", googleMapsUrl: "" }]);
     };
 
     const removeEvent = (index: number) => {

@@ -117,6 +117,22 @@
                 (p.js ? "<script>" + p.js + "<\/script>" : "") + "\n</body>\n</html>";
             var f = document.createElement("iframe");
             f.title = "Wedding Invitation";
+            // Storyboard mode (used by shots.mjs): &open=1 taps "Open invitation",
+            // &at=<css selector>[&off=px] scrolls there after the opening (&intro=ms).
+            if (q.get("open") || q.get("at")) {
+                f.onload = function () {
+                    var w = f.contentWindow, d = w.document;
+                    try { w.localStorage.clear(); } catch (e) { }
+                    setTimeout(function () {
+                        var b = d.getElementById("openBtn"); if (b) b.click();
+                        var at = q.get("at");
+                        if (at) setTimeout(function () {
+                            var el = d.querySelector(at);
+                            if (el) w.scrollTo(0, el.getBoundingClientRect().top + w.scrollY + (+q.get("off") || 0));
+                        }, +q.get("intro") || 5200);
+                    }, 400);
+                };
+            }
             f.srcdoc = full;
             document.getElementById("err").remove();
             document.body.appendChild(f);

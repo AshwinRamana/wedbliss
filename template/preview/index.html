@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  Local template preview — mirrors production exactly:
+    1. admin/upload-template parseTemplateFile()  (split <style>/<script> out of the file)
+    2. template/app/page.tsx Handlebars compile    (with the `add` helper)
+    3. template/app/page.tsx iframe document       (css in <head>, html + js in <body>)
+
+  Run from the repo root:   node template/preview/serve.mjs
+  Open:  http://localhost:4173/preview/?t=gravity&d=real
+    t = file name in templates/ (without .html)
+    d = demo | real | minimal   (sample data sets below)
+-->
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Template preview</title>
+    <style>
+        html, body { margin: 0; height: 100%; background: #111; }
+        iframe { display: block; width: 100%; height: 100vh; border: 0; }
+        #err { color: #f88; font: 14px/1.5 monospace; padding: 24px; white-space: pre-wrap; }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@4.7.8/dist/handlebars.min.js"></script>
+</head>
+
+<body>
+    <div id="err"></div>
+    <script>
+        var DATA = {
+            // The admin uploader's sample data (what the public demo shows)
+            demo: {
+                couple: {
+                    bride: { firstName: "Priya", fatherName: "Krishnaswamy", motherName: "Kamakshi", notes: "Can't wait to start this beautiful journey together!" },
+                    groom: { firstName: "Karthik", fatherName: "Ramasamy", motherName: "Saraswathi", notes: "Forever and always, my love." }
+                },
+                events: [
+                    { id: "ev-1", title: "Muhurtham", date: "28 December 2026", startTime: "8:24 AM", endTime: "10:48 AM", venueName: "Sri Murugan Kalyana Mandapam", googleMapsUrl: "https://maps.google.com/?q=Sri+Murugan+Kalyana+Mandapam" },
+                    { id: "ev-2", title: "Reception", date: "28 December 2026", startTime: "6:00 PM", endTime: "10:00 PM", venueName: "Grand Ballroom, Hotel Savera", googleMapsUrl: "https://maps.google.com/?q=Hotel+Savera+Chennai" }
+                ],
+                gallery: { images: ["https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=900", "https://images.unsplash.com/photo-1519741497674-611481863552?w=900"] },
+                media: { videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ" }
+            },
+            // Shaped exactly like app/checkout/form output: ISO dates, 24h times,
+            // optional fields missing, uploaded mp4, long names, apostrophes.
+            real: {
+                couple: {
+                    bride: { firstName: "Meenakshisundari", fatherName: "Dr. R. Venkataraman", motherName: "Lakshmi Venkataraman", notes: "From a chance meeting at a friend's wedding to our own — thank you for being part of our story. We can't wait to see you there." },
+                    groom: { firstName: "Arjun", fatherName: "S. Subramanian", motherName: "Uma Subramanian" }
+                },
+                events: [
+                    { id: "ev-1", title: "Nichayathartham", date: "2026-12-26", startTime: "18:30", endTime: "21:00", venueName: "Residence, 14 O'Brien Street, Mylapore", googleMapsUrl: "" },
+                    { id: "ev-2", title: "Wedding / Muhurtham", date: "2026-12-28", startTime: "07:15", endTime: "09:00", venueName: "Sri Parthasarathy Kalyana Mandapam, Triplicane", googleMapsUrl: "https://maps.app.goo.gl/example" },
+                    { id: "ev-3", title: "Reception", date: "2026-12-28", startTime: "19:00", endTime: "00:30", venueName: "The Leela Palace, MRC Nagar", googleMapsUrl: "https://maps.app.goo.gl/example2" }
+                ],
+                gallery: { images: [
+                    "https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=1200",
+                    "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=900",
+                    "https://images.unsplash.com/photo-1519741497674-611481863552?w=900",
+                    "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=900",
+                    "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=900",
+                    "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=900"
+                ] },
+                media: { videoUrl: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" }
+            },
+            // Smallest valid invitation: one event, nothing optional
+            minimal: {
+                couple: {
+                    bride: { firstName: "Divya", fatherName: "Mohan", motherName: "Revathi" },
+                    groom: { firstName: "Rahul", fatherName: "Suresh", motherName: "Anitha" }
+                },
+                events: [{ id: "ev-1", title: "Wedding", date: "2027-02-14", startTime: "10:00", endTime: "12:00", venueName: "Ganesh Mahal, Coimbatore", googleMapsUrl: "" }]
+            }
+        };
+
+        function parseTemplateFile(rawHtml) {
+            var doc = new DOMParser().parseFromString(rawHtml, "text/html"), css = "", js = "";
+            doc.querySelectorAll("style").forEach(function (n) { css += n.textContent + "\n"; n.remove(); });
+            doc.querySelectorAll("script:not([src]):not([id='tailwind-config'])").forEach(function (n) { js += n.textContent + "\n"; n.remove(); });
+            return { html: (doc.head.innerHTML.trim() + "\n" + doc.body.innerHTML.trim()).trim(), css: css.trim(), js: js.trim() };
+        }
+
+        var q = new URLSearchParams(location.search), t = q.get("t") || "gravity", d = q.get("d") || "real";
+        fetch("../templates/" + t + ".html", { cache: "no-store" }).then(function (r) { return r.text(); }).then(function (raw) {
+            var p = parseTemplateFile(raw);
+            Handlebars.registerHelper("add", function (a, b) { return parseInt(a, 10) + parseInt(b, 10); });
+            var data = JSON.parse(JSON.stringify(DATA[d]));
+            // &n=4 → force that many gallery photos (cycles the sample set) to test grid rhythm
+            if (q.get("n") !== null) {
+                var pool = DATA.real.gallery.images, k = +q.get("n");
+                data.gallery = k ? { images: Array.from({ length: k }, function (_, i) { return pool[i % pool.length]; }) } : undefined;
+            }
+            var compiled = Handlebars.compile(p.html)(data);
+            var full = '<!DOCTYPE html>\n<html lang="en">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
+                (p.css ? "<style>" + p.css + "</style>" : "") + "\n</head>\n<body>\n" + compiled + "\n" +
+                (p.js ? "<script>" + p.js + "<\/script>" : "") + "\n</body>\n</html>";
+            var f = document.createElement("iframe");
+            f.title = "Wedding Invitation";
+            f.srcdoc = full;
+            document.getElementById("err").remove();
+            document.body.appendChild(f);
+        }).catch(function (e) { document.getElementById("err").textContent = String(e && e.stack || e); });
+    </script>
+</body>
+
+</html>

@@ -53,6 +53,9 @@ export default function Home() {
         };
       }
       setInviteData(data);
+      // The browser tab can name the couple (crawlers only ever see the static share card)
+      const groom = data?.couple?.groom?.firstName, bride = data?.couple?.bride?.firstName;
+      if (groom && bride) document.title = `${groom} & ${bride} · Wedding Invitation`;
       setLoading(false);
     };
 

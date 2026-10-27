@@ -473,7 +473,7 @@
         }
 
         /* the ring is born from the contact flash, not waiting behind the spiral */
-        html.intro .eclipse {
+        html.intro:not(.born) .eclipse {
             opacity: 0;
             transform: translate(-50%, -50%) scale(.35);
         }
@@ -494,11 +494,26 @@
             font-size: clamp(3.6rem, 19vw, 7.5rem);
             white-space: nowrap;
             padding: 0 .06em .08em;
-            transition: letter-spacing 1.2s var(--ease);
+            transition: letter-spacing 1.8s var(--ease), filter 1.5s var(--ease), opacity 1.2s var(--ease);
         }
 
+        /* the names arrive soft and wide, then sharpen and settle as they're unveiled */
         html.intro .hero-names .n {
-            letter-spacing: .12em;
+            letter-spacing: .14em;
+            opacity: .35;
+            filter: blur(10px) drop-shadow(0 0 18px rgba(226, 191, 126, .22));
+        }
+
+        .hero-names .n+.amp+.n {
+            transition-delay: .18s;
+        }
+
+        .hero-names .amp {
+            transition: opacity 1.2s var(--ease) .1s;
+        }
+
+        html.intro .hero-names .amp {
+            opacity: 0;
         }
 
         .hero-names .amp {
@@ -2496,7 +2511,9 @@
                     ctx.globalAlpha = 1; ctx.fillStyle = gr; ctx.fillRect(0, 0, W, H);
                     if (!intro.buzzed) { intro.buzzed = true; try { navigator.vibrate && navigator.vibrate(12); } catch (e) { } }
                 }
-                // Shockwave reveals the names
+                // The ring is born in the contact flash
+                if (I >= 2400 && !intro.born) { intro.born = true; root.classList.add('born'); }
+                // Shockwave sweeps the screen…
                 if (I >= 2520) {
                     var q = clamp01((I - 2520) / 880), R = expoOut(q) * Math.hypot(W, H) * .75;
                     if (q < 1) {
@@ -2504,11 +2521,18 @@
                         ctx.strokeStyle = 'rgba(241,217,168,1)'; ctx.lineWidth = 3 - q * 2.5;
                         ctx.beginPath(); ctx.ellipse(cx, cy, R, R * .96, 0, 0, 6.2832); ctx.stroke();
                     }
-                    var hr = rectOf(heroNames);
-                    heroNames.style.clipPath = q < 1 ? 'circle(' + R + 'px at ' + (cx - hr.left) + 'px ' + (cy - hr.top) + 'px)' : '';
-                    if (q > .3 && !intro.foil) { intro.foil = true; $$('.hero-names .foil').forEach(function (n) { n.classList.add('shine'); }); root.classList.remove('intro'); root.classList.add('intro-tail'); }
-                } else {
-                    heroNames.style.clipPath = 'circle(0px at 50% 50%)';
+                }
+                // …while the names unveil at their own, readable pace. The reveal is
+                // sized to the names, not the screen — sized to the screen it would
+                // uncover them in ~20ms and read as a pop.
+                var hr = rectOf(heroNames), ncx = cx - hr.left, ncy = cy - hr.top;
+                var reach = Math.hypot(Math.max(ncx, hr.width - ncx), Math.max(ncy, hr.height - ncy)) + 24;
+                var nq = clamp01((I - 2520) / 1300);
+                heroNames.style.clipPath = nq < 1 ? 'circle(' + (easeOut(nq) * reach).toFixed(1) + 'px at ' + ncx + 'px ' + ncy + 'px)' : '';
+                if (I >= 2700 && !intro.foil) {
+                    intro.foil = true;
+                    $$('.hero-names .foil').forEach(function (n) { n.classList.add('shine'); });
+                    root.classList.remove('intro'); root.classList.add('intro-tail'); // names sharpen & settle
                 }
                 // Binary born: the merged light splits and rides out onto the new ring
                 if (I >= 3000) {
@@ -2591,7 +2615,7 @@
             }
             function goLive() {
                 mode = 'live';
-                root.classList.remove('intro', 'intro-tail', 'locked');
+                root.classList.remove('intro', 'intro-tail', 'born', 'locked');
                 root.classList.add('live');
                 gate.hidden = true;
                 store.set('wb-gravity-seen', '1');

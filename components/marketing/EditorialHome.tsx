@@ -52,18 +52,30 @@ export default function EditorialHome() {
     if (!motion) return;
     const el = root.current;
     let frame = 0;
+    const reveals = Array.from(el?.querySelectorAll<HTMLElement>(".wb-reveal") || []);
+    // Fail-safe: reveal anything at/near the viewport so a fast scroll never leaves a section blank.
+    const revealNear = () => {
+      const vh = window.innerHeight;
+      reveals.forEach(item => {
+        if (!item.classList.contains("is-visible") && item.getBoundingClientRect().top < vh * 0.9) {
+          item.classList.add("is-visible");
+        }
+      });
+    };
     const update = () => {
       frame = 0;
       el?.style.setProperty("--scroll", String(Math.min(window.scrollY / 650, 1)));
       el?.style.setProperty("--progress", `${window.scrollY / Math.max(1, document.documentElement.scrollHeight - window.innerHeight) * 100}%`);
+      revealNear();
     };
     const scroll = () => { if (!frame) frame = requestAnimationFrame(update); };
-    update();
-    window.addEventListener("scroll", scroll, { passive: true });
     const observer = new IntersectionObserver(entries => entries.forEach(entry => {
       if (entry.isIntersecting) { entry.target.classList.add("is-visible"); observer.unobserve(entry.target); }
-    }), { threshold: 0.1 });
-    el?.querySelectorAll(".wb-reveal").forEach(item => observer.observe(item));
+    }), { threshold: 0.01, rootMargin: "0px 0px 12% 0px" });
+    reveals.forEach(item => observer.observe(item));
+    update();
+    revealNear();
+    window.addEventListener("scroll", scroll, { passive: true });
     return () => { window.removeEventListener("scroll", scroll); cancelAnimationFrame(frame); observer.disconnect(); };
   }, [motion, filter, templates]);
 

@@ -106,7 +106,13 @@
                 data.gallery = k ? { images: Array.from({ length: k }, function (_, i) { return pool[i % pool.length]; }) } : undefined;
             }
             var compiled = Handlebars.compile(p.html)(data);
-            var full = '<!DOCTYPE html>\n<html lang="en">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
+            // &raf=timer → drive animation frames from a 16ms timer and expose the
+            // template's motion state (window.__wb) for numeric checks. Use when the
+            // preview runs in a hidden/background tab where browsers pause frames.
+            var shim = q.get("raf") === "timer"
+                ? "<script>window.__wbDebug=true;window.requestAnimationFrame=function(cb){return setTimeout(function(){cb(performance.now())},16)};window.cancelAnimationFrame=clearTimeout;<\/script>\n"
+                : "";
+            var full = '<!DOCTYPE html>\n<html lang="en">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1.0">\n' + shim +
                 (p.css ? "<style>" + p.css + "</style>" : "") + "\n</head>\n<body>\n" + compiled + "\n" +
                 (p.js ? "<script>" + p.js + "<\/script>" : "") + "\n</body>\n</html>";
             var f = document.createElement("iframe");

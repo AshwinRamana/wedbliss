@@ -1,21 +1,26 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { Suspense } from "react";
+import { Suspense, useState, useEffect } from "react";
 import Link from "next/link";
 
 
 
 function SuccessContent() {
     const searchParams = useSearchParams();
-    const orderId = searchParams.get("order_id") || `WB-${Math.floor(100000 + Math.random() * 900000)}`;
+    // Read the real order id from the URL after mount only. Reading it during
+    // render would mismatch the static-export prerender (no URL at build time),
+    // and the old Math.random() fallback showed a fake order number + threw a
+    // hydration error. Now we only ever show the genuine Razorpay order id.
+    const [orderId, setOrderId] = useState<string | null>(null);
+    useEffect(() => { setOrderId(searchParams.get("order_id")); }, [searchParams]);
 
     return (
         <div className="min-h-screen flex flex-col justify-between relative overflow-hidden" style={{ background: "linear-gradient(135deg, #fffbf5 0%, #fff8ed 55%, #fef3e2 100%)" }}>
             {/* Celebration Background Elements */}
             <div className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-40">
                 <div className="absolute top-[10%] left-[15%] w-4 h-4 bg-gold rounded-full blur-[1px] animate-float"></div>
-                <div className="absolute top-[30%] right-[20%] w-3 h-3 bg-emerald-500 rounded-full blur-[1px] animate-float-delayed"></div>
+                <div className="absolute top-[30%] right-[20%] w-3 h-3 bg-amber-400 rounded-full blur-[1px] animate-float-delayed"></div>
                 <div className="absolute bottom-[20%] left-[25%] w-5 h-5 bg-amber-400 rounded-full blur-[1px] animate-float"></div>
             </div>
 
@@ -24,11 +29,11 @@ function SuccessContent() {
             <main className="flex-1 w-full max-w-4xl mx-auto px-4 pt-40 pb-20 relative z-10 flex flex-col items-center">
                 <div className="w-full max-w-lg bg-white/50 backdrop-blur-3xl border border-white/60 rounded-[48px] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.12)] p-10 sm:p-14 text-center relative overflow-hidden">
                     {/* Top Accent */}
-                    <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-gold via-emerald-500 to-gold"></div>
+                    <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-gold via-[#632c40] to-gold"></div>
 
                     {/* Success Icon */}
                     <div className="w-24 h-24 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-10 shadow-inner border border-emerald-200 animate-bounce-slow">
-                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#047857" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#632c40" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                             <polyline points="20 6 9 17 4 12" />
                         </svg>
                     </div>
@@ -45,7 +50,7 @@ function SuccessContent() {
                     <div className="bg-slate-50/80 rounded-3xl p-6 mb-12 border border-slate-100 flex flex-col gap-3">
                         <div className="flex justify-between items-center text-xs font-bold text-slate-400 uppercase tracking-widest">
                             <span>Order ID</span>
-                            <span className="text-slate-800">{orderId}</span>
+                            <span className="text-slate-800">{orderId || "—"}</span>
                         </div>
                         <div className="flex justify-between items-center text-xs font-bold text-slate-400 uppercase tracking-widest pt-2 border-t border-slate-200/50">
                             <span>Status</span>

@@ -307,12 +307,12 @@ function CheckoutFormContent() {
                                                     </button>
                                                 )}
                                             </div>
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                                            <div className="grid grid-cols-1 gap-4 mt-2">
                                                 <div className="flex flex-col gap-2">
                                                     <label className="text-xs font-bold text-slate-700 uppercase">Date *</label>
                                                     <input type="date" required className={inputClass} value={event.date} onChange={e => handleEventChange(index, "date", e.target.value)} />
                                                 </div>
-                                                <div className="grid grid-cols-2 gap-4">
+                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                                     <div className="flex flex-col gap-2">
                                                         <label className="text-xs font-bold text-slate-700 uppercase">From Time *</label>
                                                         <div className="flex gap-2">

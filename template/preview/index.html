@@ -63,6 +63,21 @@
                 ] },
                 media: { videoUrl: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" }
             },
+            // Wedding-day visit: ceremony starts in ~2 hours, reception tonight (dates computed at load)
+            today: (function () {
+                var n = new Date(), iso = n.getFullYear() + "-" + String(n.getMonth() + 1).padStart(2, "0") + "-" + String(n.getDate()).padStart(2, "0");
+                var h = function (o) { return String(Math.min(23, n.getHours() + o)).padStart(2, "0") + ":00"; };
+                return {
+                    couple: {
+                        bride: { firstName: "Kavya", fatherName: "Ramesh", motherName: "Geetha", notes: "See you at the mandapam!" },
+                        groom: { firstName: "Vikram", fatherName: "Sundar", motherName: "Latha" }
+                    },
+                    events: [
+                        { id: "ev-1", title: "Muhurtham", date: iso, startTime: h(2), endTime: h(4), venueName: "Sri Kapaleeshwarar Kalyana Mandapam, Mylapore", googleMapsUrl: "" },
+                        { id: "ev-2", title: "Reception", date: iso, startTime: h(7), endTime: h(10), venueName: "ITC Grand Chola, Guindy", googleMapsUrl: "" }
+                    ]
+                };
+            })(),
             // Smallest valid invitation: one event, nothing optional
             minimal: {
                 couple: {

@@ -78,6 +78,21 @@
                     ]
                 };
             })(),
+            // Mid-ceremony: the Muhurtham started an hour ago and ends in an hour
+            live: (function () {
+                var n = new Date(), iso = n.getFullYear() + "-" + String(n.getMonth() + 1).padStart(2, "0") + "-" + String(n.getDate()).padStart(2, "0");
+                var h = function (o) { return String(Math.max(0, Math.min(23, n.getHours() + o))).padStart(2, "0") + ":" + String(n.getMinutes()).padStart(2, "0"); };
+                return {
+                    couple: { bride: { firstName: "Kavya", fatherName: "Ramesh", motherName: "Geetha" }, groom: { firstName: "Vikram", fatherName: "Sundar", motherName: "Latha" } },
+                    events: [{ id: "ev-1", title: "Muhurtham", date: iso, startTime: h(-1), endTime: h(1), venueName: "Sri Kapaleeshwarar Kalyana Mandapam", googleMapsUrl: "" },
+                        { id: "ev-2", title: "Reception", date: iso, startTime: h(3), endTime: h(5), venueName: "ITC Grand Chola", googleMapsUrl: "" }]
+                };
+            })(),
+            // Last spring's wedding, opened afterwards
+            past: {
+                couple: { bride: { firstName: "Anu", fatherName: "Prakash", motherName: "Usha" }, groom: { firstName: "Hari", fatherName: "Mani", motherName: "Jaya" } },
+                events: [{ id: "ev-1", title: "Muhurtham", date: "2026-03-08", startTime: "09:00", endTime: "10:30", venueName: "Raghavendra Mahal, Madurai", googleMapsUrl: "" }]
+            },
             // Smallest valid invitation: one event, nothing optional
             minimal: {
                 couple: {

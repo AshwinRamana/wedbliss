@@ -43,6 +43,7 @@
             --unfold: cubic-bezier(.65, 0, .35, 1);
             --settle: cubic-bezier(.16, 1, .3, 1);
             --gutter: 24px;
+            --sec: 88px;
             --vh: 100svh;
             --shadow: 0 1px 1px rgba(107, 58, 74, .06), 0 10px 30px -10px rgba(107, 58, 74, .22), 0 30px 60px -30px rgba(199, 106, 128, .18);
         }
@@ -50,6 +51,7 @@
         @media (min-width: 760px) {
             :root {
                 --gutter: 48px;
+                --sec: 120px;
             }
         }
 
@@ -237,9 +239,10 @@
         /* ── Type primitives ──────────────────────────────────────── */
         .label {
             margin: 0;
+            text-wrap: balance;
             font-family: var(--label);
             font-weight: 500;
-            font-size: 13px;
+            font-size: clamp(13px, .45vw + 11.5px, 15px);
             letter-spacing: .18em;
             text-transform: uppercase;
             color: var(--plum);
@@ -259,7 +262,7 @@
         .head {
             text-align: center;
             max-width: 40rem;
-            margin: 0 auto 48px;
+            margin: 0 auto 36px;
             padding: 0 var(--gutter);
         }
 
@@ -300,7 +303,7 @@
             background: var(--paper);
             color: var(--ink);
             font-family: var(--label);
-            font-size: 14px;
+            font-size: 16px;
             font-weight: 500;
             letter-spacing: .06em;
             text-decoration: none;
@@ -404,6 +407,7 @@
             top: calc(env(safe-area-inset-top) - 4px);
             height: 92px;
             pointer-events: none;
+            z-index: 2; /* in front of the sunrise light, so the leaves never wash out */
             transition: transform 1.2s var(--unfold), opacity .9s;
         }
 
@@ -411,7 +415,7 @@
             position: absolute;
             top: calc(env(safe-area-inset-top) + 18px);
             bottom: 0;
-            width: 34%;
+            width: min(20%, 150px);
             pointer-events: none;
             transition: transform 1.4s cubic-bezier(.2, .7, .1, 1), opacity 1.2s;
         }
@@ -456,11 +460,6 @@
             opacity: 0;
         }
 
-        html.opening .thoranam {
-            transform: translateY(-115%);
-            opacity: 0;
-            transition-delay: .5s;
-        }
 
         .gate-inner {
             position: relative;
@@ -497,8 +496,8 @@
         .gate-date {
             margin: 10px 0 0;
             font-family: var(--label);
-            font-size: 13px;
-            letter-spacing: .18em;
+            font-size: 16px;
+            letter-spacing: .12em;
             text-transform: uppercase;
             color: var(--plum);
         }
@@ -550,11 +549,28 @@
             height: 78%;
         }
 
+        /* the medallion appears only once the flaps have folded past it */
+        html.js .fold-base svg {
+            opacity: 0;
+            transition: opacity .5s ease .45s;
+        }
+
+        html.unfold .fold-base svg {
+            opacity: 1;
+        }
+
+        html.quick .fold-base svg {
+            transition-delay: .2s;
+        }
+
         .flap {
             position: absolute;
             inset: 0;
             background: linear-gradient(135deg, #fffdf8, #f8efe3);
             transform-style: preserve-3d;
+            /* a flap vanishes once it folds past 90° — no flat diamond of flap-backs */
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
             transition: transform .7s var(--unfold);
         }
 
@@ -612,7 +628,7 @@
             box-shadow: 0 2px 6px rgba(107, 58, 74, .18), inset 0 0 0 1px rgba(233, 215, 176, .9);
             display: grid;
             place-items: center;
-            transition: transform .5s var(--settle), opacity .3s;
+            transition: transform .5s var(--settle) .2s, opacity .35s ease .25s;
         }
 
         .seal svg {
@@ -722,7 +738,7 @@
 
         .names .n {
             display: block;
-            font-size: clamp(3.4rem, 16.4vw, 6.6rem);
+            font-size: clamp(2.6rem, 13.5vw, 6.6rem);
             white-space: nowrap;
             text-shadow: 0 1px 0 rgba(255, 255, 255, .6);
         }
@@ -738,7 +754,7 @@
             display: block;
             width: 1.2em;
             height: 1.05em;
-            margin: -.12em auto -.16em;
+            margin: -.02em auto -.06em;
             font-size: clamp(3.6rem, 18vw, 5.2rem);
             overflow: visible;
         }
@@ -775,13 +791,41 @@
         }
 
         .hero-date {
-            margin: 30px 0 0;
+            margin: 28px 0 0;
             font-family: var(--label);
             font-weight: 500;
-            font-size: 14px;
-            letter-spacing: .2em;
+            font-size: 17px;
+            letter-spacing: .12em;
             text-transform: uppercase;
             color: var(--plum);
+        }
+
+        .hero-venue {
+            margin: 6px auto 0;
+            max-width: min(46ch, 100%);
+            font-family: var(--body);
+            font-size: 18px;
+            line-height: 1.45;
+            color: var(--ink);
+            text-wrap: balance;
+        }
+
+        /* the doorway's thoranam stays over the names — the morning carries on */
+        /* identical to the gate's, in the identical place — the gate cross-fades
+           onto it, so the doorway never leaves the frame */
+        .hero-thoranam {
+            position: absolute;
+            left: -2%;
+            right: -2%;
+            top: calc(env(safe-area-inset-top) - 4px);
+            height: 92px;
+            pointer-events: none;
+        }
+
+        .hero-thoranam svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
         }
 
         .cue {
@@ -793,7 +837,7 @@
             justify-items: center;
             gap: 10px;
             font-family: var(--label);
-            font-size: 12px;
+            font-size: 13px;
             letter-spacing: .24em;
             text-transform: uppercase;
             color: var(--plum);
@@ -838,8 +882,20 @@
             transition: opacity .6s var(--settle), transform .6s var(--settle);
         }
 
-        html.js .hero-date {
+        html.js .hero-date,
+        html.js .hero-venue {
             transition-delay: .12s;
+        }
+
+        html.js .hero-venue {
+            opacity: 0;
+            transform: translateY(12px);
+            transition: opacity .6s var(--settle) .2s, transform .6s var(--settle) .2s;
+        }
+
+        html.settled .hero-venue {
+            opacity: 1;
+            transform: none;
         }
 
         html.names-in .names .g {
@@ -897,7 +953,7 @@
         /* ═══ FAMILIES ═══════════════════════════════════════════════ */
         .families {
             position: relative;
-            padding: 120px var(--gutter);
+            padding: var(--sec) var(--gutter);
             text-align: center;
         }
 
@@ -908,15 +964,20 @@
             padding: 56px 0;
         }
 
+        /* a kolam field confined behind the two cards, feathered at every edge —
+           it never runs through the heading or the invitation line */
         .half-kolam {
             position: absolute;
-            left: 50%;
-            top: 50%;
-            width: min(110%, 620px);
-            aspect-ratio: 1;
-            transform: translate(-50%, -50%);
-            opacity: .55;
+            inset: 0 -4%;
+            opacity: .6;
             pointer-events: none;
+            -webkit-mask: radial-gradient(closest-side, #000 55%, transparent 100%);
+            mask: radial-gradient(closest-side, #000 55%, transparent 100%);
+        }
+
+        .half-kolam svg {
+            width: 100%;
+            height: 100%;
         }
 
         .fam-row {
@@ -977,6 +1038,27 @@
             overflow-wrap: anywhere;
         }
 
+        /* one parent per line — names never break mid-way */
+        /* each parent's name stays whole; the pair breaks before "&" only if it must */
+        .fam-parents .pn {
+            display: inline-block;
+        }
+
+        @media (max-width: 699px) {
+            .half-kolam {
+                display: none;
+            }
+        }
+
+        .half-kolam .kolam-white .loop {
+            stroke: #d9c08c;
+            filter: none;
+        }
+
+        .half-kolam .kolam-white .dot {
+            fill: #d9c08c;
+        }
+
         .fam-parents .amp-s {
             font-family: var(--display);
             font-style: italic;
@@ -999,7 +1081,7 @@
         /* ═══ THE DAY ════════════════════════════════════════════════ */
         .day {
             position: relative;
-            padding: 120px var(--gutter);
+            padding: var(--sec) var(--gutter);
             text-align: center;
         }
 
@@ -1083,6 +1165,7 @@
         }
 
         .day-venue {
+            text-wrap: balance;
             margin: 2px 0 0;
             font-size: 18px;
             color: var(--plum);
@@ -1149,6 +1232,19 @@
             transition-duration: .38s;
         }
 
+        /* after the wedding: a quiet line of thanks, not a button-shaped pill */
+        .status.quiet {
+            padding: 0;
+            background: none;
+            box-shadow: none;
+            font-family: var(--display);
+            font-style: italic;
+            font-weight: 500;
+            font-size: 22px;
+            letter-spacing: 0;
+            color: var(--plum);
+        }
+
         .status {
             display: inline-block;
             margin-top: 22px;
@@ -1157,7 +1253,7 @@
             background: var(--paper);
             box-shadow: var(--shadow);
             font-family: var(--label);
-            font-size: 14px;
+            font-size: 16px;
             letter-spacing: .06em;
             color: var(--plum);
         }
@@ -1165,7 +1261,7 @@
         /* ═══ EVENTS ═════════════════════════════════════════════════ */
         .events {
             position: relative;
-            padding: 120px 0 80px;
+            padding: var(--sec) 0 calc(var(--sec) + 40px); /* last row scrolls clear of the pill */
         }
 
         .cards {
@@ -1174,8 +1270,44 @@
             padding: 0 var(--gutter);
             list-style: none;
             display: grid;
+            grid-template-columns: minmax(0, 1fr);
             gap: 30px;
             perspective: 1600px;
+        }
+
+        @media (min-width: 980px) {
+            .cards {
+                max-width: 880px;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            /* the wedding day leads, full width; the rest sit two-up beneath it */
+            .cards .is-main {
+                grid-column: 1 / -1;
+                order: -1;
+            }
+
+            .cards .center-last {
+                grid-column: 1 / -1;
+                justify-self: center;
+                width: calc(50% - 15px);
+            }
+
+            .card-wrap {
+                display: flex;
+            }
+
+            /* actions always sit on the card's floor, so buttons line up across a row */
+            .card {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .card .actions {
+                margin-top: auto;
+                padding-top: 22px;
+            }
         }
 
         .card-wrap {
@@ -1187,7 +1319,8 @@
 
         .card {
             position: relative;
-            padding: 34px 26px 26px;
+            overflow: hidden;
+            padding: 34px 22px 24px;
             background: linear-gradient(170deg, #fffdf8, #fdf6ec);
         }
 
@@ -1201,8 +1334,8 @@
 
         .card-string {
             position: absolute;
-            right: -4px;
-            top: -10px;
+            right: 12px;
+            top: 12px;
             width: 128px;
             height: 64px;
             pointer-events: none;
@@ -1298,7 +1431,7 @@
         /* ═══ NOTES ══════════════════════════════════════════════════ */
         .notes {
             position: relative;
-            padding: 120px var(--gutter);
+            padding: var(--sec) var(--gutter);
         }
 
         .notes:not(:has(.note)) {
@@ -1395,7 +1528,7 @@
         /* ═══ MOMENTS ════════════════════════════════════════════════ */
         .moments {
             position: relative;
-            padding: 120px var(--gutter);
+            padding: var(--sec) var(--gutter);
         }
 
         .prints {
@@ -1521,13 +1654,16 @@
             margin-bottom: 16px;
         }
 
-        .prints[data-n="m"] .print:nth-child(3n+2) {
-            border-radius: 14px;
+        /* one shape (the mandapam arch); rhythm comes from height, not from mixing frames */
+        .prints[data-n="m"] .print:nth-child(3n+2) .ph {
+            aspect-ratio: 4 / 4.4;
         }
 
-        .prints[data-n="m"] .print:nth-child(3n+2) .ph {
-            border-radius: 8px;
-            aspect-ratio: 1;
+        .prints-hint {
+            position: relative;
+            z-index: 1;
+            margin: -12px 0 28px;
+            text-align: center;
         }
 
         .prints[data-n="m"] .print:nth-child(odd) {
@@ -1540,7 +1676,7 @@
 
         /* ═══ FILM ═══════════════════════════════════════════════════ */
         .film {
-            padding: 120px var(--gutter);
+            padding: var(--sec) var(--gutter);
         }
 
         .film-frame {
@@ -1597,16 +1733,41 @@
             transform: scaleX(0);
         }
 
+        .film-play {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            z-index: 1;
+            display: grid;
+            place-items: center;
+            width: 76px;
+            height: 76px;
+            margin: -38px 0 0 -38px;
+            border-radius: 50%;
+            border: 1px solid var(--champagne);
+            background: rgba(255, 253, 248, .94);
+            color: var(--ink);
+            box-shadow: 0 14px 34px -12px rgba(58, 31, 43, .55);
+            cursor: pointer;
+        }
+
+        .film-play svg {
+            width: 28px;
+            height: 28px;
+            margin-left: 4px;
+        }
+
+
         /* ═══ FINALE ═════════════════════════════════════════════════ */
         .finale {
             position: relative;
-            padding: 120px var(--gutter) 80px;
+            padding: var(--sec) var(--gutter) 64px;
             text-align: center;
         }
 
         .blessing {
             position: relative;
-            width: min(84vw, 380px);
+            width: min(76vw, 380px);
             aspect-ratio: 1;
             margin: 0 auto;
         }
@@ -1617,7 +1778,7 @@
             position: absolute;
             inset: -6%;
             border-radius: 50%;
-            background: radial-gradient(circle, #f3d3d8 0%, #f7e1e3 52%, rgba(247, 227, 227, 0) 72%);
+            background: radial-gradient(circle, rgba(201, 87, 60, .2) 0%, rgba(214, 120, 90, .12) 45%, rgba(251, 241, 230, 0) 72%);
         }
 
         .blessing svg {
@@ -1631,12 +1792,11 @@
         .kolam-white .loop {
             fill: none;
             stroke: #fff;
-            stroke-width: 2.4;
             stroke-linecap: round;
             filter: url(#rice);
             stroke-dasharray: var(--L);
             stroke-dashoffset: var(--L);
-            transition: stroke-dashoffset 3.2s var(--unfold);
+            transition: stroke-dashoffset 2s var(--unfold);
         }
 
         .kolam-white .dot {
@@ -1734,11 +1894,67 @@
         }
 
         .share-row {
+            display: grid;
+            justify-items: center;
+            gap: 6px;
+            margin-top: 40px;
+        }
+
+        .share-row .btn {
+            min-height: 56px;
+            padding: 0 30px;
+        }
+
+        .share-more {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 10px;
-            margin-top: 40px;
+            gap: 0 18px;
+        }
+
+        /* ── The wedding day, wherever it appears ── */
+        .card-wrap.is-main {
+            box-shadow: 0 1px 1px rgba(107, 58, 74, .06), 0 16px 40px -14px rgba(106, 76, 20, .35), 0 0 0 1.5px #c9a45c;
+        }
+
+        .card-wrap.is-main .card {
+            background:
+                radial-gradient(120% 70% at 85% 0%, rgba(255, 236, 196, .75), rgba(255, 236, 196, 0) 60%),
+                linear-gradient(170deg, #fffdf8, #fdf6ec);
+        }
+
+        /* one frame only: the 1.5px gold outer frame */
+        .card-wrap.is-main .card::before {
+            display: none;
+        }
+
+        .main-eyebrow {
+            margin: 0 0 10px;
+            color: var(--gold-ink);
+        }
+
+        @media (min-width: 980px) {
+
+            /* the wedding-day card is never narrower than the row beneath it */
+            .cards .is-main {
+                justify-self: stretch;
+            }
+
+            .card-wrap.is-main .card-title {
+                font-size: 42px;
+            }
+        }
+
+        .card-wrap.is-main .card-time {
+            font-size: 24px;
+        }
+
+        .sheet-list li.is-main .sl-when {
+            color: var(--gold-ink);
+        }
+
+        .sheet-list .chip {
+            margin: 10px 0 0;
         }
 
         .share-status {
@@ -1749,7 +1965,7 @@
         }
 
         footer {
-            padding: 26px var(--gutter) calc(env(safe-area-inset-bottom) + 108px);
+            padding: 26px var(--gutter) calc(env(safe-area-inset-bottom) + 40px);
             text-align: center;
             font-family: var(--label);
             font-size: 13px;
@@ -1779,15 +1995,6 @@
             background: linear-gradient(90deg, transparent, var(--champagne), transparent);
         }
 
-        .chapter::after {
-            content: "";
-            position: absolute;
-            inset: 0 0 auto;
-            height: 90px;
-            background: linear-gradient(rgba(107, 58, 74, .07), transparent);
-            opacity: calc(var(--f, 0));
-            pointer-events: none;
-        }
 
         /* ── Reveals (text rises once, then never moves) ── */
         .js .rv {
@@ -1824,11 +2031,11 @@
             padding: 0 22px;
             border-radius: 999px;
             border: 1px solid var(--champagne);
-            background: rgba(255, 253, 248, .96);
+            background: #fffdf8;
             box-shadow: 0 14px 34px -14px rgba(107, 58, 74, .55);
             color: var(--ink);
             font-family: var(--label);
-            font-size: 14px;
+            font-size: 16px;
             font-weight: 500;
             letter-spacing: .06em;
             cursor: pointer;
@@ -1846,7 +2053,10 @@
             transform: translate(-50%, 0);
         }
 
-        html.sheet-open .pill {
+        /* the finale is the end of the page — the pill steps aside (and while the
+           sheet is open). Must out-rank "html.live .pill" above. */
+        html.live.sheet-open .pill,
+        html.live.near-end .pill {
             transform: translate(-50%, 150%);
         }
 
@@ -1864,7 +2074,7 @@
         .sheet-backdrop {
             position: absolute;
             inset: 0;
-            background: rgba(58, 31, 43, .35);
+            background: rgba(58, 31, 43, .45);
             opacity: 0;
             transition: opacity .38s;
         }
@@ -2176,6 +2386,7 @@
     <main id="main">
         <!-- ═══ THE NAMES ═══ -->
         <section class="hero" id="hero" aria-labelledby="hero-title">
+            <div class="hero-thoranam" id="heroThoranam" aria-hidden="true"></div>
             <div class="hero-inner" id="heroInner">
                 <p class="hero-lead">Together with their families</p>
                 <h2 class="names" id="hero-title" tabindex="-1">
@@ -2191,6 +2402,7 @@
                     </svg></div>
                 {{#each events}}{{#if @first}}
                 <p class="hero-date" data-main="hero">{{date}}</p>
+                <p class="hero-venue" data-main="venue">{{venueName}}</p>
                 {{/if}}{{/each}}
             </div>
             <div class="cue" aria-hidden="true"><span>Scroll</span><i></i></div>
@@ -2225,7 +2437,7 @@
         <!-- ═══ THE DAY ═══ -->
         {{#each events}}{{#if @first}}
         <section class="day chapter" id="day" aria-labelledby="day-title">
-            <p class="label rv">Save the date</p>
+            <p class="label rv" id="dayLabel">Save the date</p>
             <h2 class="sr-only" id="day-title" data-main="long">{{date}}</h2>
             <div class="horizon" aria-hidden="true">
                 <div class="rays"></div>
@@ -2292,7 +2504,7 @@
             <div class="notes-pair">
                 {{#if couple.groom.notes}}
                 <figure class="note rv">
-                    <div class="pressed-rose" data-rose aria-hidden="true"></div>
+
                     <div class="tissue">
                         <svg class="bud-quote" viewBox="-20 -20 40 40" aria-hidden="true">
                             <use href="#jflower" />
@@ -2304,7 +2516,7 @@
                 {{/if}}
                 {{#if couple.bride.notes}}
                 <figure class="note rv" style="--rd:.12s">
-                    <div class="pressed-rose" data-rose aria-hidden="true"></div>
+
                     <div class="tissue">
                         <svg class="bud-quote" viewBox="-20 -20 40 40" aria-hidden="true">
                             <use href="#jflower" />
@@ -2355,23 +2567,16 @@
             <div class="blessing" id="blessing" aria-hidden="true"></div>
             <h2 class="finale-line rv" id="finale-title">With love, and your blessings</h2>
             <p class="finale-names rv">{{couple.groom.firstName}} <i>&amp;</i> {{couple.bride.firstName}}</p>
-            <ul class="recap rv" id="recap" aria-label="All events"></ul>
-            <div class="share-row rv">
-                <button class="btn btn-ink" id="shareBtn" type="button">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
-                        stroke-linejoin="round" aria-hidden="true">
-                        <path d="M12 3v12M7 8l5-5 5 5M5 14v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5" />
-                    </svg>Share invitation</button>
-                <a class="btn" id="waBtn" href="#" target="_blank" rel="noopener">
+            <div class="share-row rv" id="shareRow">
+                <a class="btn btn-ink" id="waBtn" href="#" target="_blank" rel="noopener">
                     <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                         <path
                             d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.9 11.9 0 0 0 4.6 4c1.7.7 2.3.8 3.2.7.5-.1 1.5-.6 1.8-1.2.2-.6.2-1.1.1-1.2l-.5-.3z" />
-                    </svg>WhatsApp</a>
-                <button class="btn" id="copyBtn" type="button">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
-                        aria-hidden="true">
-                        <path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1" />
-                    </svg>Copy link</button>
+                    </svg><span id="waLabel">Share on WhatsApp</span></a>
+                <div class="share-more">
+                    <button class="textlink" id="shareBtn" type="button">More ways to share</button>
+                    <button class="textlink" id="copyBtn" type="button">Copy link</button>
+                </div>
             </div>
             <p class="share-status" id="shareStatus" role="status"></p>
             <button class="textlink" id="replayBtn" type="button">Open the invitation again</button>
@@ -2501,10 +2706,13 @@
             var EVENTS = $$('[data-event]').map(function (el) {
                 var g = function (k) { return el.getAttribute('data-' + k) || ''; };
                 var d = parseDate(g('date')), e = { el: el, title: g('title'), venue: g('venue'), rawDate: g('date'), d: d, startRaw: g('start') };
-                e.time = (function () { var s = fmtTime(g('start')), f = fmtTime(g('end')); return s && f ? s + ' – ' + f : (s || f); })();
+                // An end time that's missing or equal to the start means "open-ended":
+                // say "from 11:00 pm", never "11:00 pm – 11:00 pm" (or a 24-hour event).
+                var sT = fmtTime(g('start')), eT = fmtTime(g('end')), hasEnd = !!(eT && eT !== sT);
+                e.time = sT && hasEnd ? sT + ' – ' + eT : sT ? 'from ' + sT : eT;
                 if (d) {
                     e.start = at(d, g('start'));
-                    e.end = g('end') ? at(d, g('end')) : new Date(e.start.getTime() + 3 * 36e5);
+                    e.end = hasEnd ? at(d, g('end')) : new Date(e.start.getTime() + 3 * 36e5);
                     if (e.end <= e.start) e.end = new Date(e.end.getTime() + 864e5); // runs past midnight
                 }
                 var map = g('map').trim();
@@ -2518,9 +2726,19 @@
             var CEREMONY = /muhurth|kalyan|wedding|vivah|marriage|shaadi|shadi|nikah|thali|parinay/i;
             var main = EVENTS.filter(function (e) { return CEREMONY.test(e.title); })[0] || EVENTS[0];
             var allPast = EVENTS.length && EVENTS.every(function (e) { return e.past; });
+            // only the very next event gets a filled chip; later ones are outlined
+            var nextEv = EVENTS.filter(function (e) { return e.start && !e.past; }).sort(function (a, b) { return a.start - b.start; })[0] || null;
             var soon = EVENTS.filter(function (e) { return e.start && !e.past && (e.today || (e.start - now) < 6 * 36e5); });
             var couple = (($('.finale-names') || {}).textContent || '').replace(/\s+/g, ' ').trim();
 
+            /* Couples often type "Wedding / Muhurtham". Show the specific name as the
+               title and the general one as its eyebrow; never print the slash. */
+            function prettyTitle(t) {
+                var parts = String(t || '').split(/\s*[\/|]\s*/).filter(Boolean);
+                if (parts.length < 2) return { title: t, eyebrow: '' };
+                return { title: parts[parts.length - 1], eyebrow: 'The ' + parts.slice(0, -1).join(' & ') };
+            }
+            EVENTS.forEach(function (e) { var p = prettyTitle(e.title); e.display = p.title; e.kind = p.eyebrow; });
             function setText(sel, txt) { $$(sel).forEach(function (el) { el.textContent = txt; }); }
             if (main && main.d) {
                 var md = main.d;
@@ -2532,7 +2750,7 @@
                 setText('[data-main="monthyear"]', MONTHS[md.getMonth()] + ' ' + md.getFullYear());
             }
             if (main) {
-                setText('[data-main="title"]', main.title);
+                setText('[data-main="title"]', main.display);
                 setText('[data-main="time"]', main.time);
                 setText('[data-main="venue"]', main.venue);
             }
@@ -2597,36 +2815,72 @@
                     $('[data-part="mon"]', el).textContent = e.rawDate;
                 }
                 $('[data-part="time"]', el).textContent = e.time;
+                $('.card-title', el).textContent = e.display;
+                if (e.kind && e !== main) {
+                    var kb = doc.createElement('p');
+                    kb.className = 'label main-eyebrow'; kb.textContent = e.kind;
+                    $('.card', el).insertBefore(kb, $('.card-when', el));
+                }
                 var chip = $('[data-part="chip"]', el);
-                if (e.live) { chip.hidden = false; chip.textContent = 'Happening now'; }
-                else if (e.today) { chip.hidden = false; chip.textContent = 'Today'; }
-                else if (e.past) { chip.hidden = false; chip.textContent = 'Celebrated'; chip.classList.add('done'); }
+                var c = chipText(e);
+                if (c) { chip.hidden = false; chip.textContent = c; if (e.past || (nextEv && e !== nextEv)) chip.classList.add('done'); }
                 actionsFor(e, $('[data-part="actions"]', el));
+                // The ceremony is the visual peak wherever it appears
+                if (e === main && EVENTS.length > 1) {
+                    el.classList.add('is-main');
+                    var eb = doc.createElement('p');
+                    eb.className = 'label main-eyebrow'; eb.textContent = 'The wedding day';
+                    $('.card', el).insertBefore(eb, $('.card-when', el));
+                }
             });
+            // "Starts in 2 h", "Happening now", "Celebrated" — the one status guests need
+            function chipText(e) {
+                if (e.live) return 'Happening now';
+                if (e.past) return 'Celebrated';
+                if (e.today && e.start) {
+                    var mins = Math.round((e.start - now) / 6e4);
+                    return mins < 60 ? 'Starts in ' + Math.max(1, mins) + ' min' : 'Starts in ' + Math.floor(mins / 60) + ' h' + (mins % 60 ? ' ' + (mins % 60) + ' min' : '');
+                }
+                return '';
+            }
 
-            // Details sheet (next events first) + finale recap
+            // One event: the date chapter already carries it (with Directions and
+            // Calendar) — never show it a second time as a lone card.
+            if (EVENTS.length === 1) { var evSec = $('#events'); if (evSec) evSec.remove(); }
+            // Desktop: with the wedding day leading full width, an odd remainder
+            // centres its last card instead of leaving an orphan.
+            (function () {
+                var rest = EVENTS.filter(function (e) { return !(e === main && EVENTS.length > 1); });
+                if (EVENTS.length > 1 && rest.length % 2 === 1) rest[rest.length - 1].el.classList.add('center-last');
+            })();
+
+            // Details sheet (next events first)
             var ordered = EVENTS.slice().sort(function (a, b) {
                 if (a.past !== b.past) return a.past ? 1 : -1;
                 return (a.start || 0) - (b.start || 0);
             });
-            var sheetList = $('#sheetList'), recap = $('#recap');
+            var sheetList = $('#sheetList');
             ordered.forEach(function (e) {
                 var li = doc.createElement('li'), when = e.d ? DAYS[e.d.getDay()] + ' · ' + e.d.getDate() + ' ' + MONTHS[e.d.getMonth()] : e.rawDate;
-                li.innerHTML = '<p class="label sl-when"></p><h3 class="sl-title"></h3><p class="sl-time"></p><p class="sl-venue"></p><div class="actions"></div>';
-                $('.sl-when', li).textContent = (e.live ? 'Happening now · ' : e.today ? 'Today · ' : e.past ? 'Celebrated · ' : '') + when;
-                $('.sl-title', li).textContent = e.title;
+                li.innerHTML = '<p class="label sl-when"></p><h3 class="sl-title"></h3><p class="sl-time"></p><p class="sl-venue"></p><span class="chip" hidden></span><div class="actions"></div>';
+                // segments never break mid-way ("THE WEDDING DAY · TODAY", not a stray "·")
+                var segs = [];
+                if (e === main && EVENTS.length > 1) segs.push('The wedding day');
+                // the sheet header already says "Today" on the day — don't repeat it per row
+                if (!(soon.length && e.today && !e.past)) segs.push(when);
+                var sw = $('.sl-when', li);
+                segs.forEach(function (s, i) {
+                    if (i) sw.appendChild(doc.createTextNode(' · '));
+                    var sp = doc.createElement('span'); sp.style.whiteSpace = 'nowrap'; sp.textContent = s; sw.appendChild(sp);
+                });
+                $('.sl-title', li).textContent = e.display;
                 $('.sl-time', li).textContent = e.time;
                 $('.sl-venue', li).textContent = e.venue;
+                var c = chipText(e), ch = $('.chip', li);
+                if (c) { ch.hidden = false; ch.textContent = c; if (e.past || (nextEv && e !== nextEv)) ch.classList.add('done'); }
+                if (e === main && EVENTS.length > 1) li.classList.add('is-main');
                 actionsFor(e, $('.actions', li));
                 sheetList.appendChild(li);
-            });
-            EVENTS.forEach(function (e) {
-                var li = doc.createElement('li');
-                li.innerHTML = '<b></b><span><strong></strong></span>';
-                $('b', li).textContent = e.d ? e.d.getDate() + ' ' + MONTHS[e.d.getMonth()].slice(0, 3) : '';
-                $('strong', li).textContent = e.title;
-                $('span', li).appendChild(doc.createTextNode(e.time + (e.venue ? ' · ' + e.venue : '')));
-                recap.appendChild(li);
             });
             if (soon.length) {
                 $('#sheetEyebrow').textContent = soon[0].live ? 'Happening now' : 'Today';
@@ -2634,13 +2888,31 @@
                 gt.hidden = false;
                 gt.textContent = (soon[0].live ? 'Happening now: ' : 'Today: ') + soon[0].title + ', ' + fmtTime(soon[0].startRaw);
             }
-            if (allPast) $('#finale-title').textContent = 'Thank you for blessing us';
+            if (allPast) {
+                // the wedding has happened: the invitation becomes a keepsake
+                $('#finale-title').textContent = 'Thank you for blessing us';
+                var ld = EVENTS.filter(function (e) { return e.d; }).map(function (e) { return e.d; }).sort(function (a, b) { return b - a; })[0];
+                var gp = $('#gateToday');
+                gp.hidden = false;
+                gp.textContent = 'Celebrated — thank you for your blessings'; // the date is already printed just above
+                $('#openBtn').textContent = 'View the invitation';
+                $('#waLabel').textContent = 'Share our thanks';
+            }
 
             // Parents: a missing name never leaves a stray "&"
             $$('[data-parents]').forEach(function (p) {
                 var parts = $$('span:not(.amp-s)', p), has = parts.filter(function (s) { return s.textContent.trim(); });
                 if (has.length < 2) $('.amp-s', p).remove();
                 if (!has.length) { p.previousElementSibling.hidden = true; p.hidden = true; }
+                // "Father" and "& Mother" each stay whole: short pairs share a line,
+                // long ones break cleanly before the "&"
+                else if (has.length === 2) {
+                    var amp = $('.amp-s', p), mom = parts[1], second = doc.createElement('span');
+                    second.className = 'pn';
+                    amp.textContent = '& ';
+                    p.insertBefore(second, amp); second.appendChild(amp); second.appendChild(mom);
+                    parts[0].className = 'pn'; p.insertBefore(doc.createTextNode(' '), second);
+                }
             });
 
             /* ── Countdown (one line; digits rise into place) ─────── */
@@ -2660,17 +2932,22 @@
             }
             if (main && main.start) {
                 if (main.live) { status.hidden = false; status.textContent = 'Happening now'; }
-                else if (now > main.end) { status.hidden = false; status.textContent = 'Celebrated on ' + fmtLong(main.d) + ' — thank you for your blessings'; }
+                else if (now > main.end) { status.hidden = false; status.classList.add('quiet'); status.textContent = 'Celebrated — thank you for your blessings.'; $('#dayLabel').textContent = 'The day we celebrated'; }
                 else {
+                    // Far out, the days are what matter; within two days, hours and minutes.
                     cd.hidden = false;
-                    cd.innerHTML = 'in <b>' + roller('</b>days, <b>') + roller('</b>hours &amp; <b>') + roller('</b>minutes');
-                    var rolls = $$('.roll', cd);
+                    var far = null, rolls = [];
                     var tick = function () {
                         var diff = main.start - new Date();
                         if (diff <= 0) { cd.hidden = true; status.hidden = false; status.textContent = 'Happening now'; return false; }
-                        setRoll(rolls[0], Math.floor(diff / 864e5));
-                        setRoll(rolls[1], Math.floor(diff % 864e5 / 36e5));
-                        setRoll(rolls[2], Math.floor(diff % 36e5 / 6e4));
+                        var isFar = diff > 2 * 864e5;
+                        if (isFar !== far) {
+                            far = isFar;
+                            cd.innerHTML = far ? 'in <b>' + roller('</b>days') : 'in <b>' + roller('</b>hours &amp; <b>') + roller('</b>minutes');
+                            rolls = $$('.roll', cd);
+                        }
+                        if (far) setRoll(rolls[0], Math.ceil(diff / 864e5));
+                        else { setRoll(rolls[0], Math.floor(diff / 36e5)); setRoll(rolls[1], Math.floor(diff % 36e5 / 6e4)); }
                         return true;
                     };
                     if (tick()) var iv = setInterval(function () { if (!tick()) clearInterval(iv); }, 1000);
@@ -2735,16 +3012,17 @@
                     if (i < leaves) th.appendChild(use('bud', x + W / leaves / 2, y + 16, 180 + jit(10), .9));
                 }
                 $('#thoranam').appendChild(th);
+                $('#heroThoranam').appendChild(th.cloneNode(true));
                 // Jasmine curtains — strands sway on staggered cycles
                 ['#curtainL', '#curtainR'].forEach(function (sel, side) {
                     var box = $(sel), h = Math.max(600, win.innerHeight);
-                    var sv = svgEl('svg', { viewBox: '0 0 130 ' + h, preserveAspectRatio: 'xMidYMin slice' });
-                    var count = 5;
+                    var sv = svgEl('svg', { viewBox: '0 0 80 ' + h, preserveAspectRatio: 'xMidYMin slice' });
+                    var count = 4;
                     for (var k = 0; k < count; k++) {
                         var g = svgEl('g', { class: 'strand' });
                         g.style.setProperty('--d', (3 + rnd() * 2).toFixed(2) + 's');
                         g.style.setProperty('--dl', (-rnd() * 4).toFixed(2) + 's');
-                        var xk = side ? 130 - (8 + k * 22) : 8 + k * 22;
+                        var xk = side ? 80 - (8 + k * 19) : 8 + k * 19;
                         strand(g, xk, h * (0.42 + .5 * Math.pow(1 - k / count, 1.4)) + jit(30), .85);
                         sv.appendChild(g);
                     }
@@ -2760,7 +3038,7 @@
             }
 
             /* Kolam traced as a 45° billiard inside an n×n dot grid (sikku kolam) */
-            function kolamGroup(n, size, color, width, white) {
+            function kolamGroup(n, size, color, width, white, curl) {
                 var lo = -.5, hi = n - .5, used = {}, loops = [], starts = [];
                 for (var q = 0; q < n; q++) starts.push({ x: lo, y: q, dx: 1, dy: 1 }, { x: hi, y: q, dx: -1, dy: 1 }, { x: q, y: lo, dx: 1, dy: 1 }, { x: q, y: hi, dx: 1, dy: -1 });
                 starts.forEach(function (s0) {
@@ -2777,18 +3055,31 @@
                     } while (!(Math.abs(p.x - s0.x) < 1e-9 && Math.abs(p.y - s0.y) < 1e-9) && guard++ < 400);
                     loops.push(pts);
                 });
-                var pad = 1.1, S = size / (n - 1 + pad * 2), X = function (v) { return ((v + pad) * S).toFixed(2); }, r = .5, k = 1.1;
+                /* Drawing: the walk gives the authentic sikku route; the line itself
+                   is what makes it a kolam. Each half-step between crossings bows
+                   away from its nearest dot — consecutive arcs bow to alternate
+                   sides, so the line weaves and every dot ends up inside an "eye".
+                   Each bounce off the edge becomes a teardrop loop. */
+                var pad = 1.1, S = size / (n - 1 + pad * 2), X = function (v) { return ((v + pad) * S).toFixed(2); };
+                var bow = curl || .62, tear = .46;
                 var g = svgEl('g', { class: white ? 'kolam-white' : '' });
                 loops.forEach(function (pts) {
-                    var s = '';
-                    pts.forEach(function (b, i) {
-                        var A = { x: b.x - b.din.x * r, y: b.y - b.din.y * r }, C = { x: b.x + b.dout.x * r, y: b.y + b.dout.y * r };
-                        var c1 = { x: A.x + b.din.x * r * k, y: A.y + b.din.y * r * k }, c2 = { x: C.x - b.dout.x * r * k, y: C.y - b.dout.y * r * k };
-                        s += (i ? 'L' : 'M') + X(A.x) + ',' + X(A.y) + 'C' + X(c1.x) + ',' + X(c1.y) + ' ' + X(c2.x) + ',' + X(c2.y) + ' ' + X(C.x) + ',' + X(C.y);
+                    var start = pts[pts.length - 1], P = { x: start.x, y: start.y }, s = 'M' + X(P.x) + ',' + X(P.y);
+                    pts.forEach(function (b) {
+                        var steps = Math.round(Math.abs(b.x - P.x) / .5);
+                        for (var i = 0; i < steps; i++) {
+                            var Q = { x: P.x + b.din.x * .5, y: P.y + b.din.y * .5 }, M = { x: (P.x + Q.x) / 2, y: (P.y + Q.y) / 2 };
+                            var D = { x: Math.round(M.x), y: Math.round(M.y) }, cx = M.x + (M.x - D.x) * bow, cy = M.y + (M.y - D.y) * bow;
+                            s += 'Q' + X(cx) + ',' + X(cy) + ' ' + X(Q.x) + ',' + X(Q.y);
+                            P = Q;
+                        }
+                        // teardrop loop outside the edge, wrapping the border dot
+                        s += 'C' + X(b.x + b.din.x * tear) + ',' + X(b.y + b.din.y * tear) + ' ' + X(b.x - b.dout.x * tear) + ',' + X(b.y - b.dout.y * tear) + ' ' + X(b.x) + ',' + X(b.y);
+                        P = { x: b.x, y: b.y };
                     });
-                    g.appendChild(svgEl('path', { class: 'loop', d: s + 'Z', fill: 'none', stroke: color, 'stroke-width': width, 'stroke-linecap': 'round', opacity: white ? 1 : .55 }));
+                    g.appendChild(svgEl('path', { class: 'loop', d: s, fill: 'none', stroke: color, 'stroke-width': width, 'stroke-linecap': 'round', 'stroke-linejoin': 'round', opacity: white ? 1 : .55 }));
                 });
-                for (var i = 0; i < n; i++) for (var j = 0; j < n; j++) g.appendChild(svgEl('circle', { class: 'dot', cx: X(i), cy: X(j), r: white ? 2.2 : 1.1, fill: color }));
+                for (var i = 0; i < n; i++) for (var j = 0; j < n; j++) g.appendChild(svgEl('circle', { class: 'dot', cx: X(i), cy: X(j), r: white ? width * 1.15 : 1.1, fill: color }));
                 return g;
             }
 
@@ -2821,31 +3112,22 @@
                     }
                 });
                 // a lotus leaf it rests on, drawn behind the petals
-                sv.insertBefore(svgEl('ellipse', { cx: 0, cy: base + 3, rx: 46, ry: 9, fill: 'rgba(94,125,78,.28)' }), sv.children[1]);
-                return sv;
-            }
-
-            function pressedRose() {
-                var sv = svgEl('svg', { viewBox: '-40 -40 80 80', overflow: 'visible' });
-                for (var i = 0; i < 7; i++) sv.appendChild(use('petal', jit(5), jit(5), i * 51 + jit(12), .9 + jit(.15)));
-                sv.appendChild(svgEl('circle', { r: 4, fill: '#c76a80', opacity: .6 }));
                 return sv;
             }
 
             buildGate();
-            $$('[data-rose]').forEach(function (b) { b.appendChild(pressedRose()); });
             $$('.card-string').forEach(function (b) {
-                var sv = svgEl('svg', { viewBox: '0 0 128 64', overflow: 'visible' }), g = svgEl('g', {});
-                jasmineString(g, 6, 8, 124, 30, 16, 10, .78);
+                var sv = svgEl('svg', { viewBox: '0 0 128 64', overflow: 'hidden' }), g = svgEl('g', {});
+                jasmineString(g, 16, 10, 112, 26, 12, 10, .72);
                 sv.appendChild(g); b.appendChild(sv);
             });
             (function () {
                 var fk = $('#famKolam'); if (!fk) return;
-                var sv = svgEl('svg', { viewBox: '0 0 300 300' });
+                var sv = svgEl('svg', { viewBox: '0 0 300 300', preserveAspectRatio: 'xMidYMid slice' });
                 sv.appendChild(kolamGroup(7, 300, '#fff', 2.2, true));
                 fk.appendChild(sv);
                 var bl = $('#blessing'), ks = svgEl('svg', { viewBox: '0 0 300 300' });
-                ks.appendChild(kolamGroup(7, 300, '#fff', 2.4, true));
+                ks.appendChild(kolamGroup(5, 300, '#fff', 3.4, true, .62));
                 bl.appendChild(ks);
                 var lw = lotusSvg(); lw.style.transform = 'scale(.9) translateY(-6%)'; bl.appendChild(lw);
                 // dash lengths for the draw-on
@@ -2896,6 +3178,16 @@
             /* ── Notes: preserve breaks, clamp very long ones ─────── */
             var notesSec = $('#notes');
             if (notesSec && !$('.note', notesSec)) notesSec.remove();
+            else if (notesSec && $$('.note', notesSec).length === 1) {
+                // one note is one voice: "A word from Priya", not "from us"
+                var who = ($('.note-sign', notesSec).textContent || '').replace(/^[\s—-]+/, '').trim();
+                // the long name goes in the small eyebrow; the title stays short and on one line
+                if (who) {
+                    $('.head .label', notesSec).textContent = 'From ' + who;
+                    $('#notes-title').textContent = 'With love';
+                    $('.note-sign', notesSec).hidden = true;
+                }
+            }
             $$('.note-text').forEach(function (p) {
                 if (p.textContent.length <= 280) return;
                 p.classList.add('clamp');
@@ -2919,6 +3211,9 @@
                     $('.ph', last).appendChild(more);
                     last.setAttribute('aria-label', 'View all ' + n + ' photos');
                 }
+                var hint = doc.createElement('p');
+                hint.className = 'label prints-hint'; hint.textContent = n > 1 ? 'Tap any photo to view' : 'Tap to view';
+                prints.parentNode.insertBefore(hint, prints); // under the heading — the pill covers the grid's foot
             }
 
             /* ── Video behind paper shutters ──────────────────────── */
@@ -2931,8 +3226,14 @@
                     v = doc.createElement('iframe'); v.src = 'https://player.vimeo.com/video/' + m[1];
                 } else {
                     v = doc.createElement('video');
-                    v.src = /#t=/.test(u) ? u : u + '#t=0.1'; // paint the first frame, not a dark box
-                    v.controls = true; v.preload = 'metadata'; v.setAttribute('playsinline', '');
+                    v.src = /#t=/.test(u) ? u : u + '#t=0.1'; // paint the first frame as the poster
+                    v.preload = 'metadata'; v.setAttribute('playsinline', '');
+                    // a calm poster with one round play button; native controls only once playing
+                    var play = doc.createElement('button');
+                    play.type = 'button'; play.className = 'film-play'; play.setAttribute('aria-label', 'Play our story');
+                    play.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg>';
+                    play.addEventListener('click', function () { v.controls = true; play.remove(); try { v.play(); } catch (e) { } });
+                    filmBox.appendChild(play);
                 }
                 if (v.tagName === 'IFRAME') {
                     v.title = 'Our story'; v.loading = 'lazy'; v.setAttribute('allowfullscreen', '');
@@ -2944,7 +3245,8 @@
             /* ═══ LIGHT & AIR ══════════════════════════════════════════ */
             var W = win.innerWidth, H = win.innerHeight;
 
-            // Sunlight: god rays + dappled leaf shadow (komorebi), painted once
+            // Sunlight: god rays only, painted once. (Dappled leaf shadow was cut: plum blobs
+            // upscaled on ivory read as smudges on the screen, not foliage.)
             function paintSunlight() {
                 var c = $('#sunlight'); if (calm || !c) return;
                 var w = Math.round(W * 1.2 / 3), h = Math.round(H * 1.2 / 3); // painted small, upscaled = free blur
@@ -2961,19 +3263,12 @@
                     g.lineTo(ox + Math.cos(a + spread) * L, oy + Math.sin(a + spread) * L);
                     g.closePath(); g.fill();
                 }
-                for (var j = 0; j < 22; j++) {
-                    var x = rnd() * w, y = rnd() * h, rx = 4 + rnd() * 12, ry = rx * (.35 + rnd() * .3);
-                    g.save(); g.translate(x, y); g.rotate(rnd() * Math.PI);
-                    var rg = g.createRadialGradient(0, 0, 0, 0, 0, rx);
-                    rg.addColorStop(0, 'rgba(107,58,74,.06)'); rg.addColorStop(1, 'rgba(107,58,74,0)');
-                    g.fillStyle = rg; g.scale(1, ry / rx); g.beginPath(); g.arc(0, 0, rx, 0, 6.2832); g.fill(); g.restore();
-                }
             }
             paintSunlight();
 
             // Petals on one shared breeze — sprites pre-rendered; most soft, few crisp
             var pc = $('#petals'), pctx = pc && pc.getContext('2d'), DPR = 1, petals = [], sprites = [];
-            var COUNT = [0, 14, 26][tier], running = false, lastT = 0, wind = 0, gust = 0, lastScroll = 0;
+            var COUNT = [0, 9, 16][tier], running = false, lastT = 0, wind = 0, gust = 0, lastScroll = 0;
             function petalSprite(size, blur, tone) {
                 var c = doc.createElement('canvas'), s = Math.ceil(size * 2.2); c.width = c.height = s;
                 var g = c.getContext('2d');
@@ -2993,10 +3288,12 @@
                 if (!pc || calm) return;
                 DPR = Math.min(win.devicePixelRatio || 1, [1, 1, 1.5][tier]);
                 pc.width = Math.round(W * DPR); pc.height = Math.round(H * DPR);
-                var tones = [['#f8d3db', '#eeb0bd', '#d98196'], ['#f6c6d0', '#e7a1b0', '#c76a80'], ['#fbe2e7', '#f2c0cb', '#df8fa2']];
+                // rose petals and jasmine petals (white with a cream edge) — not sakura pink
+                var rose = ['#f3c4ce', '#e29aab', '#c76a80'], rose2 = ['#f6d0d8', '#e8a9b6', '#cf7a8e'];
+                var jas = ['#ffffff', '#fbf6ea', '#e6d6b4'];
                 sprites = [
-                    petalSprite(22, 2.4, tones[0]), petalSprite(28, 3, tones[1]), petalSprite(18, 1.8, tones[2]),
-                    petalSprite(14, 0, tones[1]), petalSprite(12, 0, tones[0]), petalSprite(16, 0, tones[2])
+                    petalSprite(22, 2.4, rose), petalSprite(26, 3, jas), petalSprite(18, 1.8, jas),
+                    petalSprite(14, 0, rose2), petalSprite(13, 0, jas), petalSprite(15, 0, jas)
                 ];
                 petals = [];
                 for (var i = 0; i < COUNT; i++) petals.push(newPetal(true));
@@ -3073,7 +3370,7 @@
                completes — even where frames are throttled. */
             var gate = $('#gate'), mainEl = $('#main'), opened = false, timers = [];
             mainEl.setAttribute('aria-hidden', 'true');
-            setTimeout(function () { try { $('#openBtn').focus({ preventScroll: true }); } catch (e) { } }, 60);
+            // no programmatic focus on load: it painted a focus ring around the button for guests who never used a keyboard
             function at_(ms, fn) { timers.push(setTimeout(fn, ms)); }
             function open() {
                 if (opened) return;
@@ -3095,10 +3392,11 @@
                     var r = $('#fold').getBoundingClientRect();
                     if (!returning) burstAt(r.left + r.width / 2, r.top + r.height / 2, [6, 14, 24][tier], [120, 260]);
                 });
-                at_(1500 * q, function () { root.classList.add('lift'); gate.classList.add('fade'); });
-                at_(returning ? 900 : 2300, function () { root.classList.add('names-in'); });
-                at_(returning ? 2000 : 4000, function () { root.classList.add('settled'); });
-                at_(returning ? 2400 : 4600, goLive);
+                // The names begin while the light is still rising — no empty frame between
+                at_(1300 * q, function () { root.classList.add('lift'); gate.classList.add('fade'); });
+                at_(returning ? 800 : 1600, function () { root.classList.add('names-in'); });
+                at_(returning ? 1900 : 3300, function () { root.classList.add('settled'); });
+                at_(returning ? 2300 : 3900, goLive);
             }
             function goLive() {
                 root.classList.remove('opening', 'locked', 'unfold', 'sunrise', 'lift', 'quick');
@@ -3108,7 +3406,7 @@
                 try { $('#hero-title').focus({ preventScroll: true }); } catch (e) { }
                 if (lenis) lenis.start();
                 if (motionReady) refreshMotion();
-                if (soon.length) setTimeout(openSheet, 700); // wedding-day mode
+                if (soon.length) setTimeout(function () { openSheet(true); }, 700); // wedding-day mode
             }
             $('#openBtn').addEventListener('click', open);
             $('#fold').addEventListener('click', open);
@@ -3152,6 +3450,10 @@
                     });
                 }, { rootMargin: '0px 0px -8% 0px' });
                 $$('.print').forEach(function (p) { pio.observe(p); });
+                var endIo = new IntersectionObserver(function (es) {
+                    es.forEach(function (e) { root.classList.toggle('near-end', e.isIntersecting); });
+                }, { rootMargin: '0px 0px -30% 0px' });
+                var fin = $('#finale'); if (fin) endIo.observe(fin);
             }
 
             /* ── History-aware overlays (Android back closes them) ─── */
@@ -3174,13 +3476,14 @@
 
             /* ── Date & Venue sheet ────────────────────────────────── */
             var sheet = $('#sheet'), lastFocus = null;
-            function openSheet() {
+            function openSheet(auto) {
                 if (sheet.classList.contains('open')) return;
+                auto = auto === true;
                 lastFocus = doc.activeElement;
                 sheet.classList.add('open'); root.classList.add('sheet-open'); doc.body.classList.add('is-locked');
                 if (lenis) lenis.stop();
                 pushOverlay('sheet', closeSheet);
-                setTimeout(function () { try { $('.icon-btn[data-close]', sheet).focus(); } catch (e) { } }, 50);
+                if (!auto) setTimeout(function () { try { $('.icon-btn[data-close]', sheet).focus(); } catch (e) { } }, 50);
             }
             function closeSheet(fromPop) {
                 if (!sheet.classList.contains('open')) return;
@@ -3264,7 +3567,9 @@
             /* ── Share ─────────────────────────────────────────────── */
             // Rendered inside a srcdoc iframe: the shareable URL is the parent page's.
             function pageUrl() { try { return win.top.location.href; } catch (e) { return doc.referrer || location.href; } }
-            var url = pageUrl(), shareText = 'You are invited to the wedding of ' + couple + '.';
+            var url = pageUrl(), shareText = allPast
+                ? 'With thanks from ' + couple + ' — for all your blessings at our wedding.'
+                : 'You are invited to the wedding of ' + couple + '.';
             var shareStatus = $('#shareStatus');
             $('#waBtn').href = 'https://wa.me/?text=' + encodeURIComponent(shareText + ' ' + url);
             function copyLink() {

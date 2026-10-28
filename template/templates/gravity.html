@@ -388,6 +388,17 @@
             color: var(--ivory);
         }
 
+        /* the front-page names, lifted out of the gate to ride into the hero */
+        .name-carry {
+            position: fixed;
+            z-index: 60;
+            margin: 0;
+            text-align: center;
+            transform-origin: 0 0;
+            pointer-events: none;
+            will-change: transform, opacity;
+        }
+
         .gate-names i {
             font-style: normal;
             color: var(--gold);
@@ -2601,13 +2612,45 @@
                     er: $('#eclipse').offsetWidth / 2
                 };
                 if (short) { B.sep = 0; B.x = intro.ex; B.y = intro.ey; }
+                carryNames(short);
                 // Never trap the guest: some in-app browsers and battery savers
                 // throttle animation frames in iframes. Timers still run, so the
                 // invitation opens on schedule even if no frame is ever drawn.
                 intro.watch = setTimeout(function () { if (intro) endIntro(); }, INTRO_LEN - intro.offset + 1200);
             }
+            /* The names never leave the screen: the gate's names lift off, ride the
+               spiral down into the hero, then dissolve into the gold names as the
+               shockwave uncovers them. Timer + transition driven, so it still plays
+               where animation frames are throttled. */
+            var carry = null;
+            function carryNames(short) {
+                dropCarry();
+                var g = $('#gate-title'), gr = rectOf(g), hr = rectOf(heroNames);
+                if (!gr.width || !hr.width) return;
+                var c = g.cloneNode(true);
+                c.removeAttribute('id');
+                c.setAttribute('aria-hidden', 'true');
+                $$('[data-fit]', c).forEach(function (s) { s.removeAttribute('data-fit'); });
+                c.className = 'gate-names name-carry';
+                c.style.cssText += ';left:' + gr.left + 'px;top:' + gr.top + 'px;width:' + gr.width + 'px';
+                doc.body.appendChild(c);
+                var s = Math.min(hr.height / gr.height, W * .9 / gr.width);
+                var dx = hr.left + hr.width / 2 - gr.left - gr.width * s / 2, dy = hr.top + hr.height / 2 - gr.top - gr.height * s / 2;
+                var glide = short ? 600 : 2100, fadeAt = short ? 450 : 2450;
+                c.offsetWidth; // commit the start pose before moving
+                c.style.transition = 'transform ' + glide + 'ms cubic-bezier(.65,0,.35,1) ' + (short ? 0 : 250) + 'ms, opacity .9s ease';
+                c.style.transform = 'translate(' + dx.toFixed(1) + 'px,' + dy.toFixed(1) + 'px) scale(' + s.toFixed(3) + ')';
+                carry = { el: c, t: setTimeout(function () { c.style.opacity = '0'; }, fadeAt), t2: setTimeout(dropCarry, fadeAt + 1000) };
+            }
+            function dropCarry() {
+                if (!carry) return;
+                clearTimeout(carry.t); clearTimeout(carry.t2);
+                if (carry.el.parentNode) carry.el.parentNode.removeChild(carry.el);
+                carry = null;
+            }
             function endIntro() {
                 if (intro) clearTimeout(intro.watch);
+                dropCarry();
                 intro = null;
                 heroNames.style.clipPath = '';
                 $$('.hero-names .foil').forEach(function (n) { n.classList.add('shine'); });

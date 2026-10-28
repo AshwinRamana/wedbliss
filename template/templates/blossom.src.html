@@ -134,7 +134,7 @@
         .hf { position: absolute; z-index: 60; top: calc(env(safe-area-inset-top) + 6px); right: -14vw; width: min(90vw, 640px); aspect-ratio: 1; pointer-events: none; }
         .hf canvas { width: 100%; height: 100%; opacity: 0; transition: opacity .6s; transform-origin: 50% 40%; }
         .hf.ready canvas { opacity: 1; }
-        .hf.trav { transition: transform calc(.85s * var(--q)) cubic-bezier(.2, .8, .2, 1); }
+        .hf.trav { transition: transform calc(.95s * var(--q)) cubic-bezier(.45, 0, .2, 1); }
         html.flower-set .hf { z-index: 1; }
         html.live .hf { z-index: 1; }
         html.live:not(.calm) .hf { animation: breathe 6s ease-in-out infinite alternate; }
@@ -1330,9 +1330,11 @@
                 g.globalCompositeOperation = 'source-over'; g.globalAlpha = 1;
             }
             // ring-by-ring opening, centre outward, `lag` ms apart (expo-out each); always lands on the final frame
+            // petals unfurl gently, then settle: an ease-in-out, not a snap open
+            function unfurl(x) { return x >= 1 ? 1 : x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; }
             function ringAnim(dur, lag, step, done) {
                 var n = RINGS.length, t0 = 0, fin = false;
-                var at = function (ms) { var rk = []; for (var k = 0; k < n; k++) { var x = clamp((ms - (n - 1 - k) * lag) / (dur - (n - 1) * lag), 0, 1); rk[k] = x >= 1 ? 1 : 1 - Math.pow(2, -10 * x); } var bx = clamp(ms / dur, 0, 1); return { rk: rk, b: bx >= 1 ? 1 : 1 - Math.pow(2, -10 * bx) }; };
+                var at = function (ms) { var rk = []; for (var k = 0; k < n; k++) { var x = clamp((ms - (n - 1 - k) * lag) / (dur - (n - 1) * lag), 0, 1); rk[k] = unfurl(x); } return { rk: rk, b: unfurl(clamp(ms / dur, 0, 1)) }; };
                 var end = function () { if (fin) return; fin = true; step(at(1e9), 1e9); if (done) done(); };
                 timers.push(setTimeout(end, dur + 40));
                 requestAnimationFrame(function k(ts) { if (fin) return; if (!t0) t0 = ts; var ms = ts - t0; if (ms >= dur) return end(); step(at(ms), ms); requestAnimationFrame(k); });
@@ -1572,7 +1574,7 @@
                 if (opened) return;
                 opened = true;
                 var returning = store.get('wb-blossom-seen') === '1';
-                q = returning ? 1 / 2.2 : 1; root.style.setProperty('--q', q.toFixed(3));
+                q = returning ? 1 / 1.6 : 1.7; root.style.setProperty('--q', q.toFixed(3)); // first visit: an unhurried bloom; returning guests get it brisk
                 try { if (navigator.vibrate) navigator.vibrate(12); } catch (e) { }
                 win.scrollTo(0, 0);
                 root.classList.add('opening', 'press');
@@ -1594,7 +1596,7 @@
                 at_(2020, function () { root.classList.add('ui-2'); });
                 at_(2140, function () { root.classList.add('ui-3'); });
                 at_(2800, goLive);
-                timers.push(setTimeout(goLive, 4200)); // watchdog: always live by 4.2s
+                timers.push(setTimeout(goLive, 4200 * Math.max(q, 1) + 400)); // watchdog: always live, even if frames stall
                 setTimeout(function () { doc.addEventListener('pointerdown', skip, true); }, 200);
             }
             function skip() {

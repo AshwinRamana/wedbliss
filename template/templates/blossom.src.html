@@ -129,7 +129,7 @@
         .lamp { position: absolute; left: -40vw; top: 18vh; width: 130vw; height: 90vh; max-width: 1100px; background: radial-gradient(closest-side, rgba(255, 240, 191, .9), rgba(255, 214, 196, .45) 55%, rgba(255, 214, 196, 0)); transform-origin: 30% 40%; transition: transform calc(1.8s * var(--q)) var(--e-out), opacity calc(1.4s * var(--q)); pointer-events: none; }
         html.m-ready:not(.glow) .lamp { transform: scale(.55); opacity: .35; }
         html.m-ready:not(.glow) .hero::before { opacity: 0; }
-        .hero .mac3 { width: 84vw; max-width: 560px; aspect-ratio: 1; right: -36vw; bottom: -18vw; opacity: .55; }
+        .hero .mac3 { width: 84vw; max-width: 560px; aspect-ratio: 1; right: -36vw; bottom: -18vw; opacity: .55; will-change: transform; }
         .hero .mac4 { width: 58vw; max-width: 420px; aspect-ratio: 1; left: -30vw; top: 34%; opacity: .42; }
         .hf { position: absolute; z-index: 60; top: calc(env(safe-area-inset-top) + 6px); right: -14vw; width: min(90vw, 640px); aspect-ratio: 1; pointer-events: none; }
         .hf canvas { width: 100%; height: 100%; opacity: 0; transition: opacity .6s; transform-origin: 50% 40%; }
@@ -163,15 +163,17 @@
             -webkit-background-clip: text; background-clip: text; transform-origin: 0 100%; }
         .names .amp { display: block; flex: none; width: .5em; height: .4em; margin: 0 0 .1em; overflow: visible; }
         .amp text { font-family: var(--display); font-size: 100px; fill: url(#ampFoil); stroke: #E2387A; stroke-width: 1.2; stroke-dasharray: 420; stroke-dashoffset: 0; }
-        html.m-ready .g { opacity: 0; transform: translateY(.4em); filter: blur(6px); }
-        html.m-ready.names-in .g { opacity: 1; transform: none; filter: none; transition: transform calc(.6s * var(--q)) var(--e-out) var(--gd), opacity calc(.45s * var(--q)) linear var(--gd), filter calc(.5s * var(--q)) var(--e-out) var(--gd); }
+        html.m-ready .g { opacity: 0; transform: translateY(.4em); }
+        html.m-ready.names-in .g { opacity: 1; transform: none; transition: transform calc(.6s * var(--q)) var(--e-out) var(--gd), opacity calc(.45s * var(--q)) linear var(--gd); }
+        html.opening .g { will-change: transform, opacity; }
         .g { --gd: calc(var(--d0, 0s) + var(--i) * 40ms * var(--q)); }
         .n-b { --d0: calc(.2s * var(--q)); }
         .nrow .n-g { --d0: 0s; }
         html.m-ready:not(.amp-in) .amp text { stroke-dashoffset: 420; fill-opacity: 0; }
         html.m-ready.amp-in .amp text { transition: stroke-dashoffset calc(1.1s * var(--q)) var(--e-io), fill-opacity calc(.8s * var(--q)) calc(.6s * var(--q)); }
         html.m-ready:not(.sweep) .names { --sw: 0; }
-        html.sweep .names { --sw: 1; transition: --sw calc(.9s * var(--q)) var(--p3); }
+        /* the foil sheen was a per-frame restyle + repaint of every glyph; the foil now simply rests */
+        html.sweep .names { --sw: 0; }
         .hero-card { margin-top: 30px; max-width: 520px; }
         .hc-state { display: inline-flex; align-items: center; gap: 10px; min-height: 36px; padding: 0 16px; margin-bottom: 14px; border-radius: 999px; font: 700 15px/1.2 var(--ui); background: rgba(255, 255, 255, .7); border: 1.5px solid var(--rani); color: var(--rani-ink); }
         .hc-state.now { background: #1F7A48; border-color: #1F7A48; color: #fff; }
@@ -324,7 +326,7 @@
         .finale .ta { color: var(--parrot-ink); }
         .finale-line { font: 400 clamp(40px, 11vw, 64px)/1.02 var(--display); margin: 8px auto 12px; max-width: 14ch; }
         .finale-line .g { color: var(--ink); background: none; -webkit-background-clip: border-box; background-clip: border-box; }
-        html.m-ready .finale:not(.copy-in) .finale-line .g { opacity: 0; transform: translateY(.4em); filter: blur(6px); }
+        html.m-ready .finale:not(.copy-in) .finale-line .g { opacity: 0; transform: translateY(.4em); }
         html.m-ready .finale.copy-in .finale-line .g { opacity: 1; transform: none; filter: none; transition: transform .6s var(--e-out) calc(var(--i) * 40ms), opacity .45s linear calc(var(--i) * 40ms), filter .5s var(--e-out) calc(var(--i) * 40ms); }
         .finale #finaleTa, .finale .finale-names, .finale .share-row, .finale #replayBtn { transition: opacity .5s, transform .5s var(--e-out); }
         .finale.copy-in .finale-names { transition-delay: .35s; } .finale.copy-in .share-row { transition-delay: .5s; } .finale.copy-in #replayBtn { transition-delay: .65s; }
@@ -1522,7 +1524,8 @@
                 var sy = SY, vel = (sy - lastScroll) / Math.max(dt, .001); lastScroll = sy;
                 gust += (clamp(vel, -900, 900) * .4 - gust) * .08;
                 var wind = Math.sin(ts / 3300) * 12 + gust * .04;
-                var zones = []; ZONES.forEach(function (el) { if (!el || !el.isConnected) return; var r = el.getBoundingClientRect(); if (r.bottom > -30 && r.top < H + 30) zones.push(r); });
+                if (!ZR || ts - ZRt > 600) { ZRt = ts; ZR = []; ZONES.forEach(function (el) { if (!el || !el.isConnected) return; var r = el.getBoundingClientRect(); ZR.push({ left: r.left, right: r.right, top: r.top + sy, bottom: r.bottom + sy }); }); }
+                var zones = []; ZR.forEach(function (r) { var t = r.top - sy, b = r.bottom - sy; if (b > -30 && t < H + 30) zones.push({ left: r.left, right: r.right, top: t, bottom: b }); });
                 pctx.setTransform(1, 0, 0, 1, 0, 0); pctx.clearRect(0, 0, pc.width, pc.height);
                 for (var i = petals.length - 1; i >= 0; i--) {
                     var p = petals[i]; p.t += dt;
@@ -1542,6 +1545,7 @@
                 if (!petals.length) { stop(); pctx.setTransform(1, 0, 0, 1, 0, 0); pctx.clearRect(0, 0, pc.width, pc.height); return; }
                 raf = requestAnimationFrame(frame);
             }
+            var ZR = null, ZRt = 0; // no-petal zones, cached in page coordinates
             var ZONES = ['#finale-title', '#finaleTa', '.finale-names', '#hero-title'].map(function (q) { return $(q); });
             function start() { if (!running && !calm && petals.length) { running = true; lastT = 0; raf = requestAnimationFrame(frame); } }
             function stop() { running = false; cancelAnimationFrame(raf); }

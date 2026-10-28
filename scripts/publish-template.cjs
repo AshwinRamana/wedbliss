@@ -26,7 +26,7 @@ const flag = (name) => { const i = args.indexOf(name); return i >= 0 ? args[i + 
 const dryRun = args.includes('--dry-run');
 const envFile = flag('--env');
 const rollbackFile = flag('--rollback');
-const [file, templateId] = args.filter((a, i) => !a.startsWith('--') && !['--env', '--rollback'].includes(args[i - 1]));
+const [file, templateId] = args.filter((a, i) => !a.startsWith('--') && !['--env', '--rollback', '--name', '--tier', '--desc'].includes(args[i - 1]));
 
 function die(msg) { console.error('✗ ' + msg); process.exit(1); }
 
@@ -96,7 +96,20 @@ function validate(html) {
     const { data: live, error: readErr } = await db.from('templates')
         .select('id, name, is_live, is_hero, html_content, css_content, js_content').eq('id', templateId).maybeSingle();
     if (readErr) die(readErr.message);
-    if (!live) die(`no template with id ${templateId} — new templates need the uploader's Push Live once (it provisions the subdomain)`);
+    if (!live) {
+        // A new template: --create inserts the row (live in the store). Its demo
+        // subdomain still needs the uploader's Push Live (CloudFront + DNS).
+        if (!args.includes('--create')) die(`no template with id ${templateId} (pass --create --name "<name>" [--tier premium|basic] [--desc "<text>"] to add it)`);
+        const row = {
+            id: templateId, name: flag('--name') || templateId, tier: flag('--tier') || 'premium',
+            description: flag('--desc') || '', is_live: true, is_hero: false,
+            html_content: parsed.html, css_content: parsed.css || null, js_content: parsed.js || null,
+        };
+        if (dryRun) return console.log('dry run: would create', row.id, `"${row.name}"`, row.tier);
+        const { error } = await db.from('templates').insert(row);
+        if (error) die(error.message);
+        return console.log(`✓ created ${templateId} "${row.name}" (live, ${row.tier}); no demo subdomain yet`);
+    }
     console.log(`live row: "${live.name}" (is_live=${live.is_live}, is_hero=${live.is_hero}, html ${(live.html_content || '').length} chars)`);
 
     const dir = path.join(os.homedir(), 'Desktop', 'wedbliss-template-backups');

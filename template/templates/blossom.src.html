@@ -1,0 +1,2026 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>{{couple.groom.firstName}} &amp; {{couple.bride.firstName}} · Wedding Invitation</title>
+    <meta name="theme-color" content="#EADFFB" />
+    <meta name="color-scheme" content="light only" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Manrope:wght@400..700&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+Tamil:wght@500&display=swap&text=%E0%AE%A4%E0%AE%BF%E0%AE%B0%E0%AF%81%E0%AE%AE%E0%AE%A3%E0%AE%85%E0%AE%B4%E0%AF%88%E0%AE%AA%E0%AF%8D%E0%AE%87%E0%AE%95%E0%AE%9F%E0%AE%99%E0%AE%B3%E0%AE%A9%E0%AE%86%E0%AE%9A%E0%AE%AF%E0%AF%82%E0%AE%A8%E0%AE%BE%E0%AE%B5%E0%AE%8E%E0%AE%B1%E0%AF%8B%E0%AE%B2%E0%AF%87%E0%AF%80%E0%AF%86%E0%AE%B9%E0%AE%9E%E0%AE%9C%E0%AE%8A" />
+    <!-- Motion layer. Deferred: the invitation paints and works before these arrive (or if they never do). Lenis is injected only for fine pointers. -->
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <style>
+        /* ═══════════════════════════════════════════════════════════════
+           BLOSSOM v3 · "Malligai: Midnight to Muhurtham" · pastel dawn
+           One scroll from midnight to sunrise. One jasmine bud blooms into
+           the wedding morning. Scroll position is the time of day.
+           ═══════════════════════════════════════════════════════════════ */
+        :root {
+            /* pastel grounds */
+            --peach: #FFE4DA; --lilac: #EADFFB; --mint: #DDF4EA; --butter: #FFF3CC; --skyb: #DCEBFF; --ivory: #FBF8F1;
+            /* vibrant accents (small doses) */
+            --rani: #E2387A; --marigold: #F59E0B; --parrot: #2FA866; --teal: #0E8C8F; --kumkum: #D7263D; --gold-a: #E9B949; --gold-b: #B8862B;
+            /* text-safe accent inks (≥4.5:1 on the pastels and white) */
+            --rani-ink: #B01E5C; --teal-ink: #0B6E71; --parrot-ink: #18663C; --amber-ink: #A44A06;
+            /* ink: deep plum ~12:1 on the pastels */
+            --ink: #2B1233; --ink-2: #5A3D63; --malli: #FFFFFF;
+            --cta: #CC2766; /* one rich rani tone, 5.2:1 with white */
+            --e-out: cubic-bezier(.16, 1, .3, 1); --e-io: cubic-bezier(.87, 0, .13, 1); --p3: cubic-bezier(.215, .61, .355, 1);
+            --display: 'Instrument Serif', 'IS-fb', Georgia, serif;
+            --ui: 'Manrope', 'MR-fb', system-ui, -apple-system, 'Segoe UI', sans-serif;
+            --ta: 'Noto Serif Tamil', 'Nirmala UI', 'Latha', 'Tamil Sangam MN', serif;
+            --m: 24px; --sec: 72px; --q: 1; --bar-h: 76px; --safe: env(safe-area-inset-bottom, 0px);
+            --foil: linear-gradient(115deg, #B8862B 0%, #E9B949 28%, #f6d98a 50%, #E9B949 72%, #B8862B 100%);
+            --plumfoil: linear-gradient(115deg, #2B1233 0%, #5B2A6E 34%, #7c3f80 50%, #43184f 68%, #2B1233 100%);
+        }
+        @property --sw { syntax: '<number>'; inherits: true; initial-value: 0; }
+        /* metric-matched fallbacks: no layout shift when the web fonts land */
+        @font-face { font-family: 'IS-fb'; src: local('Georgia'), local('Times New Roman'); size-adjust: 86%; ascent-override: 102%; descent-override: 28%; }
+        @font-face { font-family: 'MR-fb'; src: local('Arial'), local('Helvetica'); size-adjust: 106%; ascent-override: 100%; descent-override: 28%; }
+        @media (min-width: 900px) { :root { --m: 56px; --sec: 120px; } }
+
+        *, *::before, *::after { box-sizing: border-box; }
+        html { -webkit-text-size-adjust: 100%; background: var(--lilac); scroll-padding-bottom: 120px; }
+        body { margin: 0; background: var(--lilac); color: var(--ink); font: 400 17px/1.55 var(--ui); -webkit-font-smoothing: antialiased; overflow-x: hidden; overflow-x: clip; padding-bottom: calc(var(--bar-h) + var(--safe)); }
+        html.locked body, body.is-locked { overflow: hidden; }
+        img, svg, canvas, video, iframe { display: block; max-width: 100%; }
+        a { color: inherit; }
+        button { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent; }
+        :focus-visible { outline: 2px solid var(--rani); outline-offset: 4px; border-radius: 6px; }
+        p, h1, h2, h3, figure, ol, ul { margin: 0; }
+        .sr-only { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+        [hidden] { display: none !important; }
+
+        /* ── type ── */
+        .ta { font: 500 16px/1.6 var(--ta); letter-spacing: 0; }
+        .eyebrow { font: 600 14px/1.4 var(--ui); letter-spacing: .08em; }
+        .caps { text-transform: uppercase; letter-spacing: .1em; }
+        .h-sec { font: 400 clamp(38px, 10.4vw, 48px)/1.02 var(--display); letter-spacing: -.01em; }
+        .sec-head { max-width: 1120px; margin: 0 auto 36px; }
+        .sec-head .ta { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+
+        /* ── buttons ── */
+        .actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 52px; padding: 0 24px; border-radius: 999px; font: 700 16px/1 var(--ui); text-decoration: none; border: 1.5px solid transparent; cursor: pointer; transition: transform .15s var(--p3), background-color .2s; }
+        .btn svg { width: 20px; height: 20px; flex: none; }
+        .btn:active { transform: scale(.96); }
+        .btn-foil, .btn-kum { background: var(--cta); color: #fff; box-shadow: 0 14px 30px -16px rgba(214, 36, 110, .7); }
+        .btn-line { background: rgba(255, 255, 255, .55); border-color: rgba(43, 18, 51, .4); color: var(--ink); }
+        .btn-kum { padding: 0 22px; }
+        .btn-dk { background: #fff; border-color: rgba(43, 18, 51, .32); color: var(--ink); }
+        .btn-wa { background: #0B6E71; color: #fff; box-shadow: 0 14px 30px -16px rgba(11, 110, 113, .7); }
+        .textlink { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 2px; background: none; border: 0; font: 700 16px/1.2 var(--ui); text-decoration: underline; text-underline-offset: 5px; text-decoration-thickness: 1.5px; cursor: pointer; }
+        .textlink svg { width: 18px; height: 18px; }
+        .chip { display: inline-flex; align-items: center; gap: 8px; min-height: 32px; padding: 0 14px; border-radius: 999px; font: 700 14px/1 var(--ui); background: #0B7376; color: #fff; }
+        .chip.done { background: transparent; border: 1.5px solid currentColor; color: var(--teal-ink); }
+        .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+
+        /* ── fixed layers ── */
+        .sky { position: fixed; inset: 0; z-index: -1; background: var(--lilac); }
+        .grain { position: fixed; inset: 0; z-index: 95; pointer-events: none; opacity: .035; background-size: 128px 128px; }
+        #petals { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 70; pointer-events: none; }
+        html.calm #petals { display: none; }
+
+        /* ═══ GATE · 11:58 pm ═══ */
+        .gate { display: none; }
+        html.js .gate { display: flex; position: fixed; inset: 0; z-index: 50; flex-direction: column; overflow: hidden; }
+        .gate::before { content: ''; position: absolute; inset: 0; background: radial-gradient(70% 42% at 12% 8%, #FFD3C2 0%, rgba(255, 211, 194, 0) 70%), radial-gradient(60% 40% at 92% 26%, #E0CCFA 0%, rgba(224, 204, 250, 0) 70%), radial-gradient(75% 45% at 20% 98%, #C9EEDC 0%, rgba(201, 238, 220, 0) 70%), radial-gradient(50% 30% at 50% 40%, #FFF0BF 0%, rgba(255, 240, 191, 0) 72%), radial-gradient(60% 40% at 96% 88%, #FFD0E2 0%, rgba(255, 208, 226, 0) 70%), linear-gradient(165deg, #FFE9E0 0%, #F2E6FC 50%, #E2F6EC 100%); }
+        .gate .bokeh, .hero .bokeh { position: absolute; inset: 0; width: 100%; height: 100%; opacity: .6; pointer-events: none; }
+        .macro { position: absolute; pointer-events: none; }
+        .macro canvas { width: 100%; height: 100%; }
+        .gate .mac1 { width: 74vw; max-width: 520px; aspect-ratio: 1; left: -30vw; top: -12vh; opacity: .7; }
+        .gate .mac2 { width: 92vw; max-width: 640px; aspect-ratio: 1; right: -44vw; bottom: -20vh; opacity: .6; }
+        .gate-in { position: relative; flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center; width: 100%; max-width: 560px; margin: 0 auto; padding: calc(env(safe-area-inset-top) + 34px) var(--m) calc(env(safe-area-inset-bottom) + 18px); }
+        .gate-eye { color: var(--rani-ink); display: flex; flex-direction: column; align-items: center; gap: 2px; }
+        @media (min-width: 520px) { .gate-eye { flex-direction: row; align-items: baseline; gap: 10px; } .gate-eye .eyebrow::before { content: '· '; } }
+        .gate-eye .ta { font-size: 16px; }
+        .bud-slot { position: relative; flex: 1 1 auto; width: 100%; min-height: 150px; }
+        .ph-bud { position: absolute; left: 50%; top: 40%; height: 71%; transform: translate(-50%, -40%); overflow: visible; transition: opacity .3s; }
+        html.bud-ready .ph-bud { opacity: 0; }
+        .gate-names { font: 400 44px/1.04 var(--display); letter-spacing: -.01em; color: var(--ink); margin: 6px 0 14px; overflow-wrap: anywhere; }
+        .gate-names i { font-style: normal; color: var(--rani); padding: 0 .08em; }
+        .gate-when { font: 700 17px/1.45 var(--ui); color: var(--ink); }
+        .gate-venue { font: 500 16px/1.45 var(--ui); color: var(--ink-2); margin-top: 4px; max-width: 34ch; }
+        .gate-today { font: 700 15px/1.4 var(--ui); color: var(--rani-ink); margin-top: 12px; }
+        #openBtn { margin-top: 26px; width: min(100%, 340px); min-height: 58px; font-size: 17px; box-shadow: 0 18px 40px -14px rgba(214, 36, 110, .55); }
+        .calm-tg { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; margin-top: 8px; padding: 0 8px; background: none; border: 0; font: 600 14px/1 var(--ui); color: var(--ink-2); cursor: pointer; }
+        .calm-tg .sw { width: 34px; height: 20px; border-radius: 99px; border: 1.5px solid currentColor; position: relative; }
+        .calm-tg .sw::after { content: ''; position: absolute; top: 2px; left: 2px; width: 13px; height: 13px; border-radius: 50%; background: currentColor; transition: transform .2s; }
+        .calm-tg[aria-pressed="true"] { color: var(--rani-ink); }
+        .calm-tg[aria-pressed="true"] .sw::after { transform: translateX(14px); }
+        html.press #openBtn { transform: scale(.96); }
+        html.opening .gate { pointer-events: none; }
+        html.opening .gate-in { opacity: 0; transform: translateY(-14px); transition: opacity calc(.42s * var(--q)) .1s, transform calc(.6s * var(--q)) var(--e-out); }
+        html.lift .gate::before, html.lift .gate .bokeh, html.lift .gate .macro { opacity: 0; transition: opacity calc(.9s * var(--q)) var(--p3); }
+        html.calm.opening .gate { opacity: 0; transition: opacity .6s; }
+
+        /* ═══ HERO · midnight ═══ */
+        main { position: relative; display: block; }
+        html.locked:not(.opening) main { visibility: hidden; }
+        html.locked:not(.opening) .hf { visibility: visible; }
+        .hero { position: relative; min-height: 100vh; min-height: 100svh; padding: calc(env(safe-area-inset-top) + 30px) var(--m) 84px; background: linear-gradient(180deg, #EADFFB 0%, #F1E3FA 55%, #F8E2EE 100%); overflow: hidden; overflow: clip; }
+        .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(70% 45% at 80% 22%, rgba(255, 196, 222, .75), rgba(255, 196, 222, 0) 70%), radial-gradient(60% 40% at 0% 90%, rgba(201, 238, 220, .8), rgba(201, 238, 220, 0) 70%); transition: opacity calc(1.4s * var(--q)); }
+        .hero::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: none; }
+        .lamp { position: absolute; left: -40vw; top: 18vh; width: 130vw; height: 90vh; max-width: 1100px; background: radial-gradient(closest-side, rgba(255, 240, 191, .9), rgba(255, 214, 196, .45) 55%, rgba(255, 214, 196, 0)); transform-origin: 30% 40%; transition: transform calc(1.8s * var(--q)) var(--e-out), opacity calc(1.4s * var(--q)); pointer-events: none; }
+        html.m-ready:not(.glow) .lamp { transform: scale(.55); opacity: .35; }
+        html.m-ready:not(.glow) .hero::before { opacity: 0; }
+        .hero .mac3 { width: 84vw; max-width: 560px; aspect-ratio: 1; right: -36vw; bottom: -18vw; opacity: .55; }
+        .hero .mac4 { width: 58vw; max-width: 420px; aspect-ratio: 1; left: -30vw; top: 34%; opacity: .42; }
+        .hf { position: absolute; z-index: 60; top: calc(env(safe-area-inset-top) + 6px); right: -14vw; width: min(90vw, 640px); aspect-ratio: 1; pointer-events: none; }
+        .hf canvas { width: 100%; height: 100%; opacity: 0; transition: opacity .6s; transform-origin: 50% 40%; }
+        .hf.ready canvas { opacity: 1; }
+        .hf.trav { transition: transform calc(.85s * var(--q)) cubic-bezier(.2, .8, .2, 1); }
+        html.flower-set .hf { z-index: 1; }
+        html.live .hf { z-index: 1; }
+        html.live:not(.calm) .hf { animation: breathe 6s ease-in-out infinite alternate; }
+        @keyframes breathe { to { transform: scale(1.015); } }
+        html.live:not(.calm) .hero .bokeh { animation: bk 9s ease-in-out infinite alternate; }
+        @keyframes bk { from { transform: translate(-6px, -4px); } to { transform: translate(6px, 4px); } }
+        .drift { position: absolute; top: 0; width: 26px; height: 38px; opacity: 0; pointer-events: none; z-index: 1; }
+        html.live:not(.calm) .drift { animation: drift var(--dur, 10s) linear var(--dl, 0s) infinite; }
+        @keyframes drift { 0% { opacity: 0; transform: translate(0, -6vh) rotate(0); } 12% { opacity: .85; } 50% { transform: translate(-18px, 18vh) rotate(160deg); } 88% { opacity: .75; } 100% { opacity: 0; transform: translate(-36px, 40vh) rotate(300deg); } }
+        html.away .hf, html.away .drift, html.away .bokeh { animation-play-state: paused; }
+        .hero-in { position: relative; z-index: 2; max-width: 1120px; margin: 0 auto; display: flex; flex-direction: column; min-height: calc(100svh - 114px); }
+        .hero-eye { color: var(--rani-ink); display: flex; flex-direction: column; gap: 2px; max-width: 62%; }
+        .hero-eye .ta { white-space: nowrap; }
+        #hero-title:focus { outline: none; }
+        .hero-eye .ta { font-size: 16px; }
+        .hero-eye .eyebrow { color: var(--ink-2); font-weight: 600; letter-spacing: .02em; font-size: 15px; }
+        .hero-space { flex: none; height: calc(min(90vw, 640px) * .9 - 74px); }
+        .names { position: relative; font: 400 clamp(56px, 19vw, 96px)/.88 var(--display); letter-spacing: -.02em; display: flex; flex-direction: column; align-items: flex-start; gap: .04em; margin: 0; --fw: 8em; hyphens: none; -webkit-hyphens: none; overflow-wrap: normal; word-break: normal; }
+        .nrow { display: flex; align-items: flex-end; gap: .14em; max-width: 100%; }
+                .nl { display: block; max-width: 100%; }
+        .w { display: inline-block; vertical-align: top; white-space: nowrap; }
+        .g { display: inline-block; color: transparent; padding: .12em 0 .16em; margin: -.12em 0 -.16em;
+            background-image: linear-gradient(105deg, rgba(255, 190, 220, 0) 42%, rgba(255, 170, 205, .95) 50%, rgba(255, 190, 220, 0) 58%), var(--plumfoil);
+            background-size: var(--fw) 100%, var(--fw) 100%; background-repeat: no-repeat;
+            background-position: calc((var(--sw) * 2.2 - 1.1) * var(--fw) - var(--gx, 0px)) 0, calc(0px - var(--gx, 0px)) 0;
+            -webkit-background-clip: text; background-clip: text; transform-origin: 0 100%; }
+        .names .amp { display: block; flex: none; width: .5em; height: .4em; margin: 0 0 .1em; overflow: visible; }
+        .amp text { font-family: var(--display); font-size: 100px; fill: url(#ampFoil); stroke: #E2387A; stroke-width: 1.2; stroke-dasharray: 420; stroke-dashoffset: 0; }
+        html.m-ready .g { opacity: 0; transform: translateY(.4em); filter: blur(6px); }
+        html.m-ready.names-in .g { opacity: 1; transform: none; filter: none; transition: transform calc(.6s * var(--q)) var(--e-out) var(--gd), opacity calc(.45s * var(--q)) linear var(--gd), filter calc(.5s * var(--q)) var(--e-out) var(--gd); }
+        .g { --gd: calc(var(--d0, 0s) + var(--i) * 40ms * var(--q)); }
+        .n-b { --d0: calc(.2s * var(--q)); }
+        .nrow .n-g { --d0: 0s; }
+        html.m-ready:not(.amp-in) .amp text { stroke-dashoffset: 420; fill-opacity: 0; }
+        html.m-ready.amp-in .amp text { transition: stroke-dashoffset calc(1.1s * var(--q)) var(--e-io), fill-opacity calc(.8s * var(--q)) calc(.6s * var(--q)); }
+        html.m-ready:not(.sweep) .names { --sw: 0; }
+        html.sweep .names { --sw: 1; transition: --sw calc(.9s * var(--q)) var(--p3); }
+        .hero-card { margin-top: 30px; max-width: 520px; }
+        .hc-state { display: inline-flex; align-items: center; gap: 10px; min-height: 36px; padding: 0 16px; margin-bottom: 14px; border-radius: 999px; font: 700 15px/1.2 var(--ui); background: rgba(255, 255, 255, .7); border: 1.5px solid var(--rani); color: var(--rani-ink); }
+        .hc-state.now { background: #1F7A48; border-color: #1F7A48; color: #fff; }
+        .hc-state.plain { background: none; border: 0; padding: 0; min-height: 0; border-radius: 0; font: 400 30px/1.15 var(--display); color: var(--rani-ink); }
+        .hc-title { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; font: 400 28px/1.15 var(--display); color: var(--rani-ink); }
+        .hc-title .ta { font-size: 16px; color: var(--ink-2); }
+        .hc-when { font: 700 18px/1.45 var(--ui); color: var(--ink); margin-top: 8px; }
+        .hc-venue { font: 500 18px/1.45 var(--ui); color: var(--ink-2); margin-top: 2px; }
+        .hero-card .actions { margin-top: 22px; }
+        .cue { display: none; }
+        html.m-ready .hero-eye, html.m-ready #heroState, html.m-ready #heroTitle, html.m-ready #heroWhen, html.m-ready #heroVenue, html.m-ready #heroActions { transition: opacity calc(.4s * var(--q)), transform calc(.4s * var(--q)) var(--e-out); }
+        html.m-ready:not(.ui-1) .hero-eye, html.m-ready:not(.ui-2) #heroState, html.m-ready:not(.ui-2) #heroTitle, html.m-ready:not(.ui-2) #heroWhen, html.m-ready:not(.ui-3) #heroVenue, html.m-ready:not(.ui-3) #heroActions { opacity: 0; transform: translateY(16px); }
+        html.skip .g, html.skip .hero-eye, html.skip #heroState, html.skip #heroTitle, html.skip #heroWhen, html.skip #heroVenue, html.skip #heroActions { transition-delay: 0s !important; }
+        html.skip * { transition-duration: .3s !important; transition-delay: 0s !important; }
+
+        /* ═══ FAMILIES · 2 am ═══ */
+        .families { position: relative; padding: var(--sec) var(--m); background: linear-gradient(180deg, #F8E2EE 0%, #FCE3E4 55%, #FFE4DA 100%); color: var(--ink); }
+        .families .sec-head .ta { color: var(--rani-ink); }
+        .fam-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; max-width: 1120px; margin: 0 auto; align-items: stretch; }
+        .fam { padding: 28px 24px 30px; border-radius: 28px; background: rgba(255, 255, 255, .72); border: 1.5px solid rgba(226, 56, 122, .28); box-shadow: 0 24px 48px -32px rgba(176, 30, 92, .45); clip-path: inset(0 0 0 0 round 28px); transition: clip-path calc(1.1s * var(--q)) var(--e-out); }
+        .fam-role { display: flex; flex-wrap: wrap; gap: 0 10px; align-items: baseline; color: var(--rani-ink); }
+        .fam-role .ta { font-size: 16px; }
+        .fam-name { font: 400 48px/1.02 var(--display); margin: 10px 0 18px; overflow-wrap: anywhere; }
+        .fam-rel { color: var(--ink-2); }
+        .fam-parents { font: 600 18px/1.5 var(--ui); margin-top: 6px; }
+        .fam-parents .pn { display: block; }
+        .fam-parents .amp-s { color: var(--rani); font-weight: 600; }
+        .families::before { content: ''; position: absolute; right: -24vw; top: 6%; width: 78vw; max-width: 620px; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, rgba(226, 56, 122, .26), rgba(226, 56, 122, 0) 68%); pointer-events: none; }
+        .fam { box-shadow: inset 0 6px 0 var(--rani), 0 24px 48px -32px rgba(176, 30, 92, .45) !important; }
+        .sprig { display: flex; align-items: center; justify-content: center; height: 72px; }
+        .sprig canvas { width: min(78vw, 320px); height: auto; }
+        .invite-line { max-width: 1120px; margin: 40px auto 0; font: 400 26px/1.3 var(--display); color: var(--ink); }
+        .invite-line span { display: block; max-width: 22ch; }
+        html.m-ready .fam-g:not(.in) { clip-path: inset(0 0 100% 0 round 28px); }
+        html.m-ready .fam-b:not(.in) { clip-path: inset(100% 0 0 0 round 28px); }
+        @media (min-width: 720px) {
+            .fam-grid { grid-template-columns: minmax(0, 1fr) 72px minmax(0, 1fr); }
+            .sprig { height: auto; }
+            .sprig canvas { width: 64px; height: auto; }
+            html.m-ready .fam-g:not(.in) { clip-path: inset(0 0 0 100% round 28px); }
+            html.m-ready .fam-b:not(.in) { clip-path: inset(0 100% 0 0 round 28px); }
+        }
+
+        /* ═══ THE DAY · 4 am → dawn ═══ */
+        .day { position: relative; z-index: 2; color: var(--ink); background: var(--butter); }
+        .day-pin { position: relative; min-height: 100vh; min-height: 100svh; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-start; padding: 4vh var(--m) calc(var(--bar-h) + 20px); }
+        .dsk, .dsk > * { position: absolute; inset: 0; }
+        .dsk .dawn { background: linear-gradient(180deg, #FFE6B3 0%, #FFF3CC 55%, #FFF6DA 100%); }
+        .dsk .dusk { background: linear-gradient(180deg, #FFE4DA 0%, #FFD5C8 45%, #FFC9AE 100%); opacity: 0; }
+        .cd-stage { position: relative; width: 100%; display: flex; justify-content: center; overflow: hidden; }
+        .sun { position: absolute; left: 50%; bottom: 0; width: min(54vw, 300px); aspect-ratio: 1; transform: translate(-50%, 34%); }
+        .horizon { position: absolute; left: 6%; right: 6%; bottom: 0; height: 2px; border-radius: 2px; background: linear-gradient(90deg, rgba(164, 74, 6, 0), rgba(164, 74, 6, .55), rgba(164, 74, 6, 0)); }
+        .sun i { position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(circle, #FFF8DF 0%, #FFD866 30%, #F59E0B 58%, rgba(245, 158, 11, .5) 66%, rgba(245, 158, 11, 0) 71%); }
+        .day-in { position: relative; z-index: 2; max-width: 640px; width: 100%; margin: 0 auto; flex: 1; display: flex; flex-direction: column; justify-content: center; }
+        .plate { margin-top: 0; }
+        .countdown { flex: none; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 0 22px; }
+        .big { position: relative; z-index: 1; font: 400 clamp(112px, 34vw, 220px)/1 var(--display); letter-spacing: -.03em; }
+        .big .o, .big .f { display: flex; justify-content: center; }
+        .big .o { color: transparent; -webkit-text-stroke: 1.5px var(--ink); }
+        .big .f { position: absolute; inset: 0; color: var(--marigold); -webkit-text-stroke: 1.5px var(--ink); }
+        .dg { display: inline-block; height: 1em; overflow: hidden; padding: 0 .02em; }
+        .dg > span { display: block; transition: transform calc(1.6s * var(--q)) var(--e-out); }
+        .dg b { display: block; height: 1em; font-weight: 400; }
+        .sep { display: inline-block; padding: 0 .04em; }
+        .unit { font: 400 30px/1.1 var(--display); color: var(--ink); margin-top: 12px; }
+        .day.is-dusk .unit { color: var(--ink); }
+        .day.is-dusk .big .o { -webkit-text-stroke-color: var(--ink); }
+        .status { font: 400 44px/1.1 var(--display); text-align: center; margin: 4vh 0 28px; color: var(--ink); }
+        .status.now::before { content: ''; display: inline-block; width: 14px; height: 14px; border-radius: 50%; background: var(--parrot); margin-right: 14px; vertical-align: middle; }
+        .plate { position: relative; background: rgba(255, 255, 255, .92); color: var(--ink); border-radius: 28px; padding: 24px 24px 22px; box-shadow: 0 30px 60px -34px rgba(164, 74, 6, .45); }
+        .plate .ta { color: var(--amber-ink); }
+        .plate h2 { font: 400 30px/1.1 var(--display); margin: 4px 0 8px; }
+        .nw { white-space: nowrap; }
+        .dp-line { font: 700 18px/1.4 var(--ui); color: var(--amber-ink); }
+        .plate .actions { margin-top: 18px; }
+        @media (max-width: 519px) { .card .actions .btn, .hero-card .actions .btn, .sheet-list .actions .btn { flex: 1 1 100%; } }
+
+        /* ═══ CELEBRATIONS · dawn ═══ */
+        .lightsec { position: relative; color: var(--ink); padding: var(--sec) var(--m) 0; }
+        .lightsec.finale { padding-bottom: var(--sec); }
+        .lightsec .sec-head .ta { color: var(--teal-ink); }
+        .notes .sec-head .ta { color: var(--rani-ink); }
+        .moments .sec-head .ta { color: var(--amber-ink); }
+        .finale .sec-head .ta, .finale .ta { color: var(--parrot-ink); }
+        .ev-wrap { max-width: 1120px; margin: 0 auto; }
+        .cards { list-style: none; padding: 0 0 24px; margin: 0; }
+        .card-wrap { position: relative; margin: 0 0 28px; }
+        .card { position: relative; background: #FFFFFF; border-radius: 28px; padding: 24px 24px 22px 28px; border: 1px solid rgba(14, 140, 143, .22); box-shadow: inset 6px 0 0 #0E8C8F, 0 24px 50px -30px rgba(11, 110, 113, .45); transform-origin: 50% 0; }
+        .is-main .card { border: 2px solid transparent; padding: 28px 26px 26px; background: linear-gradient(160deg, #FFF9E6, #FFEFC2) padding-box, var(--foil) border-box; box-shadow: 0 30px 60px -30px rgba(184, 134, 43, .6); }
+        .is-main .card-title { font-size: 42px; }
+        .is-main .card-time { color: var(--amber-ink); }
+        .card-eyebrow { color: var(--rani-ink); margin-bottom: 6px; }
+        .card-ta { color: var(--teal-ink); font-size: 16px; }
+        .card-title { font: 400 34px/1.05 var(--display); margin: 2px 0 12px; overflow-wrap: anywhere; }
+        .card-time { font: 400 84px/.86 var(--display); letter-spacing: -.02em; display: flex; align-items: baseline; gap: 10px; color: var(--teal-ink); }
+        .card-time small { font: 700 20px/1 var(--ui); letter-spacing: .02em; }
+        .card-until { font: 600 16px/1.4 var(--ui); color: var(--ink-2); margin-top: 6px; }
+        .card-when { font: 700 18px/1.4 var(--ui); margin-top: 14px; }
+        .card-venue { font: 500 18px/1.45 var(--ui); color: var(--ink-2); margin-top: 2px; }
+        .card .chip { margin-top: 14px; }
+        .card .actions { margin-top: 18px; }
+        @media (min-width: 900px) {
+            .ev-wrap .sec-head { position: static; }
+            .cards { display: grid; grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr)); gap: 24px; align-items: start; padding: 0; }
+            .card-wrap { position: static; margin: 0; }
+        }
+
+        /* ═══ NOTES · sunrise ═══ */
+        .notes-pair { max-width: 1120px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; }
+        .note { max-width: 560px; }
+        .paper { background: #FFFFFF; border-radius: 6px; padding: 30px 26px 26px; box-shadow: 0 1px 0 rgba(226, 56, 122, .12), 0 22px 44px -28px rgba(176, 30, 92, .45); transform: rotate(-1.5deg); }
+        .note:nth-child(2) { justify-self: end; }
+        .note:nth-child(2) .paper { transform: rotate(1.5deg); }
+        .note-text { font: 400 19px/1.6 var(--ui); color: var(--ink); white-space: pre-line; }
+        .paper::before { content: '\201C'; display: block; font: 400 96px/.6 var(--display); color: var(--rani); height: 40px; }
+        .note-text.clamp { display: -webkit-box; -webkit-line-clamp: 9; -webkit-box-orient: vertical; overflow: hidden; }
+        .note-sign { font: 700 16px/1.4 var(--ui); color: var(--rani-ink); margin-top: 18px; }
+        @media (min-width: 900px) { .notes-pair { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+
+        /* ═══ MOMENTS · golden ═══ */
+        .prints-hint { font: 600 15px/1.4 var(--ui); letter-spacing: .02em; color: var(--ink-2); margin: -20px auto 20px; max-width: 1120px; }
+        .moments .sec-head::after { content: ''; display: block; width: 72px; height: 6px; border-radius: 3px; background: var(--marigold); margin-top: 14px; }
+        .prints { max-width: 1120px; margin: 0 auto; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; align-items: start; }
+        .prints[data-n="1"] { grid-template-columns: minmax(0, 1fr); max-width: 480px; }
+        .print { all: unset; box-sizing: border-box; display: block; cursor: zoom-in; position: relative; }
+        .print:focus-visible { outline: 2px solid var(--rani); outline-offset: 4px; }
+        .print:nth-child(even) { margin-top: 36px; }
+        .ph { display: block; position: relative; overflow: hidden; aspect-ratio: 3/4; border-radius: 8px; background: #FFE7C2; }
+        .print.arch .ph { border-radius: 0; aspect-ratio: 3/4.3; clip-path: var(--arch); }
+        .ph img { width: 100%; height: 100%; object-fit: cover; filter: sepia(.12) saturate(1.06); }
+        .ph::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(245, 158, 11, .08), rgba(226, 56, 122, .08)); pointer-events: none; }
+        .more { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; background: rgba(43, 18, 51, .62); color: #fff; font: 400 48px/1 var(--display); z-index: 1; }
+        .more small { font: 700 14px/1.4 var(--ui); margin-top: 6px; }
+        @media (min-width: 900px) { .prints { grid-template-columns: repeat(3, minmax(0, 1fr)); } .print:nth-child(even) { margin-top: 0; } .print:nth-child(3n+2) { margin-top: 56px; } }
+
+        /* ═══ FILM ═══ */
+        .film { z-index: 2; }
+        .film-frame { position: relative; z-index: 2; max-width: 440px; margin: 0 auto; }
+        .film-box { position: relative; aspect-ratio: 4/5; background: #F3E6FB; overflow: hidden; clip-path: var(--arch); }
+        .film-box video, .film-box iframe { width: 100%; height: 100%; object-fit: cover; border: 0; }
+        .film-play { position: absolute; inset: 0; margin: auto; width: 96px; height: 96px; border-radius: 50%; border: 0; background: rgba(43, 18, 51, .5); color: #fff; cursor: pointer; display: grid; place-items: center; }
+        .film-play svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+        .film-play .tri { position: static; width: 30px; height: 30px; margin-left: 5px; }
+
+        /* ═══ FINALE · 6:30 am ═══ */
+        .finale { text-align: center; min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .lightsec.finale { padding: 40px var(--m) 48px; }
+        .blessing { width: min(84vw, 440px, 54vh); aspect-ratio: 1; margin: 0 auto 6px; }
+        .blessing canvas { width: 100%; height: 100%; }
+        .finale .ta { color: var(--parrot-ink); }
+        .finale-line { font: 400 clamp(40px, 11vw, 64px)/1.02 var(--display); margin: 8px auto 12px; max-width: 14ch; }
+        .finale-line .g { color: var(--ink); background: none; -webkit-background-clip: border-box; background-clip: border-box; }
+        html.m-ready .finale:not(.copy-in) .finale-line .g { opacity: 0; transform: translateY(.4em); filter: blur(6px); }
+        html.m-ready .finale.copy-in .finale-line .g { opacity: 1; transform: none; filter: none; transition: transform .6s var(--e-out) calc(var(--i) * 40ms), opacity .45s linear calc(var(--i) * 40ms), filter .5s var(--e-out) calc(var(--i) * 40ms); }
+        .finale #finaleTa, .finale .finale-names, .finale .share-row, .finale #replayBtn { transition: opacity .5s, transform .5s var(--e-out); }
+        .finale.copy-in .finale-names { transition-delay: .35s; } .finale.copy-in .share-row { transition-delay: .5s; } .finale.copy-in #replayBtn { transition-delay: .65s; }
+        html.m-ready .finale:not(.copy-in) #finaleTa, html.m-ready .finale:not(.copy-in) .finale-names, html.m-ready .finale:not(.copy-in) .share-row, html.m-ready .finale:not(.copy-in) #replayBtn { opacity: 0; transform: translateY(16px); }
+        .finale-names { font: 600 18px/1.5 var(--ui); color: var(--ink-2); }
+        .finale-names i { font-style: normal; color: var(--rani); }
+        .share-row { display: flex; flex-direction: column; align-items: center; gap: 6px; margin-top: 28px; }
+        .share-more { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 22px; }
+        .share-status { min-height: 24px; font: 600 15px/1.5 var(--ui); color: var(--parrot-ink); margin-top: 6px; }
+        footer { padding: 26px var(--m) 30px; text-align: center; font: 500 14px/1.5 var(--ui); color: var(--ink-2); background: #F3FBF5; }
+
+        /* ── gold thread down the spine ── */
+        .thread { position: absolute; left: 0; top: 0; width: 80px; z-index: 1; pointer-events: none; overflow: visible; }
+        .thread path { fill: none; stroke: #D9A441; stroke-width: 1.5; stroke-opacity: .7; stroke-linecap: round; }
+        .thread .nib { transition: opacity .3s; }
+        #thread2.off { opacity: 0; transition: opacity .3s; }
+        .thread .knot { transform-box: fill-box; transform-origin: center; transform: scale(0); transition: transform .5s var(--e-out); }
+        .thread .knot.on { transform: none; }
+        .thread .tend { opacity: 0; transition: opacity .4s; } .thread .tend.on { opacity: 1; }
+        html.calm .thread path { stroke-dashoffset: 0 !important; }
+        html.calm .thread .knot { transform: none; }
+
+        /* ── generic reveal (fail-open: final state is the default) ── */
+        .rv { transition: opacity calc(.5s * var(--q)), transform calc(.5s * var(--q)) var(--e-out); }
+        html.m-ready .rv:not(.in) { opacity: 0; transform: translateY(16px); }
+
+        /* below the fold: skip rendering until near */
+        #families, #events, #notes, #moments, #film, #finale { content-visibility: auto; contain-intrinsic-size: auto 900px; }
+
+        /* ── sticky bar ── */
+        .bar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; min-height: calc(var(--bar-h) + var(--safe)); padding: 8px 8px calc(8px + var(--safe)) 0; background: #FFF8F2; color: var(--ink); border-top: 1px solid rgba(43, 18, 51, .1); display: flex; align-items: center; gap: 6px; transform: translateY(100%); transition: transform .32s var(--e-out); box-shadow: 0 -12px 30px -16px rgba(43, 18, 51, .35); }
+        .bar.on { transform: none; }
+        .bar-main { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; text-align: left; background: none; border: 0; padding: 0 6px 0 16px; cursor: pointer; color: inherit; }
+        .bar-l1 { font: 700 15px/1.25 var(--ui); }
+        .bar-l2 { font: 500 13px/1.3 var(--ui); color: var(--ink-2); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .bar-cue { font: 700 13px/1.3 var(--ui); color: var(--rani-ink); margin-top: 2px; }
+        .ib { flex: none; width: 60px; min-height: 56px; border-radius: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; background: rgba(226, 56, 122, .1); border: 0; color: var(--rani-ink); cursor: pointer; text-decoration: none; font: 700 13px/1 var(--ui); }
+        .ib svg { width: 22px; height: 22px; }
+        @media (min-width: 720px) { .bar { left: 50%; right: auto; width: 600px; transform: translate(-50%, 130%); bottom: 16px; border-radius: 24px; padding: 8px 8px 8px 4px; } .bar.on { transform: translate(-50%, 0); } }
+
+        /* ── sheet ── */
+        .sheet { position: fixed; inset: 0; z-index: 80; visibility: hidden; transition: visibility 0s .45s; }
+        .sheet.open { visibility: visible; transition: none; }
+        .sheet-backdrop { position: absolute; inset: 0; background: rgba(43, 18, 51, .45); opacity: 0; transition: opacity .35s; }
+        .sheet.open .sheet-backdrop { opacity: 1; }
+        .sheet-panel { position: absolute; left: 0; right: 0; bottom: 0; max-width: 640px; margin: 0 auto; max-height: 88vh; overflow: auto; overscroll-behavior: contain; background: #FFFBF6; color: var(--ink); border-radius: 28px 28px 0 0; padding: 10px var(--m) calc(26px + var(--safe)); transform: translateY(102%); transition: transform .45s var(--e-out); }
+        .sheet.open .sheet-panel { transform: none; }
+        .sheet-grab { width: 44px; height: 5px; border-radius: 9px; background: rgba(42, 16, 24, .22); margin: 4px auto 14px; }
+        .sheet-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+        .sheet-top .eyebrow { color: var(--rani-ink); }
+        #sheet-title { font: 400 32px/1.05 var(--display); margin-top: 4px; overflow-wrap: anywhere; }
+        .icon-btn { flex: none; width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; background: rgba(42, 16, 24, .07); border: 0; cursor: pointer; }
+        .icon-btn svg { width: 22px; height: 22px; }
+        .sheet-list { list-style: none; padding: 0; margin: 18px 0 0; }
+        .sheet-list li { padding: 18px 0; border-top: 1px solid rgba(42, 16, 24, .12); }
+        .sheet-list li.is-main { background: linear-gradient(160deg, #FFF9E6, #FFEFC2); border-radius: 18px; padding: 16px 16px 18px 20px; margin: 4px -6px; border-top: 0; box-shadow: inset 5px 0 0 #E9B949; }
+        .sheet-list li.is-main .sl-title { color: var(--rani-ink); }
+        .sl-when { color: var(--teal-ink); }
+        .sl-title { font: 400 28px/1.1 var(--display); margin: 2px 0 4px; }
+        .sl-time { font: 700 18px/1.4 var(--ui); }
+        .sl-venue { font: 500 17px/1.45 var(--ui); color: var(--ink-2); }
+        .sheet-list .chip { margin-top: 10px; }
+        .sheet-list .actions { margin-top: 12px; }
+        .sheet-foot { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; padding-top: 14px; border-top: 1px solid rgba(42, 16, 24, .12); }
+
+        /* ── lightbox ── */
+        .lightbox { position: fixed; inset: 0; z-index: 90; background: rgba(30, 12, 36, .96); display: none; align-items: center; justify-content: center; }
+        .lightbox.open { display: flex; }
+        #lbImg { max-width: 94vw; max-height: 80vh; object-fit: contain; border-radius: 4px; }
+        .lb-btn { position: absolute; background: rgba(255, 255, 255, .16); color: #fff; }
+        .lb-close { top: calc(env(safe-area-inset-top) + 14px); right: 14px; }
+        .lb-prev { left: 10px; top: 50%; margin-top: -24px; }
+        .lb-next { right: 10px; top: 50%; margin-top: -24px; }
+        .lb-count { position: absolute; bottom: calc(var(--safe) + 22px); left: 0; right: 0; text-align: center; color: #fff; font: 600 16px/1 var(--ui); }
+
+        /* ── toast ── */
+        .toast { position: fixed; left: 50%; bottom: calc(var(--bar-h) + var(--safe) + 18px); z-index: 85; display: flex; align-items: center; gap: 10px; padding: 12px 20px; border-radius: 999px; background: var(--ink); color: #fff; font: 700 16px/1 var(--ui); opacity: 0; transform: translate(-50%, 16px); transition: opacity .3s, transform .4s var(--e-out); pointer-events: none; }
+        .toast.show { opacity: 1; transform: translate(-50%, 0); }
+        .toast svg { width: 22px; height: 22px; }
+        .toast path { stroke-dasharray: 24; stroke-dashoffset: 24; }
+        .toast.show path { stroke-dashoffset: 0; transition: stroke-dashoffset .5s .15s var(--e-out); }
+
+        /* ── desktop composition ── */
+        @media (min-width: 900px) {
+            .hf { width: min(46vw, 620px); right: 2vw; top: calc(50vh - min(23vw, 310px)); }
+            .hero-eye { max-width: 40%; }
+            .hero-space { height: auto; flex: 1 1 auto; min-height: 10vh; }
+            .names, .hero-card { max-width: 56%; }
+            .hero .mac3 { width: 44vw; right: -14vw; bottom: -18vw; }
+            .gate .mac1 { left: -12vw; top: -20vh; } .gate .mac2 { right: -16vw; bottom: -30vh; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            html.m-ready .g, html.m-ready .rv, html.m-ready .fam { transform: none !important; opacity: 1 !important; clip-path: none !important; }
+            * { transition-duration: .01s !important; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sky" id="sky" aria-hidden="true"></div>
+    <div class="grain" id="grain" aria-hidden="true"></div>
+    <canvas id="petals" aria-hidden="true"></canvas>
+    <p class="sr-only" id="announce" role="status" aria-live="polite"></p>
+
+    <!-- ═══ GATE · 11:58 pm ═══ -->
+    <div class="gate" id="gate" role="dialog" aria-modal="true" aria-labelledby="gate-title">
+        <canvas class="bokeh" id="gateBokeh" aria-hidden="true"></canvas>
+        <div class="macro mac1" aria-hidden="true"><canvas></canvas></div>
+        <div class="macro mac2" aria-hidden="true"><canvas></canvas></div>
+        <div class="gate-in">
+            <p class="gate-eye"><span class="ta" lang="ta">திருமண அழைப்பிதழ்</span><span class="eyebrow">Wedding Invitation</span></p>
+            <div class="bud-slot" id="budSlot" aria-hidden="true"><svg class="ph-bud" viewBox="-40 -110 80 150"><defs><linearGradient id="phB" x1="0" y1="-100" x2="0" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#FFFDF6"/><stop offset=".55" stop-color="#F3F1E4"/><stop offset="1" stop-color="#D9E6C4"/></linearGradient><radialGradient id="phS"><stop offset="0" stop-color="rgb(150,80,60)" stop-opacity=".2"/><stop offset="1" stop-color="rgb(150,80,60)" stop-opacity="0"/></radialGradient></defs><ellipse cx="8" cy="-36" rx="34" ry="60" fill="url(#phS)"/><path d="M0,0 C-10,10 -5,22 -12,32" fill="none" stroke="#3f6b2a" stroke-width="3" stroke-linecap="round"/><path d="M0,0 C-35,-10 -32,-62 4,-100 C31,-60 34,-10 0,0Z" fill="url(#phB)" stroke="rgba(150,140,110,.4)" stroke-width=".8"/><path d="M-20,-8 C-8,-42 6,-72 4,-100 M12,-6 C14,-34 4,-66 4,-100" fill="none" stroke="rgba(140,130,100,.32)" stroke-width="1"/><path d="M-25,-20 C-25,-50 -12,-80 3,-99" fill="none" stroke="#FFF8E7" stroke-width="2"/><g fill="#5d8a3a"><path d="M-14,-2 L-10,-14 L-6,-1Z"/><path d="M-5,0 L-1,-15 L3,0Z"/><path d="M5,-1 L9,-14 L13,-2Z"/></g><ellipse cx="0" cy="1" rx="12" ry="4" fill="#4f7a30"/></svg></div>
+            <h1 class="gate-names" id="gate-title"><span data-fit="gate" data-fit-min="28">{{couple.groom.firstName}}</span> <i aria-hidden="true">&amp;</i><span class="sr-only">and</span> <span data-fit="gate" data-fit-min="28">{{couple.bride.firstName}}</span></h1>
+            {{#each events}}{{#if @first}}
+            <p class="gate-when" id="gateWhen">{{date}} · {{startTime}}</p>
+            <p class="gate-venue" id="gateVenue">{{venueName}}</p>
+            {{/if}}{{/each}}
+            <p class="gate-today" id="gateToday" hidden></p>
+            <button class="btn btn-foil" id="openBtn" type="button">Open the invitation</button>
+            <button class="calm-tg" id="gateCalm" type="button" aria-pressed="false"><span class="sw" aria-hidden="true"></span>Calm motion</button>
+        </div>
+    </div>
+
+    <main id="main">
+        <svg class="thread" id="thread" aria-hidden="true"></svg>
+        <svg class="thread" id="thread2" aria-hidden="true"></svg>
+
+        <!-- ═══ HERO · midnight ═══ -->
+        <section class="hero" id="hero" aria-labelledby="hero-title">
+            <canvas class="bokeh" id="heroBokeh" aria-hidden="true"></canvas>
+            <div class="lamp" aria-hidden="true"></div>
+            <div class="macro mac3" aria-hidden="true"><canvas></canvas></div>
+            <div class="macro mac4" aria-hidden="true"><canvas></canvas></div>
+            <div class="hf" id="hf" aria-hidden="true"><canvas id="bloom"></canvas></div>
+            <div class="hero-in">
+                <p class="hero-eye"><span class="ta" lang="ta">திருமண அழைப்பிதழ்</span><span class="eyebrow">Together with their families</span></p>
+                <div class="hero-space" aria-hidden="true"></div>
+                <h2 class="names" id="hero-title" tabindex="-1">
+                    <span class="nrow"><span class="nl n-g" aria-hidden="true">{{couple.groom.firstName}}</span><svg class="amp" viewBox="0 0 100 80" aria-hidden="true"><defs><linearGradient id="ampFoil" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#C81E5A" /><stop offset=".55" stop-color="#E2387A" /><stop offset="1" stop-color="#F2668F" /></linearGradient></defs><text x="8" y="78">&amp;</text></svg></span>
+                    <span class="nl n-b" aria-hidden="true">{{couple.bride.firstName}}</span>
+                    <span class="sr-only">{{couple.groom.firstName}} and {{couple.bride.firstName}}</span>
+                </h2>
+                <div class="hero-card" id="heroCard">
+                    <p class="hc-state" id="heroState" hidden></p>
+                    {{#each events}}{{#if @first}}
+                    <p class="hc-title" id="heroTitle">{{title}}</p>
+                    <p class="hc-when" id="heroWhen">{{date}} · {{startTime}}</p>
+                    <p class="hc-venue" id="heroVenue">{{venueName}}</p>
+                    {{/if}}{{/each}}
+                    <div class="actions" id="heroActions"></div>
+                </div>
+            </div>
+            <div class="cue" aria-hidden="true"></div>
+        </section>
+
+        <!-- ═══ FAMILIES · 2 am ═══ -->
+        <section class="families chapter" id="families" aria-labelledby="families-title">
+            <header class="sec-head rv">
+                <p class="ta" lang="ta">இரு குடும்பங்களின் ஆசியுடன்</p>
+                <h2 class="h-sec" id="families-title">With the blessings of our families</h2>
+            </header>
+            <div class="fam-grid">
+                <div class="fam fam-g">
+                    <p class="fam-role"><span class="ta" lang="ta">மணமகன்</span><span class="eyebrow">The groom</span></p>
+                    <p class="fam-name" data-fit="fam" data-fit-min="28">{{couple.groom.firstName}}</p>
+                    <p class="eyebrow caps fam-rel">Son of</p>
+                    <p class="fam-parents" data-parents><span>{{couple.groom.fatherName}}</span><span class="amp-s"> &amp; </span><span>{{couple.groom.motherName}}</span></p>
+                </div>
+                <div class="sprig" id="sprig" aria-hidden="true"></div>
+                <div class="fam fam-b">
+                    <p class="fam-role"><span class="ta" lang="ta">மணமகள்</span><span class="eyebrow">The bride</span></p>
+                    <p class="fam-name" data-fit="fam" data-fit-min="28">{{couple.bride.firstName}}</p>
+                    <p class="eyebrow caps fam-rel">Daughter of</p>
+                    <p class="fam-parents" data-parents><span>{{couple.bride.fatherName}}</span><span class="amp-s"> &amp; </span><span>{{couple.bride.motherName}}</span></p>
+                </div>
+            </div>
+            <p class="invite-line rv"><span>request the pleasure of your company as their children begin a life together.</span></p>
+        </section>
+
+        <!-- ═══ THE DAY · 4 am → dawn ═══ -->
+        {{#each events}}{{#if @first}}
+        <section class="day chapter" id="day" aria-labelledby="day-title">
+            <div class="day-pin" id="dayPin">
+                <div class="dsk" aria-hidden="true"><div class="dawn"></div><div class="dusk" id="dusk"></div></div>
+                <div class="day-in">
+                    <div class="countdown" id="countdown" hidden>
+                        <div class="cd-stage" aria-hidden="true"><div class="sun" id="sun"><i></i></div><div class="horizon"></div><div class="big" id="big"><div class="o"></div><div class="f" id="bigFill"></div></div></div>
+                        <p class="unit" id="bigUnit" aria-hidden="true"></p>
+                        <p class="sr-only" id="cdText"></p>
+                    </div>
+                    <p class="status" id="dayStatus" hidden></p>
+                    <div class="plate">
+                        <p class="ta" lang="ta">முகூர்த்த நாள்</p>
+                        <h2 id="day-title" data-main="long">{{date}}</h2>
+                        <p class="dp-line" id="dayLine">{{title}} · {{startTime}}</p>
+                        <div class="actions" id="dayActions"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        {{/if}}{{/each}}
+
+        <!-- ═══ CELEBRATIONS · dawn ═══ -->
+        <section class="events chapter lightsec" id="events" aria-labelledby="events-title">
+            <div class="ev-wrap">
+                <header class="sec-head rv">
+                    <p class="ta" lang="ta">விழாக்கள்</p>
+                    <h2 class="h-sec" id="events-title">Every celebration</h2>
+                </header>
+                <ol class="cards" id="cards">
+                    {{#each events}}
+                    <li class="card-wrap" data-event data-title="{{title}}" data-date="{{date}}" data-start="{{startTime}}"
+                        data-end="{{endTime}}" data-venue="{{venueName}}" data-map="{{googleMapsUrl}}">
+                        <article class="card" aria-label="Event {{add @index 1}}">
+                            <p class="eyebrow caps card-eyebrow" data-part="eyebrow" hidden></p>
+                            <p class="ta card-ta" lang="ta" data-part="ta" hidden></p>
+                            <h3 class="card-title">{{title}}</h3>
+                            <p class="card-time"><span data-part="time">{{startTime}}</span><small data-part="ampm"></small></p>
+                            <p class="card-until" data-part="until" hidden></p>
+                            <p class="card-when" data-part="when">{{date}}</p>
+                            <p class="card-venue">{{venueName}}</p>
+                            <span class="chip" data-part="chip" hidden></span>
+                            <div class="actions" data-part="actions"></div>
+                        </article>
+                    </li>
+                    {{/each}}
+                </ol>
+            </div>
+        </section>
+
+        <!-- ═══ NOTES · sunrise ═══ -->
+        <section class="notes chapter lightsec" id="notes" aria-labelledby="notes-title">
+            <header class="sec-head rv">
+                <p class="ta" lang="ta">அன்புடன்</p>
+                <h2 class="h-sec" id="notes-title">In their words</h2>
+            </header>
+            <div class="notes-pair">
+                {{#if couple.groom.notes}}
+                <figure class="note rv"><div class="paper">
+                    <p class="note-text">{{couple.groom.notes}}</p>
+                    <figcaption class="note-sign">— {{couple.groom.firstName}}</figcaption>
+                </div></figure>
+                {{/if}}
+                {{#if couple.bride.notes}}
+                <figure class="note rv"><div class="paper">
+                    <p class="note-text">{{couple.bride.notes}}</p>
+                    <figcaption class="note-sign">— {{couple.bride.firstName}}</figcaption>
+                </div></figure>
+                {{/if}}
+            </div>
+        </section>
+
+        <!-- ═══ MOMENTS · golden ═══ -->
+        {{#if gallery.images}}
+        <section class="moments chapter lightsec" id="moments" aria-labelledby="moments-title">
+            <header class="sec-head rv">
+                <p class="ta" lang="ta">நினைவுகள்</p>
+                <h2 class="h-sec" id="moments-title">Moments</h2>
+            </header>
+            <div class="prints" id="prints">
+                {{#each gallery.images}}
+                <button class="print" type="button" data-i="{{@index}}" aria-label="Open photo {{add @index 1}}">
+                    <span class="ph"><img src="{{this}}" alt="" loading="lazy" decoding="async" /></span>
+                </button>
+                {{/each}}
+            </div>
+        </section>
+        {{/if}}
+
+        <!-- ═══ FILM ═══ -->
+        {{#if media.videoUrl}}
+        <section class="film chapter lightsec" id="film" aria-labelledby="film-title">
+            <header class="sec-head rv">
+                <p class="ta" lang="ta">எங்கள் கதை</p>
+                <h2 class="h-sec" id="film-title">Our story</h2>
+            </header>
+            <div class="film-frame" id="filmFrame">
+                <div class="film-box" id="filmBox" data-video="{{media.videoUrl}}"></div>
+            </div>
+        </section>
+        {{/if}}
+
+        <!-- ═══ FINALE · 6:30 am ═══ -->
+        <section class="finale chapter lightsec" id="finale" aria-labelledby="finale-title">
+            <div class="blessing" id="blessing" aria-hidden="true" data-drawn="0"><canvas id="finaleC"></canvas></div>
+            <p class="ta" lang="ta" id="finaleTa">அன்புடன் அழைக்கிறோம்</p>
+            <h2 class="finale-line" id="finale-title">With love, the families</h2>
+            <p class="finale-names">{{couple.groom.firstName}} <i>&amp;</i> {{couple.bride.firstName}}</p>
+            <div class="share-row" id="shareRow">
+                <a class="btn btn-wa" id="waBtn" href="#" target="_blank" rel="noopener">
+                    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.9 11.9 0 0 0 4.6 4c1.7.7 2.3.8 3.2.7.5-.1 1.5-.6 1.8-1.2.2-.6.2-1.1.1-1.2l-.5-.3z" /></svg><span id="waLabel">Share on WhatsApp</span></a>
+                <div class="share-more">
+                    <button class="textlink" id="copyBtn" type="button">Copy link</button>
+                    <button class="textlink" id="shareBtn" type="button">More ways to share</button>
+                </div>
+            </div>
+            <p class="share-status" id="shareStatus" role="status"></p>
+            <button class="textlink" id="replayBtn" type="button">Open the invitation again</button>
+        </section>
+    </main>
+
+    <footer id="foot">Made with love on <a href="https://www.wedbliss.co/?ref=blossom" target="_blank" rel="noopener">WedBliss</a></footer>
+
+    <!-- Sticky facts bar -->
+    <div class="bar" id="bar">
+        <button class="bar-main" id="pill" type="button" aria-haspopup="dialog" aria-controls="sheet"><span class="bar-l1" id="barL1">Date &amp; venue</span><span class="bar-l2" id="barL2"></span><span class="bar-cue" aria-hidden="true">All details ›</span></button>
+        <span id="barActs" style="display:flex;gap:6px;align-self:stretch;align-items:center"></span>
+    </div>
+
+    <div class="toast" id="toast" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#7fd39b" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg><span id="toastText">Link copied</span></div>
+
+    <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+        <div class="sheet-backdrop" data-close></div>
+        <div class="sheet-panel" id="sheetPanel" data-lenis-prevent>
+            <div class="sheet-grab" aria-hidden="true"></div>
+            <div class="sheet-top">
+                <div>
+                    <p class="eyebrow" id="sheetEyebrow">The details</p>
+                    <h2 id="sheet-title">{{couple.groom.firstName}} &amp; {{couple.bride.firstName}}</h2>
+                </div>
+                <button class="icon-btn" type="button" data-close aria-label="Close details"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg></button>
+            </div>
+            <ul class="sheet-list" id="sheetList"></ul>
+            <div class="sheet-foot">
+                <button class="textlink" type="button" id="sheetShare">Share invitation</button>
+                <button class="textlink" type="button" id="sheetReplay">Open the invitation again</button>
+                <button class="textlink" type="button" id="calmToggle">Calm motion: off</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer" data-lenis-prevent>
+        <img id="lbImg" alt="" />
+        <button class="icon-btn lb-btn lb-close" id="lbClose" type="button" aria-label="Close photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg></button>
+        <button class="icon-btn lb-btn lb-prev" id="lbPrev" type="button" aria-label="Previous photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg></button>
+        <button class="icon-btn lb-btn lb-next" id="lbNext" type="button" aria-label="Next photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7" /></svg></button>
+        <p class="lb-count" id="lbCount"></p>
+    </div>
+
+    <script>
+        (function () {
+            'use strict';
+            var doc = document, root = doc.documentElement, win = window;
+            var $ = function (s, c) { return (c || doc).querySelector(s); };
+            var $$ = function (s, c) { return Array.prototype.slice.call((c || doc).querySelectorAll(s)); };
+            var store = {
+                get: function (k) { try { return win.localStorage.getItem(k); } catch (e) { return null; } },
+                set: function (k, v) { try { win.localStorage.setItem(k, v); } catch (e) { } }
+            };
+            var NS = 'http://www.w3.org/2000/svg';
+            function mk(tag, cls, txt) { var e = doc.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; }
+            function svgEl(tag, attrs) { var e = doc.createElementNS(NS, tag); for (var k in attrs) e.setAttribute(k, attrs[k]); return e; }
+            function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+            root.classList.add('js', 'locked');
+
+            /* ── Comfort & capability ──────────────────────────────────
+               calm = reduced motion, ≤2 GB devices, or the guest's choice.
+               tier = 2 desktop/flagship · 1 mid Android · 0 low end. */
+            var mq = win.matchMedia ? win.matchMedia('(prefers-reduced-motion: reduce)') : { matches: false };
+            var mem = navigator.deviceMemory || 8, cores = navigator.hardwareConcurrency || 8;
+            var calm = mq.matches || mem <= 2 || store.get('wb-blossom-calm') === '1';
+            var tier = calm ? 0 : (cores <= 4 || mem <= 4 ? 1 : 2);
+            function applyCalm() { root.classList.toggle('calm', calm); root.classList.toggle('m-ready', !calm); }
+            applyCalm();
+            if (mq.addEventListener) mq.addEventListener('change', function (e) { if (e.matches) { calm = true; applyCalm(); } });
+
+            /* ── Seeded randomness: every couple gets their own jitter ── */
+            var seedStr = ($('.finale-names') || {}).textContent || 'blossom', seed = 2166136261;
+            for (var si = 0; si < seedStr.length; si++) { seed ^= seedStr.charCodeAt(si); seed = Math.imul(seed, 16777619); }
+            function rnd() { seed = (seed + 0x6D2B79F5) | 0; var t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }
+            function jit(a) { return (rnd() * 2 - 1) * a; }
+
+            /* ── Dates & times ─────────────────────────────────────────
+               Checkout stores ISO dates ("2026-12-28") and 24h times
+               ("19:00"); older/demo data uses "28 December 2026"/"8:24 AM". */
+            var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            var DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            function pad(n) { return String(n).padStart(2, '0'); }
+            function parseDate(s) {
+                if (!s) return null;
+                s = String(s).trim();
+                var m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+                if (m) return new Date(+m[1], +m[2] - 1, +m[3]);
+                var d = new Date(s);
+                return isNaN(d.getTime()) ? null : new Date(d.getFullYear(), d.getMonth(), d.getDate());
+            }
+            function parseTime(t) {
+                if (!t) return null;
+                var m = String(t).trim().match(/^(\d{1,2})[:.](\d{2})\s*([ap])?\.?\s*m?\.?$/i);
+                if (!m) return null;
+                var h = +m[1], mi = +m[2], ap = (m[3] || '').toLowerCase();
+                if (ap === 'p' && h < 12) h += 12;
+                if (ap === 'a' && h === 12) h = 0;
+                return { h: h, m: mi };
+            }
+            function hm(p) { return (p.h % 12 || 12) + ':' + pad(p.m); }
+            function ap(p) { return p.h < 12 ? 'AM' : 'PM'; }
+            function fmtTime(t) { var p = parseTime(t); return p ? hm(p) + ' ' + ap(p) : (t || ''); } // a time never breaks across lines
+            function at(d, t) { var p = parseTime(t), r = new Date(d.getTime()); r.setHours(p ? p.h : 0, p ? p.m : 0, 0, 0); return r; }
+            function fmtLong(d) { return DAYS[d.getDay()] + ', ' + d.getDate() + ' ' + MONTHS[d.getMonth()] + ' ' + d.getFullYear(); }
+            function fmtShort(d) { return DAYS[d.getDay()].slice(0, 3) + ', ' + d.getDate() + ' ' + MONTHS[d.getMonth()].slice(0, 3); }
+            function sameDay(a, b) { return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate(); }
+
+            /* ── Event model ──────────────────────────────────────── */
+            var now = new Date();
+            var EVENTS = $$('[data-event]').map(function (el) {
+                var g = function (k) { return el.getAttribute('data-' + k) || ''; };
+                var d = parseDate(g('date')), e = { el: el, title: g('title'), venue: g('venue'), rawDate: g('date'), d: d, startRaw: g('start') };
+                // An end time missing or equal to the start means "open-ended"
+                var sT = fmtTime(g('start')), eT = fmtTime(g('end')), hasEnd = !!(eT && eT !== sT);
+                e.sT = sT; e.eT = hasEnd ? eT : '';
+                e.time = sT && hasEnd ? sT + ' – ' + eT : sT ? 'From ' + sT : eT;
+                if (d) {
+                    e.start = at(d, g('start'));
+                    e.end = hasEnd ? at(d, g('end')) : new Date(e.start.getTime() + 3 * 36e5);
+                    if (e.end <= e.start) { e.end = new Date(e.end.getTime() + 864e5); e.cross = hasEnd; } // runs past midnight
+                }
+                var map = g('map').trim();
+                e.map = /^https?:\/\//i.test(map) ? map : (e.venue ? 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(e.venue) : '');
+                e.past = !!(e.end && now > e.end);
+                e.live = !!(e.start && now >= e.start && now <= e.end);
+                e.today = !!(d && sameDay(d, now) && !e.past);
+                return e;
+            });
+            // chronological, always (the ceremony is marked, not moved)
+            EVENTS.sort(function (a, b) { return (a.start ? a.start.getTime() : 9e15) - (b.start ? b.start.getTime() : 9e15); });
+            var cardsOl = $('#cards');
+            EVENTS.forEach(function (e, i) { if (cardsOl) cardsOl.appendChild(e.el); e.el.style.setProperty('--i', i); });
+            var CEREMONY = /muhurth|kalyan|wedding|vivah|marriage|shaadi|shadi|nikah|thali|parinay/i;
+            var main = EVENTS.filter(function (e) { return CEREMONY.test(e.title); })[0] || EVENTS[0];
+            var allPast = EVENTS.length && EVENTS.every(function (e) { return e.past; });
+            var nextEv = EVENTS.filter(function (e) { return e.start && !e.past; })[0] || null;
+            var soon = EVENTS.filter(function (e) { return e.start && !e.past && (e.today || (e.start - now) < 6 * 36e5); });
+            var liveEv = EVENTS.filter(function (e) { return e.live; })[0];
+            var todayEv = EVENTS.filter(function (e) { return e.today && !e.past; })[0];
+            var heroEv = liveEv || todayEv || main;
+            var state = allPast ? 'past' : liveEv ? 'live' : todayEv ? 'today' : 'before';
+            root.classList.add('st-' + state);
+            var couple = (($('.finale-names') || {}).textContent || '').replace(/\s+/g, ' ').trim();
+
+            function prettyTitle(t) {
+                var parts = String(t || '').split(/\s*[\/|]\s*/).filter(Boolean);
+                if (parts.length < 2) return { title: t, eyebrow: '' };
+                return { title: parts[parts.length - 1], eyebrow: 'The ' + parts.slice(0, -1).join(' & ') };
+            }
+            var TA = { muhurth: 'முகூர்த்தம்', kalyan: 'கல்யாணம்', wedding: 'திருமணம்', marriage: 'திருமணம்', nichay: 'நிச்சயதார்த்தம்', engage: 'நிச்சயதார்த்தம்', reception: 'வரவேற்பு', sangeet: 'சங்கீத்', mehendi: 'மெஹந்தி', mehndi: 'மெஹந்தி', haldi: 'மஞ்சள் நீராட்டு', nalangu: 'நலங்கு', janavas: 'ஜானவாசம்', mappillai: 'மாப்பிள்ளை அழைப்பு', vratham: 'விரதம்', kasi: 'காசி யாத்திரை', oonjal: 'ஊஞ்சல்' };
+            function taFor(t) { t = String(t || '').toLowerCase(); for (var k in TA) if (t.indexOf(k) >= 0) return TA[k]; return ''; }
+            EVENTS.forEach(function (e) { var p = prettyTitle(e.title); e.display = p.title; e.kind = p.eyebrow; e.ta = taFor(e.display) || taFor(e.title); });
+            function setT(sel, txt) { var el = $(sel); if (el) el.textContent = txt; return el; }
+
+            /* ── Directions & calendar ─────────────────────────────── */
+            var isApple = /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent) && !/Chrome|Android/.test(navigator.userAgent);
+            function icsStamp(d) { return d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate()) + 'T' + pad(d.getHours()) + pad(d.getMinutes()) + '00'; }
+            // wall-clock times are India time: .ics gets an unambiguous UTC stamp
+            function utcStamp(d, real) { var u = real ? d : new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), d.getMinutes()) - 5.5 * 36e5); return u.getUTCFullYear() + pad(u.getUTCMonth() + 1) + pad(u.getUTCDate()) + 'T' + pad(u.getUTCHours()) + pad(u.getUTCMinutes()) + '00Z'; }
+            function icsEsc(s) { return String(s || '').replace(/([,;\\])/g, '\\$1').replace(/\n/g, '\\n'); }
+            function addToCalendar(e) {
+                var title = e.title + ' · ' + couple, details = 'Wedding of ' + couple + '. ' + e.title + ' at ' + e.venue + '.';
+                if (isApple) {
+                    var ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//WedBliss//Blossom//EN', 'BEGIN:VEVENT',
+                        'UID:' + icsStamp(e.start) + '-' + Math.random().toString(36).slice(2) + '@wedbliss.co',
+                        'DTSTAMP:' + utcStamp(new Date(), true), 'DTSTART:' + utcStamp(e.start), 'DTEND:' + utcStamp(e.end),
+                        'SUMMARY:' + icsEsc(title), 'DESCRIPTION:' + icsEsc(details), 'LOCATION:' + icsEsc(e.venue),
+                        'END:VEVENT', 'END:VCALENDAR'].join('\r\n');
+                    var a = doc.createElement('a');
+                    a.href = URL.createObjectURL(new Blob([ics], { type: 'text/calendar;charset=utf-8' }));
+                    a.download = (e.title || 'wedding').replace(/[^\w]+/g, '-') + '.ics';
+                    doc.body.appendChild(a); a.click(); a.remove();
+                } else {
+                    win.open('https://calendar.google.com/calendar/render?action=TEMPLATE&text=' + encodeURIComponent(title) +
+                        '&dates=' + icsStamp(e.start) + '/' + icsStamp(e.end) + '&details=' + encodeURIComponent(details) +
+                        '&location=' + encodeURIComponent(e.venue) + '&ctz=Asia/Kolkata', '_blank', 'noopener');
+                }
+            }
+            var ICON_DIR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l18-8-8 18-2-8z"/></svg>';
+            var ICON_CAL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4" stroke-linecap="round"/></svg>';
+            var ICON_SHARE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 8l5-5 5 5M5 14v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/></svg>';
+            function dirA(e, cls, label) {
+                var a = mk('a', cls); a.href = e.map; a.target = '_blank'; a.rel = 'noopener';
+                a.innerHTML = ICON_DIR + '<span></span>'; a.lastChild.textContent = label || 'Directions';
+                if (cls === 'ib') { a.innerHTML = ICON_DIR + '<span>Map</span>'; a.setAttribute('aria-label', 'Directions to ' + e.venue); }
+                return a;
+            }
+            function calB(e, cls, label) {
+                var b = mk('button', cls); b.type = 'button';
+                b.innerHTML = ICON_CAL + (cls === 'ib' ? '<span>Save date</span>' : '<span></span>');
+                if (cls !== 'ib') b.lastChild.textContent = label || 'Add to calendar';
+                b.setAttribute('aria-label', 'Add ' + e.display + ' to calendar');
+                b.addEventListener('click', function () { addToCalendar(e); });
+                return b;
+            }
+            function chipText(e) {
+                if (e.live) return 'Happening now';
+                if (e.past) return 'Celebrated';
+                if (e.today && e.start) {
+                    var mins = Math.round((e.start - now) / 6e4);
+                    return mins < 60 ? 'Starts in ' + Math.max(1, mins) + ' min' : 'Starts in ' + Math.floor(mins / 60) + ' h' + (mins % 60 ? ' ' + (mins % 60) + ' min' : '');
+                }
+                return '';
+            }
+            function setChip(ch, e) {
+                var c = chipText(e); if (!c || !ch) return;
+                ch.hidden = false; ch.textContent = c;
+                if (e.live) ch.insertBefore(mk('span', 'dot'), ch.firstChild);
+                if (e.past || (nextEv && e !== nextEv && !e.live)) ch.classList.add('done');
+            }
+
+            /* ── Gate & hero facts ─────────────────────────────────── */
+            var gallery = !!$('#moments');
+            if (heroEv) {
+                var whenTxt = heroEv.d ? fmtLong(heroEv.d) + (heroEv.sT ? ' · ' + heroEv.sT : '') : heroEv.rawDate + ' · ' + heroEv.sT;
+                setT('#gateWhen', whenTxt); setT('#gateVenue', heroEv.venue);
+                var ht = $('#heroTitle');
+                if (ht) { ht.textContent = heroEv.display; if (heroEv.ta) { var ts = mk('span', 'ta', heroEv.ta); ts.lang = 'ta'; ht.appendChild(ts); } }
+                setT('#heroWhen', whenTxt); setT('#heroVenue', heroEv.venue);
+                var hs = $('#heroState'), ha = $('#heroActions');
+                if (state === 'today') { hs.hidden = false; hs.textContent = 'Today · starts ' + heroEv.sT; }
+                if (state === 'live') { hs.hidden = false; hs.className = 'hc-state now'; hs.innerHTML = '<span class="dot"></span>Happening now'; }
+                if (state === 'past') {
+                    hs.hidden = false; hs.className = 'hc-state plain'; hs.textContent = 'Thank you for your blessings';
+                    setT('#heroWhen', 'Celebrated on ' + (heroEv.d ? fmtLong(heroEv.d) : heroEv.rawDate));
+                    if (gallery) { var sp = mk('a', 'btn btn-foil', 'See the photos'); sp.href = '#moments'; ha.appendChild(sp); }
+                    var sh = mk('button', 'btn ' + (gallery ? 'btn-line' : 'btn-foil')); sh.type = 'button'; sh.innerHTML = ICON_SHARE + '<span>Share</span>';
+                    sh.addEventListener('click', share); ha.appendChild(sh);
+                } else {
+                    if (heroEv.map) ha.appendChild(dirA(heroEv, 'btn btn-foil'));
+                    if (state !== 'live' && heroEv.start) ha.appendChild(calB(heroEv, 'btn btn-line'));
+                }
+            }
+            if (soon.length) {
+                var gt = $('#gateToday'); gt.hidden = false;
+                gt.textContent = (soon[0].live ? 'Happening now: ' : 'Today: ') + soon[0].display + ', ' + soon[0].sT;
+            }
+            if (allPast) {
+                var gp = $('#gateToday'); gp.hidden = false; gp.textContent = 'Celebrated · thank you for your blessings';
+                $('#openBtn').textContent = 'View the invitation';
+                $('#finale-title').textContent = 'Thank you for blessing us';
+                setT('#finaleTa', 'நன்றி');
+                $('#waLabel').textContent = 'Share our thanks';
+                // a keepsake: thanks, then photos and film lead
+                var hero = $('#hero');
+                ['#film', '#moments'].forEach(function (s) { var el = $(s); if (el) hero.after(el); });
+            }
+
+            /* ── The day (countdown) ───────────────────────────────── */
+            if (main && main.d) {
+                (function (h, d) { h.textContent = DAYS[d.getDay()] + ', '; h.appendChild(mk('span', 'nw', d.getDate() + ' ' + MONTHS[d.getMonth()] + ' ' + d.getFullYear())); })($('#day-title'), main.d);
+                setT('#dayLine', main.display + (main.sT ? ' · ' + main.sT : ''));
+            }
+            if (main && main.start && !main.past) $('#dayActions').appendChild(main.live ? (main.map ? dirA(main, 'btn btn-kum') : mk('span')) : calB(main, 'btn btn-kum')); // live: Directions, never Calendar
+            var cd = $('#countdown'), status = $('#dayStatus'), pinDay = false;
+            function odo(str) {
+                var big = $('#big'), o = $('.o', big), f = $('.f', big);
+                if (big.getAttribute('data-s') !== str.replace(/\d/g, '0')) {
+                    big.setAttribute('data-s', str.replace(/\d/g, '0'));
+                    var h = '';
+                    for (var i = 0; i < str.length; i++) h += /\d/.test(str[i]) ? '<span class="dg"><span>' + '0123456789'.split('').map(function (n) { return '<b>' + n + '</b>'; }).join('') + '</span></span>' : '<span class="sep">' + str[i] + '</span>';
+                    o.innerHTML = h; f.innerHTML = h;
+                }
+                var cols = [$$('.dg > span', o), $$('.dg > span', f)], di = 0;
+                for (var j = 0; j < str.length; j++) if (/\d/.test(str[j])) { var tr = 'translateY(' + (-str[j]) + 'em)'; cols[0][di].style.transform = tr; cols[1][di].style.transform = tr; di++; }
+            }
+            if (cd && main && main.start) {
+                if (main.live) { status.hidden = false; status.classList.add('now'); status.textContent = 'Happening now'; }
+                else if (now > main.end) { status.hidden = false; status.textContent = 'Celebrated, with your blessings'; }
+                else {
+                    cd.hidden = false; pinDay = true;
+                    var tick = function () {
+                        var diff = main.start - new Date();
+                        if (diff <= 0) { cd.hidden = true; status.hidden = false; status.classList.add('now'); status.textContent = 'Happening now'; return false; }
+                        var far = diff > 2 * 864e5, str, unit, sr;
+                        if (far) { var dd = Math.ceil(diff / 864e5); str = String(dd); unit = dd === 1 ? 'day to go' : 'days to go'; sr = dd + ' ' + unit; }
+                        else { var hh = Math.floor(diff / 36e5), mm = Math.floor(diff % 36e5 / 6e4); str = hh ? hh + ':' + pad(mm) : String(Math.max(1, mm)); unit = hh ? 'hours and minutes to go' : (mm === 1 ? 'minute to go' : 'minutes to go'); sr = (hh ? hh + (hh === 1 ? ' hour ' : ' hours ') : '') + mm + (mm === 1 ? ' minute' : ' minutes') + ' to go'; }
+                        odo(str); setT('#bigUnit', unit); setT('#cdText', sr);
+                        return true;
+                    };
+                    if (tick()) var iv = setInterval(function () { if (!tick()) clearInterval(iv); }, 15000);
+                }
+            }
+
+
+            /* ── Event cards ──────────────────────────────────────── */
+            EVENTS.forEach(function (e) {
+                var el = e.el, p = parseTime(e.startRaw);
+                $('.card-title', el).textContent = e.display;
+                var eb = $('[data-part="eyebrow"]', el), t = $('[data-part="ta"]', el);
+                if (e === main && EVENTS.length > 1) { el.classList.add('is-main'); eb.hidden = false; eb.textContent = 'The wedding day'; }
+                else if (e.kind) { eb.hidden = false; eb.textContent = e.kind; }
+                if (e.ta) { t.hidden = false; t.textContent = e.ta; }
+                $('[data-part="time"]', el).textContent = p ? hm(p) : e.startRaw;
+                $('[data-part="ampm"]', el).textContent = p ? ap(p) : '';
+                if (e.eT) { var u = $('[data-part="until"]', el); u.hidden = false; u.textContent = 'Until ' + e.eT + (e.cross ? ', after midnight' : ''); }
+                $('[data-part="when"]', el).textContent = e.d ? fmtLong(e.d) : e.rawDate;
+                setChip($('[data-part="chip"]', el), e);
+                var box = $('[data-part="actions"]', el);
+                if (!e.past) {
+                    if (e.map) box.appendChild(dirA(e, 'btn btn-kum'));
+                    if (e.start && !e.live) box.appendChild(calB(e, 'btn btn-dk'));
+                }
+            });
+            if (EVENTS.length === 1) { var evSec = $('#events'); if (evSec) evSec.remove(); }
+            else if (cardsOl) cardsOl.style.setProperty('--cols', Math.min(3, EVENTS.length));
+
+            /* ── Details sheet ───────────────────────────────────── */
+            var ordered = EVENTS.slice().sort(function (a, b) { if (a.past !== b.past) return a.past ? 1 : -1; return (a.start || 0) - (b.start || 0); });
+            var sheetList = $('#sheetList');
+            ordered.forEach(function (e) {
+                var li = mk('li');
+                li.innerHTML = '<p class="eyebrow sl-when"></p><h3 class="sl-title"></h3><p class="sl-time"></p><p class="sl-venue"></p><span class="chip" hidden></span><div class="actions"></div>';
+                var segs = [];
+                if (e === main && EVENTS.length > 1) segs.push('The wedding day');
+                if (!(soon.length && e.today && !e.past)) segs.push(e.d ? fmtShort(e.d) : e.rawDate);
+                $('.sl-when', li).textContent = segs.join(' · ');
+                $('.sl-title', li).textContent = e.display;
+                $('.sl-time', li).textContent = e.time + (e.cross ? ' (after midnight)' : '');
+                $('.sl-venue', li).textContent = e.venue;
+                setChip($('.chip', li), e);
+                if (e === main && EVENTS.length > 1) li.classList.add('is-main');
+                var box = $('.actions', li);
+                if (!e.past) { if (e.map) box.appendChild(dirA(e, 'btn btn-kum')); if (e.start && !e.live) box.appendChild(calB(e, 'btn btn-dk')); }
+                sheetList.appendChild(li);
+            });
+            if (soon.length) $('#sheetEyebrow').textContent = soon[0].live ? 'Happening now' : 'Today';
+
+            /* ── Bar ───────────────────────────────────────────── */
+            (function () {
+                var e = heroEv, acts = $('#barActs'); if (!e) return;
+                if (state === 'past') {
+                    setT('#barL1', 'Celebrated · ' + (e.d ? fmtShort(e.d) : e.rawDate)); setT('#barL2', 'Thank you for your blessings');
+                    var s = mk('button', 'ib'); s.type = 'button'; s.innerHTML = ICON_SHARE + '<span>Share</span>'; s.addEventListener('click', share); acts.appendChild(s);
+                    return;
+                }
+                setT('#barL1', (state === 'live' ? 'Now · ' : state === 'today' ? 'Today · ' : (e.d ? fmtShort(e.d) + ' · ' : '')) + e.sT);
+                setT('#barL2', e.venue);
+                if (e.map) acts.appendChild(dirA(e, 'ib'));
+                if (state !== 'live' && e.start) acts.appendChild(calB(e, 'ib'));
+            })();
+
+            /* ── Parents: one per line; a missing name never leaves a stray "&" ── */
+            $$('[data-parents]').forEach(function (p) {
+                var parts = $$('span:not(.amp-s)', p), has = parts.filter(function (s) { return s.textContent.trim(); });
+                if (has.length < 2) $('.amp-s', p).remove();
+                if (!has.length) { p.previousElementSibling.hidden = true; p.hidden = true; return; }
+                has.forEach(function (s) { s.className = 'pn'; });
+                if (has.length === 2) { var amp = $('.amp-s', p); amp.textContent = '& '; parts[1].insertBefore(amp, parts[1].firstChild); }
+            });
+
+            /* ── Notes ─────────────────────────────────────────── */
+            var notesSec = $('#notes');
+            if (notesSec && !$('.note', notesSec)) notesSec.remove();
+            else if (notesSec && $$('.note', notesSec).length === 1) {
+                var who = ($('.note-sign', notesSec).textContent || '').replace(/^[\s—-]+/, '').trim();
+                if (who) { setT('#notes-title', 'From ' + who); }
+            }
+            $$('.note-text').forEach(function (p) {
+                var txt = p.textContent.trim(); p.textContent = '';
+                txt.split(/(\s+)/).forEach(function (w) { if (/^\s+$/.test(w)) p.appendChild(doc.createTextNode(w)); else if (w) p.appendChild(mk('span', 'wd', w)); });
+                if (txt.length <= 300) return;
+                p.classList.add('clamp');
+                var b = mk('button', 'textlink', 'Read more'); b.type = 'button';
+                b.addEventListener('click', function () { p.classList.remove('clamp'); b.remove(); refreshSoon(); });
+                p.after(b);
+            });
+
+            /* ── Photos: gopuram arches and 3:4 prints ──────────── */
+            var prints = $('#prints'), shots = prints ? $$('.print', prints) : [], allSrc = shots.map(function (s) { return $('img', s).getAttribute('src'); });
+            if (prints) {
+                var n = shots.length, MAXP = 6;
+                prints.setAttribute('data-n', n === 1 ? '1' : 'm');
+                shots.forEach(function (s, i) { if (i % 4 === 0 || i % 4 === 3) s.classList.add('arch'); });
+                if (n > MAXP) {
+                    shots.forEach(function (s, i) { if (i >= MAXP) s.remove(); });
+                    var last = shots[MAXP - 1], more = mk('span', 'more');
+                    more.innerHTML = '+' + (n - MAXP + 1) + '<small>View all ' + n + ' photos</small>';
+                    $('.ph', last).appendChild(more); last.setAttribute('aria-label', 'View all ' + n + ' photos');
+                }
+                var hint = mk('p', 'eyebrow prints-hint', n > 1 ? 'Tap any photo to view' : 'Tap to view');
+                prints.parentNode.insertBefore(hint, prints);
+                // ogee arch, like a temple doorway: semicircle shoulders, a gentle point
+                var pts = ['0% 100%', '0% 22%'];
+                for (var k = 0; k <= 24; k++) { var x = k / 24, dd = Math.abs(x - .5) * 2, y = 22 * (.82 * (1 - Math.sqrt(Math.max(0, 1 - dd * dd))) + .18 * Math.pow(dd, .7)); pts.push((x * 100).toFixed(1) + '% ' + y.toFixed(1) + '%'); }
+                pts.push('100% 22%', '100% 100%');
+                
+            }
+
+            (function () { // ogee arch, like a temple doorway: semicircle shoulders, a gentle point
+                var pts = ['0% 100%', '0% 22%'];
+                for (var k = 0; k <= 24; k++) { var x = k / 24, dd = Math.abs(x - .5) * 2, y = 22 * (.82 * (1 - Math.sqrt(Math.max(0, 1 - dd * dd))) + .18 * Math.pow(dd, .7)); pts.push((x * 100).toFixed(1) + '% ' + y.toFixed(1) + '%'); }
+                pts.push('100% 22%', '100% 100%');
+                $('#main').style.setProperty('--arch', 'polygon(' + pts.join(',') + ')');
+            })();
+
+            /* ── Film: poster frame + one custom play ring, never autoplay ── */
+            var filmBox = $('#filmBox');
+            if (filmBox) {
+                var vu = filmBox.getAttribute('data-video'), vm, v;
+                if ((vm = vu.match(/(?:youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{11})/))) {
+                    v = mk('iframe'); v.src = 'https://www.youtube-nocookie.com/embed/' + vm[1] + '?rel=0&modestbranding=1';
+                } else if ((vm = vu.match(/vimeo\.com\/(?:video\/)?(\d+)/))) {
+                    v = mk('iframe'); v.src = 'https://player.vimeo.com/video/' + vm[1];
+                } else {
+                    v = mk('video'); v.src = /#t=/.test(vu) ? vu : vu + '#t=0.1'; v.preload = 'metadata'; v.setAttribute('playsinline', '');
+                    var play = mk('button', 'film-play'); play.type = 'button'; play.setAttribute('aria-label', 'Play our story');
+                    play.innerHTML = '<svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="47" fill="none" stroke="#FFFFFF" stroke-width="1.6"/><circle cx="50" cy="50" r="41" fill="none" stroke="#FFFFFF" stroke-opacity=".35" stroke-width="1"/></svg><svg class="tri" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12.5-7.5z" fill="currentColor"/></svg>';
+                    play.addEventListener('click', function () { v.controls = true; play.remove(); try { v.play(); } catch (e) { } });
+                    filmBox.appendChild(play);
+                }
+                if (v.tagName === 'IFRAME') { v.title = 'Our story'; v.loading = 'lazy'; v.setAttribute('allowfullscreen', ''); v.allow = 'accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen'; }
+                filmBox.insertBefore(v, filmBox.firstChild);
+            }
+
+            /* ── Section colour ramp: dawn → daylight across whatever exists ── */
+            (function () {
+                var secs = ['#events', '#notes', '#moments', '#film', '#finale'].map(function (s) { return $(s); }).filter(Boolean);
+                var R = [[255, 246, 218], [221, 244, 234], [247, 251, 243]], n = secs.length;
+                var col = function (t) { var k = Math.min(1, Math.floor(t * 2)), u = t * 2 - k, A = R[k], B = R[k + 1]; return 'rgb(' + A.map(function (a, i) { return Math.round(a + (B[i] - a) * u); }).join(',') + ')'; };
+                secs.forEach(function (s, i) { s.style.background = 'linear-gradient(180deg,' + col(i / n) + ',' + col((i + 1) / n) + ')'; });
+            })();
+
+            /* ── Names: grapheme spans (Tamil-safe), letters aria-hidden ── */
+            var seg = win.Intl && Intl.Segmenter ? new Intl.Segmenter(undefined, { granularity: 'grapheme' }) : null;
+            function graphemes(s) { return seg ? Array.from(seg.segment(s), function (x) { return x.segment; }) : Array.from(s); }
+            function splitGlyphs(el, txt) {
+                el.textContent = ''; var i = 0;
+                txt.split(' ').filter(Boolean).forEach(function (word, wi) {
+                    if (wi) el.appendChild(doc.createTextNode(' '));
+                    var w = mk('span', 'w');
+                    graphemes(word).forEach(function (c) { var g = mk('span', 'g', c); g.style.setProperty('--i', i++); w.appendChild(g); });
+                    el.appendChild(w);
+                });
+            }
+            $$('#hero-title .nl').forEach(function (n) { n.setAttribute('data-text', n.textContent.replace(/\s+/g, ' ').trim()); });
+            (function () {
+                var fl = $('#finale-title'), t = fl.textContent.trim();
+                var sr = mk('span', 'sr-only', t), vis = mk('span'); vis.setAttribute('aria-hidden', 'true');
+                splitGlyphs(vis, t); fl.textContent = ''; fl.appendChild(vis); fl.appendChild(sr);
+            })();
+            function splitAt(gs) {
+                var n = gs.length, best = -1, bd = 1e9, V = /[aeiouy]/i;
+                for (var i = Math.ceil(n * .3); i <= Math.floor(n * .7); i++) if (V.test(gs[i - 1]) && !V.test(gs[i])) { var d = Math.abs(i - n / 2); if (d < bd) { bd = d; best = i; } }
+                return best < 0 ? Math.round(n / 2) : best;
+            }
+            function breakWord(w) {
+                var gs = $$('.g', w), k = splitAt(gs.map(function (g) { return g.textContent; }));
+                if (k < 2 || k > gs.length - 2) return;
+                var w2 = mk('span', 'w'); gs.slice(k).forEach(function (g) { w2.appendChild(g); });
+                var hy = mk('span', 'g', '-'); hy.style.setProperty('--i', k); w.appendChild(hy);
+                var br = mk('br'); w.after(br); br.after(w2);
+            }
+            /* Hero names: keep them huge. Shrink a little (≤15%), else break the
+               long word editorially ("Meenakshi-/sundari"), never below 28px. */
+            function fitHero() {
+                var h = $('#hero-title'); if (!h) return;
+                var ns = $$('.nl', h); h.style.fontSize = '';
+                ns.forEach(function (n) { splitGlyphs(n, n.getAttribute('data-text')); });
+                var avail = h.clientWidth, base = parseFloat(getComputedStyle(h).fontSize);
+                if (!avail) return;
+                // the longest single word must fit on one line; wrapping happens only between words
+                var row = $('.nrow', h), amp = $('.amp', h), ampW = amp ? amp.getBoundingClientRect().width + base * .14 : 0;
+                var widest = 0;
+                ns.forEach(function (n) {
+                    var ws = $$('.w', n);
+                    ws.forEach(function (w, i) { var wd = w.offsetWidth + (n.parentNode === row && i === ws.length - 1 ? ampW : 0); if (wd > widest) widest = wd; });
+                });
+                var size = Math.max(28, Math.min(base, base * avail / widest * .99));
+                h.style.fontSize = size + 'px';
+                h.style.setProperty('--fw', h.offsetWidth + 'px');
+                var gs = $$('.g', h), xs = gs.map(function (g) { return g.offsetLeft; });
+                gs.forEach(function (g, i) { g.style.setProperty('--gx', xs[i] + 'px'); });
+            }
+            /* Other names: the couple share one fitted size; if even the floor overflows, wrap. */
+            function fit() {
+                var els = $$('[data-fit]'), groups = {};
+                els.forEach(function (el) { el.style.fontSize = ''; el.style.overflowWrap = ''; el.style.display = 'inline-block'; el.style.whiteSpace = 'nowrap'; });
+                var m = els.map(function (el) { var pe = el.parentElement, pcs = getComputedStyle(pe); return { el: el, avail: pe.clientWidth - parseFloat(pcs.paddingLeft) - parseFloat(pcs.paddingRight), w: el.scrollWidth, size: parseFloat(getComputedStyle(el).fontSize) }; });
+                m.forEach(function (x) {
+                    var floor = +(x.el.getAttribute('data-fit-min') || 28), want = x.w > x.avail && x.avail ? x.size * x.avail / x.w * .99 : x.size;
+                    x.over = want < floor; x.fs = Math.max(floor, want);
+                    var k = x.el.getAttribute('data-fit'); (groups[k] = groups[k] || []).push(x);
+                    x.el.style.display = ''; x.el.style.whiteSpace = '';
+                });
+                Object.keys(groups).forEach(function (k) {
+                    var g = groups[k], min = Math.min.apply(null, g.map(function (x) { return x.fs; }));
+                    g.forEach(function (x) { x.el.style.fontSize = min + 'px'; if (x.over) x.el.style.overflowWrap = 'anywhere'; });
+                });
+                fitHero();
+            }
+            setTimeout(fit, 0);
+
+            /* ═══ THE HERO JASMINE (gundu malli) ═══════════════════════
+               Each petal is painted once as an SVG sprite (radial base→tip,
+               a vein at 15%, rim light on the lit side, a turbulence-displaced
+               edge, ±4° hue) and rasterised. The flower is assembled on one
+               canvas: petals sit on rings round a 3-D axis, open by angle,
+               and are projected by a camera that tilts from a side view (bud)
+               to a three-quarter view (bloom). No live SVG, no per-frame filters. */
+            var RAD = Math.PI / 180;
+            var PET = 'M60,196 C50,184 20,150 13,104 C6,58 27,9 60,5 C93,9 114,58 107,104 C100,150 70,184 60,196Z';
+            function hueRot(hex, deg) {
+                var r = parseInt(hex.slice(1, 3), 16), g = parseInt(hex.slice(3, 5), 16), b = parseInt(hex.slice(5, 7), 16), a = deg * RAD, c = Math.cos(a), n = Math.sin(a);
+                var m = [.213 + c * .787 - n * .213, .715 - c * .715 - n * .715, .072 - c * .072 + n * .928, .213 - c * .213 + n * .143, .715 + c * .285 + n * .14, .072 - c * .072 - n * .283, .213 - c * .213 - n * .787, .715 - c * .715 + n * .715, .072 + c * .928 + n * .072];
+                var f = function (k) { return clamp(Math.round(m[k] * r + m[k + 1] * g + m[k + 2] * b), 0, 255); };
+                return 'rgb(' + f(0) + ',' + f(3) + ',' + f(6) + ')';
+            }
+            var NOISE = null;
+            function noise() {
+                if (NOISE) return NOISE;
+                NOISE = mk('canvas'); NOISE.width = NOISE.height = 64;
+                var x = NOISE.getContext('2d'), d = x.createImageData(64, 64);
+                for (var i = 0; i < d.data.length; i += 4) { var v = 96 + rnd() * 70; d.data[i] = d.data[i + 1] = d.data[i + 2] = v; d.data[i + 3] = rnd() * 255; }
+                x.putImageData(d, 0, 0);
+                return NOISE;
+            }
+            // the petal outline, sampled and displaced by seeded smooth noise
+            // (the turbulence edge, amplitude 1.5, baked once)
+            function petalPath(sd) { // a pointed oval, its edge displaced by seeded noise (amplitude 1.5, baked once)
+                var segs = [[60, 196, 48, 186, 16, 150, 15, 104], [15, 104, 14, 62, 38, 22, 60, 4], [60, 4, 82, 22, 106, 62, 105, 104], [105, 104, 104, 150, 72, 186, 60, 196]];
+                var p = new Path2D(), k = 0, ph = sd * 1.7;
+                segs.forEach(function (q, si) {
+                    for (var t = si ? 1 / 24 : 0; t <= 1.0001; t += 1 / 24, k++) {
+                        var u = 1 - t, x = u * u * u * q[0] + 3 * u * u * t * q[2] + 3 * u * t * t * q[4] + t * t * t * q[6], y = u * u * u * q[1] + 3 * u * u * t * q[3] + 3 * u * t * t * q[5] + t * t * t * q[7];
+                        var w = Math.min(1, Math.abs(y - 196) / 20) * Math.min(1, y / 18);
+                        x += 1.5 * w * (Math.sin(k * .55 + ph) * .6 + Math.sin(k * 1.37 + ph * 2) * .4);
+                        y += 1.2 * w * (Math.cos(k * .43 + ph) * .6 + Math.sin(k * 1.11 - ph) * .4);
+                        if (k) p.lineTo(x, y); else p.moveTo(x, y);
+                    }
+                });
+                p.closePath();
+                return p;
+            }
+            function soft(g, o, fn) { // a blurred mark via the shadow trick: fast everywhere, no filters
+                g.save(); g.shadowColor = g.fillStyle = g.strokeStyle = o.c; g.shadowBlur = o.b; g.shadowOffsetX = 4000; g.translate(-2000, 0); fn(); g.restore();
+            }
+            // waxy jasmine: green-cream base, pearl body, warm subsurface glow, a pearly specular streak
+            function paintPetal(kind, hue, sd) {
+                var c = mk('canvas'); c.width = 300; c.height = 440;
+                var g = c.getContext('2d'), path = petalPath(sd);
+                g.setTransform(2, 0, 0, 2, 30, 20);
+                if (kind === 'k') { soft(g, { c: 'rgba(150,80,60,1)', b: 22 }, function () { g.fill(path); }); return c; }
+                if (kind === 's') { g.fillStyle = '#9c8e93'; g.fill(path); return c; }
+                var f = kind === 'f', cl = (f ? ['#d3dfa6', '#eef2d9', '#fffef9', '#fffbf2', '#f4ecdc'] : ['#c9d699', '#e8edd0', '#fdfcf5', '#f9f5ea', '#ece4d2']).map(function (x) { return hueRot(x, hue); });
+                var gr = g.createRadialGradient(60, 200, 0, 60, 200, 200);
+                [0, .14, .44, .82, 1].forEach(function (o, i) { gr.addColorStop(o, cl[i]); });
+                g.fillStyle = gr; g.fill(path);
+                g.save(); g.clip(path);
+                var ss = g.createRadialGradient(60, 168, 0, 60, 168, 78); ss.addColorStop(0, 'rgba(255,212,168,.24)'); ss.addColorStop(1, 'rgba(255,212,168,0)');
+                g.fillStyle = ss; g.fillRect(-15, -10, 150, 220);
+                var sg = g.createLinearGradient(15, 0, 105, 0);
+                sg.addColorStop(.5, 'rgba(170,135,120,0)'); sg.addColorStop(1, 'rgba(150,120,110,' + (f ? .22 : .26) + ')');
+                g.fillStyle = sg; g.fillRect(-15, -10, 150, 220);
+                g.globalAlpha = .07; g.fillStyle = g.createPattern(noise(), 'repeat'); g.fillRect(-15, -10, 150, 220); g.globalAlpha = 1;
+                soft(g, { c: 'rgba(255,255,255,' + (f ? .95 : .75) + ')', b: 9 }, function () { g.lineWidth = 9; g.stroke(new Path2D('M40,168 C31,128 33,74 52,26')); });
+                if (f) soft(g, { c: 'rgba(255,255,255,1)', b: 3 }, function () { g.beginPath(); g.ellipse(44, 78, 3.2, 12, -.25, 0, 7); g.fill(); });
+                soft(g, { c: 'rgba(255,255,255,.8)', b: 4 }, function () { g.lineWidth = 4; g.stroke(new Path2D('M58,192 C44,176 17,146 16,104 C15,64 36,24 60,6')); });
+                g.restore();
+                g.lineWidth = .8; g.strokeStyle = 'rgba(160,150,135,.38)'; g.stroke(path);
+                return c;
+            }
+            var SP = null;
+            // One sprite per task, so no single task runs long on a slow phone
+            function loadSprites(cb) {
+                var specs = [['b', 2, 11], ['f', 0, 5], ['s', 0, 5], ['k', 0, 0], ['f', -4, 3], ['f', 4, 8]], out = [], i = 0;
+                (function next() {
+                    if (i >= specs.length) { SP = { f: [out[4], out[1], out[5]], b: out[0], s: out[2], k: out[3][0] }; cb(); return; }
+                    var sp = specs[i], c = paintPetal(sp[0], sp[1], sp[2]), m = mk('canvas'); m.width = 300; m.height = 440;
+                    var mg = m.getContext('2d'); mg.translate(300, 0); mg.scale(-1, 1); mg.drawImage(c, 0, 0);
+                    out[i++] = [c, m];
+                    setTimeout(next, 0);
+                })();
+            }
+            // rings: count, bud angle, open angle, length, bud width, open width, base radius, base height, phase
+            // rings (outer → centre): count, bud angle, open angle, length, bud width, open width, base radius, base height, phase
+            var RINGS = [[7, 9, 80, 1, .52, .5, .035, 0, 0], [6, 7, 58, .86, .5, .48, .03, .05, 26], [5, 5, 34, .7, .46, .44, .025, .1, 9], [4, 3, 13, .52, .42, .4, .018, .15, 44]];
+            var PJ = [];
+            for (var pj = 0; pj < 40; pj++) PJ.push({ t: jit(5), p: jit(9), l: .93 + rnd() * .12, h: Math.floor(rnd() * 3), r: jit(.08) });
+            var LG = [-.5, .72, .5]; (function () { var m = Math.hypot(LG[0], LG[1], LG[2]); LG = LG.map(function (x) { return x / m; }); })();
+            function ringP(b, k) { return clamp((b - (RINGS.length - 1 - k) * .07) / .79, 0, 1); } // centre opens first
+            function drawBud(g, ox, oy, S, A) {
+                var H = S * 1.15, Wd = H / 1.6, sl = S * .3;
+                g.setTransform(1, 0, 0, 1, 0, 0); g.globalAlpha = A; g.lineCap = 'round';
+                var body = new Path2D();
+                body.moveTo(ox, oy);
+                body.bezierCurveTo(ox - Wd * .56, oy - H * .1, ox - Wd * .52, oy - H * .62, ox + Wd * .06, oy - H);
+                body.bezierCurveTo(ox + Wd * .5, oy - H * .6, ox + Wd * .54, oy - H * .1, ox, oy);
+                // soft warm cast shadow (no purple)
+                g.save(); g.shadowColor = 'rgba(150,80,60,.18)'; g.shadowBlur = S * .16; g.shadowOffsetX = 8000 + S * .05; g.shadowOffsetY = S * .07; g.fillStyle = '#000'; g.translate(-8000, 0); g.fill(body); g.restore();
+                // a short stem
+                g.strokeStyle = '#3f6b2a'; g.lineWidth = S * .03;
+                g.beginPath(); g.moveTo(ox, oy); g.bezierCurveTo(ox + S * .01, oy + sl * .4, ox - S * .05, oy + sl * .8, ox - S * .12, oy + sl); g.stroke();
+                // waxy body: ivory to green at the calyx
+                var gr = g.createLinearGradient(0, oy - H, 0, oy);
+                gr.addColorStop(0, '#FFFDF6'); gr.addColorStop(.55, '#F3F1E4'); gr.addColorStop(1, '#D9E6C4');
+                g.fillStyle = gr; g.fill(body);
+                g.save(); g.clip(body);
+                var sd = g.createLinearGradient(ox - Wd * .55, 0, ox + Wd * .55, 0);
+                sd.addColorStop(0, 'rgba(255,248,231,0)'); sd.addColorStop(.55, 'rgba(170,140,110,0)'); sd.addColorStop(1, 'rgba(170,140,110,.24)');
+                g.fillStyle = sd; g.fillRect(ox - Wd, oy - H * 1.1, Wd * 2, H * 1.2);
+                var hl = g.createRadialGradient(ox - Wd * .2, oy - H * .55, 0, ox - Wd * .2, oy - H * .55, Wd * .45);
+                hl.addColorStop(0, 'rgba(255,255,255,.75)'); hl.addColorStop(1, 'rgba(255,255,255,0)');
+                g.fillStyle = hl; g.fillRect(ox - Wd, oy - H * 1.1, Wd * 2, H * 1.2);
+                // overlapping petals spiral up to the point
+                for (var i = 0; i < 3; i++) {
+                    var x0 = ox + Wd * (-.36 + i * .3), tw = Wd * (.34 - i * .12);
+                    var seam = new Path2D(); seam.moveTo(x0, oy - H * .04);
+                    seam.bezierCurveTo(x0 + tw * .4, oy - H * .4, ox + Wd * (.3 - i * .12), oy - H * .72, ox + Wd * .06, oy - H);
+                    g.fillStyle = 'rgba(160,145,115,.06)';
+                    g.lineWidth = S * .008; g.strokeStyle = 'rgba(140,125,95,.22)'; g.stroke(seam);
+                    g.save(); g.translate(-S * .01, 0); g.lineWidth = S * .01; g.strokeStyle = 'rgba(255,248,231,.7)'; g.stroke(seam); g.restore();
+                }
+                g.restore();
+                // 2px warm specular rim on the lit side
+                g.save(); g.clip(body);
+                g.lineWidth = Math.max(2, S * .02); g.strokeStyle = '#FFF8E7';
+                g.beginPath(); g.moveTo(ox - Wd * .05, oy - H * .02); g.bezierCurveTo(ox - Wd * .54, oy - H * .12, ox - Wd * .5, oy - H * .62, ox + Wd * .06, oy - H); g.stroke();
+                g.restore();
+                g.lineWidth = S * .008; g.strokeStyle = 'rgba(150,135,105,.4)'; g.stroke(body);
+                // calyx: five short teeth hugging the base
+                for (var t = 0; t < 5; t++) {
+                    var tx = ox + Wd * (-.26 + t * .13), th = H * (t % 2 ? .06 : .08), tw2 = Wd * .065;
+                    g.fillStyle = t % 2 ? '#4f7a30' : '#5d8a3a';
+                    g.beginPath(); g.moveTo(tx - tw2, oy - H * .015); g.quadraticCurveTo(tx - tw2 * .2, oy - th * .6, tx + Wd * .02, oy - th); g.quadraticCurveTo(tx + tw2 * .3, oy - th * .5, tx + tw2, oy - H * .015); g.fill();
+                }
+                var cg = g.createRadialGradient(ox - S * .02, oy, 0, ox, oy, Wd * .2);
+                cg.addColorStop(0, '#6f9a3c'); cg.addColorStop(1, '#3f6b2a');
+                g.fillStyle = cg; g.beginPath(); g.ellipse(ox, oy + S * .012, Wd * .17, S * .026, 0, 0, 7); g.fill();
+                g.globalAlpha = 1;
+            }
+            function drawFlower(g, ox, oy, S, b, o) {
+                o = o || {};
+                var A = o.alpha == null ? 1 : o.alpha, el = (14 + 42 * b) * RAD, sa = Math.sin(el), ca = Math.cos(el), C = [0, sa, ca];
+                var Y = function (p) { return -(p[1] * ca - p[2] * sa); };
+                g.setTransform(1, 0, 0, 1, 0, 0);
+                if (o.glow !== false) {
+                    var cy0 = oy - S * (.42 - .3 * b), gr = g.createRadialGradient(ox, cy0, 0, ox, cy0, S * 1.25);
+                    gr.addColorStop(0, 'rgba(255,176,206,' + (.62 - .12 * b) * A + ')'); gr.addColorStop(.42, 'rgba(255,214,170,' + (.4 - .1 * b) * A + ')'); gr.addColorStop(.75, 'rgba(214,190,250,' + .16 * A + ')'); gr.addColorStop(1, 'rgba(214,190,250,0)');
+                    g.fillStyle = gr; g.fillRect(ox - S * 1.3, cy0 - S * 1.3, S * 2.6, S * 2.6);
+                }
+                var budA = o.budA != null ? o.budA : (!SP ? 1 : clamp(1 - b / .22, 0, 1)), ringA = !SP ? 0 : (o.budA != null ? 1 : clamp(b / .12, 0, 1));
+                if (budA > 0) drawBud(g, ox, oy, S, A * budA);
+                if (ringA <= 0) return;
+                A *= ringA;
+                g.lineCap = 'round'; g.lineJoin = 'round';
+                var sk = o.stemK == null ? (o.stem === false ? 0 : 1) : o.stemK;
+                if (sk > .01) { // a short, natural stem; it fades and shrinks as the bud opens
+                    var sl = S * .36 * (.55 + .45 * sk), stg = g.createLinearGradient(ox, oy, ox, oy + sl);
+                    stg.addColorStop(0, '#4f8a2e'); stg.addColorStop(1, '#2c561c');
+                    g.globalAlpha = A * sk; g.strokeStyle = stg; g.lineWidth = S * .036;
+                    g.beginPath(); g.moveTo(ox, oy + S * .02); g.quadraticCurveTo(ox + S * .035, oy + sl * .6, ox - S * .05, oy + sl); g.stroke();
+                    g.strokeStyle = 'rgba(190,220,140,.5)'; g.lineWidth = S * .01;
+                    g.beginPath(); g.moveTo(ox - S * .008, oy + S * .03); g.quadraticCurveTo(ox + S * .022, oy + sl * .6, ox - S * .058, oy + sl * .96); g.stroke();
+                }
+                g.globalAlpha = A;
+                for (var k = 0; k < 5; k++) { // five small calyx sepals
+                    var ph = (k * 72 + 18) * RAD, th = (118 - 22 * b) * RAD, len = S * .09;
+                    var tx = Math.sin(th) * Math.cos(ph), ty = Math.cos(th), tz = Math.sin(th) * Math.sin(ph);
+                    var ex = ox + tx * len, ey = oy + Y([0, ty * len, tz * len]), px = -Math.sin(ph) * S * .02, pz = Math.cos(ph) * S * .02;
+                    g.fillStyle = tz * sa + ty * ca > 0 ? '#4f8a2e' : '#2f5f1f';
+                    g.beginPath(); g.moveTo(ox + px, oy + Y([0, 0, pz])); g.quadraticCurveTo(ox + tx * len * .6 + px * .4, oy + Y([0, ty * len * .6, tz * len * .6 + pz * .4]), ex, ey); g.quadraticCurveTo(ox + tx * len * .6 - px * .4, oy + Y([0, ty * len * .6, tz * len * .6 - pz * .4]), ox - px, oy + Y([0, 0, -pz])); g.fill();
+                }
+                var cg = g.createRadialGradient(ox - S * .015, oy - S * .015, 0, ox, oy, S * .06);
+                cg.addColorStop(0, '#7fae45'); cg.addColorStop(1, '#2f5f1f');
+                g.fillStyle = cg; g.beginPath(); g.ellipse(ox, oy + S * .008, S * .05, S * .05 * (.55 + .45 * sa), 0, 0, 7); g.fill();
+                var list = [], idx = 0;
+                RINGS.forEach(function (r, k) {
+                    var tk = o.rk ? o.rk[k] : ringP(b, k);
+                    for (var i = 0; i < r[0]; i++, idx++) {
+                        var j = PJ[idx], th = (r[1] + (r[2] - r[1]) * tk + j.t * (.25 + .75 * tk)) * RAD, ph = (r[8] + i * 360 / r[0] + j.p) * RAD;
+                        var st = Math.sin(th), ct = Math.cos(th), sp = Math.sin(ph), cp = Math.cos(ph);
+                        var u = [st * cp, ct, st * sp], v = [-sp, 0, cp];
+                        // a spiral: the bud twists tight; the bloom keeps a gentle pinwheel
+                        var tw = .7 * (1 - tk) + .3 + j.r, cw = Math.cos(tw), sw = Math.sin(tw);
+                        var v2 = [v[0] * cw + sw * (u[1] * v[2] - u[2] * v[1]), sw * (u[2] * v[0] - u[0] * v[2]), v[2] * cw + sw * (u[0] * v[1] - u[1] * v[0])];
+                        var L = S * r[3] * (.9 + .1 * tk) * j.l, W = S * (r[4] + (r[5] - r[4]) * tk) * j.l;
+                        var B = [r[6] * S * cp, r[7] * S * (.3 + .7 * tk), r[6] * S * sp];
+                        var n = [v2[1] * u[2] - v2[2] * u[1], v2[2] * u[0] - v2[0] * u[2], v2[0] * u[1] - v2[1] * u[0]];
+                        var face = n[1] * C[1] + n[2] * C[2], s = face >= 0 ? 1 : -1;
+                        var lit = Math.max(0, s * (n[0] * LG[0] + n[1] * LG[1] + n[2] * LG[2]));
+                        list.push({ z: (B[1] + u[1] * L * .55) * C[1] + (B[2] + u[2] * L * .55) * C[2], B: B, u: u, v: v2, L: L, W: W, f: face >= 0, lit: lit, h: j.h, tk: tk });
+                    }
+                });
+                list.sort(function (a, c) { return a.z - c.z; });
+                list = list.filter(function (p) { return !(p.tk > .12 && Math.hypot(p.v[0], Y(p.v)) < .5); }); // edge-on petals (and their shadows) read as shards
+                if (!o.noShadow) list.forEach(function (p) { // one soft cast shadow under the whole flower
+                    var Ux = p.u[0] * p.L, Uy = Y(p.u) * p.L, Vx = p.v[0] * p.W, Vy = Y(p.v) * p.W, a = Vx / 188, bb = Vy / 188, c = -Ux / 382, d = -Uy / 382;
+                    g.setTransform(a, bb, c, d, ox + p.B[0] - 150 * a - 412 * c + S * .045, oy + Y(p.B) - 150 * bb - 412 * d + S * .07); g.globalAlpha = .16 * A; g.drawImage(SP.k, 0, 0);
+                });
+                list.forEach(function (p) {
+                    var Ux = p.u[0] * p.L, Uy = Y(p.u) * p.L, Vx = p.v[0] * p.W, Vy = Y(p.v) * p.W;
+                    var a = Vx / 188, bb = Vy / 188, c = -Ux / 382, d = -Uy / 382;
+                    var mir = (Vx * .6 + Vy * .8) < 0 ? 1 : 0; // keep the specular streak on the edge facing the light
+                    var e = ox + p.B[0] - 150 * a - 412 * c, f = oy + Y(p.B) - 150 * bb - 412 * d;
+                    if (!o.fast) { g.setTransform(a, bb, c, d, e + S * .012, f + S * .026); g.globalAlpha = .18 * A; g.drawImage(SP.k, 0, 0); }
+                    g.setTransform(a, bb, c, d, e, f); g.globalAlpha = A;
+                    g.drawImage((p.f ? SP.f[p.h] : SP.b)[mir], 0, 0);
+                    var sh = 1 - (.5 + .5 * p.lit);
+                    if (sh > .03) { g.globalAlpha = sh * (.6 - .24 * b) * A; g.drawImage(SP.s[mir], 0, 0); }
+                });
+                g.setTransform(1, 0, 0, 1, 0, 0); g.globalAlpha = A; // a pink/gold rim light over the whole flower
+                g.globalCompositeOperation = 'source-atop';
+                var wk = g.createLinearGradient(ox - S, oy - S * 1.2, ox + S, oy + S * .4);
+                wk.addColorStop(0, 'rgba(255,196,90,' + (.32 - .12 * b) + ')'); wk.addColorStop(.42, 'rgba(255,220,160,0)'); wk.addColorStop(.7, 'rgba(255,150,190,0)'); wk.addColorStop(1, 'rgba(236,72,140,' + (.3 - .1 * b) + ')');
+                g.fillStyle = wk; g.fillRect(ox - S * 1.6, oy - S * 1.8, S * 3.2, S * 3.2);
+                g.globalCompositeOperation = 'source-over'; g.globalAlpha = 1;
+            }
+            // ring-by-ring opening, centre outward, `lag` ms apart (expo-out each); always lands on the final frame
+            function ringAnim(dur, lag, step, done) {
+                var n = RINGS.length, t0 = 0, fin = false;
+                var at = function (ms) { var rk = []; for (var k = 0; k < n; k++) { var x = clamp((ms - (n - 1 - k) * lag) / (dur - (n - 1) * lag), 0, 1); rk[k] = x >= 1 ? 1 : 1 - Math.pow(2, -10 * x); } var bx = clamp(ms / dur, 0, 1); return { rk: rk, b: bx >= 1 ? 1 : 1 - Math.pow(2, -10 * bx) }; };
+                var end = function () { if (fin) return; fin = true; step(at(1e9), 1e9); if (done) done(); };
+                timers.push(setTimeout(end, dur + 40));
+                requestAnimationFrame(function k(ts) { if (fin) return; if (!t0) t0 = ts; var ms = ts - t0; if (ms >= dur) return end(); step(at(ms), ms); requestAnimationFrame(k); });
+            }
+
+            /* ── The bloom canvas: bud on the gate, bloom in the hero ── */
+            var hf = $('#hf'), bloomC = $('#bloom'), bctx = bloomC.getContext('2d'), bState = 0, BW = 0, BDPR = 1, gateK = 1;
+            function sizeBloom(lo) {
+                BW = hf.offsetWidth;
+                BDPR = Math.min(2.6, Math.min(2, win.devicePixelRatio || 1) * Math.max(1, gateK)) * (lo ? .55 : 1);
+                var px = Math.round(BW * BDPR);
+                if (bloomC.width !== px) { bloomC.width = px; bloomC.height = px; }
+            }
+            function drawBloom(b, rk, sk, budA) {
+                bState = b;
+                var W = bloomC.width, S = W * .36;
+                bctx.setTransform(1, 0, 0, 1, 0, 0); bctx.clearRect(0, 0, W, W);
+                drawFlower(bctx, W * .5, W * (.5 + .5 * .36 - .38 * .36 * b), S, b, { rk: rk, stemK: sk == null ? 0 : sk, budA: budA, fast: b > .001 && b < .999 });
+            }
+            var HFR = null; // the bloom's resting rect in the hero
+            // where the bud sits on the gate: a transform from the hero spot
+            function placeOnGate() {
+                if (!gate.isConnected) return;
+                hf.classList.remove('trav'); hf.style.transform = 'none'; BW = hf.offsetWidth;
+                var slot = $('#budSlot').getBoundingClientRect(), r = hf.getBoundingClientRect(); HFR = r;
+                var S = BW * .36, cx = BW * .5, cy = BW * (.5 + .18) - S * .575;
+                var k = clamp(Math.min(slot.height * .64 / (S * 1.55), slot.width * .5 / (S * .9)), .5, 2);
+                gateK = k;
+                hf.style.transformOrigin = cx + 'px ' + cy + 'px';
+                hf.style.transform = 'translate(' + (slot.left + slot.width / 2 - (r.left + cx)).toFixed(1) + 'px,' + (slot.top + slot.height * .4 - (r.top + cy)).toFixed(1) + 'px) scale(' + k.toFixed(3) + ')';
+            }
+
+            /* ── Art painted once: bokeh, macro blooms, markers, grain, sprig ── */
+            var bloomCache = null;
+            function bloomBitmap() {
+                if (bloomCache) return bloomCache;
+                var c = mk('canvas'); c.width = c.height = 240;
+                drawFlower(c.getContext('2d'), 120, 136, 82, 1, { stem: false, glow: false });
+                return (bloomCache = c);
+            }
+            function paintMacro(cv, blur) {
+                var w = 120, c = cv; c.width = c.height = w;
+                var g = c.getContext('2d');
+                if ('filter' in g) g.filter = 'blur(' + blur + 'px)';
+                g.drawImage(bloomBitmap(), 0, 0, w, w);
+                g.filter = 'none'; g.globalCompositeOperation = 'source-atop'; g.fillStyle = 'rgba(255,236,244,.45)'; g.fillRect(0, 0, w, w); g.globalCompositeOperation = 'source-over';
+            }
+            function paintBokeh(cv) {
+                var w = Math.round(win.innerWidth / 5), h = Math.round(win.innerHeight / 5);
+                cv.width = w; cv.height = h;
+                var g = cv.getContext('2d'), s0 = seed;
+                for (var i = 0; i < 26; i++) {
+                    var x = rnd() * w, y = rnd() * h, r = 1.5 + rnd() * 7, warm = rnd() < .6;
+                    if (x > w * .22 && x < w * .78 && y > h * .12 && y < h * .62) x = x < w / 2 ? x * .35 : w - (w - x) * .35; // keep the bud clear
+                    var gr = g.createRadialGradient(x, y, 0, x, y, r);
+                    var tint = ['255,140,185', '250,190,70', '90,205,160', '255,255,255'][i % 4]; gr.addColorStop(0, 'rgba(' + tint + ',.85)'); gr.addColorStop(.6, 'rgba(' + tint + ',.3)'); gr.addColorStop(1, 'rgba(' + tint + ',0)');
+                    g.fillStyle = gr; g.beginPath(); g.ellipse(x, y, r, r * (.6 + rnd() * .4), rnd() * 3, 0, 7); g.fill();
+                }
+                seed = s0;
+            }
+            function paintGrain() {
+                var c = mk('canvas'); c.width = c.height = 128;
+                var g = c.getContext('2d'), d = g.createImageData(128, 128);
+                for (var i = 0; i < d.data.length; i += 4) { var v = Math.random() * 255; d.data[i] = d.data[i + 1] = d.data[i + 2] = v; d.data[i + 3] = 255; }
+                g.putImageData(d, 0, 0);
+                try { $('#grain').style.backgroundImage = 'url(' + c.toDataURL() + ')'; } catch (e) { }
+            }
+            // small sprites for the strand and the charam: a bud, a marigold, a rose
+            var MINI = null;
+            function minis() {
+                if (MINI || !SP) return MINI;
+                var bud = mk('canvas'); bud.width = 64; bud.height = 96;
+                drawFlower(bud.getContext('2d'), 32, 84, 66, 0, { stem: false, glow: false, noShadow: true });
+                var mari = mk('canvas'); mari.width = mari.height = 64;
+                var g = mari.getContext('2d'); g.translate(32, 32);
+                for (var ring = 4; ring >= 0; ring--) {
+                    var rr = 30 * (.32 + .17 * ring), n = 9 + ring * 5;
+                    for (var i = 0; i < n; i++) {
+                        g.save(); g.rotate(i / n * 6.283 + ring * .45);
+                        var pg = g.createLinearGradient(0, 0, 0, -rr); pg.addColorStop(0, '#C2410C'); pg.addColorStop(1, ring % 2 ? '#FDBA4D' : '#F59E0B');
+                        g.fillStyle = pg; g.beginPath(); g.ellipse(0, -rr * .55, rr * .2, rr * .5, 0, 0, 7); g.fill(); g.restore();
+                    }
+                }
+                var mc = g.createRadialGradient(-6, -6, 0, 0, 0, 30); mc.addColorStop(0, 'rgba(255,240,200,.35)'); mc.addColorStop(1, 'rgba(120,40,0,.25)'); g.fillStyle = mc; g.beginPath(); g.arc(0, 0, 30, 0, 7); g.fill();
+                var rose = mk('canvas'); rose.width = rose.height = 64;
+                g = rose.getContext('2d'); g.translate(32, 32);
+                for (var rg = 3; rg >= 0; rg--) {
+                    var rr2 = 9 + rg * 6.5, n2 = 5 + rg;
+                    for (var q2 = 0; q2 < n2; q2++) {
+                        g.save(); g.rotate(q2 / n2 * 6.283 + rg * .7);
+                        var rgd = g.createRadialGradient(0, -rr2 * .2, 0, 0, -rr2 * .4, rr2); rgd.addColorStop(0, rg ? '#F8BBD0' : '#EC407A'); rgd.addColorStop(1, rg > 1 ? '#D81B60' : '#AD1457');
+                        g.fillStyle = rgd; g.beginPath(); g.ellipse(0, -rr2 * .45, rr2 * .55, rr2 * .55, 0, 0, 7); g.fill(); g.restore();
+                    }
+                }
+                g.strokeStyle = 'rgba(120,10,50,.6)'; g.lineWidth = 1.4; g.beginPath(); g.arc(0, 0, 4, 0, 5); g.stroke();
+                return (MINI = { bud: bud, mari: mari, rose: rose });
+            }
+            // a short malli strand, 5 on a thread: buds and open blooms (instantly Tamil)
+            function strand() {
+                var box = $('#sprig'); if (!box || !minis()) return;
+                var vert = win.matchMedia && win.matchMedia('(min-width: 720px)').matches;
+                var c = mk('canvas'), Wd = vert ? 64 : 320, Ht = vert ? 320 : 64, d = 2; c.width = Wd * d; c.height = Ht * d;
+                var g = c.getContext('2d'); g.scale(d, d);
+                if (vert) { g.translate(Wd, 0); g.rotate(Math.PI / 2); }
+                g.strokeStyle = 'rgba(176,30,92,.55)'; g.lineWidth = 1.4; g.beginPath(); g.moveTo(8, 32); g.quadraticCurveTo(160, 46, 312, 32); g.stroke();
+                [0, 1, 2, 3, 4].forEach(function (i) {
+                    var x = 40 + i * 60, y = 32 + Math.sin(i / 4 * Math.PI) * 7;
+                    if (i % 2) g.drawImage(bloomBitmap(), x - 26, y - 28, 52, 52);
+                    else { g.save(); g.translate(x, y + 6); g.rotate((i - 2) * .12); g.drawImage(MINI.bud, -13, -34, 26, 39); g.restore(); }
+                });
+                box.appendChild(c);
+            }
+
+            /* ── The finale: a bloom inside a jasmine charam ─────────────
+               The hero malli opens big and centred, ring by ring; a circlet of
+               buds (with marigold and rose accents) closes round it; then a
+               petal shower. One canvas, pre-rendered sprites. */
+            var FC = $('#finaleC'), fctx = FC ? FC.getContext('2d') : null, finState = 0, finPending = false;
+            function sizeFinale() { if (!FC) return; var cw = FC.parentNode.offsetWidth || 320, d = Math.min(2, win.devicePixelRatio || 1); FC.width = FC.height = Math.round(cw * d); }
+            function drawFinale(ms, a) {
+                if (!fctx || !minis()) return;
+                var W = FC.width, g = fctx, cx = W / 2, cy = W / 2, R = W * .41, S = W * .25, N = 30;
+                g.setTransform(1, 0, 0, 1, 0, 0); g.clearRect(0, 0, W, W);
+                var tc = clamp((ms - 80) / 1100, 0, 1), ec = 1 - Math.pow(1 - tc, 3);
+                g.strokeStyle = 'rgba(176,150,110,.75)'; g.lineWidth = W * .005; g.beginPath(); g.arc(cx, cy, R, -Math.PI / 2, -Math.PI / 2 + ec * Math.PI * 2); g.stroke();
+                for (var i = 0; i < N; i++) {
+                    var ang = -Math.PI / 2 + i * Math.PI * 2 / N, p = clamp((ms - 120 - i * 36) / 320, 0, 1);
+                    if (p <= 0) continue;
+                    var e = 1 - Math.pow(1 - p, 3), kind = i % 10 === 5 ? 'mari' : (i % 10 === 0 && i ? 'rose' : 'bud'), spr = MINI[kind];
+                    g.setTransform(1, 0, 0, 1, cx + Math.cos(ang) * R, cy + Math.sin(ang) * R); g.globalAlpha = e;
+                    if (kind === 'bud') { g.rotate(ang + Math.PI / 2 + (i % 2 ? .3 : -.3)); var bh = W * .1 * (.6 + .4 * e); g.drawImage(spr, -bh * .33, -bh * .88, bh * .67, bh); }
+                    else { var ms2 = W * .078 * (.6 + .4 * e); g.rotate(i); g.drawImage(spr, -ms2 / 2, -ms2 / 2, ms2, ms2); }
+                }
+                g.setTransform(1, 0, 0, 1, 0, 0); g.globalAlpha = 1;
+                drawFlower(g, cx, cy + S * .12, S, a.b, { rk: a.rk, stemK: 0, fast: ms < 1600 });
+            }
+            function finaleCopy() { var f = $('#finale'); if (f) f.classList.add('copy-in'); }
+            function finaleStatic() { drawFinale(1e9, { b: 1, rk: [1, 1, 1, 1] }); $('#blessing').setAttribute('data-drawn', '1'); finaleCopy(); }
+            function playFinale() {
+                if (finState || !FC) return;
+                if (!SP) { finPending = true; return; }
+                finState = 1;
+                if (calm || state === 'past') { finaleStatic(); if (state === 'past' && !calm) shower(10); return; }
+                setTimeout(finaleCopy, 1120); // the line rises at ~70% open
+                ringAnim(1600, 60, function (a, ms) { drawFinale(ms, a); }, function () { $('#blessing').setAttribute('data-drawn', '1'); finaleCopy(); shower([14, 22, 30][tier]); });
+            }
+
+            /* ── Petals: one canvas, pre-rendered sprites, runs only while petals fly ── */
+            var pc = $('#petals'), pctx = pc.getContext('2d'), PDPR = 1, petals = [], pspr = [], running = false, lastT = 0, gust = 0, lastScroll = 0, W = win.innerWidth, H = win.innerHeight, raf = 0;
+            function petalSprites() {
+                if (!SP || pspr.length) return;
+                var mkP = function (h, ramp) {
+                    var w = Math.round(h * .68), c = mk('canvas'); c.width = w + 14; c.height = h + 14;
+                    var g = c.getContext('2d'), src = SP.f[1][0];
+                    if (ramp) { // a tinted petal keeps its painted shading (multiply), then is re-masked
+                        var t = mk('canvas'); t.width = w; t.height = h; var tg = t.getContext('2d');
+                        tg.drawImage(src, 0, 0, w, h); tg.globalCompositeOperation = 'multiply';
+                        var lg = tg.createLinearGradient(0, h, 0, 0); lg.addColorStop(0, ramp[0]); lg.addColorStop(1, ramp[1]); tg.fillStyle = lg; tg.fillRect(0, 0, w, h);
+                        tg.globalCompositeOperation = 'destination-in'; tg.drawImage(src, 0, 0, w, h); src = t;
+                    }
+                    g.save(); g.shadowColor = 'rgba(74,30,84,.26)'; g.shadowBlur = 5; g.shadowOffsetY = 3; g.drawImage(src, 7, 5, w, h); g.restore();
+                    return c;
+                };
+                pspr = [mkP(58), mkP(22), mkP(54, ['#E8590C', '#FDBA4D']), mkP(54, ['#C2185B', '#F8BBD0'])];
+            }
+            function pick(acc) { var r = rnd(); return acc && r < .12 ? 2 : acc && r < .24 ? 3 : 0; }
+            function sizePetals() { PDPR = Math.min(win.devicePixelRatio || 1, 1.5); pc.width = Math.round(W * PDPR); pc.height = Math.round(H * PDPR); }
+            function addPetal(x, y, k, z, vx, vy, life) {
+                var far = k === 0 && z < .6;
+                petals.push({ x: x, y: y, vx: vx, vy: vy, t: 0, life: life, s: pspr[far ? 1 : k], sc: far ? z * 2.4 : z, z: z, rot: rnd() * 6.28, spin: jit(.9), flip: rnd() * 6.28, fs: .8 + rnd() * 1.6, sw: 14 + rnd() * 24, sf: 1 + rnd() * 1.3, ph: rnd() * 6.28 });
+            }
+            function burstAt(x, y, n) { // 8-12 ivory petals lift off the bloom, then drift down
+                if (calm || !SP) return; petalSprites();
+                for (var i = 0; i < n; i++) { var a = -Math.PI / 2 + jit(1.4); addPetal(x + jit(40), y + jit(30), 0, .55 + rnd() * .55, Math.cos(a) * (40 + rnd() * 70), -30 - rnd() * 50, 2.5 + rnd()); }
+                start();
+            }
+            function shower(n) {
+                if (calm || !SP) return; petalSprites();
+                for (var i = 0; i < n; i++) addPetal(rnd() * W, -30 - rnd() * H * .45, pick(true), .4 + rnd() * .8, jit(16), 10 + rnd() * 30, 3 + rnd() * 1.5);
+                start();
+            }
+            function frame(ts) {
+                if (!running) return;
+                var dt = Math.min(.05, lastT ? (ts - lastT) / 1000 : .016); lastT = ts;
+                var sy = SY, vel = (sy - lastScroll) / Math.max(dt, .001); lastScroll = sy;
+                gust += (clamp(vel, -900, 900) * .4 - gust) * .08;
+                var wind = Math.sin(ts / 3300) * 12 + gust * .04;
+                var zones = []; ZONES.forEach(function (el) { if (!el || !el.isConnected) return; var r = el.getBoundingClientRect(); if (r.bottom > -30 && r.top < H + 30) zones.push(r); });
+                pctx.setTransform(1, 0, 0, 1, 0, 0); pctx.clearRect(0, 0, pc.width, pc.height);
+                for (var i = petals.length - 1; i >= 0; i--) {
+                    var p = petals[i]; p.t += dt;
+                    if (p.t > p.life || p.y > H + 60) { petals.splice(i, 1); continue; }
+                    var gr = Math.min(1, p.t / 1.2); gr = gr * gr * (3 - 2 * gr); // gravity eases in
+                    p.vy = Math.min(p.vy + (55 + 45 * p.z) * gr * dt, 60 + 55 * p.z);
+                    p.vx *= Math.pow(.55, dt);
+                    p.x += (p.vx + wind * p.z + Math.cos(p.t * p.sf + p.ph) * p.sw) * dt; p.y += p.vy * dt;
+                    p.rot += p.spin * dt; p.flip += p.fs * dt;
+                    var sc = p.sc * PDPR, fx = Math.cos(p.flip), al = Math.min(1, p.t / .25) * clamp((p.life - p.t) / .6, 0, 1);
+                    pctx.setTransform(sc * fx * Math.cos(p.rot), sc * fx * Math.sin(p.rot), -sc * Math.sin(p.rot), sc * Math.cos(p.rot), p.x * PDPR, p.y * PDPR);
+                    for (var zi = 0; zi < zones.length; zi++) { var zr = zones[zi], dx = Math.max(zr.left - p.x, 0, p.x - zr.right), dy = Math.max(zr.top - p.y, 0, p.y - zr.bottom); al *= clamp(Math.max(dx, dy) / 24, 0, 1); } // never over the words
+                    pctx.globalAlpha = al * (.6 + .4 * Math.abs(fx));
+                    pctx.drawImage(p.s, -p.s.width / 2, -p.s.height / 2);
+                }
+                pctx.globalAlpha = 1;
+                if (!petals.length) { stop(); pctx.setTransform(1, 0, 0, 1, 0, 0); pctx.clearRect(0, 0, pc.width, pc.height); return; }
+                raf = requestAnimationFrame(frame);
+            }
+            var ZONES = ['#finale-title', '#finaleTa', '.finale-names', '#hero-title'].map(function (q) { return $(q); });
+            function start() { if (!running && !calm && petals.length) { running = true; lastT = 0; raf = requestAnimationFrame(frame); } }
+            function stop() { running = false; cancelAnimationFrame(raf); }
+            doc.addEventListener('visibilitychange', function () { if (doc.hidden) stop(); else start(); });
+
+            /* ═══ THE OPENING ════════════════════════════════════════════
+               A timeline of labels. Every label is mirrored by a setTimeout
+               and every tween forces its end state, so the opening always
+               completes even where animation frames are throttled. */
+            var gate = $('#gate'), mainEl = $('#main'), opened = false, timers = [], q = 1, isLive = false, artReady = false;
+            function setInert(on) { [mainEl, $('#bar'), $('#foot')].forEach(function (el) { if (el) { if (on) el.setAttribute('inert', ''); else el.removeAttribute('inert'); } }); }
+            setInert(true);
+            function at_(ms, fn) { timers.push(setTimeout(fn, ms * q)); }
+            function tween(from, to, ms, fn) {
+                var t0 = 0, done = false, dur = ms * q;
+                var end = function () { if (!done) { done = true; fn(to); } };
+                timers.push(setTimeout(end, dur + 30));
+                requestAnimationFrame(function k(ts) { if (done) return; if (!t0) t0 = ts; var t = Math.min(1, (ts - t0) / dur), e = t === 1 ? 1 : 1 - Math.pow(2, -10 * t); fn(from + (to - from) * e); if (t < 1) requestAnimationFrame(k); else end(); });
+            }
+            var ALL = ['glow', 'lift', 'flower-set', 'names-in', 'amp-in', 'sweep', 'ui-1', 'ui-2', 'ui-3', 'ui-in'];
+            function bloomOpen() { // the bud opens ring by ring, centre outward; the stem fades over 250ms
+                if (artReady) sizeBloom(true);
+                ringAnim(900 * q, 60 * q, function (a, ms) {
+                    if (!artReady) { bState = a.b; return; }
+                    if (ms >= 1e9) { sizeBloom(false); drawBloom(1, [1, 1, 1, 1], 0); return; }
+                    drawBloom(a.b, a.rk, 1 - clamp(ms / (250 * q), 0, 1), 1 - clamp(ms / (160 * q), 0, 1));
+                });
+            }
+            function open() {
+                if (opened) return;
+                opened = true;
+                var returning = store.get('wb-blossom-seen') === '1';
+                q = returning ? 1 / 2.2 : 1; root.style.setProperty('--q', q.toFixed(3));
+                try { if (navigator.vibrate) navigator.vibrate(12); } catch (e) { }
+                win.scrollTo(0, 0);
+                root.classList.add('opening', 'press');
+                if (calm) {
+                    if (artReady) drawBloom(1, [1, 1, 1, 1], 0); else bState = 1;
+                    hf.style.transform = 'none';
+                    ALL.forEach(function (c) { root.classList.add(c); });
+                    timers.push(setTimeout(goLive, 620));
+                    return;
+                }
+                at_(120, function () { root.classList.remove('press'); });
+                at_(100, bloomOpen);
+                at_(150, function () { root.classList.add('glow', 'lift'); });
+                at_(250, function () { hf.classList.add('trav'); hf.style.transform = 'none'; }); // to its resting spot by ~1.1s
+                at_(1000, function () { var r = HFR || hf.getBoundingClientRect(); burstAt(r.left + r.width / 2, r.top + r.height * .5, [8, 10, 12][tier]); });
+                at_(1100, function () { root.classList.add('flower-set', 'names-in'); }); // names only once the flower has landed
+                at_(1300, function () { root.classList.add('amp-in'); });
+                at_(1900, function () { root.classList.add('ui-1', 'sweep'); });
+                at_(2020, function () { root.classList.add('ui-2'); });
+                at_(2140, function () { root.classList.add('ui-3'); });
+                at_(2800, goLive);
+                timers.push(setTimeout(goLive, 4200)); // watchdog: always live by 4.2s
+                setTimeout(function () { doc.addEventListener('pointerdown', skip, true); }, 200);
+            }
+            function skip() {
+                if (isLive) return;
+                timers.forEach(clearTimeout); timers = [];
+                root.classList.add('skip'); ALL.forEach(function (c) { root.classList.add(c); });
+                goLive();
+                setTimeout(function () { root.classList.remove('skip'); }, 400);
+            }
+            function goLive() {
+                if (isLive) return;
+                isLive = true;
+                doc.removeEventListener('pointerdown', skip, true);
+                timers.forEach(clearTimeout); timers = [];
+                root.classList.remove('opening', 'locked', 'press');
+                root.classList.add('live'); ALL.forEach(function (c) { root.classList.add(c); });
+                hf.classList.remove('trav'); hf.style.transform = 'none'; bloomC.style.transition = 'none';
+                if (artReady) { sizeBloom(false); drawBloom(1, [1, 1, 1, 1], 0); } else bState = 1;
+                gate.remove(); // out of the DOM after opening
+                setInert(false);
+                store.set('wb-blossom-seen', '1');
+                try { $('#hero-title').focus({ preventScroll: true }); } catch (e) { }
+                setT('#announce', 'Invitation opened');
+                requestAnimationFrame(function () { requestAnimationFrame(function () { $('#bar').classList.add('on'); }); }); // slides up from the first hero frame
+                setTimeout(barWatch, 0);
+                setTimeout(function () { if (lenis) lenis.start(); buildThread(); }, 60);
+                setTimeout(maybeBoot, 160);
+                if (!calm) setTimeout(fpsProbe, 900);
+            }
+            $('#openBtn').addEventListener('click', open);
+            $('#gateCalm').setAttribute('aria-pressed', calm ? 'true' : 'false');
+            $('#gateCalm').addEventListener('click', function () {
+                calm = !calm; store.set('wb-blossom-calm', calm ? '1' : '0'); applyCalm();
+                if (calm) unboot(); else maybeBoot();
+                this.setAttribute('aria-pressed', calm ? 'true' : 'false');
+                calmBtn.textContent = 'Calm motion: ' + (calm ? 'on' : 'off');
+            });
+            function replay() {
+                closeSheet();
+                if (lenis) { lenis.scrollTo(0, { immediate: true }); lenis.stop(); }
+                win.scrollTo(0, 0);
+                root.classList.remove('live'); ALL.forEach(function (c) { root.classList.remove(c); });
+                bloomC.style.transform = ''; bloomC.style.opacity = '';
+                root.classList.add('locked');
+                $('#bar').classList.remove('on');
+                doc.body.insertBefore(gate, mainEl);
+                setInert(true);
+                isLive = false; opened = false;
+                if (artReady) { gateK = 1; placeOnGate(); sizeBloom(); placeOnGate(); drawBloom(0); }
+                setTimeout(function () { if (lenis) lenis.start(); open(); }, 600);
+            }
+            $('#replayBtn').addEventListener('click', replay);
+            $('#sheetReplay').addEventListener('click', replay);
+
+            /* Art build, staged after first paint so the button answers at once */
+            function buildArt() {
+                sizePetals();
+                artReady = true;
+                placeOnGate(); sizeBloom(); placeOnGate();
+                drawBloom(opened ? Math.max(bState, isLive ? 1 : 0) : 0);
+                hf.classList.add('ready'); root.classList.add('bud-ready');
+                if (!calm) paintBokeh($('#gateBokeh'));
+                loadSprites(function () {
+                    drawBloom(opened ? Math.max(bState, isLive ? 1 : 0) : bState);
+                    setTimeout(function () { strand(); sizeFinale(); if (calm || state === 'past') finaleStatic(); if (finPending) { finPending = false; playFinale(); } }, 40);
+                    if (calm) return; // calm: the bloom only
+                    drifters();
+                    setTimeout(maybeBoot, 700);
+                    setTimeout(function () {
+                        $$('.macro canvas').forEach(function (c, i) { paintMacro(c, [3, 4, 3.5][i] || 3); });
+                        var hb = $('#heroBokeh'); hb.width = $('#gateBokeh').width; hb.height = $('#gateBokeh').height; hb.getContext('2d').drawImage($('#gateBokeh'), 0, 0);
+                    }, 0);
+                    setTimeout(paintGrain, 30);
+                });
+            }
+            // slow drifting petals in the bloom's corner of the hero, never over the text column
+            function drifters() {
+                if ($('.drift')) return; petalSprites();
+                [[.62, 9.5, 0], [.78, 12, 3.4], [.9, 8.4, 6.2]].forEach(function (d, i) {
+                    var c = mk('canvas', 'drift'); c.width = 52; c.height = 76; c.getContext('2d').drawImage(pspr[i === 1 ? 3 : i ? 1 : 0], 0, 0, 52, 76);
+                    c.setAttribute('aria-hidden', 'true'); c.style.left = (d[0] * 100) + '%'; c.style.setProperty('--dur', d[1] + 's'); c.style.setProperty('--dl', -d[2] + 's');
+                    $('#hero').appendChild(c);
+                });
+            }
+            setTimeout(buildArt, 0);
+
+            /* ── Reveals: play once, never reverse ────────────────── */
+            $$('#cards .card-wrap').forEach(function (w) { w.classList.add('rv'); });
+            var reveals = $$('.rv, .fam-grid');
+            function onIn(el) {
+                el.classList.add('in');
+                if (el.classList.contains('fam-grid')) $$('.fam', el).forEach(function (f, i) { setTimeout(function () { f.classList.add('in'); }, i * 140); });
+            }
+            if (!('IntersectionObserver' in win)) { reveals.forEach(onIn); playFinale(); }
+            else {
+                var io = new IntersectionObserver(function (es) {
+                    es.forEach(function (e) { if (e.isIntersecting) { onIn(e.target); io.unobserve(e.target); } });
+                }, { threshold: 0, rootMargin: '0px 0px -10% 0px' });
+                reveals.forEach(function (el) { io.observe(el); });
+                var fio = new IntersectionObserver(function (es) { if (es[0].isIntersecting && isLive) { playFinale(); fio.disconnect(); } }, { threshold: .55 });
+                if ($('#blessing')) fio.observe($('#blessing'));
+            }
+            // idle life (breathing bloom, drifting petals) pauses while the hero is off screen
+            var barIo = null;
+            function barWatch() {
+                if (barIo || !('IntersectionObserver' in win)) return;
+                barIo = new IntersectionObserver(function (es) { root.classList.toggle('away', !es[0].isIntersecting); }, { rootMargin: '-40% 0px 0px 0px' });
+                barIo.observe($('#hero'));
+            }
+
+            /* ── Gold thread: drawn by scroll down the spine, knots at chapters,
+               threads into the jasmine charam in the finale ────────────── */
+            var TH = { path: null, lens: [], ys: [], total: 0, knots: [] };
+            function budNode(x, y) { // a jasmine bud on the thread
+                var g = svgEl('g', { class: 'knot' });
+                g.appendChild(svgEl('path', { d: 'M' + x + ',' + (y + 7) + ' C' + (x + 4.6) + ',' + (y + 4) + ' ' + (x + 4.2) + ',' + (y - 5) + ' ' + x + ',' + (y - 10) + ' C' + (x - 4.2) + ',' + (y - 5) + ' ' + (x - 4.6) + ',' + (y + 4) + ' ' + x + ',' + (y + 7) + 'Z', fill: '#FFFDF6', stroke: '#B9A6CF', 'stroke-width': .9 }));
+                g.appendChild(svgEl('path', { d: 'M' + (x - 2.6) + ',' + (y + 6) + ' L' + x + ',' + (y + 9.5) + ' L' + (x + 2.6) + ',' + (y + 6), fill: 'none', stroke: '#3f7a24', 'stroke-width': 1.3, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }));
+                return g;
+            }
+            function nib(sv) {
+                var g = svgEl('g', { class: 'nib' });
+                g.appendChild(svgEl('circle', { r: 7, fill: 'rgba(247,201,72,.28)' }));
+                g.appendChild(svgEl('circle', { r: 2.6, fill: '#F7C948' }));
+                sv.appendChild(g); return g;
+            }
+            function buildThread() {
+                var sv = $('#thread'), sv2 = $('#thread2'), amp = $('.names .amp'), bl = $('#blessing'); if (!sv || !isLive || !bl) return;
+                var mr = mainEl.getBoundingClientRect(), top0 = mr.top + win.scrollY, Wm = mainEl.clientWidth;
+                var x0 = Wm >= 900 ? Math.max(14, (Wm - 1120) / 2 - 28) : 11, ox = x0 - 20; // svg-local x = doc x - ox
+                var X = function (y) { return 20 + Math.sin(y / 150) * 3; };
+                var nr = $('#hero-title').getBoundingClientRect();
+                var ax = X(0), ay = nr.top + win.scrollY - top0 + 8;
+                var cw = bl.offsetWidth, bt = bl.getBoundingClientRect(), ringTop = bt.top + win.scrollY - top0 + cw * .09, kx = bt.left - mr.left + cw / 2;
+                var heads = $$('.chapter .sec-head', mainEl).map(function (h) { return h.getBoundingClientRect().top + win.scrollY - top0 + 14; });
+                var ys = [], lens = [], xs = [], d = '', L = 0, y, yS = ringTop - 150;
+                for (y = ay; y <= yS; y += 14) { // from the "&", easing into the spine
+                    var m = clamp((y - ay) / 140, 0, 1), x = ax + (X(y) - ax) * m * m * (3 - 2 * m);
+                    if (ys.length) L += Math.hypot(x - xs[xs.length - 1], y - ys[ys.length - 1]);
+                    ys.push(y); xs.push(x); lens.push(L); d += (ys.length > 1 ? 'L' : 'M') + x.toFixed(1) + ',' + y.toFixed(1);
+                }
+                sv.style.transform = 'translate(' + ox + 'px,0)'; sv.style.height = (yS + 20) + 'px';
+                sv.setAttribute('viewBox', '0 0 80 ' + (yS + 20)); sv.innerHTML = '';
+                var path = svgEl('path', { d: d }); sv.appendChild(path);
+                path.style.strokeDasharray = L; path.style.strokeDashoffset = L;
+                // the last stretch leaves the spine and threads into the charam: its top bud
+                var sx = ox + xs[xs.length - 1], w2 = Math.max(40, Math.abs(kx - sx) + 30), lft = Math.min(sx, kx) - 15;
+                sv2.style.transform = 'translate(' + lft + 'px,' + (yS - 10) + 'px)'; sv2.style.width = w2 + 'px'; sv2.style.height = (ringTop - yS + 30) + 'px';
+                sv2.setAttribute('viewBox', '0 0 ' + w2 + ' ' + (ringTop - yS + 30)); sv2.innerHTML = '';
+                var p2 = svgEl('path', { d: 'M' + (sx - lft) + ',10 C' + (sx - lft) + ',90 ' + (kx - lft) + ',' + (ringTop - yS - 70) + ' ' + (kx - lft) + ',' + (ringTop - yS + 10) }); sv2.appendChild(p2);
+                var L2 = Math.ceil(p2.getTotalLength()); p2.style.strokeDasharray = L2; p2.style.strokeDashoffset = L2;
+                TH = { path: path, p2: p2, L2: L2, lens: lens, ys: ys, xs: xs, total: L, knots: [], top0: top0, yS: yS, yEnd: ringTop, last: -1, n1: nib(sv), n2: nib(sv2) };
+                heads.forEach(function (ky) {
+                    if (ky < ay + 60 || ky > yS) return;
+                    var g = budNode(X(ky), ky); sv.appendChild(g); TH.knots.push({ el: g, y: ky });
+                });
+                DOCH = doc.documentElement.scrollHeight; SY = win.pageYOffset;
+                drawThread();
+            }
+            function drawThread() {
+                if (!TH.path) return;
+                var y = SY - TH.top0 + H * .62, ys = TH.ys, lo = 0, hi = ys.length - 1, L, nx, ny;
+                if (y <= ys[0]) { L = 0; nx = TH.xs[0]; ny = ys[0]; } else if (y >= ys[hi]) { L = TH.total; nx = TH.xs[hi]; ny = ys[hi]; }
+                else { while (hi - lo > 1) { var m = (lo + hi) >> 1; if (ys[m] < y) lo = m; else hi = m; } var f = (y - ys[lo]) / Math.max(1, ys[hi] - ys[lo]); L = TH.lens[lo] + (TH.lens[hi] - TH.lens[lo]) * f; nx = TH.xs[lo] + (TH.xs[hi] - TH.xs[lo]) * f; ny = y; }
+                var q2 = clamp((y - TH.yS) / Math.max(1, TH.yEnd - TH.yS), 0, 1), key = Math.round(L) + q2;
+                if (key === TH.last) return; TH.last = key; // only repaint when the drawn length changes
+                TH.path.style.strokeDashoffset = (TH.total - L).toFixed(1);
+                TH.p2.style.strokeDashoffset = (TH.L2 * (1 - q2)).toFixed(1);
+                TH.n1.setAttribute('transform', 'translate(' + nx.toFixed(1) + ' ' + ny.toFixed(1) + ')'); TH.n1.style.opacity = q2 > 0 || L <= 0 ? 0 : 1;
+                if (q2 > 0) { var pt = TH.p2.getPointAtLength(TH.L2 * q2); TH.n2.setAttribute('transform', 'translate(' + pt.x.toFixed(1) + ' ' + pt.y.toFixed(1) + ')'); TH.n2.style.opacity = q2 < 1 ? 1 : 0; } else TH.n2.style.opacity = 0;
+                TH.knots.forEach(function (k) { if (!k.on && y > k.y) { k.on = true; k.el.classList.add('on'); } });
+            }
+            var HP = -1, SY = 0, DOCH = 0; // cached: never read layout inside a frame
+            var scrollQ = false, lastSec = -1, SKY = ['#EADFFB', '#FFE4DA', '#FFF3CC', '#DDF4EA', '#F7FBF3'];
+            win.addEventListener('scroll', function () {
+                SY = win.pageYOffset;
+                if (scrollQ) return; scrollQ = true;
+                requestAnimationFrame(function () {
+                    scrollQ = false; drawThread();
+                    if (isLive && !calm) { var hp = clamp(SY / 300, 0, 1); if (hp !== HP) { HP = hp; bloomC.style.transform = 'translateY(' + (-40 * hp).toFixed(2) + '%) scale(' + (1 - .15 * hp).toFixed(4) + ')'; bloomC.style.opacity = (1 - hp).toFixed(3); } }
+                    if (!DOCH) DOCH = doc.documentElement.scrollHeight;
+                    var p = SY / Math.max(1, DOCH - win.innerHeight), s = Math.min(4, Math.floor(p * 5));
+                    if (s !== lastSec) { lastSec = s; $('#sky').style.background = SKY[s]; }
+                });
+            }, { passive: true });
+
+            /* ── History-aware overlays (Android back closes them) ─── */
+            var overlayStack = [], ignorePop = false;
+            function pushOverlay(name, closeFn) { overlayStack.push({ name: name, close: closeFn }); try { history.pushState({ wb: name }, ''); } catch (e) { } }
+            function popOverlay(name, fromPop) {
+                var i = overlayStack.map(function (o) { return o.name; }).lastIndexOf(name);
+                if (i < 0) return;
+                overlayStack.splice(i, 1);
+                if (!fromPop) { try { if (history.state && history.state.wb === name) { ignorePop = true; history.back(); } } catch (e) { } }
+            }
+            win.addEventListener('popstate', function () {
+                if (ignorePop) { ignorePop = false; return; }
+                var top = overlayStack[overlayStack.length - 1];
+                if (top) top.close(true);
+            });
+            // focus trap for dialogs; the page behind is inert
+            function trap(box, e) {
+                if (e.key !== 'Tab') return;
+                var f = $$('a[href],button:not([disabled]):not([hidden])', box).filter(function (x) { return x.offsetParent !== null; });
+                if (!f.length) return;
+                if (e.shiftKey && doc.activeElement === f[0]) { e.preventDefault(); f[f.length - 1].focus(); }
+                else if (!e.shiftKey && doc.activeElement === f[f.length - 1]) { e.preventDefault(); f[0].focus(); }
+            }
+
+            /* ── Details sheet ─────────────────────────────────── */
+            var sheet = $('#sheet'), lastFocus = null;
+            function openSheet() {
+                if (sheet.classList.contains('open')) return;
+                lastFocus = doc.activeElement;
+                sheet.classList.add('open'); doc.body.classList.add('is-locked'); setInert(true);
+                if (lenis) lenis.stop();
+                pushOverlay('sheet', closeSheet);
+                setTimeout(function () { try { $('.icon-btn[data-close]', sheet).focus(); } catch (e) { } }, 50);
+            }
+            function closeSheet(fromPop) {
+                if (!sheet.classList.contains('open')) return;
+                sheet.classList.remove('open'); doc.body.classList.remove('is-locked');
+                if (isLive) setInert(false);
+                if (lenis && isLive) lenis.start();
+                popOverlay('sheet', fromPop === true);
+                if (lastFocus && lastFocus.focus) try { lastFocus.focus({ preventScroll: true }); } catch (e) { }
+            }
+            $('#pill').addEventListener('click', openSheet);
+            $$('[data-close]', sheet).forEach(function (b) { b.addEventListener('click', function () { closeSheet(); }); });
+            doc.addEventListener('keydown', function (e) {
+                if (sheet.classList.contains('open')) { if (e.key === 'Escape') closeSheet(); else trap(sheet, e); }
+            });
+            (function () { // drag down to dismiss
+                var panel = $('#sheetPanel'), y0 = null, t0 = 0;
+                panel.addEventListener('touchstart', function (e) { if (panel.scrollTop <= 0) { y0 = e.touches[0].clientY; t0 = Date.now(); } }, { passive: true });
+                panel.addEventListener('touchmove', function (e) { if (y0 === null) return; var dy = e.touches[0].clientY - y0; if (dy > 0) { panel.style.transition = 'none'; panel.style.transform = 'translateY(' + dy + 'px)'; } }, { passive: true });
+                panel.addEventListener('touchend', function (e) {
+                    if (y0 === null) return;
+                    var dy = e.changedTouches[0].clientY - y0, v = dy / Math.max(1, Date.now() - t0); y0 = null;
+                    panel.style.transition = ''; panel.style.transform = '';
+                    if (dy > 100 || v > .5) closeSheet();
+                }, { passive: true });
+            })();
+            var calmBtn = $('#calmToggle');
+            calmBtn.textContent = 'Calm motion: ' + (calm ? 'on' : 'off');
+            calmBtn.addEventListener('click', function () {
+                var next = !(store.get('wb-blossom-calm') === '1' || calm);
+                store.set('wb-blossom-calm', next ? '1' : '0');
+                calmBtn.textContent = 'Calm motion: ' + (next ? 'on' : 'off') + ' · applies on reload';
+            });
+
+            /* ── Lightbox (FLIP from the print) ─────────────────── */
+            var lb = $('#lightbox'), lbImg = $('#lbImg'), idx = 0, lbFocus = null;
+            function show(i) {
+                idx = (i + allSrc.length) % allSrc.length;
+                lbImg.src = allSrc[idx]; lbImg.alt = 'Photo ' + (idx + 1) + ' of ' + allSrc.length;
+                $('#lbCount').textContent = (idx + 1) + ' / ' + allSrc.length;
+            }
+            function openLb(i, from) {
+                lbFocus = doc.activeElement; show(i);
+                lb.classList.add('open'); doc.body.classList.add('is-locked'); setInert(true);
+                if (lenis) lenis.stop();
+                pushOverlay('lightbox', closeLb);
+                $('#lbClose').focus();
+                if (from && !calm && lbImg.animate) {
+                    var go = function () {
+                        var r = from.getBoundingClientRect(), f = lbImg.getBoundingClientRect(); if (!f.width) return;
+                        var k = r.width / f.width;
+                        lbImg.animate([{ transform: 'translate(' + (r.left + r.width / 2 - f.left - f.width / 2) + 'px,' + (r.top + r.height / 2 - f.top - f.height / 2) + 'px) scale(' + k + ')', opacity: .5 }, { transform: 'none', opacity: 1 }], { duration: 480, easing: 'cubic-bezier(.16,1,.3,1)' });
+                    };
+                    if (lbImg.complete && lbImg.naturalWidth) go(); else lbImg.addEventListener('load', go, { once: true });
+                }
+            }
+            function closeLb(fromPop) {
+                if (!lb.classList.contains('open')) return;
+                lb.classList.remove('open'); doc.body.classList.remove('is-locked'); setInert(false);
+                if (lenis && isLive) lenis.start();
+                popOverlay('lightbox', fromPop === true);
+                if (lbFocus) try { lbFocus.focus({ preventScroll: true }); } catch (e) { }
+            }
+            $$('.print').forEach(function (b) { b.addEventListener('click', function () { openLb(+b.getAttribute('data-i'), $('.ph', b)); }); });
+            if (allSrc.length < 2) { $('#lbPrev').hidden = true; $('#lbNext').hidden = true; }
+            $('#lbClose').addEventListener('click', function () { closeLb(); });
+            $('#lbPrev').addEventListener('click', function () { show(idx - 1); });
+            $('#lbNext').addEventListener('click', function () { show(idx + 1); });
+            lb.addEventListener('click', function (e) { if (e.target === lb) closeLb(); });
+            doc.addEventListener('keydown', function (e) {
+                if (!lb.classList.contains('open')) return;
+                if (e.key === 'Escape') closeLb(); else if (e.key === 'ArrowLeft') show(idx - 1); else if (e.key === 'ArrowRight') show(idx + 1); else trap(lb, e);
+            });
+            (function () {
+                var x0 = null, y0 = null;
+                lb.addEventListener('touchstart', function (e) { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, { passive: true });
+                lb.addEventListener('touchend', function (e) {
+                    if (x0 === null) return;
+                    var dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0; x0 = null;
+                    if (dy > 120 && Math.abs(dy) > Math.abs(dx)) closeLb();
+                    else if (Math.abs(dx) > 50) show(idx + (dx < 0 ? 1 : -1));
+                }, { passive: true });
+            })();
+
+            /* ── Share ─────────────────────────────────────────── */
+            // Rendered inside a srcdoc iframe: the shareable URL is the parent page's.
+            function pageUrl() { try { return win.top.location.href; } catch (e) { return doc.referrer || location.href; } }
+            var url = pageUrl(), shareText = allPast
+                ? 'With thanks from ' + couple + ' — for all your blessings at our wedding.'
+                : couple + (main && main.d ? ' · ' + DAYS[main.d.getDay()].slice(0, 3) + ' ' + main.d.getDate() + ' ' + MONTHS[main.d.getMonth()].slice(0, 3) + (main.sT ? ', ' + main.sT.replace(/\u00a0/g, ' ') : '') : '') + (main && main.venue ? ' · ' + main.venue : '');
+            var shareStatus = $('#shareStatus'), toast = $('#toast'), tt = 0;
+            $('#waBtn').href = 'https://wa.me/?text=' + encodeURIComponent(shareText + '\n' + url);
+            function toastMsg(m) {
+                setT('#toastText', m); toast.classList.remove('show'); void toast.offsetWidth; toast.classList.add('show');
+                clearTimeout(tt); tt = setTimeout(function () { toast.classList.remove('show'); }, 2200);
+            }
+            function copyLink() {
+                var done = function () { shareStatus.textContent = 'Link copied'; toastMsg('Link copied'); };
+                if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(done, legacy);
+                else legacy();
+                function legacy() {
+                    var t = mk('textarea'); t.value = url; t.style.position = 'fixed'; t.style.opacity = '0';
+                    doc.body.appendChild(t); t.select();
+                    try { doc.execCommand('copy'); done(); } catch (e) { shareStatus.textContent = url; }
+                    t.remove();
+                }
+            }
+            function share() {
+                if (navigator.share) navigator.share({ title: shareText, text: shareText, url: url }).then(function () { toastMsg('Shared'); }, function () { });
+                else win.open($('#waBtn').href, '_blank', 'noopener');
+            }
+            $('#shareBtn').addEventListener('click', share);
+            $('#sheetShare').addEventListener('click', share);
+            $('#copyBtn').addEventListener('click', copyLink);
+
+            /* ═══ SCROLL MOTION ═══════════════════════════════════════
+               Scrub for space, triggers for text. Everything scrubbed rests
+               in its final state by default; GSAP sets the "from" state only
+               once it is running. */
+            var lenis = null, booted = false;
+            function refreshSoon() { clearTimeout(win.__wbR); win.__wbR = setTimeout(function () { try { if (win.ScrollTrigger) win.ScrollTrigger.refresh(); else buildThread(); } catch (e) { } }, 200); }
+            function maybeBoot() {
+                if (booted || calm || !win.gsap || !win.ScrollTrigger || (opened && !isLive)) return; // boots while the gate idles, never mid-opening
+                booted = true;
+                var gsap = win.gsap, ST = win.ScrollTrigger;
+                gsap.registerPlugin(ST);
+                if (win.matchMedia && win.matchMedia('(pointer: fine)').matches) {
+                    var ls = mk('script'); ls.src = 'https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js';
+                    ls.onload = function () {
+                        if (!win.Lenis || lenis) return;
+                        lenis = new win.Lenis({ lerp: .1, wheelMultiplier: .9 });
+                        lenis.on('scroll', ST.update);
+                        gsap.ticker.add(function (t) { lenis.raf(t * 1000); });
+                        gsap.ticker.lagSmoothing(0);
+                        if (!isLive) lenis.stop();
+                    };
+                    doc.body.appendChild(ls);
+                }
+                var sc = { scrub: .6 };
+                var steps = [function () {
+                gsap.to('.hero .mac3', { yPercent: -30, ease: 'none', scrollTrigger: Object.assign({ trigger: '#hero', start: 'top top', end: 'bottom top' }, sc) });
+                }, function () {
+                // The day: the only pin. Dusk passes to dawn, the sun rises, numerals fill.
+                var day = $('#day');
+                if (day && pinDay) {
+                    day.classList.add('is-dusk');
+                    var tl = gsap.timeline({ scrollTrigger: Object.assign({ trigger: day, start: 'top top', end: '+=90%', pin: true, anticipatePin: 1, onUpdate: function (s) { day.classList.toggle('is-dusk', s.progress < .42); } }, sc) });
+                    // the marigold wipe starts the moment the pin engages, bottom to top
+                    tl.fromTo('#bigFill', { clipPath: 'inset(100% 0% 0% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', ease: 'none', duration: .7 }, 0)
+                        .fromTo('#sun i', { yPercent: 60 }, { yPercent: 0, ease: 'none', duration: 1 }, 0)
+                        .fromTo('#dusk', { opacity: 1 }, { opacity: 0, ease: 'none', duration: 1 }, 0);
+                }
+                }, function () {
+                // Notes: a reading light passes word by word
+                $$('.note-text').forEach(function (p) {
+                    var ws = $$('.wd', p); if (!ws.length) return;
+                    gsap.fromTo(ws, { opacity: .15 }, { opacity: 1, stagger: .1, ease: 'none', scrollTrigger: Object.assign({ trigger: p, start: 'top 85%', end: 'bottom 55%' }, sc) });
+                });
+                }, function () {
+                // Photos: mask reveal with counter-scaled image (once)
+                $$('.print').forEach(function (pr) {
+                    if (tier === 0) return;
+                    var once = { trigger: pr, start: 'top 90%', once: true };
+                    gsap.fromTo(pr, { clipPath: 'inset(100% 0% 0% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.1, ease: 'expo.out', scrollTrigger: once });
+                    gsap.fromTo($('img', pr), { scale: 1.3 }, { scale: 1, duration: 1.4, ease: 'expo.out', scrollTrigger: Object.assign({}, once) });
+                });
+                // Film: the frame opens to full width
+                if ($('#filmFrame')) gsap.fromTo('#filmFrame', { scale: .92, opacity: 0 }, { scale: 1, opacity: 1, duration: .6, ease: 'expo.out', scrollTrigger: { trigger: '#filmFrame', start: 'top 88%', once: true } });
+                // The finale: pinned while the flower opens, so the whole moment sits in view
+                var fin = $('#finale');
+                if (fin && fin.offsetHeight <= win.innerHeight + 4) ST.create({ trigger: fin, start: 'top top', end: '+=55%', pin: true, anticipatePin: 1, onEnter: playFinale, onToggle: function (st) { var t2 = $('#thread2'); if (t2) t2.classList.toggle('off', st.isActive); } });
+                }, function () {
+                ST.addEventListener('refresh', buildThread);
+                if (doc.fonts && doc.fonts.ready) doc.fonts.ready.then(refreshSoon);
+                $$('img').forEach(function (im) { if (!im.complete) im.addEventListener('load', refreshSoon, { once: true }); });
+                if (win.ResizeObserver) { var lastH = 0; new ResizeObserver(function () { var h = mainEl.scrollHeight; if (Math.abs(h - lastH) > 40) { lastH = h; refreshSoon(); } }).observe(mainEl); }
+                ST.refresh();
+                }];
+                (function run() { if (!booted) return; var f = steps.shift(); if (f) { f(); setTimeout(run, 16); } })();
+            }
+            function unboot() { // the guest chose calm on the gate: every scrubbed element back to its resting state
+                if (!booted || !win.ScrollTrigger) return;
+                win.ScrollTrigger.getAll().forEach(function (t) { t.kill(); });
+                win.gsap.set(['#dusk', '#sun i', '#bigFill', '.card', '.wd', '.print', '.print img', '#filmFrame', '.hero .mac3'].filter(function (x) { return typeof x !== 'string' || $(x); }), { clearProps: 'all' });
+                var d = $('#day'); if (d) d.classList.remove('is-dusk');
+                booted = false;
+            }
+            if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', maybeBoot); else maybeBoot();
+            win.addEventListener('load', maybeBoot);
+
+            // device tier: a 60-frame probe after opening; drop a tier when slow
+            function fpsProbe() {
+                var n = 0, t0 = 0;
+                requestAnimationFrame(function k(t) { if (!t0) t0 = t; if (++n < 60) return requestAnimationFrame(k); if ((t - t0) / 59 > 24 && tier > 0) tier--; });
+            }
+
+            if (doc.fonts && doc.fonts.ready) doc.fonts.ready.then(function () { fit(); if (artReady && !isLive) placeOnGate(); });
+            var rz;
+            win.addEventListener('resize', function () {
+                clearTimeout(rz);
+                rz = setTimeout(function () {
+                    var w = win.innerWidth, h = win.innerHeight, big = Math.abs(w - W) > 2;
+                    W = w; H = h; sizePetals();
+                    fit();
+                    if (big && artReady) { if (!isLive) { gateK = 1; placeOnGate(); } sizeBloom(); if (!isLive) placeOnGate(); drawBloom(bState, null, isLive ? 0 : null); sizeFinale(); if (finState || calm || state === 'past') drawFinale(1e9, { b: 1, rk: [1, 1, 1, 1] }); }
+                    refreshSoon();
+                }, 150);
+            });
+        })();
+    </script>
+</body>
+
+</html>

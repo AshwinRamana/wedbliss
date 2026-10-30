@@ -73,6 +73,9 @@ html.past-hero .rails { opacity: 1; }
 .rail::before { content: ''; position: absolute; z-index: 1; left: 0; right: 0; bottom: 0; height: 200px; background: linear-gradient(rgba(255, 251, 242, 0), rgba(255, 251, 242, .7) 55%, rgba(255, 251, 242, .96)); }
 .rail::after { content: ''; position: absolute; top: 0; bottom: 0; width: 48px; background: var(--kolam) repeat-y center top / 48px 48px; opacity: .55; }
 .rl::after { right: 28px; } .rr::after { left: 28px; }
+.rl img { left: calc(50% - 44px); width: min(70%, 290px); }
+.rl::before { -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 48px), transparent); mask-image: linear-gradient(to right, #000 calc(100% - 48px), transparent); }
+.rr::before { -webkit-mask-image: linear-gradient(to left, #000 calc(100% - 48px), transparent); mask-image: linear-gradient(to left, #000 calc(100% - 48px), transparent); }
 .sec > .seam { left: calc(50% - 326px); right: calc(50% - 326px); }
 }
 .grain { position: fixed; inset: 0; z-index: 95; pointer-events: none; opacity: .03; background-size: 128px 128px; }
@@ -216,7 +219,7 @@ html.live:not(.calm) .hg { will-change: transform; }
 .hero-names .g { color: transparent; background-image: linear-gradient(100deg, rgba(244, 206, 106, 0) 40%, #F4CE6A 47%, #FFF3C4 50%, #C8902B 53%, rgba(200, 144, 43, 0) 60%), linear-gradient(#2A0F2E, #2A0F2E); background-size: var(--fw, 8em) 100%, 100% 100%; background-repeat: no-repeat; background-position: calc((var(--sw) * 2.4 - 1.2) * var(--fw, 8em) - var(--gx, 0px)) 0, 0 0; -webkit-background-clip: text; background-clip: text; }
 }
 html.m-ready:not(.names-in) .hero-names .g, html.m-ready:not(.names-in) .hero-names .amp { opacity: 0; transform: translateY(36px); }
-html.m-ready.names-in .hero-names .g, html.m-ready.names-in .hero-names .amp { transition: transform calc(.42s * var(--q)) var(--e-out) calc(var(--i) * 40ms * var(--q)), opacity calc(.3s * var(--q)) linear calc(var(--i) * 40ms * var(--q)); }
+html.m-ready.names-in .hero-names .g, html.m-ready.names-in .hero-names .amp { transition: transform calc(.42s * var(--q)) var(--e-out) calc(var(--i) * 32ms * var(--q)), opacity calc(.3s * var(--q)) linear calc(var(--i) * 32ms * var(--q)); }
 html.calm:not(.names-in) .hero-names { opacity: 0; }
 html.calm .hero-names { transition: opacity .6s; }
 html.sweep .hero-names { --sw: 1; transition: --sw 1.4s var(--p2out); }
@@ -470,7 +473,7 @@ footer { padding: 20px var(--m) calc(16px + var(--safe)); text-align: center; fo
 /* ── 320px ── */
 @media (max-width: 359px) {
 :root { --m: 16px; }
-.herow { left: 2vw; width: 37vw; top: 30px; } .farw { right: 2vw; width: 37vw; top: 30px; }
+.herow { left: 3vw; width: 33vw; top: 30px; } .farw { right: 3vw; width: 33vw; top: 30px; }
 .t-venue { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; letter-spacing: -.005em; }
 .gate .scrim::before { background: radial-gradient(ellipse 70% 55% at 50% 45%, rgba(255, 251, 242, .8), rgba(255, 251, 242, .42) 50%, transparent 78%); }
 .h-scene { height: 300px; }
@@ -494,11 +497,13 @@ footer { padding: 20px var(--m) calc(16px + var(--safe)); text-align: center; fo
 .mist { height: 34vh; }
 .h-scene { height: max(500px, 60vh); }
 
-.hg { left: calc(50% - 300px - 214px); bottom: 98px; width: 214px; max-width: none; }
+.hg { left: calc(50% - 300px - 200px); bottom: 84px; width: 190px; max-width: none; }
 .hfar { right: calc(50% - 300px - 172px); bottom: 122px; width: 172px; max-width: none; }
 .hpot { right: 130px; bottom: 2px; width: 150px; max-width: none; }
 .hero { padding-top: 120px; padding-bottom: 100px; }
-.h-space { min-height: calc(max(500px, 60vh) - 186px); max-height: none; }
+.hero .scrim { padding: 6px 0 10px; }
+.hero-facts { margin-top: 0; }
+.h-space { min-height: calc(max(500px, 60vh) - 200px); max-height: none; }
 .sunw { top: 30%; left: 50%; }
 .h-sun, .art img.h-rays { left: 50%; top: 16%; }
 }
@@ -1351,12 +1356,12 @@ footer { padding: 20px var(--m) calc(16px + var(--safe)); text-align: center; fo
         for (var k = 0; k < 8; k++) {
             var yb = y, yt = y - h, yM = yb - .07 * h, yW = yb - .62 * h, yC = yb - .75 * h, wall = WALLS[k % 4][0], deep = WALLS[k % 4][1];
             tiers += P(trap(yb, yM, 2, 2), CREAM2) + P(trap(yb - 1, yb - 2.2, 2, 2), 'rgba(255,255,255,.5)');
-            var ym2 = (yM + yW) / 2, ins = 16;
+            var ym2 = (yM + yW) / 2, ins = k >= 3 ? 22 : 16;
             tiers += P('M' + f1(C - hw(yM)) + ',' + f1(yM) + 'L' + f1(C + hw(yM)) + ',' + f1(yM) + 'Q' + f1(C + hw(ym2) - ins) + ',' + f1(ym2) + ' ' + f1(C + hw(yW)) + ',' + f1(yW) + 'L' + f1(C - hw(yW)) + ',' + f1(yW) + 'Q' + f1(C - hw(ym2) + ins) + ',' + f1(ym2) + ' ' + f1(C - hw(yM)) + ',' + f1(yM) + 'Z', wall);
             var cbx = Math.min(22, (hw(yM) - 40) * .22);
             [-1, 1].forEach(function (sg) { // projecting corner bays, stepped forward with a darker inner edge
-                var o1 = C + sg * (hw(yM) + 5), o2 = C + sg * (hw(yW) + 5), i1 = o1 - sg * (cbx + 5), i2 = o2 - sg * (cbx + 5);
-                var om = C + sg * (hw(ym2) - ins + 5), im = om - sg * (cbx + 5);
+                var o1 = C + sg * (hw(yM) + 7), o2 = C + sg * (hw(yW) + 7), i1 = o1 - sg * (cbx + 7), i2 = o2 - sg * (cbx + 7);
+                var om = C + sg * (hw(ym2) - ins + 7), im = om - sg * (cbx + 7);
                 tiers += P('M' + f1(o1) + ',' + f1(yM) + 'L' + f1(i1) + ',' + f1(yM) + 'Q' + f1(im) + ',' + f1(ym2) + ' ' + f1(i2) + ',' + f1(yW) + 'L' + f1(o2) + ',' + f1(yW) + 'Q' + f1(om) + ',' + f1(ym2) + ' ' + f1(o1) + ',' + f1(yM) + 'Z', wall) + P('M' + f1(o1) + ',' + f1(yM) + 'L' + f1(i1) + ',' + f1(yM) + 'Q' + f1(im) + ',' + f1(ym2) + ' ' + f1(i2) + ',' + f1(yW) + 'L' + f1(o2) + ',' + f1(yW) + 'Q' + f1(om) + ',' + f1(ym2) + ' ' + f1(o1) + ',' + f1(yM) + 'Z', 'rgba(255,255,255,.2)') + S('M' + f1(o1) + ',' + f1(yM) + 'Q' + f1(om) + ',' + f1(ym2) + ' ' + f1(o2) + ',' + f1(yW), sg > 0 ? '#FFF6D8' : 'rgba(40,20,10,.35)', 1.4);
                 tiers += S('M' + f1(i1) + ',' + f1(yM) + 'Q' + f1(im) + ',' + f1(ym2) + ' ' + f1(i2) + ',' + f1(yW), 'rgba(40,20,10,.45)', 1.2);
                 if (sg > 0) tiers += P(rect(Math.min(i1, i2) - 7, yW + 1, 7, yM - yW - 1), 'url(#bayL)'); // the projecting right bay casts its shadow leftward
@@ -1853,6 +1858,7 @@ footer { padding: 20px var(--m) calc(16px + var(--safe)); text-align: center; fo
             var n = Math.max(3, Math.floor((x1 - x0) / (25 * s))), swapAt = Math.floor(R() * n);
             for (var i = 0; i < n; i++) {
                 var t = (i + .5) / n, x = x0 + (x1 - x0) * t, y = y0 + (y1 - y0) * t + 4 * sag * t * (1 - t);
+                if (host.id === 'gBunt' && W >= 900 && Math.abs(x - W / 2) < 135) continue;
                 var ang = Math.atan(((y1 - y0) + 4 * sag * (1 - 2 * t)) / (x1 - x0)) * 180 / Math.PI + (R() * 8 - 4);
                 var ci = (i + (sp.k || 0)) % 6; if (i === swapAt) ci = (ci + 3) % 6;
                 var f = mk('i', 'fl');
@@ -2041,7 +2047,7 @@ footer { padding: 20px var(--m) calc(16px + var(--safe)); text-align: center; fo
         at_(120, function () { root.classList.remove('press'); });
         at_(100, function () { add('snap'); });
         at_(150, function () { add('flare'); });
-        at_(250, function () { burst(); });
+        at_(380, function () { burst(); });
         var gh = $('#gHero'), rr = gh.getBoundingClientRect(); // aim the push at the doorway
         gh.style.setProperty('--tx', (innerWidth / 2 - (rr.left + rr.width * .5)).toFixed(1) + 'px');
         gh.style.setProperty('--ty', (innerHeight * .55 - (rr.top + rr.height * .9)).toFixed(1) + 'px');
@@ -2050,7 +2056,7 @@ footer { padding: 20px var(--m) calc(16px + var(--safe)); text-align: center; fo
         at_(950, function () { add('bloom-in'); });
         at_(1300, function () { root.classList.remove('bloom-in'); add('bloom-out'); });
         at_(1150, function () { add('ui-in'); });
-        at_(1200, function () { add('names-in'); });
+        at_(1100, function () { add('names-in'); });
         at_(2000, function () { add('card-in'); });
         at_(1400, function () { add('gate-off'); bokehRun(false); });
         at_(2400, goLive);

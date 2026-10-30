@@ -150,7 +150,7 @@ html.calm .bokeh { display: none; }
 .f-time { font: 700 18px/1.45 var(--ui); color: var(--rani-t); }
 .f-venue { font: 500 17px/1.45 var(--ui); color: var(--ink2); margin-top: 2px; }
 .f-today { font: 700 15px/1.4 var(--ui); color: var(--green-t); margin-top: 8px; }
-#openBtn { margin-top: 18px; width: min(100%, 340px); min-height: 60px; flex-direction: column; gap: 0; padding: 6px 24px; font-size: 18px; }
+#openBtn { margin-top: 18px; width: min(100%, 340px); min-height: 60px; flex-direction: column; gap: 0; padding: 6px 24px; font-size: 18px; background-origin: border-box; /* gradient fills the transparent border: no slivers at the ends */ }
 #openBtn small { font: 500 14px/1.4 var(--ui); opacity: .95; }
 #openBtn[aria-busy="true"] { opacity: .82; }
 .calm-tg { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; margin-top: 8px; padding: 0 12px; background: rgba(255, 251, 242, .7); border: 0; border-radius: 999px; font: 700 14px/1 var(--ui); color: var(--ink2); cursor: pointer; }
@@ -2182,6 +2182,7 @@ footer { padding: 20px var(--m) calc(16px + var(--safe)); text-align: center; fo
             ps.forEach(function (p) {
                 var drag = Math.exp(-1.8 * dt); p.vx *= drag; p.vy = p.vy * drag + 900 * dt * .35;
                 p.sw += dt * 3; p.x += (p.vx + Math.sin(p.sw) * 40) * dt; p.y += p.vy * dt; p.ph += p.fs * dt; p.rot += dt * 1.5;
+                if (side) p.x = p.x < W / 2 ? Math.min(p.x, W * .24) : Math.max(p.x, W * .76); // keep the margins: never over the heading
                 var sy = Math.cos(p.ph);
                 g.globalAlpha = Math.max(0, 1 - Math.max(0, t - 2.2) / .6);
                 g.setTransform(Math.cos(p.rot) * k, Math.sin(p.rot) * k, -Math.sin(p.rot) * sy * k, Math.cos(p.rot) * sy * k, p.x * k, p.y * k);
